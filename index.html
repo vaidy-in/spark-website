@@ -25,16 +25,16 @@
     <section class="relative overflow-hidden pt-12 pb-20 lg:pt-24 lg:pb-32 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-                <!-- Left: Copy -->
-                <div class="text-center lg:text-left">
+                <!-- Top: Copy -->
+                <div class="text-center lg:col-span-2">
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
-                        From video to a course <br>
-                        <span class="text-brand-600">in one click.</span>
+                        From video to <br/> <span class="text-brand-600">monetized</span> course <br>
+                        in one click.
                     </h1>
-                    <p class="mt-4 text-xl text-slate-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        Spark turns your teaching content into a complete learning experience—structured lessons, quizzes, and AI tutor—automatically.
+                    <p class="mt-4 text-xl text-slate-600 mb-8 leading-relaxed max-w-2xl mx-auto">
+                        Spark turns your teaching content into a complete learning experience - structured lessons, quizzes, and AI tutor - automatically.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="#waitlist" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-xl text-white bg-brand-600 hover:bg-brand-700 shadow-lg hover:shadow-xl transition-all">
                             Join the waitlist
                         </a>
@@ -45,28 +45,9 @@
                 </div>
 
                 <!-- Right: Hero Visual (What Spark Is) -->
-                <div class="relative group rounded-2xl shadow-2xl overflow-hidden border border-slate-200 bg-slate-50 aspect-[4/3] flex items-center justify-center">
-                    <!-- Placeholder Image -->
-                    <img src="https://placehold.co/800x600/e0e7ff/312e81?text=Visual:+Course+Overview" alt="Course Overview" class="absolute inset-0 w-full h-full object-cover opacity-50">
-                    
-                    <!-- Content overlay for context -->
-                    <div class="relative z-10 text-center p-6 bg-white/90 backdrop-blur rounded-xl shadow-lg border border-slate-100 max-w-xs">
-                         <p class="font-bold text-slate-800 mb-2">Visual Concept:</p>
-                         <p class="text-sm text-slate-600">
-                             One video in. A complete course out.<br>
-                             Center: a generic course card (e.g., “Physics for beginners”). Around it: floating chips for Chapters, Notes, Quizzes, and AI Tutor. Small tag on the left: “Input: 1 video”. Small tag on the right: “Output: ready-to-run course”.
-                         </p>
-                    </div>
-
-                    <!-- AI Prompt Overlay (Hover) -->
-                    <div class="ai-prompt-overlay absolute inset-0 bg-black/80 flex items-center justify-center p-8 z-20 backdrop-blur-sm">
-                        <div class="text-white text-center">
-                            <p class="text-xs uppercase tracking-widest text-brand-300 font-bold mb-2">AI Image Prompt</p>
-                            <p class="font-mono text-sm">
-                                "Striking SaaS hero illustration. Center: a large course card titled 'Your next course' showing a friendly cover image and a smaller subtitle like 'Intro to Physics' (or any subject). Radiating out from this card are four bright, floating chips labeled 'Chapters', 'Study notes', 'Quizzes', and 'AI tutor', each with a clean icon. On the far left, a small pill-shaped label reads 'Input: 1 video'. On the far right, another label reads 'Output: complete course'. Clean white background, generous whitespace, soft glows around the course card, subtle motion lines suggesting transformation, with indigo and blue accent colors in a Stripe/Linear-style flat illustration."
-                            </p>
-                        </div>
-                    </div>
+                <div class="lg:col-span-2">
+                    <!-- Hero Image -->
+                    <img src="images/hero.jpg" alt="Spark - From video to full course in three steps" class="w-full h-auto block">
                 </div>
             </div>
         </div>
@@ -76,7 +57,7 @@
     <section class="py-24 bg-slate-50 border-y border-slate-100">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-slate-900 mb-4">What it really takes to turn a video into a course</h2>
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">What it takes to turn a video into a monetized course</h2>
                 <p class="text-lg text-slate-600">
                     Here’s the grind you’d normally have to run. <br/>
                     And how Spark takes each piece off your plate.
@@ -279,10 +260,10 @@
                     <div class="relative flex lg:items-center reveal">
                         <div class="hidden lg:block w-5 h-5 rounded-full border-4 border-white bg-brand-500 shadow absolute left-1/2 -ml-2.5"></div>
                         <div class="lg:w-1/2 lg:pr-16">
-                            <p class="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-2">Step 9 · Publish</p>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Launch & maintain</h3>
+                            <p class="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-2">Step 9 · Payments</p>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Set up how you get paid</h3>
                             <p class="text-slate-600 mb-3">
-                                Set up access, payments, live sessions, and keep everything updated across cohorts.
+                                Configure pricing, subscriptions, and student logins so the right people can access the right course.
                             </p>
                             <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Teacher</span>
@@ -290,7 +271,28 @@
                             </div>
                             <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
-                                    Spark: runs on PracticeNow rails for auth, payments, and live classes
+                                    Spark: handles student signups, login, payments and subscriptions
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 10 -->
+                    <div class="relative flex lg:items-center reveal">
+                        <div class="hidden lg:block w-5 h-5 rounded-full border-4 border-white bg-brand-500 shadow absolute left-1/2 -ml-2.5"></div>
+                        <div class="lg:w-1/2 lg:ml-auto lg:pl-16">
+                            <p class="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-2">Step 10 · Maintain</p>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Host and keep it running</h3>
+                            <p class="text-slate-600 mb-3">
+                                Keep the course hosted, update content across cohorts, and make sure everything works as your class evolves.
+                            </p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Teacher</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Platform/ops</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: keeps the course live, up to date, and accessible to students
                                 </span>
                             </div>
                         </div>
