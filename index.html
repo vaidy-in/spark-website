@@ -78,15 +78,40 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-slate-900 mb-4">What it really takes to turn a video into a course</h2>
                 <p class="text-lg text-slate-600">
-                    You already know this as the grind. This is the pipeline you end up running every time you try to turn one video into a real course.
+                    Here’s the grind you’d normally have to run. <br/>
+                    And how Spark takes each piece off your plate.
                 </p>
             </div>
 
             <div class="relative">
-                <!-- Vertical line (desktop) -->
-                <div class="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-slate-200"></div>
+                <!-- Manual vs Spark summary bubble -->
+                <div class="max-w-3xl mx-auto mb-14">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-stretch justify-between">
+                        <div class="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-2">If you do it manually</p>
+                            <p class="text-sm sm:text-base font-semibold text-slate-900">~25–30 hours of specialist work for every 1-hour video</p>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1">Typically $1,500–$3,000 in US production costs.</p>
+                        </div>
+                        <div class="flex-1 sm:text-right sm:pl-6 sm:ml-6 sm:border-l sm:border-transparent">
+                            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 h-full flex flex-col sm:items-end">
+                                <p class="mb-2">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-semibold uppercase tracking-widest text-emerald-700">
+                                        With Spark
+                                    </span>
+                                </p>
+                                <p class="text-sm sm:text-base font-semibold text-slate-900">~15 minutes of your time to upload, then review</p>
+                                <p class="text-xs sm:text-sm text-slate-600 mt-1">100+ automated steps quietly replace the production team.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="space-y-16">
+                <!-- Steps container (keeps timeline line below the summary bubble) -->
+                <div class="relative mt-6">
+                    <!-- Vertical line (desktop) -->
+                    <div class="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-slate-200"></div>
+
+                    <div class="space-y-16">
                     <!-- Step 1 -->
                     <div class="relative flex lg:items-center reveal">
                         <div class="hidden lg:block w-5 h-5 rounded-full border-4 border-white bg-brand-500 shadow absolute left-1/2 -ml-2.5"></div>
@@ -96,7 +121,11 @@
                             <p class="text-slate-600 mb-3">
                                 You run a live class or record a session. One honest teaching moment becomes the raw input.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: You (teacher)</p>
+                            <div class="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">
+                                    You (teacher)
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -109,7 +138,15 @@
                             <p class="text-slate-600 mb-3">
                                 Turn messy audio into a precise, time-coded transcript that every other step depends on.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Transcriptionist, Content assistant</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Transcriptionist</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Content assistant</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: transcript + cleanup handled automatically
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -122,7 +159,15 @@
                             <p class="text-slate-600 mb-3">
                                 Identify topics, split clumped explanations, and decide where one idea ends and the next begins.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Subject-matter assistant, Instructional designer</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Subject-matter assistant</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Instructional designer</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: chapter & module structure generated for you
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -135,7 +180,14 @@
                             <p class="text-slate-600 mb-3">
                                 Trim dead air, remove false starts, and export clean clips for every chapter.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Video editor</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Video editor</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: polishing and splitting done in the pipeline
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -148,7 +200,15 @@
                             <p class="text-slate-600 mb-3">
                                 Turn spoken explanations into clear, structured notes for every chapter and example.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Technical writer, Subject-matter assistant</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Technical writer</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Subject-matter assistant</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: study notes generated chapter by chapter
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -161,7 +221,15 @@
                             <p class="text-slate-600 mb-3">
                                 Scrub through the entire video to capture clean slides, boards, and diagrams—with no duplicates.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Video editor, Visual specialist</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Video editor</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Visual specialist</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: slide extraction handled by computer vision
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -174,7 +242,15 @@
                             <p class="text-slate-600 mb-3">
                                 Write chapter-level quizzes, correct answers, and explanations that genuinely check understanding.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Assessment designer, Evaluator</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Assessment designer</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Evaluator</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: quizzes generated and checked automatically
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -187,7 +263,15 @@
                             <p class="text-slate-600 mb-3">
                                 Connect videos, notes, slides, quizzes, and the AI tutor into one seamless student experience.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Instructional designer, Tech/ops</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Instructional designer</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Tech/ops</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: course JSON, player wiring, and tutor setup are automated
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -200,16 +284,19 @@
                             <p class="text-slate-600 mb-3">
                                 Set up access, payments, live sessions, and keep everything updated across cohorts.
                             </p>
-                            <p class="text-xs text-slate-500">Roles: Teacher, Platform/ops</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-600">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Teacher</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-slate-100">Platform/ops</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-[11px] text-emerald-700">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                                    Spark: runs on PracticeNow rails for auth, payments, and live classes
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-16 text-center">
-                    <p class="text-xl font-medium text-slate-700">
-                        Spark runs a 100+ step pipeline to quietly take over this work in the background.
-                    </p>
-                </div>
             </div>
         </div>
     </section>
