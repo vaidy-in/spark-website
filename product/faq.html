@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark – FAQ</title>
+    <meta name="description" content="Answers to common questions about Spark’s infrastructure, safety posture, scale, and migration options.">
+    <script src="../js/layout.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
+</head>
+<body class="bg-white text-slate-900 antialiased pt-16">
+
+<main class="pt-20 pb-24">
+    <section>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-xs font-semibold tracking-[0.18em] uppercase text-brand-600 mb-3">FAQ</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
+                Frequently asked questions
+            </h1>
+            <p class="text-lg text-slate-600 mb-8">
+                A few of the questions thoughtful teachers and institutions typically ask before trusting Spark with their content and students.
+            </p>
+
+            <div class="divide-y divide-slate-200">
+                <section class="py-5">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-1">
+                        Where is Spark hosted?
+                    </h2>
+                    <p class="text-sm text-slate-600">
+                        Spark runs on a modern cloud infrastructure stack with separate storage for your video content and learning data. Within that environment, each school or teacher’s data is logically isolated so that one account cannot see another’s courses, quizzes, or reports.
+                    </p>
+                </section>
+
+                <section class="py-5">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-1">
+                        How do you think about security and access control?
+                    </h2>
+                    <p class="text-sm text-slate-600">
+                        Access to teacher dashboards, quiz results, and tutoring tools is protected using signed tokens and role‑based permissions. Students only see what they’ve been invited to; teachers and admins have a broader view, but still within the boundaries of their own organization.
+                    </p>
+                </section>
+
+                <section class="py-5">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-1">
+                        Can Spark handle hundreds of videos and thousands of students?
+                    </h2>
+                    <p class="text-sm text-slate-600">
+                        Spark has been architected to work with large catalogs and busy cohorts: hundreds of videos, thousands of chapters, and many concurrent quiz sessions. Background jobs that generate notes, quizzes, and reports are designed to either complete cleanly or fail loudly, instead of producing half‑finished results.
+                    </p>
+                </section>
+
+                <section class="py-5">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-1">
+                        What happens if something goes wrong internally?
+                    </h2>
+                    <p class="text-sm text-slate-600">
+                        The philosophy behind Spark is to stop and surface issues rather than quietly guessing. If a transcript can’t be processed, a chapter boundary looks impossible, or a quiz fails internal checks, the system treats that as a visible error and does not move forward until it’s addressed.
+                    </p>
+                </section>
+
+                <section class="py-5">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-1">
+                        Can I move my courses out of Spark later?
+                    </h2>
+                    <p class="text-sm text-slate-600">
+                        Yes. Your recordings and the structured representations of your courses are yours. Spark is being built to support exporting course structures, notes, and assessments in formats that can be reused in other systems where appropriate.
+                    </p>
+                </section>
+
+                <section class="py-5">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-1">
+                        Do you train generic AI models on my content?
+                    </h2>
+                    <p class="text-sm text-slate-600">
+                        No. Your content is used to power your own courses, tutor, search, and analytics. It is not blended into a shared pool to train a generic “global” model that others can tap into.
+                    </p>
+                </section>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
+
+

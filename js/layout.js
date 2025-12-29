@@ -36,11 +36,23 @@ function loadTailwind() {
 
 // Navigation Links
 const navLinks = [
-    { name: 'Home', href: 'index.html' },
-    { name: 'Product', href: 'product.html' },
-    { name: 'For Teachers', href: 'for-teachers.html' },
-    { name: 'Pricing', href: 'pricing.html' },
-    { name: 'About', href: 'about.html' },
+    { name: 'Home', href: '/' },
+    { name: 'Product', href: '/product/' },
+    { name: 'For Teachers', href: '/for-teachers.html' },
+    { name: 'Pricing', href: '/pricing.html' },
+    { name: 'About', href: '/about.html' },
+];
+
+// Product sub-pages for dropdown navigation
+const productSubpages = [
+    { name: 'Overview', href: '/product/' },
+    { name: 'Origin story', href: '/product/origin.html' },
+    { name: 'Features', href: '/product/features.html' },
+    { name: 'Monetization', href: '/product/monetization.html' },
+    { name: 'Reporting', href: '/product/reporting.html' },
+    { name: 'Hallucinations & safety', href: '/product/hallucinations.html' },
+    { name: 'Content ownership', href: '/product/content-ownership.html' },
+    { name: 'FAQ', href: '/product/faq.html' },
 ];
 
 // Header Component
@@ -49,11 +61,35 @@ function createHeader() {
     // Added top-0 to ensure it's flush, and increased bg opacity to ensure content doesn't bleed through
     header.className = 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-slate-100';
     
-    // Get current page filename to mark active state
-    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-    
+    // Get current path to mark active state
+    const currentPath = window.location.pathname || '/';
+
     const navItems = navLinks.map(link => {
-        const isActive = currentPath === link.href;
+        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+
+        if (link.name === 'Product') {
+            const dropdownItems = productSubpages.map(sub => {
+                const subActive = currentPath === sub.href;
+                return `
+                    <a href="${sub.href}" class="block px-4 py-2 text-sm ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'}">
+                        ${sub.name}
+                    </a>
+                `;
+            }).join('');
+
+            return `
+                <div class="relative group">
+                    <a href="${link.href}" class="inline-flex items-center gap-1 text-sm font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600">
+                        <span>${link.name}</span>
+                        <span class="material-symbols-rounded text-[16px] leading-none">expand_more</span>
+                    </a>
+                    <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-150 absolute left-1/2 -translate-x-1/2 top-full w-56 rounded-xl bg-white shadow-lg border border-slate-100 py-2 z-50">
+                        ${dropdownItems}
+                    </div>
+                </div>
+            `;
+        }
+
         return `<a href="${link.href}" class="text-sm font-medium transition-colors hover:text-brand-600 ${isActive ? 'text-brand-600' : 'text-slate-600'}">${link.name}</a>`;
     }).join('');
 
@@ -91,8 +127,22 @@ function createHeader() {
         <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                ${navLinks.map(link => `<a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>`).join('')}
-                 <a href="index.html#waitlist" class="block w-full text-center px-4 py-2 mt-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-brand-600 hover:bg-brand-700">
+                ${navLinks.map(link => {
+                    if (link.name === 'Product') {
+                        const mobileSubLinks = productSubpages.map(sub => {
+                            return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-50">– ${sub.name}</a>`;
+                        }).join('');
+
+                        return `
+                            <div class="mb-2">
+                                <a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>
+                                ${mobileSubLinks}
+                            </div>
+                        `;
+                    }
+                    return `<a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>`;
+                }).join('')}
+                 <a href="/#waitlist" class="block w-full text-center px-4 py-2 mt-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-brand-600 hover:bg-brand-700">
                     Join Waitlist
                 </a>
             </div>
@@ -111,7 +161,7 @@ function createFooter() {
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="col-span-2 md:col-span-1">
-                    <a href="index.html" class="flex items-center gap-2 mb-4">
+                    <a href="/" class="flex items-center gap-2 mb-4">
                         <div class="w-6 h-6 bg-slate-900 rounded-md flex items-center justify-center text-white font-bold text-xs">S</div>
                         <span class="font-bold text-lg text-slate-900">Spark</span>
                     </a>
@@ -119,7 +169,7 @@ function createFooter() {
                         From video to a course — without the grind.
                     </p>
                     <div class="text-xs text-slate-400">
-                        Built by the team behind <a href="https://practicenow.us" target="_blank" class="underline hover:text-brand-600">PracticeNow</a>
+                        Built by a team obsessed with long-term learning, retention, and high-trust relationships with teachers.
                     </div>
                 </div>
                 
@@ -150,7 +200,7 @@ function createFooter() {
             </div>
             <div class="mt-12 border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-base text-slate-400 text-center md:text-left">
-                    &copy; ${new Date().getFullYear()} Spark / PracticeNow. All rights reserved.
+                    &copy; ${new Date().getFullYear()} Spark. All rights reserved.
                 </p>
             </div>
         </div>
