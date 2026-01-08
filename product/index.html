@@ -79,175 +79,186 @@
 
             <!-- Section 1: Understand the product -->
             <section id="understand" class="mb-24 scroll-mt-24">
-                <div class="grid lg:grid-cols-2 gap-12 items-start">
-                    <div>
+                <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                    <!-- Intro text -->
+                    <div class="product-section__intro">
                         <h2 class="text-2xl font-bold text-slate-900 mb-4">Understand the product</h2>
-                        <p class="text-base text-slate-600 mb-6 leading-relaxed">
+                        <p class="text-base text-slate-600 leading-relaxed">
                             Spark listens to your Zoom, YouTube, or LMS teaching and turns it into chapters, notes, quizzes, and an in-course tutor. <br/><br/>
                             
                             Students move through your material in short, focused micro-learning units instead of 90-minute walls of video.
                         </p>
-                        
-                        <!-- Metric Bubble -->
-                        <div class="bg-brand-50 border border-brand-100 rounded-2xl p-6 mb-8">
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
-                                    <p class="text-base font-medium text-slate-900">
-                                        Already running on <span class="text-brand-700">1,000+ videos and 2,000+ hours</span> of real teaching.
-                                    </p>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
-                                    <p class="text-base font-medium text-slate-900">
-                                        Battle-tested with <span class="text-brand-700">100+ students</span> in high-stakes math and science prep. Works just as well for adult learners.
-                                    </p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="flex flex-wrap gap-3 text-base font-semibold">
-                            <a href="origin.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">auto_stories</span>
-                                <span>Our origin story</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                            <a href="features.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">schema</span>
-                                <span>Features</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                            <a href="micro-learning.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">schedule</span>
-                                <span>Why micro-learning matters</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                        </div>
                     </div>
 
+                    <!-- Image -->
                     <div 
-                        class="border-2 border-dashed border-slate-300 rounded-3xl p-4 bg-slate-50 flex items-center justify-center text-center aspect-[4/3]">
+                        class="product-section__image border-2 border-dashed border-slate-300 rounded-3xl p-4 bg-slate-50 flex items-center justify-center text-center aspect-[4/3]">
                         <img 
                             src="../images/product/understand-product.jpg" 
                             alt="Spark micro-learning platform: short video sections with notes, AI tutor, quizzes, insights, and searchable knowledge-base"
                             class="w-full h-auto max-h-full rounded-2xl object-contain">
+                    </div>
+
+                    <!-- Metric Bubble -->
+                    <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                                <p class="text-base font-medium text-slate-900">
+                                    Already running on <span class="text-brand-700">1,000+ videos and 2,000+ hours</span> of real teaching.
+                                </p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                                <p class="text-base font-medium text-slate-900">
+                                    Battle-tested with <span class="text-brand-700">100+ students</span> in high-stakes math and science prep. Works just as well for adult learners.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="product-section__links flex flex-wrap gap-3 text-base font-semibold">
+                        <a href="origin.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">auto_stories</span>
+                            <span>Our origin story</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
+                        <a href="features.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">schema</span>
+                            <span>Features</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
+                        <a href="micro-learning.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">schedule</span>
+                            <span>Why micro-learning matters</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
                     </div>
                 </div>
             </section>
 
             <!-- Section 2: Make it a business -->
             <section id="business" class="mb-24 scroll-mt-24">
-                <div class="grid lg:grid-cols-2 gap-12 items-start">
-                    <div class="lg:order-2">
+                <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                    <!-- Intro text -->
+                    <div class="product-section__intro">
                         <h2 class="text-2xl font-bold text-slate-900 mb-4">Earn from your teaching</h2>
-                        <p class="text-base text-slate-600 mb-6 leading-relaxed">
+                    <p class="text-base text-slate-600 leading-relaxed">
                             Spark wraps your content in the business layer-pricing, access, and reporting. <br/><br/>
                             
                             It takes you from "helpful videos" to a real course business without juggling five tools.
                         </p>
-                        
-                        <!-- Metric Bubble -->
-                        <div class="bg-brand-50 border border-brand-100 rounded-2xl p-6 mb-8">
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="material-symbols-rounded text-brand-600 mt-0.5">payments</span>
-                                    <p class="text-base font-medium text-slate-900">
-                                        Built by the team behind <span class="text-emerald-700 font-bold text-base">PracticeNow</span>, which already processes <span class="text-emerald-700">$1M+ in payments a year</span> for online teachers.
-                                    </p>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="material-symbols-rounded text-brand-600 mt-0.5">monitoring</span>
-                                    <p class="text-base font-medium text-slate-900">
-                                        Teachers went from 1–2 exams a month to <span class="text-emerald-700 font-bold text-base">3–4 focused tests a week</span>, with automated quiz creation cutting prep time by ~95%.
-                                    </p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="flex flex-wrap gap-3 text-base font-semibold">
-                            <a href="monetization.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">payments</span>
-                                <span>Explore monetization</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                            <a href="reporting.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">monitoring</span>
-                                <span>See reporting details</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                        </div>
                     </div>
 
+                    <!-- Image -->
                     <div 
-                        class="border-2 border-dashed border-slate-300 rounded-3xl p-4 bg-slate-50 flex items-center justify-center text-center aspect-[4/3]">
+                        class="product-section__image border-2 border-dashed border-slate-300 rounded-3xl p-4 bg-slate-50 flex items-center justify-center text-center aspect-[4/3]">
                         <img 
                             src="../images/product/earn-from-teaching.jpg" 
                             alt="Spark micro-learning platform: short video sections with notes, AI tutor, quizzes, insights, and searchable knowledge-base"
                             class="w-full h-auto max-h-full rounded-2xl object-contain">
+                    </div>
+
+                    <!-- Metric Bubble -->
+                    <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-rounded text-brand-600 mt-0.5">payments</span>
+                                <p class="text-base font-medium text-slate-900">
+                                    Built by the team behind <span class="text-emerald-700 font-bold text-base">PracticeNow</span>, which already processes <span class="text-emerald-700">$1M+ in payments a year</span> for online teachers.
+                                </p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-rounded text-brand-600 mt-0.5">monitoring</span>
+                                <p class="text-base font-medium text-slate-900">
+                                    Teachers went from 1–2 exams a month to <span class="text-emerald-700 font-bold text-base">3–4 focused tests a week</span>, with automated quiz creation cutting prep time by ~95%.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="product-section__links flex flex-wrap gap-3 text-base font-semibold">
+                        <a href="monetization.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">payments</span>
+                            <span>Explore monetization</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
+                        <a href="reporting.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">monitoring</span>
+                            <span>See reporting details</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
                     </div>
                 </div>
             </section>
 
             <!-- Section 3: Safety and ownership -->
             <section id="safety" class="mb-24 scroll-mt-24">
-                <div class="grid lg:grid-cols-2 gap-12 items-start">
-                    <div>
+                <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                    <!-- Intro text -->
+                    <div class="product-section__intro">
                         <h2 class="text-2xl font-bold text-slate-900 mb-4">Safety and ownership</h2>
-                        <p class="text-base text-slate-600 mb-6 leading-relaxed">
-                            Spark’s tutor answers from your lectures and notes - not from the open web - and when the answer isn’t in the course, it would rather block than guess. <br/><br/>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                            Spark's tutor answers from your lectures and notes - not from the open web - and when the answer isn't in the course, it would rather block than guess. <br/><br/>
                             
                             Your videos are never used to train models; they only ground answers.  <br/><br/>
                             
                             And all the derived content - notes, quizzes, and reports - stays yours and is downloadable.
                         </p>
-                        
-                        <!-- Metric Bubble -->
-                        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8">
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="material-symbols-rounded text-indigo-600 mt-0.5">verified</span>
-                                    <p class="text-base font-medium text-slate-900">
-                                        Running on real group classes since <span class="text-indigo-700">June 2025</span>, powering daily live sessions taught over Zoom.
-                                    </p>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="material-symbols-rounded text-indigo-600 mt-0.5">security</span>
-                                    <p class="text-base font-medium text-slate-900">
-                                        Built by the same team that has safely handled <span class="text-indigo-700 font-bold text-base">years of payments and student data</span> on PracticeNow.
-                                    </p>
-                                </li>
-                            </ul>
-                        </div>
-
-
-                        <div class="flex flex-wrap gap-3 text-base font-semibold">
-                            <a href="hallucinations.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-indigo-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-800 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">rule</span>
-                                <span>Accuracy & hallucinations</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                            <a href="content-ownership.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-indigo-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-800 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">fact_check</span>
-                                <span>Ownership policy</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                            <a href="faq.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-indigo-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-800 transition-colors">
-                                <span class="material-symbols-rounded text-[18px]">help</span>
-                                <span>Infrastructure FAQ</span>
-                                <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
-                            </a>
-                        </div>
                     </div>
 
+                    <!-- Image -->
                     <div 
-                        class="border-2 border-dashed border-slate-300 rounded-3xl p-4 bg-slate-50 flex items-center justify-center text-center aspect-[4/3]">
+                        class="product-section__image border-2 border-dashed border-slate-300 rounded-3xl p-4 bg-slate-50 flex items-center justify-center text-center aspect-[4/3]">
                         <img 
                             src="../images/product/safety-ownership.jpg" 
                             alt="Spark micro-learning platform: short video sections with notes, AI tutor, quizzes, insights, and searchable knowledge-base"
                             class="w-full h-auto max-h-full rounded-2xl object-contain">
                     </div>
+
+                    <!-- Metric Bubble -->
+                    <div class="product-section__metrics bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-rounded text-indigo-600 mt-0.5">verified</span>
+                                <p class="text-base font-medium text-slate-900">
+                                    Running on real group classes since <span class="text-indigo-700">June 2025</span>, powering daily live sessions taught over Zoom.
+                                </p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-rounded text-indigo-600 mt-0.5">security</span>
+                                <p class="text-base text-slate-900">
+                                    Built by the same team that has safely handled <span class="text-indigo-700 font-bold text-base">years of payments and student data</span> on PracticeNow.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="product-section__links flex flex-wrap gap-3 text-base font-semibold">
+                        <a href="hallucinations.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-indigo-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-800 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">rule</span>
+                            <span>Accuracy & hallucinations</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
+                        <a href="content-ownership.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-indigo-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-800 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">fact_check</span>
+                            <span>Ownership policy</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
+                        <a href="faq.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-indigo-700 hover:border-indigo-300 hover:bg-white hover:text-indigo-800 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">help</span>
+                            <span>Infrastructure FAQ</span>
+                            <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                        </a>
+                    </div>
                 </div>
             </section>
         </div>
     </main>
+
 
 </body>
 </html>

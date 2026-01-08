@@ -13,3 +13,50 @@
 }
 
 
+@layer components {
+  @media (min-width: 768px) {
+    /* Image on the right: text, metrics, links in left column; image in right column */
+    .product-section--image-right .product-section__intro {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .product-section--image-right .product-section__image {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
+
+    .product-section--image-right .product-section__metrics {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .product-section--image-right .product-section__links {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    /* Image on the left: image in left column; text, metrics, links in right column */
+    .product-section--image-left .product-section__image {
+      grid-column: 1;
+      grid-row: 1 / span 3;
+    }
+
+    .product-section--image-left .product-section__intro {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .product-section--image-left .product-section__metrics {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .product-section--image-left .product-section__links {
+      grid-column: 2;
+      grid-row: 3;
+    }
+  }
+}
+
+
