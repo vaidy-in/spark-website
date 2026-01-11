@@ -57,6 +57,88 @@
       grid-row: 3;
     }
   }
+
+  /* Fullscreen carousel viewer (used by marketing carousels). */
+  .carousel-fs-overlay[hidden] {
+    display: none;
+  }
+
+  .carousel-fs-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .carousel-fs-dialog {
+    width: 100%;
+    max-width: 56rem; /* matches max-w-4xl */
+    max-height: calc(100vh - 32px);
+    background: #fff;
+    border: 1px solid #e2e8f0; /* slate-200 */
+    border-radius: 16px; /* rounded-2xl */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .carousel-fs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0; /* slate-200 */
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .carousel-fs-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a; /* slate-900 */
+  }
+
+  .carousel-fs-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    border: 1px solid #e2e8f0; /* slate-200 */
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .carousel-fs-close:focus {
+    outline: 2px solid #6366f1; /* brand-500 */
+    outline-offset: 2px;
+  }
+
+  .carousel-fs-body {
+    padding: 12px;
+    background: #f8fafc; /* slate-50 */
+  }
+
+  .carousel-fs-frame {
+    width: 100%;
+    height: min(78vh, 820px);
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0; /* slate-200 */
+    overflow: hidden;
+  }
+
+  .carousel-fs-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 @layer utilities {
@@ -68,6 +150,20 @@
 
   .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Hide scrollbars while keeping scroll behavior (used by carousels). */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Reduce the chance of skipping multiple slides when swiping. */
+  .carousel-snap-stop {
+    scroll-snap-stop: always;
   }
 }
 
