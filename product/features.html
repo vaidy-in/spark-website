@@ -9,210 +9,481 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
     <script src="../js/layout.js"></script>
+    <script src="../js/components/carousel.js" defer></script>
 </head>
 <body class="preload-hidden bg-white text-slate-900 antialiased pt-16">
 
 <main class="pt-20 pb-24">
-    <section>
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div id="top" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Hero -->
+        <section class="mb-14">
             <p class="text-sm font-semibold tracking-[0.18em] uppercase text-brand-600 mb-3">Features</p>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
-                From “I have a pile of recordings” to “my students have a real course”.
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
+                Everything your recordings become inside Spark.
             </h1>
-            <p class="text-lg text-slate-600 mb-10">
-                Spark is a production line for serious teaching: it listens once, then quietly does the unglamorous work of structuring, summarizing, questioning, and tutoring—so your students can learn in short, focused sessions.
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Spark turns your YouTube or Zoom teaching into a real course experience—structure, notes, quizzes, a grounded tutor, and search—without re‑recording.
             </p>
+        </section>
 
-            <!-- 1. Course structure -->
-            <section class="mb-14">
-                <div class="flex items-start justify-between gap-8 flex-col lg:flex-row">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-semibold text-slate-900 mb-2">
-                            1. Course structure: chapters and micro‑sections from a single long video
-                        </h2>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Upload one messy recording and Spark breaks it into a course: high‑level chapters, each made of short 3–8 minute sections. Students don’t have to scrub through a two‑hour wall of video—they can jump directly to the idea they care about.
-                        </p>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Behind the scenes, Spark pays attention to where ideas start and end in your speech, not just where there happen to be silences. It looks for topic shifts, repeated reminders, and “now let’s move on to…” signals that human teachers use naturally.
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            The result is a clean outline you can skim at a glance, plus a timeline with precise chapter boundaries so students always land in the right place.
-                        </p>
-                    </div>
-                    <div class="flex-1 space-y-4">
+        <!-- Table of contents (tight, mobile-friendly) -->
+        <section class="mb-20">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
+                <p class="text-center text-sm font-semibold uppercase tracking-widest text-slate-500 mb-6">Jump to a feature</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <a href="#feature-structure" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">account_tree</span>
+                        <span class="text-sm font-semibold text-slate-900">Structure</span>
+                    </a>
+                    <a href="#feature-notes" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">note_alt</span>
+                        <span class="text-sm font-semibold text-slate-900">Study notes</span>
+                    </a>
+                    <a href="#feature-quizzes" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">quiz</span>
+                        <span class="text-sm font-semibold text-slate-900">Quizzes</span>
+                    </a>
+                    <a href="#feature-tutor" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">forum</span>
+                        <span class="text-sm font-semibold text-slate-900">Course tutor</span>
+                    </a>
+                    <a href="#feature-search" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">search</span>
+                        <span class="text-sm font-semibold text-slate-900">Knowledge base</span>
+                    </a>
+                    <a href="#feature-assignments" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">construction</span>
+                        <span class="text-sm font-semibold text-slate-900">Assignments</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1) Structure -->
+        <section id="feature-structure" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">account_tree</span>
+                            <span>Course structure</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Spark turns one long recording into chapters and short micro‑sections your students can actually finish—and revisit later without scrubbing.
+                    </p>
+                </div>
+
+                <div class="product-section__image">
+                    <div id="feature-structure-carousel" data-carousel data-carousel-fullscreen class="relative">
                         <div
-                            class="border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                            title="Screenshot prompt: Show a single video at the top with chapter markers along the scrubber. Below, a chapter list in the left column (Chapter 1: 'Introduction to Optics', Chapter 2: 'Snell’s Law', etc.) and within a selected chapter, a nested list of short sections with durations (e.g., '2:13 - Why refraction happens', '4:52 - Worked example'). Style: calm, minimal, similar to a high-end course platform. No real names; all content generic.">
-                            <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                            <p class="text-sm text-slate-500">
-                                Hover for a detailed prompt for the “chapters and sections” layout.
-                            </p>
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/spark-course-structure.png"
+                                                alt="Spark course structure: chapters and micro-sections"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Chapters and micro‑sections</p>
+                                            <p class="text-sm text-slate-600">
+                                                Students can jump directly to the idea they need—without rewatching a 60–90 minute block.
+                                            </p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/spark-video-pane.jpg"
+                                                alt="Spark video pane: chapter navigation and context"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Video navigation</p>
+                                            <p class="text-sm text-slate-600">
+                                                Clear chapter boundaries and context so learners land in the right moment.
+                                            </p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
                         </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap an image to view it full screen.</p>
                     </div>
                 </div>
-            </section>
 
-            <!-- 2. Study notes -->
-            <section class="mb-14">
-                <div class="flex items-start justify-between gap-8 flex-col lg:flex-row-reverse">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-semibold text-slate-900 mb-2">
-                            2. Study notes: readable, math‑friendly summaries for each chapter
-                        </h2>
-                        <p class="text-sm text-slate-600 mb-2">
-                            For every chapter, Spark drafts notes that feel like a careful teaching assistant was listening: section headings, key ideas, worked examples, and formulas that render cleanly instead of turning into broken symbols.
-                        </p>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Each note is checked against what you actually said. If the system is unsure, it prefers to flag the note for review rather than confidently inventing details. When you see a small “verified” badge, it means that note has passed an extra layer of scrutiny.
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            Students get a place where they can skim before class, catch up after class, or quickly revise the night before an exam without re‑watching everything.
-                        </p>
-                    </div>
-                    <div class="flex-1 space-y-4">
-                        <div
-                            class="border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                            title="Screenshot prompt: Right side of the player showing study notes for a chapter. Use a clear heading like 'Chapter 3 – Snell’s Law', followed by bullet points, a highlighted 'Key takeaway' box, and at least one nicely rendered formula (e.g., n1 * sin θ1 = n2 * sin θ2). Add a tiny green 'Verified' pill with a tooltip icon explaining that the note has passed extra checks against the original lecture.">
-                            <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                            <p class="text-sm text-slate-500">
-                                Hover for a detailed prompt for the “chapter notes” screenshot.
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Reuse your existing YouTube/Zoom library—no re‑recording, no editing timeline.
                             </p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Learners get short, finishable units instead of a “wall of video”.
+                            </p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Better retention: revisit a single concept in minutes, not hours.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2) Study notes -->
+        <section id="feature-notes" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">note_alt</span>
+                            <span>Study notes</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        For each chapter, Spark drafts clean notes—key ideas, examples, and formulas—so students can skim and revise without rewatching.
+                    </p>
+                </div>
+
+                <div class="product-section__image">
+                    <div id="feature-notes-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/spark-study-notes.png"
+                                                alt="Spark study notes: structured, chapter-level notes"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Chapter notes</p>
+                                            <p class="text-sm text-slate-600">
+                                                A revision-friendly view students can skim before class or the night before a test.
+                                            </p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
                         </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap the image to view it full screen.</p>
                     </div>
                 </div>
-            </section>
 
-            <!-- 3. Quizzes -->
-            <section class="mb-14">
-                <div class="flex items-start justify-between gap-8 flex-col lg:flex-row">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-semibold text-slate-900 mb-2">
-                            3. Quizzes: chapter‑level checks today, per‑student adaptation soon
-                        </h2>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Spark generates chapter‑level quizzes that are aligned with what you actually taught—complete with correct answers and explanations. You can run them live at the start of class, assign them between sessions, or let students self‑check on their own time.
-                        </p>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Instead of random trivia, questions are chosen to cover the right spread of ideas. If something doesn’t clearly map back to your content, it simply doesn’t make it into the final quiz.
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            Coming soon: per‑student quizzes that adapt based on how each learner has been answering so far—leaning more on topics they struggle with and giving gentle wins where they are strong.
-                        </p>
-                    </div>
-                    <div class="flex-1 space-y-4">
-                        <div
-                            class="border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                            title="Screenshot prompt: A single multiple-choice question card overlaid on the course UI. Show a physics or math question with four options, a subtle label 'Chapter quiz – Learning mode', and below the chosen answer, a short explanation card that appears after answering. Include a small link or button 'Ask the tutor about this question' to hint at integration with the course-specific tutor.">
-                            <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                            <p class="text-sm text-slate-500">
-                                Hover for a detailed prompt for the “chapter quiz” screenshot.
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Students get a “second brain” for your teaching—organized by the way you already explain.
                             </p>
-                        </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Makes your content feel like a real course—not a playlist.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
 
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3) Quizzes -->
+        <section id="feature-quizzes" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">quiz</span>
+                            <span>Quizzes</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Spark generates chapter quizzes aligned to what you taught, so students check understanding instead of just “watching and hoping.”
+                    </p>
+                </div>
+
+                <div class="product-section__image">
+                    <div id="feature-quizzes-carousel" data-carousel data-carousel-fullscreen class="relative">
                         <div
-                            class="border-2 border-dashed border-emerald-300 rounded-2xl p-4 bg-emerald-50/60"
-                            title="Infographic prompt: A simple two-panel graphic. Left panel titled 'Today' with a stack of chapter cards, each with a small quiz icon and label 'Aligned with this chapter'. Right panel titled 'Soon' with a stylized student avatar at the center and question cards orbiting it labeled 'Weak topic', 'Revision', 'Stretch'. Goal: visually communicate the move from static chapter quizzes to per-student adaptive quizzes, without any technical jargon.">
-                            <p class="text-sm font-semibold text-emerald-800 mb-1">[Infographic placeholder]</p>
-                            <p class="text-sm text-emerald-700">
-                                Hover for a detailed prompt for the “today vs. adaptive” quiz infographic.
-                            </p>
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/spark-quiz.png"
+                                                alt="Spark quizzes embedded into the learning flow"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Quick checks, right inside the flow</p>
+                                            <p class="text-sm text-slate-600">
+                                                Frequent recall beats passive watching—without you writing every question by hand.
+                                            </p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
                         </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap the image to view it full screen.</p>
                     </div>
                 </div>
-            </section>
 
-            <!-- 4. AI Tutor -->
-            <section class="mb-14">
-                <div class="flex items-start justify-between gap-8 flex-col lg:flex-row-reverse">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-semibold text-slate-900 mb-2">
-                            4. Course‑specific AI Tutor: a coach that only talks about your material
-                        </h2>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Every course in Spark can have its own tutor. Students can ask “why” and “how” questions, request another example, or get nudged towards the exact chapter and section that clears up their confusion.
-                        </p>
-                        <p class="text-sm text-slate-600 mb-2">
-                            The tutor doesn’t improvise from the wider internet. It answers from the course’s own notes and structure, with short references back to where in the material the answer is coming from.
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            Over time, this becomes a patient, always‑on extension of you—the same voice, the same notation, the same way of thinking, just available at midnight before a test.
-                        </p>
-                    </div>
-                    <div class="flex-1 space-y-4">
-                        <div
-                            class="border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                            title="Screenshot prompt: A chat-style panel labeled 'Course Tutor' anchored to the right of the player. Show a student question like 'I’m still not getting why the ray bends towards the normal' and a tutor reply that uses simple language plus a short diagram thumbnail and a link like 'Jump back to: Chapter 2, Section 3 – Intuition for refraction'. Emphasize calm typography, minimal decoration, and small citation badges rather than heavy chat bubbles.">
-                            <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                            <p class="text-sm text-slate-500">
-                                Hover for a detailed prompt for the “course tutor” screenshot.
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Students get fast feedback on what they missed—before confusion compounds.
                             </p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Keeps the course “active” without you building a separate quiz system.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4) Course tutor -->
+        <section id="feature-tutor" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">forum</span>
+                            <span>Course tutor</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        A tutor that stays inside your course universe—answers in your style, from your material, and points learners back to the right section.
+                    </p>
+                </div>
+
+                <div class="product-section__image">
+                    <div id="feature-tutor-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/spark-chatbot.png"
+                                                alt="Spark course tutor chatbot"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Grounded Q&amp;A</p>
+                                            <p class="text-sm text-slate-600">
+                                                Not generic web answers—help that’s tied back to your chapters and notes.
+                                            </p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
                         </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap the image to view it full screen.</p>
                     </div>
                 </div>
-            </section>
 
-            <!-- 5. Knowledge base search -->
-            <section class="mb-14">
-                <div class="flex items-start justify-between gap-8 flex-col lg:flex-row">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-semibold text-slate-900 mb-2">
-                            5. “Search my teacher’s knowledge base”: search across everything you’ve taught
-                        </h2>
-                        <p class="text-sm text-slate-600 mb-2">
-                            As more of your videos become courses, Spark quietly builds a private knowledge base on top: a way for students to search across subjects, chapters, and time without leaving your world.
-                        </p>
-                        <p class="text-sm text-slate-600 mb-2">
-                            A student can type “optics last month” or “integration by parts in Grade 12 physics” and get pointed to the right chapters, not to a random search engine result.
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            It’s less like searching the web, and more like asking a well‑organized version of you: “Where did you explain this best?”
-                        </p>
-                    </div>
-                    <div class="flex-1 space-y-4">
-                        <div
-                            class="border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                            title="Screenshot prompt: A standalone 'Search your teacher' page or modal. At the top: a prominent search bar with placeholder text 'Search across all your courses'. Below, two or three result cards showing the question snippet, the course title, chapter name, and a small tag for date (e.g., 'Taught on: 12 Mar'). Include a 'View chapter' button on each card. The tone should feel like a calm internal knowledge base, not a generic web search page.">
-                            <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                            <p class="text-sm text-slate-500">
-                                Hover for a detailed prompt for the “search my teacher” screenshot.
+                <div class="product-section__metrics bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-indigo-600 mt-0.5">verified</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Keeps trust high: the tutor stays constrained to your course content.
                             </p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-indigo-600 mt-0.5">school</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Helps students progress without needing you on call 24/7.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-indigo-700 hover:text-indigo-800">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5) Knowledge base search -->
+        <section id="feature-search" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">search</span>
+                            <span>Knowledge base search</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Students can search across everything you’ve taught and jump to the best match—without leaving your world.
+                    </p>
+                </div>
+
+                <div class="product-section__image">
+                    <div id="feature-search-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/features/kb-search.png"
+                                                alt="Spark knowledge base search results"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Semantic search</p>
+                                            <p class="text-sm text-slate-600">
+                                                Search “trees” and still get helpful results related to plants and photosynthesis—even without exact keyword matches.
+                                            </p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
                         </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap the image to view it full screen.</p>
                     </div>
                 </div>
-            </section>
 
-            <!-- 6. Assignments -->
-            <section class="mb-4">
-                <div class="flex items-start justify-between gap-8 flex-col lg:flex-row-reverse">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-semibold text-slate-900 mb-2">
-                            6. Assignments (upcoming): from “I watched it” to “I can actually do it”
-                        </h2>
-                        <p class="text-sm text-slate-600 mb-2">
-                            For coding‑heavy courses, Spark will be able to suggest real assignments—bug‑fixing, completion, refactoring tasks—based on the chapters a student has just covered. Solutions can be checked automatically with structured feedback on correctness and style.
-                        </p>
-                        <p class="text-sm text-slate-600 mb-2">
-                            Over time, the same idea extends beyond code: case studies, “what would you do?” scenarios, and open‑ended prompts that force learners to apply what they’ve picked up, not just repeat it.
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            The goal is simple: a steady drip of doing, not just watching and reading—tuned to where each student currently is.
-                        </p>
-                    </div>
-                    <div class="flex-1 space-y-4">
-                        <div
-                            class="border-2 border-dashed border-emerald-300 rounded-2xl p-4 bg-emerald-50/60"
-                            title="Infographic prompt: A vertical ladder titled 'From watching → doing'. Bottom rung: 'Watch & read' with icons for video and notes. Middle rung: 'Quiz yourself' with a quiz icon. Top rung: 'Do an assignment' with icons representing code (for a terminal or brackets) and a generic 'case file' for non-coding tasks. Each rung includes a 1-line caption explaining the goal (e.g., 'Check recall', 'Test real-world application').">
-                            <p class="text-sm font-semibold text-emerald-800 mb-1">[Infographic placeholder]</p>
-                            <p class="text-sm text-emerald-700">
-                                Hover for a detailed prompt for the “from watching to doing” infographic.
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Turns your back catalog into a searchable asset—not forgotten uploads.
                             </p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Helps learners find “where you explained this best” in seconds.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6) Assignments (coming soon) -->
+        <section id="feature-assignments" class="mb-4 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">construction</span>
+                            <span>Assignments</span>
+                        </span>
+                        <span class="ml-2 text-xs font-semibold uppercase tracking-widest text-amber-700">Coming soon</span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Practical “do it” tasks after a chapter—so students apply what they watched, not just remember it.
+                    </p>
+                </div>
+
+                <div class="product-section__image border-2 border-dashed border-amber-200 rounded-3xl p-6 bg-amber-50 flex items-center justify-center text-center aspect-[4/3]">
+                    <div class="max-w-md">
+                        <div class="flex items-center justify-center mb-3">
+                            <span class="material-symbols-rounded text-amber-700 text-[48px] leading-none">construction</span>
                         </div>
+                        <p class="text-sm font-semibold text-slate-900 mb-2">Assignments are on the way</p>
+                        <p class="text-sm text-slate-700">
+                            A future step that nudges learners from “I watched it” to “I can do it”.
+                        </p>
                     </div>
                 </div>
-            </section>
-        </div>
-    </section>
+
+                <div class="product-section__metrics bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-amber-700 mt-0.5">bolt</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Built for creators who want outcomes—not extra admin.
+                            </p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-amber-700 mt-0.5">timer</span>
+                            <p class="text-base font-medium text-slate-900">
+                                Designed to be quick to start, easy to complete, and easy to check.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-amber-700 hover:text-amber-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+    </div>
 </main>
 
 </body>

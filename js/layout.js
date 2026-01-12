@@ -184,7 +184,7 @@ function createFooter() {
                         <span class="font-bold text-lg text-slate-900">Spark</span>
                     </a>
                     <p class="text-sm text-slate-500 mb-4">
-                        From video to a course — without the grind.
+                        From video to a course - without the grind.
                     </p>
                     <div class="text-sm text-slate-400">
                         Built by a team obsessed with long-term learning, retention, and high-trust relationships with teachers.
