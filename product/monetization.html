@@ -4,142 +4,700 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spark – Monetization</title>
-    <meta name="description" content="Turn courses, live classes, and recordings into predictable subscription revenue with Spark’s built-in plans, payments, and virtual studio.">
+    <meta name="description" content="Turn your existing teaching into paid courses, plans, and a student portal — with proven monetization rails inherited from PracticeNow.">
     <link rel="stylesheet" href="../css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
     <script src="../js/layout.js"></script>
+    <script src="../js/components/carousel.js" defer></script>
 </head>
 <body class="preload-hidden bg-white text-slate-900 antialiased pt-16">
 
 <main class="pt-20 pb-24">
-    <section>
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div id="top" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Hero -->
+        <section class="mb-16">
             <p class="text-sm font-semibold tracking-[0.18em] uppercase text-brand-600 mb-3">Monetization</p>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
-                The same system that makes your course also runs your business.
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
+                The business layer behind your course — already proven in the real world.
             </h1>
-            <p class="text-lg text-slate-600 mb-10">
-                Spark doesn’t stop at content. It comes with the rails to package everything you do—courses, live classes, workshops, and recordings—into clear offerings that students can buy and stick with.
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Spark turns your recordings into a structured course experience. Then it gives you the rails to sell it:
+                plans, payments, access control, and a student portal — inherited from PracticeNow.
             </p>
+        </section>
 
-            <!-- What you can sell -->
-            <section class="mb-12">
-                <h2 class="text-xl font-semibold text-slate-900 mb-3">1. What you can sell</h2>
-                <p class="text-sm text-slate-600 mb-4">
-                    Once Spark has turned your recordings into structured courses, you can decide how to offer them. The same account can handle a mix of:
-                </p>
-                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1 mb-4">
-                    <li><span class="font-semibold text-slate-800">Courses</span> – Spark‑generated courses sold as standalone products or bundled into larger programs.</li>
-                    <li><span class="font-semibold text-slate-800">Live classes</span> – recurring group classes, one‑on‑ones, and workshops (online or offline).</li>
-                    <li><span class="font-semibold text-slate-800">Recordings &amp; uploads</span> – auto‑recorded live sessions and existing video libraries offered on‑demand.</li>
-                </ul>
-                <p class="text-sm text-slate-600">
-                    For your students, it all looks like a single “virtual studio”: one place where they discover what you offer, sign up, join sessions, and come back to your courses when they have time.
-                </p>
+        <!-- Index (tight, mobile-friendly) -->
+        <section class="mb-20">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
+                <p class="text-center text-sm font-semibold uppercase tracking-widest text-slate-500 mb-6">Jump to a section</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <a href="#monetization-storefront" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">storefront</span>
+                        <span class="text-sm font-semibold text-slate-900">Storefront</span>
+                    </a>
+                    <a href="#monetization-pricing" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">payments</span>
+                        <span class="text-sm font-semibold text-slate-900">Plans &amp; pricing</span>
+                    </a>
+                    <a href="#monetization-checkout" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">receipt_long</span>
+                        <span class="text-sm font-semibold text-slate-900">Checkout</span>
+                    </a>
+                    <a href="#monetization-country-pricing" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">public</span>
+                        <span class="text-sm font-semibold text-slate-900">Country pricing</span>
+                    </a>
+                    <a href="#monetization-delivery" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">verified_user</span>
+                        <span class="text-sm font-semibold text-slate-900">Delivery</span>
+                    </a>
+                    <a href="#monetization-growth" class="flex items-start gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm transition">
+                        <span class="material-symbols-rounded text-brand-600 mt-0.5">redeem</span>
+                        <span class="text-sm font-semibold text-slate-900">Promotions</span>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-                <div
-                    class="mt-4 border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                    title="Screenshot prompt: A 'Catalog' or 'Studio' page with three tiles labeled 'Courses', 'Live Classes', and 'Workshops & Recordings'. Each tile has 1–2 example offerings like 'Complete Algebra Course', 'Evening Physics Group Class', and 'Exam Revision Recordings'. Include short tags for 'Live', 'On-demand', and 'Bundle'. The goal is to show a unified storefront, not a cluttered marketplace.">
-                    <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                    <p class="text-sm text-slate-500">
-                        Hover for a detailed prompt for the “what you can sell” catalog screenshot.
+        <!-- A) Unified storefront -->
+        <section id="monetization-storefront" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">storefront</span>
+                            <span>One storefront: courses, live classes, recordings</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Students shouldn’t need three links and a spreadsheet to buy from you.
+                        Spark gives them one “home” where they discover what you offer, join live sessions,
+                        and come back to your course when they have time.
                     </p>
                 </div>
-            </section>
 
-            <!-- Plans & pricing -->
-            <section class="mb-12">
-                <h2 class="text-xl font-semibold text-slate-900 mb-3">2. Plans and pricing that match how you really teach</h2>
-                <p class="text-sm text-slate-600 mb-4">
-                    Spark’s pricing engine is built for teachers who don’t fit into one neat box. You can run:
-                </p>
-                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1 mb-4">
-                    <li><span class="font-semibold text-slate-800">Paid, donation‑based, and free plans</span> – experiment with different entry points and “pay what you want” tiers.</li>
-                    <li><span class="font-semibold text-slate-800">Online, offline, and hybrid plans</span> – connect a single plan to in‑person classes, online sessions, or both.</li>
-                    <li><span class="font-semibold text-slate-800">Private plans</span> – plans visible only to specific email addresses or student segments.</li>
-                    <li><span class="font-semibold text-slate-800">Tiered and bundled pricing</span> – ladders based on class counts or duration, plus upsells and cross‑sells between plans.</li>
-                </ul>
+                <div class="product-section__image">
+                    <div id="monetization-storefront-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI infographic prompt: Create a clean diagram titled 'One student home'. Show three tiles connected into one portal: (1) Courses (on-demand), (2) Live classes (calendar + join button), (3) Recordings (library). Add a single top bar that says 'Your learning hub' and a small note 'Timezone-aware'. Visual style: modern SaaS, white background, slate text, subtle indigo accents (#4f46e5), rounded cards, soft shadows, Inter-like typography, lots of whitespace. Avoid: yoga terms, cartoonish icons, loud colors.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20diagram%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI diagram placeholder: unified student home (courses + live + recordings)"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI infographic</p>
+                                            <p class="text-sm text-slate-600">Unified student home (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
 
-                <div
-                    class="mt-4 border-2 border-dashed border-emerald-300 rounded-2xl p-4 bg-emerald-50/60"
-                    title="Infographic prompt: A 2x2 grid titled 'Pricing patterns Spark supports'. Quadrants: (1) 'Membership' with a simple monthly plan card, (2) 'Program' with a fixed-duration plan card, (3) 'Drop-in & bundles' with a small pack of class credits, (4) 'Private / invite-only' with a lock icon on a plan card. Each quadrant has a 1-line explanation. Visual style: clean SaaS pricing diagrams, no currency symbols needed.">
-                    <p class="text-sm font-semibold text-emerald-800 mb-1">[Infographic placeholder]</p>
-                    <p class="text-sm text-emerald-700">
-                        Hover for a detailed prompt for the “pricing patterns” infographic.
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/pn-upcoming-classes.jpg"
+                                                alt="PracticeNow student portal: upcoming classes schedule and quick joins"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Student home</p>
+                                            <p class="text-sm text-slate-600">A single schedule view with timezone context and fast joins.</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap an image to view it full screen.</p>
+                    </div>
+                </div>
+
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">One link for students: discover → buy → attend → revisit.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Timezone-aware schedules (fewer “what time is it?” messages).</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Access is subscription-aware: students see only what they can attend.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- B) Plans & pricing -->
+        <section id="monetization-pricing" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">payments</span>
+                            <span>Plans &amp; pricing that match real creators</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Start simple, stay flexible: subscriptions, fixed-duration programs, bundles, and private plans.
+                        Price for the way you already teach — without building a new “business to manage.”
                     </p>
                 </div>
-            </section>
 
-            <!-- Payments & subscriptions -->
-            <section class="mb-12">
-                <h2 class="text-xl font-semibold text-slate-900 mb-3">3. Payments and subscriptions that run on their own</h2>
-                <p class="text-sm text-slate-600 mb-4">
-                    Spark is designed to collect and track payments with as little manual work as possible:
-                </p>
-                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1 mb-4">
-                    <li>Modern online payment methods, including cards and local options, with support for multiple currencies.</li>
-                    <li>Automatic subscription lifecycles: upcoming, active, expiring, and expired, with reminders sent at the right time.</li>
-                    <li>Support for students holding multiple plans at once—for example, a regular class plan plus a short exam bootcamp.</li>
-                    <li>Options to freeze or extend subscriptions when life happens, without losing track of entitlements.</li>
-                </ul>
+                <div class="product-section__image">
+                    <div id="monetization-pricing-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI infographic prompt: A clean 2x2 grid titled 'Pricing patterns Spark supports'. Quadrants: (1) Membership — monthly plan card, simple benefits list. (2) Program — fixed duration (e.g., 6 weeks) plan card with start/end dates. (3) Bundles — pack of credits (e.g., 10 sessions) with expiry. (4) Private / invite-only — locked plan card with 'Invite required'. Visual style: modern SaaS infographic, white background, slate text, subtle indigo accents (#4f46e5), rounded cards, soft shadows, Inter-like typography, lots of whitespace. Audience cues: professional YouTube educator (no yoga terms), high-trust feel. Avoid: currency symbols, loud colors, playful icons.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20diagram%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI infographic placeholder: pricing patterns (membership, program, bundles, invite-only)"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI infographic</p>
+                                            <p class="text-sm text-slate-600">Pricing patterns grid (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
 
-                <div
-                    class="mt-4 border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                    title="Screenshot prompt: A 'Subscriptions' dashboard with a table of students, each row showing name, plan name, status pill (Upcoming/Active/Expiring/Expired), next billing date, and a tiny '...' menu. Above the table, show simple filters (Status, Plan) and a small card summarizing 'Monthly recurring revenue' and 'Active paying students'.">
-                    <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                    <p class="text-sm text-slate-500">
-                        Hover for a detailed prompt for the “subscriptions dashboard” screenshot.
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/pn-buy-plans.jpg"
+                                                alt="PracticeNow plans page: students compare and select subscription plans"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Plans &amp; pricing</p>
+                                            <p class="text-sm text-slate-600">Students can compare options and pick what fits their schedule.</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap an image to view it full screen.</p>
+                    </div>
+                </div>
+
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Membership, cohort/program, bundles, and invite-only plans.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Paid, free, and “pay what you want” options.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Tie each plan to exactly what it unlocks (course/live/recordings).</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links flex flex-wrap gap-3 text-base font-semibold">
+                    <a
+                        href="https://yogaranya.practicenow.us/students/subscriptions?handle=yogaranya&theme_id=&uid=yogaranya"
+                        target="_blank"
+                        rel="noopener"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                        <span class="material-symbols-rounded text-[18px]">open_in_new</span>
+                        <span>See a live plans page</span>
+                        <span class="material-symbols-rounded text-[18px]">arrow_forward</span>
+                    </a>
+                    <a href="#top" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-brand-600 hover:border-brand-300 hover:bg-white hover:text-brand-700 transition-colors">
+                        <span>Back to top</span>
+                        <span class="material-symbols-rounded text-[18px]">arrow_upward</span>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- C) Checkout + subscriptions -->
+        <section id="monetization-checkout" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">receipt_long</span>
+                            <span>Checkout + subscriptions (lifecycle handled)</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Payments are the easy part. The hard part is the lifecycle: upcoming → active → expiring → expired,
+                        and making sure the right student has the right access at the right time.
                     </p>
                 </div>
-            </section>
 
-            <!-- Virtual studio & hosting -->
-            <section class="mb-12">
-                <h2 class="text-xl font-semibold text-slate-900 mb-3">4. Virtual studio and secure hosting</h2>
-                <p class="text-sm text-slate-600 mb-4">
-                    Students get a single “home” with your brand on it:
-                </p>
-                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1 mb-4">
-                    <li><span class="font-semibold text-slate-800">Virtual studio portal</span> – shows only the classes and courses a student can actually attend, with one‑click joins for live sessions.</li>
-                    <li><span class="font-semibold text-slate-800">Time‑zone aware schedules</span> – no more messages asking “what time is this in my country?”.</li>
-                    <li><span class="font-semibold text-slate-800">Secure video hosting</span> – streaming tuned for real‑world internet speeds, with safeguards against casual downloading and sharing.</li>
-                </ul>
+                <div class="product-section__image">
+                    <div id="monetization-checkout-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI diagram prompt: Create a simple lifecycle diagram titled 'Subscription lifecycle (handled)'. Show a left-to-right flow with 5 labeled steps in rounded pills: Upcoming → Active → Expiring → Expired → Renewed. Under the flow, add a small row of 'automations' icons: reminders, access control, freeze/extend. Visual style: clean SaaS diagram, white background, slate text, indigo accents (#4f46e5), rounded shapes, lots of whitespace, Inter-like typography. Avoid: currency symbols, busy UI.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20diagram%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI diagram placeholder: subscription lifecycle (upcoming → active → expiring → expired → renewed)"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI diagram</p>
+                                            <p class="text-sm text-slate-600">Subscription lifecycle flow (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
 
-                <div
-                    class="mt-4 border-2 border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50"
-                    title="Screenshot prompt: A student-facing 'Today' view of the virtual studio. At the top, welcome text with the teacher’s name; below, two cards: one for an upcoming live class with a clear 'Join' button and countdown, and one for a course they’re enrolled in with a 'Resume course' button. Include a small timezone label like 'All times shown in: Asia/Kolkata' to hint at timezone-awareness.">
-                    <p class="text-sm font-semibold text-slate-700 mb-1">[Screenshot placeholder]</p>
-                    <p class="text-sm text-slate-500">
-                        Hover for a detailed prompt for the “virtual studio” screenshot.
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="../images/product/origin/pn-checkout-page.jpg"
+                                                alt="PracticeNow checkout page: plan purchase and payment flow"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">Checkout</p>
+                                            <p class="text-sm text-slate-600">A clean purchase flow that maps directly to access.</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap an image to view it full screen.</p>
+                    </div>
+                </div>
+
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Automatic subscription states + reminders.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Students can hold multiple plans at once (course + live, etc.).</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Pause/extend when life happens — without breaking entitlements.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- C.5) Country-wise pricing -->
+        <section id="monetization-country-pricing" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">public</span>
+                            <span>Country-wise pricing (global, without awkward hacks)</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        If you teach globally, a single price rarely fits. Spark supports country-wise pricing so students
+                        see a fair local price — without you manually sending payment links or tracking exceptions.
                     </p>
                 </div>
-            </section>
 
-            <!-- Promotions and engagement -->
-            <section>
-                <h2 class="text-xl font-semibold text-slate-900 mb-3">5. Promotions and engagement that don’t feel spammy</h2>
-                <p class="text-sm text-slate-600 mb-4">
-                    Spark includes tools to nudge students without turning your teaching into a discount circus:
-                </p>
-                <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1 mb-4">
-                    <li>Discount codes for thoughtful campaigns instead of permanent sales.</li>
-                    <li>Wallet‑style credits and cashbacks for rewarding loyal students.</li>
-                    <li>Referral and gifting mechanics that let your happiest students bring others in.</li>
-                    <li>Consistency‑based rewards (leaderboards, badges) to celebrate students who keep showing up.</li>
-                </ul>
+                <div class="product-section__image">
+                    <div id="monetization-country-pricing-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI diagram prompt: Create a clean diagram titled 'Country-wise pricing'. Show a single plan card in the center labeled 'Course + Office Hours'. Around it, show 4 small country cards (US, UK, India, Brazil) each with a local currency label (no specific numbers) and a short note like 'Displayed automatically'. Add a subtle caption: 'Students see local pricing by country'. Visual style: modern SaaS diagram, white background, slate text, subtle indigo accents (#4f46e5), rounded cards, soft shadows, Inter-like typography, lots of whitespace. Avoid: flags that dominate the design, busy maps, loud colors.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20diagram%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI diagram placeholder: country-wise pricing"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI diagram</p>
+                                            <p class="text-sm text-slate-600">Country-wise pricing overview (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
 
-                <div
-                    class="mt-4 border-2 border-dashed border-emerald-300 rounded-2xl p-4 bg-emerald-50/60"
-                    title="Infographic prompt: A simple loop labeled 'Healthy growth loop'. Arrows connecting: 'Student gets value' → 'Feels recognized' → 'Invites friends / stays subscribed' → 'You reinvest in better teaching'. Along the loop, place small icons: badge for recognition, gift box for referrals, bar chart for sustainable revenue. The tone should emphasize sustainability, not short-term hacks.">
-                    <p class="text-sm font-semibold text-emerald-800 mb-1">[Infographic placeholder]</p>
-                    <p class="text-sm text-emerald-700">
-                        Hover for a detailed prompt for the “healthy growth loop” infographic.
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI UI mock prompt: A 'Plan pricing' settings screen with a tab called 'Country-wise pricing'. Left: plan name and base price (no numbers). Right: a table with columns 'Country/Region', 'Currency', 'Price', 'Status'. Rows: United States, United Kingdom, India, Brazil, 'Rest of world'. Use simple status pills (Enabled/Disabled) and a small help note 'Shown automatically based on student location'. Visual style: modern SaaS UI screenshot, white background, slate text, subtle indigo accents (#4f46e5), rounded cards, soft shadows, Inter-like typography, minimal clutter. Avoid: complex finance charts, loud flags, spammy pricing language.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20UI%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI UI placeholder: country-wise pricing settings"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI UI mock</p>
+                                            <p class="text-sm text-slate-600">Country-wise pricing settings (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap an image to view it full screen.</p>
+                    </div>
+                </div>
+
+                <div class="product-section__metrics bg-brand-50 border border-brand-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Local prices for different countries, tied to the same plan.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Students see the right price automatically at checkout.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-brand-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Helps global access without underpricing your core market.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- D) Delivery -->
+        <section id="monetization-delivery" class="mb-24 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-right">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">verified_user</span>
+                            <span>Delivery: student portal + secure hosting</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        A clean portal keeps your brand professional and your students focused.
+                        Your content stays accessible to paying learners — without turning you into a support desk.
                     </p>
                 </div>
-            </section>
-        </div>
-    </section>
+
+                <div class="product-section__image">
+                    <div id="monetization-delivery-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-slate-300 rounded-3xl p-3 bg-slate-50 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI UI mock prompt: Student-facing portal 'Today' view for a professional YouTube educator. Top: 'Welcome back, Alex' + 'All times shown in: Pacific Time (PT)'. Two main cards: (1) 'Next live session' with countdown + 'Join' button, (2) 'Resume course' with progress bar (35%) + 'Continue' button. Secondary row: 'Your purchases' with two plan pills: 'Course Access' and 'Weekly Office Hours'. Style: modern SaaS UI screenshot, white background, slate text, subtle indigo accents (#4f46e5), rounded cards, soft shadows, Inter-like typography, minimal clutter. Avoid: yoga terms, playful illustrations, busy dashboards.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20UI%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI UI placeholder: student portal 'Today' view"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI UI mock</p>
+                                            <p class="text-sm text-slate-600">Student portal “Today” view (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI diagram prompt: Create a simple security + delivery diagram titled 'Secure access'. Show a lock icon connected to: (1) 'Entitlements / access rules', (2) 'Adaptive streaming', (3) 'Sharing prevention'. Add a small note: 'Students see only what they paid for'. Style: clean SaaS infographic, white background, slate text, subtle indigo accents (#4f46e5), rounded shapes, soft shadows, Inter-like typography, lots of whitespace. Avoid: scary hacker imagery, neon colors, clutter.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20diagram%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI diagram placeholder: secure access + delivery"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI diagram</p>
+                                            <p class="text-sm text-slate-600">Secure access + delivery (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500 text-center">Tap an image to view it full screen.</p>
+                    </div>
+                </div>
+
+                <div class="product-section__metrics bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-indigo-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Students see only what they’re eligible for (less confusion, fewer refunds).</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-indigo-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Timezone-aware schedules + one-tap joins.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-indigo-600 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Secure hosting options for paid video access.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-indigo-700 hover:text-indigo-800">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- E) Growth tools -->
+        <section id="monetization-growth" class="mb-4 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-12 items-start product-section product-section--image-left">
+                <div class="product-section__intro">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">
+                        <span class="inline-flex items-center gap-2">
+                            <span class="material-symbols-rounded text-slate-900">redeem</span>
+                            <span>Promotions that don’t feel spammy</span>
+                        </span>
+                    </h2>
+                    <p class="text-base text-slate-600 leading-relaxed">
+                        Discounts, credits, and referrals — used like a craft tool, not a megaphone.
+                        The goal is retention and trust, not constant coupons.
+                    </p>
+                </div>
+
+                <div class="product-section__image">
+                    <div id="monetization-growth-carousel" data-carousel data-carousel-fullscreen class="relative">
+                        <div
+                            data-carousel-track
+                            class="border-2 border-dashed border-emerald-300 rounded-3xl p-3 bg-emerald-50/60 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                            <div class="flex gap-3">
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI infographic prompt: Title 'Healthy growth loop'. A simple circular loop with 4 labeled nodes + arrows: (1) Student gets value, (2) Feels recognized, (3) Stays subscribed / invites friends, (4) You reinvest in better teaching. Add small minimal icons near each node: badge/check, star/award, gift/people, upward chart. Visual style: clean SaaS infographic, white background, slate text, subtle indigo accents (#4f46e5), rounded labels, lots of whitespace, Inter-like typography. Avoid: loud marketing vibe, emoji, neon colors.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20infographic%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI infographic placeholder: healthy growth loop"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI infographic</p>
+                                            <p class="text-sm text-slate-600">Healthy growth loop (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+
+                                <figure data-carousel-slide class="min-w-full snap-center carousel-snap-stop">
+                                    <div
+                                        class="rounded-2xl bg-white border border-slate-200 overflow-hidden"
+                                        title="AI UI mock prompt: A 'Promotions' admin screen for a professional creator. Three tabs: 'Discount codes', 'Credits', 'Referrals'. In 'Discount codes' show a table with 3 example codes (Launch10, Alumni20, CohortEarly) + status pill + expiry date. Right side: a small summary card 'Redemptions this week' + 'Revenue attributed'. Visual style: modern SaaS UI screenshot, white background, slate text, subtle indigo accents (#4f46e5), rounded cards, soft shadows, Inter-like typography, minimal clutter. Avoid: spammy language, huge discounts, flashy colors.">
+                                        <div class="aspect-[16/9] bg-white">
+                                            <img
+                                                src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271200%27%20height%3D%27675%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f8fafc%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2750%25%27%20dominant-baseline%3D%27middle%27%20text-anchor%3D%27middle%27%20fill%3D%27%2364748b%27%20font-family%3D%27Inter%2C%20Arial%27%20font-size%3D%2730%27%3EAI%20UI%20placeholder%3C/text%3E%3C/svg%3E"
+                                                alt="AI UI placeholder: promotions tools (discount codes, credits, referrals)"
+                                                class="w-full h-full object-cover sm:object-center cursor-zoom-in">
+                                        </div>
+                                        <figcaption class="p-4 bg-slate-50 border-t border-slate-200">
+                                            <p class="text-sm font-semibold text-slate-800 mb-1">AI UI mock</p>
+                                            <p class="text-sm text-slate-600">Discounts, credits, referrals (hover for the full generation prompt).</p>
+                                        </figcaption>
+                                    </div>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-3">
+                            <button
+                                type="button"
+                                data-carousel-prev
+                                aria-label="Previous image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_left</span>
+                            </button>
+                            <div data-carousel-dots class="flex items-center justify-center gap-2">
+                                <button type="button" data-carousel-dot="0" aria-label="Go to image 1" class="w-2.5 h-2.5 rounded-full bg-brand-600"></button>
+                                <button type="button" data-carousel-dot="1" aria-label="Go to image 2" class="w-2.5 h-2.5 rounded-full bg-slate-300"></button>
+                            </div>
+                            <button
+                                type="button"
+                                data-carousel-next
+                                aria-label="Next image"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-slate-200 text-slate-700 shadow-sm hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                                <span class="material-symbols-rounded text-[18px] leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-xs text-emerald-800 text-center">Tap an image to view it full screen.</p>
+                    </div>
+                </div>
+
+                <div class="product-section__metrics bg-emerald-50 border border-emerald-100 rounded-2xl p-6">
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-700 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Discount codes for thoughtful launches and cohorts.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-700 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Wallet-style credits to reward loyal students.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-700 mt-0.5">check_circle</span>
+                            <p class="text-base font-medium text-slate-900">Referrals and gifting to let happy students bring others in.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="product-section__links">
+                    <a href="#top" class="text-sm font-semibold text-emerald-800 hover:text-emerald-800">Back to top ↑</a>
+                </div>
+            </div>
+        </section>
+    </div>
 </main>
 
 </body>
