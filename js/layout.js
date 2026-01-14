@@ -37,6 +37,35 @@ console.log('[spark-marketing] resolved BASE_PATH', {
     basePath: BASE_PATH
 });
 
+function getLogoThumbnailHref() {
+    // Use an absolute-from-site-root path so it works from /product/* pages too.
+    // When BASE_PATH is empty, this becomes "/images/..." (root of the marketing site).
+    return `${BASE_PATH}/images/logos/logo-thumbnail.png`;
+}
+
+function ensureFavicon() {
+    const href = getLogoThumbnailHref();
+
+    const existing = document.querySelector('link[rel="icon"]');
+    if (existing) {
+        // Keep it idempotent: only update if it doesn't already match.
+        if (existing.getAttribute('href') !== href) {
+            existing.setAttribute('href', href);
+            existing.setAttribute('type', 'image/png');
+        }
+        console.log('[spark-marketing] favicon ensured (updated existing)', { href });
+        return;
+    }
+
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'icon');
+    link.setAttribute('type', 'image/png');
+    link.setAttribute('href', href);
+    document.head.appendChild(link);
+
+    console.log('[spark-marketing] favicon ensured (created)', { href });
+}
+
 // Navigation Links
 const navLinks = [
     {
@@ -117,8 +146,11 @@ function createHeader() {
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="${BASE_PATH || ''}/index.html" class="flex items-center gap-2">
-                        <!-- Placeholder Logo Icon -->
-                        <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">S</div>
+                        <img
+                            src="${getLogoThumbnailHref()}"
+                            alt="Spark logo"
+                            class="w-8 h-8 rounded-lg"
+                            decoding="async">
                         <span class="font-bold text-xl tracking-tight text-slate-900">Spark</span>
                     </a>
                 </div>
@@ -180,7 +212,11 @@ function createFooter() {
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="col-span-2 md:col-span-1">
                     <a href="${BASE_PATH ? `${BASE_PATH}/` : '/'}" class="flex items-center gap-2 mb-4">
-                        <div class="w-6 h-6 bg-slate-900 rounded-md flex items-center justify-center text-white font-bold text-sm">S</div>
+                        <img
+                            src="${getLogoThumbnailHref()}"
+                            alt="Spark logo"
+                            class="w-6 h-6 rounded-md"
+                            decoding="async">
                         <span class="font-bold text-lg text-slate-900">Spark</span>
                     </a>
                     <p class="text-sm text-slate-500 mb-4">
@@ -233,6 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
         hasTailwindStylesheet: !!document.querySelector('link[href*="marketing/css/tailwind.css"],link[href*=\"/marketing/css/tailwind.css\"]'),
         bodyClasses: document.body.className
     });
+
+    ensureFavicon();
     
     // Insert Header
     document.body.insertBefore(createHeader(), document.body.firstChild);
