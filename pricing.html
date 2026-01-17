@@ -17,11 +17,71 @@
         [data-accordion-chevron] {
             transition: transform 0.3s ease-out;
         }
-        .feature-tooltip-modal {
-            display: none;
+        /* Tooltip styles */
+        .tooltip-container {
+            position: relative;
+            display: inline-flex;
         }
-        .feature-tooltip-modal.active {
-            display: flex;
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            white-space: normal;
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            font-size: 14px;
+            line-height: 1.5;
+            z-index: 50;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #1e293b;
+        }
+        .tooltip-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: white;
+        }
+        .tooltip-content {
+            color: #e2e8f0;
+        }
+        .tooltip-container:hover .tooltip,
+        .tooltip-trigger:focus ~ .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        @media (max-width: 640px) {
+            .p-8 li {
+                position: relative;
+            }
+            .tooltip-container {
+                position: static !important;
+            }
+            .tooltip {
+                width: auto !important;
+                left: 12px !important;
+                right: 12px !important;
+                transform: none !important;
+                max-width: none !important;
+            }
+            .tooltip::after {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -53,43 +113,78 @@
                                 <span class="material-symbols-rounded text-brand-600 text-lg">account_tree</span>
                                 <span>Course Creation</span>
                             </h3>
-                            <div class="pl-6 space-y-2.5">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Auto-organized chapters & sections</span>
-                                    <button onclick="showFeatureTooltip('structure')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors p-0 bg-transparent border-0 cursor-pointer" aria-label="Learn more about course structure">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Extracted presentation slides</span>
-                                    <button onclick="showFeatureTooltip('slides')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about slides">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Auto-generated study notes</span>
-                                    <button onclick="showFeatureTooltip('notes')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about study notes">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Auto-generated quizzes</span>
-                                    <button onclick="showFeatureTooltip('quizzes')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about quizzes">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">24/7 AI tutor assistant</span>
-                                    <button onclick="showFeatureTooltip('tutor')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about AI tutor">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <ul class="pl-6 space-y-2.5 list-none text-left">
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Auto-organized chapters & <span class="whitespace-nowrap">sections<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors p-0 bg-transparent border-0 cursor-pointer" aria-label="Learn more about course structure">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Course structure</div>
+                                                <div class="tooltip-content">Spark automatically breaks your long videos into chapters and 3-8 minute micro-sections. Students can jump to specific topics without scrubbing through hours of content.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Extracted presentation <span class="whitespace-nowrap">slides<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about slides">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Slides</div>
+                                                <div class="tooltip-content">Automatically extracts key presentation slides from your videos using multi-stage computer vision. Duplicate slides are detected and removed, ensuring students see unique, meaningful content.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Auto-generated study <span class="whitespace-nowrap">notes<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about study notes">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Study notes</div>
+                                                <div class="tooltip-content">Auto-generated notes for every chapter with key ideas, examples, and formulas. Students can quickly review without rewatching entire videos.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Auto-generated <span class="whitespace-nowrap">quizzes<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about quizzes">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Quizzes</div>
+                                                <div class="tooltip-content">Automatically generated quiz questions tied to each chapter. All answers are verified against your actual teaching content before being included.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        24/7 AI tutor <span class="whitespace-nowrap">assistant<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about AI tutor">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">AI tutor</div>
+                                                <div class="tooltip-content">A 24/7 tutor that answers student questions using only your course content. It stays grounded in what you taught and cites specific chapters or notes.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
 
                         <!-- Student Experience -->
@@ -98,29 +193,50 @@
                                 <span class="material-symbols-rounded text-brand-600 text-lg">storefront</span>
                                 <span>Student Experience</span>
                             </h3>
-                            <div class="pl-6 space-y-2.5">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Unified student portal</span>
-                                    <button onclick="showFeatureTooltip('portal')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about student portal">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Natural language search</span>
-                                    <button onclick="showFeatureTooltip('search')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about knowledge search">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Student progress reports</span>
-                                    <button onclick="showFeatureTooltip('progress')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about progress tracking">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <ul class="pl-6 space-y-2.5 list-none text-left">
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Unified student <span class="whitespace-nowrap">portal<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about student portal">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Student portal</div>
+                                                <div class="tooltip-content">A clean, professional portal where students access courses, join live sessions, and view recordings. Fully mobile-friendly and organized by their subscription access.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Natural language <span class="whitespace-nowrap">search<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about knowledge search">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Knowledge search</div>
+                                                <div class="tooltip-content">Students can search across all your content using natural language. Find where you explained a concept even without exact keyword matches.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Student progress <span class="whitespace-nowrap">reports<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about progress tracking">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Progress tracking</div>
+                                                <div class="tooltip-content">Students see their progress through each course. You get detailed reports showing which students struggle with which concepts - so you know where to focus.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
 
                         <!-- Payments & Pricing -->
@@ -129,36 +245,64 @@
                                 <span class="material-symbols-rounded text-brand-600 text-lg">payments</span>
                                 <span>Payments & Pricing</span>
                             </h3>
-                            <div class="pl-6 space-y-2.5">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Multiple pricing models</span>
-                                    <button onclick="showFeatureTooltip('pricing')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about flexible pricing">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Worldwide payment processing</span>
-                                    <button onclick="showFeatureTooltip('payments')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about global payments">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Discount codes & credits</span>
-                                    <button onclick="showFeatureTooltip('discounts')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about discounts and credits">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Automated subscription management</span>
-                                    <button onclick="showFeatureTooltip('subscriptions')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about automated subscriptions">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <ul class="pl-6 space-y-2.5 list-none text-left">
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Multiple pricing <span class="whitespace-nowrap">models<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about flexible pricing">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Flexible pricing</div>
+                                                <div class="tooltip-content">Support for subscriptions, one-time payments, fixed-duration programs, bundles, and pay-what-you-want options. Price it how you want to run your business.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Worldwide payment <span class="whitespace-nowrap">processing<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about global payments">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Global payments</div>
+                                                <div class="tooltip-content">Connect Stripe (globally) or RazorPay (in India) to accept payments. Set country-wise pricing so students automatically see fair local prices at checkout.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Discount codes & <span class="whitespace-nowrap">credits<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about discounts and credits">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Discounts & credits</div>
+                                                <div class="tooltip-content">Create discount codes with expiry dates and usage limits. Students can earn and redeem credits through a wallet system.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Automated subscription <span class="whitespace-nowrap">management<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about automated subscriptions">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Auto subscriptions</div>
+                                                <div class="tooltip-content">Subscriptions automatically move through states: Upcoming → Active → Expiring → Expired. Renewal reminders and access control handled automatically.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
 
                         <!-- Platform -->
@@ -167,29 +311,50 @@
                                 <span class="material-symbols-rounded text-brand-600 text-lg">cloud_upload</span>
                                 <span>Platform</span>
                             </h3>
-                            <div class="pl-6 space-y-2.5">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Cloud video hosting</span>
-                                    <button onclick="showFeatureTooltip('hosting')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about video hosting">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Live class integration</span>
-                                    <button onclick="showFeatureTooltip('live')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about live classes">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-rounded text-brand-600 text-base">check</span>
-                                    <span class="text-base text-slate-700">Export to LMS platforms</span>
-                                    <button onclick="showFeatureTooltip('export')" class="flex-shrink-0 text-slate-300 hover:text-slate-500 transition-colors cursor-pointer" aria-label="Learn more about content export">
-                                        <span class="material-symbols-rounded text-[7px] leading-none">help</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <ul class="pl-6 space-y-2.5 list-none text-left">
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Cloud video <span class="whitespace-nowrap">hosting<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about video hosting">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Video hosting</div>
+                                                <div class="tooltip-content">Spark hosts your videos securely in the cloud with adaptive streaming. Up to 20 hours of video upload per month (no limit on streaming).</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Live class <span class="whitespace-nowrap">integration<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about live classes">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Live classes</div>
+                                                <div class="tooltip-content">Seamless integration with Zoom and Google Meet. Students join live sessions directly from the student portal, and recordings automatically flow into Spark.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="material-symbols-rounded text-brand-600 text-base flex-shrink-0 mt-0.5">check</span>
+                                    <div class="flex-1 text-base text-slate-700">
+                                        Export to LMS <span class="whitespace-nowrap">platforms<span class="tooltip-container inline-flex items-center ml-1">
+                                            <button class="tooltip-trigger inline-flex items-center text-slate-300 hover:text-slate-500 transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Learn more about content export">
+                                                <span class="material-symbols-rounded text-[7px] leading-none">help</span>
+                                            </button>
+                                            <div class="tooltip">
+                                                <div class="tooltip-title">Content export</div>
+                                                <div class="tooltip-content">Your content is yours. Export courses, notes, quizzes, and structure to standard formats like SCORM or direct integration with Moodle, Canvas, and other LMS platforms.</div>
+                                            </div>
+                                        </span></span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     
@@ -215,7 +380,7 @@
         </section>
 
         <!-- Table of contents -->
-        <section id="faq-toc" class="mb-20"><section id="faq-toc" class="mb-20">
+        <section id="faq-toc" class="mb-20">
             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
                 <p class="text-center text-base font-semibold uppercase tracking-widest text-slate-500 mb-6">Jump to a section</p>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -1513,107 +1678,6 @@
     </div>
 </main>
 
-<!-- Feature Tooltip Modal -->
-<div id="feature-tooltip-modal" class="feature-tooltip-modal fixed inset-0 z-[100] flex items-center justify-center p-4" onclick="closeFeatureTooltip(event)">
-    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onclick="closeFeatureTooltip(event)"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full" onclick="event.stopPropagation()">
-        <button onclick="closeFeatureTooltip(event)" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors" aria-label="Close">
-            <span class="material-symbols-rounded">close</span>
-        </button>
-        <h3 id="tooltip-title" class="text-xl font-bold text-slate-900 mb-3 pr-8"></h3>
-        <p id="tooltip-content" class="text-base text-slate-600 leading-relaxed"></p>
-    </div>
-</div>
-
-<script>
-const featureTooltips = {
-    structure: {
-        title: 'Course structure',
-        content: 'Spark automatically breaks your long videos into chapters and 3-8 minute micro-sections. Students can jump to specific topics without scrubbing through hours of content.'
-    },
-    slides: {
-        title: 'Slides',
-        content: 'Automatically extracts key presentation slides from your videos using multi-stage computer vision. Duplicate slides are detected and removed, ensuring students see unique, meaningful content.'
-    },
-    notes: {
-        title: 'Study notes',
-        content: 'Auto-generated notes for every chapter with key ideas, examples, and formulas. Students can quickly review without rewatching entire videos.'
-    },
-    quizzes: {
-        title: 'Quizzes',
-        content: 'Automatically generated quiz questions tied to each chapter. All answers are verified against your actual teaching content before being included.'
-    },
-    tutor: {
-        title: 'AI tutor',
-        content: 'A 24/7 tutor that answers student questions using only your course content. It stays grounded in what you taught and cites specific chapters or notes.'
-    },
-    portal: {
-        title: 'Student portal',
-        content: 'A clean, professional portal where students access courses, join live sessions, and view recordings. Fully mobile-friendly and organized by their subscription access.'
-    },
-    search: {
-        title: 'Knowledge search',
-        content: 'Students can search across all your content using natural language. Find where you explained a concept even without exact keyword matches.'
-    },
-    progress: {
-        title: 'Progress tracking',
-        content: 'Students see their progress through each course. You get detailed reports showing which students struggle with which concepts - so you know where to focus.'
-    },
-    pricing: {
-        title: 'Flexible pricing',
-        content: 'Support for subscriptions, one-time payments, fixed-duration programs, bundles, and pay-what-you-want options. Price it how you want to run your business.'
-    },
-    payments: {
-        title: 'Global payments',
-        content: 'Connect Stripe (globally) or RazorPay (in India) to accept payments. Set country-wise pricing so students automatically see fair local prices at checkout.'
-    },
-    discounts: {
-        title: 'Discounts & credits',
-        content: 'Create discount codes with expiry dates and usage limits. Students can earn and redeem credits through a wallet system.'
-    },
-    subscriptions: {
-        title: 'Auto subscriptions',
-        content: 'Subscriptions automatically move through states: Upcoming → Active → Expiring → Expired. Renewal reminders and access control handled automatically.'
-    },
-    hosting: {
-        title: 'Video hosting',
-        content: 'Spark hosts your videos securely in the cloud with adaptive streaming. Up to 20 hours of video upload per month (no limit on streaming).'
-    },
-    live: {
-        title: 'Live classes',
-        content: 'Seamless integration with Zoom and Google Meet. Students join live sessions directly from the student portal, and recordings automatically flow into Spark.'
-    },
-    export: {
-        title: 'Content export',
-        content: 'Your content is yours. Export courses, notes, quizzes, and structure to standard formats like SCORM or direct integration with Moodle, Canvas, and other LMS platforms.'
-    }
-};
-
-function showFeatureTooltip(featureId) {
-    const tooltip = featureTooltips[featureId];
-    if (!tooltip) return;
-    
-    document.getElementById('tooltip-title').textContent = tooltip.title;
-    document.getElementById('tooltip-content').textContent = tooltip.content;
-    document.getElementById('feature-tooltip-modal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeFeatureTooltip(event) {
-    if (event.target === event.currentTarget || event.target.closest('button')) {
-        document.getElementById('feature-tooltip-modal').classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-// Close on Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.getElementById('feature-tooltip-modal').classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
-</script>
 
 </body>
 </html>
