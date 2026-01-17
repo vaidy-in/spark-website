@@ -126,7 +126,7 @@ const productSubpages = [
 const aboutSubpages = [
     { name: 'Why Spark', href: `${BASE_PATH}/about/why-spark.html` },
     { name: 'Team', href: `${BASE_PATH}/about/team.html` },
-    { name: 'Story', href: `${BASE_PATH}/about/story.html` },
+    { name: 'Our Story', href: `${BASE_PATH}/about/story.html` },
 ];
 
 // For Teachers sub-pages for dropdown navigation
