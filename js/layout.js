@@ -95,7 +95,7 @@ const navLinks = [
     },
     {
         name: 'For Teachers',
-        href: `${BASE_PATH}/for-teachers.html`,
+        href: `${BASE_PATH}/for-teachers/who-is-it-for.html`,
         hasDropdown: true
     },
     {
@@ -131,8 +131,7 @@ const aboutSubpages = [
 
 // For Teachers sub-pages for dropdown navigation
 const forTeachersSubpages = [
-    { name: 'Overview', href: `${BASE_PATH}/for-teachers.html` },
-    { name: 'Types of Teachers', href: `${BASE_PATH}/for-teachers/types-of-teachers.html` },
+    { name: 'Who is it for?', href: `${BASE_PATH}/for-teachers/who-is-it-for.html` },
     { name: 'Case Studies', href: `${BASE_PATH}/for-teachers/case-study-high-school-tutors.html` },
 ];
 
@@ -344,7 +343,7 @@ function createFooter() {
                     <h3 class="text-sm font-semibold text-slate-900 tracking-wider uppercase mb-4">Company</h3>
                     <ul class="space-y-3">
                         <li><a href="about.html" class="text-sm text-slate-500 hover:text-brand-600">About / Philosophy</a></li>
-                        <li><a href="for-teachers.html" class="text-sm text-slate-500 hover:text-brand-600">For Teachers</a></li>
+                        <li><a href="for-teachers/who-is-it-for.html" class="text-sm text-slate-500 hover:text-brand-600">For Teachers</a></li>
                         <li><a href="blog.html" class="text-sm text-slate-500 hover:text-brand-600">Blog</a></li>
                     </ul>
                 </div>

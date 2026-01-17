@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who is it for? - Spark</title>
+    <meta name="description" content="See how Spark solves daily challenges for high school tutors, university professors, enterprise trainers, and independent coaches.">
+    <link rel="stylesheet" href="../css/tailwind.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
+    <script src="../js/layout.js"></script>
+    <style>
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Active ToC link styling */
+        .toc-link.active {
+            border-color: rgb(59, 130, 246);
+            background-color: rgb(239, 246, 255);
+        }
+        .toc-link.active .text-slate-900 {
+            color: rgb(59, 130, 246);
+        }
+    </style>
+    <script>
+        // Update active ToC link on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            // Highlight active section in ToC
+            function updateActiveToc() {
+                let currentSection = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 150;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-section') === currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            // Update on scroll
+            let ticking = false;
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        updateActiveToc();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+            
+            // Initial check
+            updateActiveToc();
+            
+            // Smooth scroll for ToC links
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 120;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body class="preload-hidden bg-white text-slate-900 antialiased pt-16">
+
+<main class="pt-20 pb-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Hero -->
+        <section class="mb-16 text-center">
+            <p class="text-sm font-semibold tracking-[0.18em] uppercase text-brand-600 mb-3">Who is it for?</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
+                Built for teachers who want to teach, not edit videos.
+            </h1>
+            <p class="text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+                Whether you're teaching high school students, university courses, enterprise teams, or building an online audience - Spark turns your recordings into structured courses automatically. Here's how it solves the problems you face every day.
+            </p>
+        </section>
+
+        <!-- Table of Contents -->
+        <section class="mb-12">
+            <div class="sticky top-24 z-10 bg-white border-transparent rounded-2xl p-6">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4">Jump to a section</h3>
+                <nav class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3" aria-label="Table of contents">
+                    <a href="#enterprise-experts" class="toc-link flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-slate-50 transition-all group" data-section="enterprise-experts">
+                        <span class="material-symbols-rounded text-brand-600 text-xl mt-0.5 group-hover:scale-110 transition-transform">business</span>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900 group-hover:text-brand-600 transition-colors">Enterprise Experts</div>
+                            <div class="text-xs text-slate-500 mt-0.5">Internal training & onboarding</div>
+                        </div>
+                    </a>
+                    <a href="#independent-coaches" class="toc-link flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-slate-50 transition-all group" data-section="independent-coaches">
+                        <span class="material-symbols-rounded text-brand-600 text-xl mt-0.5 group-hover:scale-110 transition-transform">videocam</span>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900 group-hover:text-brand-600 transition-colors">Independent Coaches</div>
+                            <div class="text-xs text-slate-500 mt-0.5">YouTube educators & creators</div>
+                        </div>
+                    </a>
+                    <a href="#university-professors" class="toc-link flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-slate-50 transition-all group" data-section="university-professors">
+                        <span class="material-symbols-rounded text-brand-600 text-xl mt-0.5 group-hover:scale-110 transition-transform">account_circle</span>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900 group-hover:text-brand-600 transition-colors">University Professors</div>
+                            <div class="text-xs text-slate-500 mt-0.5">Undergraduate & graduate courses</div>
+                        </div>
+                    </a>
+                    <a href="#high-school-tutors" class="toc-link flex items-start gap-3 p-4 rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-slate-50 transition-all group" data-section="high-school-tutors">
+                        <span class="material-symbols-rounded text-brand-600 text-xl mt-0.5 group-hover:scale-110 transition-transform">school</span>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900 group-hover:text-brand-600 transition-colors">High School Tutors</div>
+                            <div class="text-xs text-slate-500 mt-0.5">Online tutors teaching grades 8-12</div>
+                        </div>
+                    </a>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Enterprise Domain Experts -->
+        <section id="enterprise-experts" class="mb-20 scroll-mt-24">
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 md:p-12 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="material-symbols-rounded text-brand-600 text-4xl">business</span>
+                    <h2 class="text-3xl font-bold text-slate-900">Enterprise Domain Experts</h2>
+                </div>
+                
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    You're teaching internal training, onboarding, or upskilling content for employees. Maybe you work at a consultancy, tech company, or specialized training firm. Your training sessions are valuable, but making them accessible and trackable across a large organization is a challenge.
+                </p>
+
+                <div class="space-y-8">
+                    <!-- Problem 1 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Your training content needs to work for busy professionals</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Employees don't have time to sit through 2-hour training sessions. They need to find specific information quickly, and they need training broken into digestible chunks they can consume on their own schedule. Your current recordings don't support that.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Spark breaks your training content into modular, bite-sized sections. Employees find exactly what they need - whether it's a specific process, compliance requirement, or technical concept - without watching entire sessions.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Access control by role and department is complex</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Engineering needs access to technical training, HR needs compliance content, and new hires need onboarding materials. But some content is sensitive - only certain roles or departments should see it. Managing this manually doesn't scale.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Integrate with your enterprise systems (LDAP/SSO) to control access by employee role, department, or clearance level automatically. Engineering sees engineering content, HR sees HR content, and sensitive material stays restricted. Set it up once, and it scales.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">You can't track who's actually completing training</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Compliance requires training completion, but you have no visibility into who's actually watched the sessions, who needs reminders, and where employees are getting stuck. You're flying blind on training effectiveness.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Track completion and progress across your entire organization. See which employees have finished training, identify knowledge gaps, and get visibility into where people need follow-up support. All the data you need for compliance and effectiveness tracking.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 4 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Employees need on-demand support, but you can't be available 24/7</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            An employee has a question about training content at 8 PM, but you're not available. They either wait until the next day (slowing them down) or they guess (risky). Scheduling follow-up sessions for every question doesn't scale.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">The AI tutor provides instant answers to employee questions about training content, 24/7. Instead of waiting or guessing, employees get immediate clarification grounded in your actual training materials. You only get involved for complex issues that need your expertise.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 5 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Content privacy and ownership matter</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Your training content contains proprietary processes, company-specific information, and sensitive data. You need guarantees that this content stays within your organization and that you maintain full ownership. Cloud solutions often raise concerns about data residency and control.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Enterprise-grade content ownership and privacy controls ensure your training content stays within your organization. You maintain full ownership, and the system is designed for enterprise security requirements. Your proprietary processes stay proprietary.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Independent Coaches -->
+        <section id="independent-coaches" class="mb-20 scroll-mt-24">
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 md:p-12 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="material-symbols-rounded text-brand-600 text-4xl">videocam</span>
+                    <h2 class="text-3xl font-bold text-slate-900">Independent Coaches</h2>
+                </div>
+                
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    You're a YouTube educator, online coach, or content creator teaching skills, hobbies, or professional development. You've built an audience, but converting free subscribers to paying customers - and managing all the pieces of a teaching business - is harder than it should be.
+                </p>
+
+                <div class="space-y-8">
+                    <!-- Problem 1 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">You have thousands of YouTube subscribers, but only a few paying students</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Your YouTube channel is growing, but turning those free viewers into paying customers is a struggle. They love your free content, but there's no clear path from "subscribe" to "buy your course." You're leaving money on the table.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Turn your existing YouTube videos into structured, paid courses automatically. Import your recordings, and Spark creates the course structure, study notes, and quizzes. Your free subscribers see a clear upgrade path - same great content, but in a structured format with extra value like quizzes and an AI tutor.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Your courses, memberships, and live classes are scattered everywhere</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You sell courses on one platform, run memberships on another, host live classes on Zoom, and manage payments separately. Students are confused, and you're juggling multiple systems. Every new platform means more complexity.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">One unified storefront for everything - courses, live classes, and recordings. Students discover, buy, and learn in one place. No more sending people to three different platforms. Your entire teaching business lives in one system that actually makes sense.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Pricing for a global audience is complicated</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You want to reach students worldwide, but $99 USD is expensive in some countries and cheap in others. Manually setting prices by country, managing currency conversions, and handling regional promotions is a nightmare. You end up either overpricing or leaving money on the table.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Country-wise pricing automatically shows localized prices based on student location. Set your base price, and Spark handles the rest - students in different countries see prices that make sense for their market. Global reach without global complexity.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 4 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Turning recordings into courses takes forever</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You have hours of great content - YouTube videos, Zoom recordings, live sessions - but creating a structured course from them means spending weeks editing, organizing, and formatting. You want to focus on creating new content, not turning old content into courses.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Import your YouTube videos or Zoom recordings, and Spark automatically structures them into courses with chapters, study notes, and quizzes. What used to take weeks now takes minutes. Turn your entire content library into sellable courses without the production grind.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 5 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">You're drowning in support questions from free subscribers</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Your free content generates tons of questions - many of which you've already answered in your videos. But free subscribers expect answers, and ignoring them hurts your reputation. Meanwhile, you're spending hours answering questions instead of creating content or serving paying customers.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">The AI tutor answers common questions by citing your actual content, reducing your support load significantly. Free subscribers still get value, but you're not personally answering every basic question. This frees you up to focus on creating content and serving paying students who deserve your attention.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- University Professors -->
+        <section id="university-professors" class="mb-20 scroll-mt-24">
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 md:p-12 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="material-symbols-rounded text-brand-600 text-4xl">account_circle</span>
+                    <h2 class="text-3xl font-bold text-slate-900">University Professors</h2>
+                </div>
+                
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    You're teaching undergraduate or graduate courses, maybe creating content for distance learning programs. Your lecture recordings exist, but students struggle to use them effectively. And you don't have time to create all the supplementary materials students need.
+                </p>
+
+                <div class="space-y-8">
+                    <!-- Problem 1 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Your lecture recordings are too long and unstructured</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You recorded a 90-minute lecture on quantum mechanics, but students can't effectively use it for revision. They either skip it entirely (too overwhelming) or waste time scrubbing through trying to find the one concept they need to review before the exam.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Spark automatically structures your lecture recordings into clear chapters with logical breaks. Students can navigate directly to the topics they need, turning hours of video into a usable resource for exam preparation.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Creating supplementary study materials is time-consuming</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Students need comprehensive notes from your lectures, especially for complex academic content. But creating detailed study materials for every lecture - with proper formula rendering for STEM subjects - would take more time than you have.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Spark generates detailed study notes automatically with proper formula rendering using MathJax. For STEM subjects, this is critical - students get accurate notes they can actually use for review without watching entire lectures again.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">You don't know which students are struggling until it's too late</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Midterm exams roll around, and you discover half your class didn't understand a fundamental concept from week 3. By then, it's hard to catch them up. You wish you'd known earlier which concepts were causing confusion.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Student progress tracking shows you which concepts students struggle with across your course. Generate quizzes aligned with your course objectives, and see where the class needs more support - before exam season hits.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 4 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Academic accuracy is non-negotiable</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            If your study notes or AI tutor give students wrong information, that's a serious problem. Students rely on these materials for exam prep, and academic content demands precision. You can't risk hallucinations or content that goes beyond what you actually taught.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Spark uses a maker-checker process to ensure study notes and the AI tutor stay strictly within your lecture boundaries. The system is designed for academic content - it won't invent concepts you didn't teach or make up facts. Critical when students are preparing for exams.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 5 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Students ask questions you already covered</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Office hours are filled with questions you addressed in lecture - sometimes multiple times. Students either weren't paying attention, or they can't find where you explained it in the recording. Either way, you're re-explaining concepts you've already taught.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">The AI tutor answers student questions by citing your actual lecture content. When they ask about something you covered, they get an instant answer with a direct link to where you explained it. Office hours become about deeper questions and clarification, not re-explaining basics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- High School Tutors -->
+        <section id="high-school-tutors" class="mb-20 scroll-mt-24">
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 md:p-12 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="material-symbols-rounded text-brand-600 text-4xl">school</span>
+                    <h2 class="text-3xl font-bold text-slate-900">High School Tutors</h2>
+                </div>
+                
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    You're teaching math, physics, chemistry, and biology to 100+ students across multiple grades. Your live Zoom classes are recorded, but turning those 90-minute recordings into something students can actually use? That's eating your entire weekend.
+                </p>
+
+                <div class="space-y-8">
+                    <!-- Problem 1 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">You're spending more time editing than teaching</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            Every weekend, you're manually splitting recordings, writing timestamps, and creating study notes. You started teaching because you love helping students, but now you're drowning in video editing work. Sound familiar?
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Upload your Zoom recording (or connect it automatically), and Spark turns it into a structured course with chapters, study notes, and quizzes - all without you touching a single video editor. Your weekends are yours again.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Students can't find anything in your 90-minute recordings</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            A student asks, "Where did you explain quadratic equations?" and you both spend 20 minutes scrubbing through a long recording trying to find that one concept. Your students need to review specific topics, not rewatch entire classes.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Spark automatically breaks your recordings into chapters with micro-sections (3-8 minutes each). Students jump directly to the topic they need. Plus, they can search across all your content using natural language - "Show me where you explained quadratic equations."</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">The same questions keep coming up</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You've answered "How do I solve this integration problem?" five times this week. Students ask questions that were already covered in your recordings, but they can't find the answers themselves. Your email is flooded with repetitive questions.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Spark's AI tutor answers student questions by citing your actual lecture content. When a student asks about integration, they get an instant answer with a direct link to where you explained it. You only get the questions that actually need your expertise.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 4 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Managing access for 100+ students is exhausting</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You've got 8th graders who should only see 8th grade content, 10th graders enrolled in both math and physics, and students who only subscribed to one subject. Keeping track of who sees what - and making sure they don't see what they shouldn't - is a constant headache.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Granular access control by grade, subject, and subscription means 8th graders only see 8th grade content automatically. Multi-subject students see everything they're enrolled in, and single-subject students stay in their lane. Set it once, and it just works.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem 5 -->
+                    <div class="border-l-4 border-red-200 pl-6">
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Generating quizzes takes forever</h3>
+                        <p class="text-base text-slate-600 mb-3">
+                            You want to check if students understood today's class, or maybe create a comprehensive quiz covering the last three weeks. But writing good questions - with proper difficulty levels and clear explanations - takes hours you don't have.
+                        </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
+                            <p class="text-sm font-semibold text-emerald-900 mb-1">How Spark fixes this:</p>
+                            <p class="text-sm text-emerald-800">Generate quizzes per-video or across multiple videos in minutes. Questions are aligned with Bloom's taxonomy - from basic recall to application-level problems. During live classes, you can run quizzes and see real-time reports showing which students are struggling, so you know exactly where to focus your attention.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="bg-brand-50 border border-brand-100 rounded-2xl p-8 text-center">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Ready to see it in action?</h2>
+            <p class="text-lg text-slate-600 mb-6">
+                Read how real teachers are using Spark to solve these exact problems.
+            </p>
+            <a href="case-study-high-school-tutors.html" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 transition-colors">
+                <span>View case study</span>
+                <span class="material-symbols-rounded">arrow_forward</span>
+            </a>
+        </section>
+    </div>
+</main>
+
+</body>
+</html>
+
