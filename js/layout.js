@@ -21,8 +21,9 @@ function getBasePath() {
 
     // When serving "marketing" as the root locally:
     // - "/product/..."           → first === "product"      → no base prefix
+    // - "/about/..."             → first === "about"        → no base prefix
     // - "/about.html" etc        → first endsWith ".html"   → no base prefix
-    if (first === 'product' || first.endsWith('.html')) {
+    if (first === 'product' || first === 'about' || first.endsWith('.html')) {
         return '';
     }
 
@@ -101,7 +102,7 @@ const navLinks = [
     },
     {
         name: 'About',
-        href: `${BASE_PATH}/about.html`
+        href: `${BASE_PATH}/about/why-spark.html`
     },
     {
         name: 'Blog',
@@ -112,12 +113,18 @@ const navLinks = [
 // Product sub-pages for dropdown navigation
 const productSubpages = [
     { name: 'Overview', href: `${BASE_PATH}/product/` },
-    { name: 'Origin story', href: `${BASE_PATH}/product/origin.html` },
     { name: 'Features', href: `${BASE_PATH}/product/features.html` },
     { name: 'Monetization', href: `${BASE_PATH}/product/monetization.html` },
     { name: 'Reporting', href: `${BASE_PATH}/product/reporting.html` },
     { name: 'Hallucinations & safety', href: `${BASE_PATH}/product/hallucinations.html` },
     { name: 'Content ownership', href: `${BASE_PATH}/product/content-ownership.html` },
+];
+
+// About sub-pages for dropdown navigation
+const aboutSubpages = [
+    { name: 'Why Spark', href: `${BASE_PATH}/about/why-spark.html` },
+    { name: 'Team', href: `${BASE_PATH}/about/team.html` },
+    { name: 'Story', href: `${BASE_PATH}/about/story.html` },
 ];
 
 // Header Component
@@ -134,6 +141,29 @@ function createHeader() {
 
         if (link.name === 'Product') {
             const dropdownItems = productSubpages.map(sub => {
+                const subActive = currentPath === sub.href;
+                return `
+                    <a href="${sub.href}" class="block px-4 py-2 text-sm ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'}">
+                        ${sub.name}
+                    </a>
+                `;
+            }).join('');
+
+            return `
+                <div class="relative group">
+                    <a href="${link.href}" class="flex items-center gap-1 text-sm font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600">
+                        <span>${link.name}</span>
+                        <span class="material-symbols-rounded text-[16px] leading-none">expand_more</span>
+                    </a>
+                    <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-150 absolute left-1/2 -translate-x-1/2 top-full w-56 rounded-xl bg-white shadow-lg border border-slate-100 py-2 z-50">
+                        ${dropdownItems}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (link.name === 'About') {
+            const dropdownItems = aboutSubpages.map(sub => {
                 const subActive = currentPath === sub.href;
                 return `
                     <a href="${sub.href}" class="block px-4 py-2 text-sm ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'}">
@@ -198,6 +228,18 @@ function createHeader() {
                 ${navLinks.map(link => {
                     if (link.name === 'Product') {
                         const mobileSubLinks = productSubpages.map(sub => {
+                            return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-50">– ${sub.name}</a>`;
+                        }).join('');
+
+                        return `
+                            <div class="mb-2">
+                                <a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>
+                                ${mobileSubLinks}
+                            </div>
+                        `;
+                    }
+                    if (link.name === 'About') {
+                        const mobileSubLinks = aboutSubpages.map(sub => {
                             return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-50">– ${sub.name}</a>`;
                         }).join('');
 
