@@ -18,7 +18,7 @@ function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', { 
             year: 'numeric', 
-            month: 'long', 
+            month: 'short', 
             day: 'numeric' 
         });
     } catch (e) {
@@ -144,6 +144,16 @@ function parseRSSFeed(xmlText) {
             const link = item.querySelector('link')?.textContent || '';
             const pubDate = item.querySelector('pubDate')?.textContent || '';
             
+            // Get author - handle dc:creator namespace
+            const creatorEl = item.querySelector('dc\\:creator, creator');
+            const author = creatorEl?.textContent?.trim() || 'Spark Team';
+            console.log('[spark-marketing][blog][DEBUG] Post author extracted', {
+                postIndex: index,
+                title: title.substring(0, 50),
+                author: author,
+                hasCreatorEl: !!creatorEl
+            });
+            
             // Get description - handle CDATA sections
             let description = '';
             const descEl = item.querySelector('description');
@@ -186,6 +196,7 @@ function parseRSSFeed(xmlText) {
                 title: stripHtml(title),
                 link: link.trim(),
                 date: pubDate,
+                author: stripHtml(author),
                 excerpt: truncateText(cleanExcerpt),
                 fullContent: fullContent
             });
@@ -311,9 +322,12 @@ function renderPostInMain(post, container) {
     
     postEl.innerHTML = `
         <div class="p-8 lg:p-12">
-            <div class="flex items-center gap-2 text-sm text-slate-500 mb-4">
-                <span>${dateStr}</span>
-                ${elapsed ? `<span class="text-slate-400">•</span><span>${elapsed}</span>` : ''}
+            <div class="text-sm text-slate-500 mb-4">
+                <div class="flex items-center gap-2">
+                    <span>${dateStr}</span>
+                    ${elapsed ? `<span class="text-slate-400">•</span><span>${elapsed}</span>` : ''}
+                </div>
+                ${post.author ? `<div class="mt-1">${post.author}</div>` : ''}
             </div>
             <h1 class="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-6">
                 ${post.title}
@@ -369,9 +383,12 @@ function renderPostLists(posts, sidebarContainer, mobilePostsContainer) {
         });
         
         postEl.innerHTML = `
-            <div class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                <span>${dateStr}</span>
-                ${elapsed ? `<span class="text-slate-400">•</span><span>${elapsed}</span>` : ''}
+            <div class="text-xs text-slate-500 mb-2">
+                <div class="flex items-center gap-2">
+                    <span>${dateStr}</span>
+                    ${elapsed ? `<span class="text-slate-400">•</span><span>${elapsed}</span>` : ''}
+                </div>
+                ${post.author ? `<div class="mt-1">${post.author}</div>` : ''}
             </div>
             <h3 class="text-base font-bold text-slate-900 mb-2 ${isMobile ? '' : 'line-clamp-2'}">
                 <a 
