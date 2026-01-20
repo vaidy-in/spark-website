@@ -98,8 +98,9 @@ function cleanHtmlForDisplay(html) {
         ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'hr', 
                        'blockquote', 'ul', 'ol', 'li', 'a', 'em', 'strong', 'i', 'b', 
                        'img', 'div', 'span', 'pre', 'code', 'table', 'thead', 'tbody', 
-                       'tr', 'td', 'th', 'small'],
-        ALLOWED_ATTR: ['href', 'src', 'alt', 'target', 'rel'],
+                       'tr', 'td', 'th', 'small', 'sup', 'sub', 'mark', 'del', 'strike',
+                       'abbr', 'kbd', 'cite', 'q', 'ins', 'u', 's'],
+        ALLOWED_ATTR: ['href', 'src', 'alt', 'target', 'rel', 'title'],
         KEEP_CONTENT: true,
         RETURN_DOM: true
     };

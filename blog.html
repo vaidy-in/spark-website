@@ -76,10 +76,30 @@
         .blog-post-content ul,
         .blog-post-content ol {
             margin-bottom: 1.25em;
-            padding-left: 1.5em;
+            padding-left: 2em;
+            margin-top: 1em;
+        }
+        .blog-post-content ul {
+            list-style-type: disc;
+            list-style-position: outside;
+        }
+        .blog-post-content ol {
+            list-style-type: decimal;
+            list-style-position: outside;
         }
         .blog-post-content li {
             margin-bottom: 0.5em;
+            padding-left: 0.25em;
+        }
+        .blog-post-content ul ul,
+        .blog-post-content ol ul {
+            list-style-type: circle;
+            margin-top: 0.2em;
+        }
+        .blog-post-content ul ol,
+        .blog-post-content ol ol {
+            list-style-type: lower-alpha;
+            margin-top: 0.2em;
         }
         .blog-post-content a {
             color: var(--blog-indigo-600);
@@ -141,6 +161,57 @@
         .blog-post-content pre code {
             background-color: transparent;
             padding: 0;
+        }
+        
+        /* Additional semantic elements */
+        .blog-post-content strong,
+        .blog-post-content b {
+            font-weight: 700;
+            color: var(--blog-slate-900);
+        }
+        .blog-post-content em,
+        .blog-post-content i {
+            font-style: italic;
+        }
+        .blog-post-content hr {
+            border: 0;
+            border-top: 1px solid var(--blog-slate-200);
+            margin: 2em 0;
+        }
+        .blog-post-content sup,
+        .blog-post-content sub {
+            font-size: 0.75em;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+        .blog-post-content sup {
+            top: -0.5em;
+        }
+        .blog-post-content sub {
+            bottom: -0.25em;
+        }
+        .blog-post-content mark {
+            background-color: #fef08a;
+            color: var(--blog-slate-900);
+            padding: 0.125em 0.25em;
+        }
+        .blog-post-content del,
+        .blog-post-content strike {
+            text-decoration: line-through;
+            color: var(--blog-slate-500);
+        }
+        .blog-post-content abbr {
+            text-decoration: underline dotted;
+            cursor: help;
+        }
+        .blog-post-content kbd {
+            background-color: var(--blog-slate-100);
+            border: 1px solid var(--blog-slate-200);
+            border-radius: 0.25rem;
+            padding: 0.125em 0.375em;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875em;
         }
         
         /* Sidebar scrollable posts list */
