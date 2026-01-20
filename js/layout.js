@@ -140,7 +140,7 @@ const forTeachersSubpages = [
 function createHeader() {
     const header = document.createElement('header');
     // Added top-0 to ensure it's flush, and increased bg opacity to ensure content doesn't bleed through
-    header.className = 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-slate-100';
+    header.className = 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-50';
     
     // Get current path to mark active state
     const currentPath = window.location.pathname || '/';
