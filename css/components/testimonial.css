@@ -1,7 +1,7 @@
 /* Reusable Testimonial Component - Stripe-inspired minimal design */
 
 .testimonial-section {
-    padding: 64px 16px;
+    padding: 48px 16px;
     background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
 }
 
@@ -119,7 +119,7 @@
 /* Tablet and up */
 @media (min-width: 768px) {
     .testimonial-section {
-        padding: 80px 24px;
+        padding: 56px 24px;
     }
     
     .testimonial-card {
@@ -139,7 +139,7 @@
 /* Desktop */
 @media (min-width: 1024px) {
     .testimonial-section {
-        padding: 96px 32px;
+        padding: 64px 32px;
     }
     
     .testimonial-card {
