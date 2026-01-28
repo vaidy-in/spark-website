@@ -5,8 +5,9 @@
 
 const FIREBASE_FUNCTION_URL = 'https://getblogposts-eyyuwkjlza-uc.a.run.app';
 
-// Store all posts globally for navigation
-let allPosts = [];
+// Store post list (metadata only) and cache of full posts
+let postList = [];
+let fullPostCache = new Map();
 
 /**
  * Format date string to readable format
@@ -149,9 +150,8 @@ function cleanHtmlForDisplay(html) {
         div.replaceWith(blockquote);
     });
     
-    // Remove the first h1 (title - we display separately)
-    const firstH1 = bodyContent.querySelector('h1');
-    if (firstH1) firstH1.remove();
+    // Remove all h1 tags (title - we display separately)
+    bodyContent.querySelectorAll('h1').forEach(h1 => h1.remove());
     
     // Remove the first h2 if it's short (likely a subtitle)
     const firstH2 = bodyContent.querySelector('h2');
@@ -204,102 +204,20 @@ function truncateText(text, maxLength = 150) {
 
 
 /**
- * Render posts to the DOM
+ * Render post list (metadata) to sidebar and mobile
  */
-function renderPosts(posts) {
-    const contentContainer = document.getElementById('blog-content');
-    const latestPostContainer = document.getElementById('blog-latest-post');
+function renderPostList(posts) {
     const sidebarContainer = document.getElementById('blog-sidebar-posts');
     const mobilePostsContainer = document.getElementById('blog-mobile-posts');
-    const loadingEl = document.getElementById('blog-loading');
-    const errorEl = document.getElementById('blog-error');
-
-    // Hide error and loading states FIRST, before any other logic
-    console.log('[spark-marketing][blog][DEBUG] renderPosts called', {
-        postsCount: posts ? posts.length : 0,
-        hasContentContainer: !!contentContainer,
-        hasErrorEl: !!errorEl,
-        errorElDisplay: errorEl ? window.getComputedStyle(errorEl).display : 'N/A',
-        errorElHidden: errorEl ? errorEl.classList.contains('hidden') : 'N/A',
-        isMobile: window.innerWidth < 1024
-    });
     
-    if (errorEl) {
-        errorEl.classList.add('hidden');
-        errorEl.style.display = 'none';
-        console.log('[spark-marketing][blog][DEBUG] Error element hidden', {
-            display: errorEl.style.display,
-            hasHiddenClass: errorEl.classList.contains('hidden')
-        });
-    }
-    if (loadingEl) {
-        loadingEl.classList.add('hidden');
-        loadingEl.style.display = 'none';
-    }
-
-    if (!contentContainer || !latestPostContainer || !sidebarContainer || !mobilePostsContainer) {
-        console.error('[spark-marketing][blog] Required containers not found');
-        console.log('[spark-marketing][blog][DEBUG] Showing error - containers missing', {
-            contentContainer: !!contentContainer,
-            latestPostContainer: !!latestPostContainer,
-            sidebarContainer: !!sidebarContainer,
-            mobilePostsContainer: !!mobilePostsContainer
-        });
-        if (errorEl) {
-            errorEl.classList.remove('hidden');
-            errorEl.style.display = 'block';
-        }
-        return;
-    }
-
-    if (!posts || posts.length === 0) {
-        console.log('[spark-marketing][blog][DEBUG] Showing error - no posts', {
-            posts: posts,
-            postsLength: posts ? posts.length : 0
-        });
-        if (errorEl) {
-            errorEl.classList.remove('hidden');
-            errorEl.style.display = 'block';
-        }
-        return;
-    }
-
-    // Store posts globally
-    allPosts = posts;
-
-    // Show content container
-    contentContainer.classList.remove('hidden');
-    console.log('[spark-marketing][blog][DEBUG] Content container shown', {
-        hasHiddenClass: contentContainer.classList.contains('hidden'),
-        display: window.getComputedStyle(contentContainer).display
-    });
-
+    if (!sidebarContainer || !mobilePostsContainer) return;
+    
     // Clear existing content
-    latestPostContainer.innerHTML = '';
     sidebarContainer.innerHTML = '';
     mobilePostsContainer.innerHTML = '';
-
-    // Render all posts in sidebar and mobile (including latest)
-    renderPostLists(posts, sidebarContainer, mobilePostsContainer);
     
-    // Check if a specific post is requested via URL hash
-    const hash = window.location.hash;
-    const postMatch = hash.match(/^#post-(\d+)$/);
-    if (postMatch) {
-        const postIndex = parseInt(postMatch[1], 10);
-        if (postIndex >= 0 && postIndex < posts.length) {
-            handleHashChange();
-            return;
-        }
-    }
-
-    // Render latest post (first post) in full on desktop only
-    if (window.innerWidth >= 1024) {
-        const latestPost = posts[0];
-        if (latestPost) {
-            renderPostInMain(latestPost, latestPostContainer);
-        }
-    }
+    // Render all posts in sidebar and mobile
+    renderPostLists(posts, sidebarContainer, mobilePostsContainer);
 }
 
 /**
@@ -307,6 +225,25 @@ function renderPosts(posts) {
  */
 function renderPostInMain(post, container) {
     if (!post || !container) return;
+
+    // Clean fullContent if it exists and hasn't been cleaned yet
+    let content = post.excerpt;
+    if (post.fullContent) {
+        // Check if already cleaned (has been processed)
+        if (post._cleaned) {
+            content = post.fullContent;
+        } else {
+            content = cleanHtmlForDisplay(post.fullContent);
+            // Store the cleaned content back in the post object
+            post.fullContent = content;
+            // Mark as cleaned
+            post._cleaned = true;
+            // Update in cache if cached
+            if (fullPostCache.has(post._index)) {
+                fullPostCache.set(post._index, post);
+            }
+        }
+    }
 
     const elapsed = getElapsedTime(post.date);
     const dateStr = formatDate(post.date);
@@ -327,7 +264,7 @@ function renderPostInMain(post, container) {
                 ${post.title}
             </h1>
             <div class="prose prose-lg max-w-none blog-post-content text-slate-700">
-                ${post.fullContent || post.excerpt}
+                ${content}
             </div>
             <div class="mt-8 pt-6 border-t border-slate-200">
                 <a 
@@ -432,15 +369,63 @@ function renderPostLists(posts, sidebarContainer, mobilePostsContainer) {
 }
 
 /**
+ * Fetch a single post's full content
+ */
+async function fetchPostFullContent(postIndex) {
+    try {
+        const url = `${FIREBASE_FUNCTION_URL}?post=${postIndex}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.post) {
+            const post = data.post;
+            post._index = postIndex;
+            fullPostCache.set(postIndex, post);
+            return post;
+        } else {
+            throw new Error('No post returned from API');
+        }
+    } catch (error) {
+        console.error('[spark-marketing][blog] Error fetching post:', error);
+        throw error;
+    }
+}
+
+/**
  * Fetch blog posts from Firebase Function
  */
 async function fetchBlogPosts() {
     const loadingEl = document.getElementById('blog-loading');
     const errorEl = document.getElementById('blog-error');
+    const contentContainer = document.getElementById('blog-content');
+    const latestPostContainer = document.getElementById('blog-latest-post');
 
     try {
-        console.log('[spark-marketing][blog] Fetching posts from Firebase Function');
-        const response = await fetch(FIREBASE_FUNCTION_URL);
+        // Check URL hash to determine what to fetch
+        const hash = window.location.hash;
+        const postMatch = hash.match(/^#post-(\d+)$/);
+        const postIndex = postMatch ? parseInt(postMatch[1], 10) : null;
+        
+        // Build query params
+        const params = new URLSearchParams();
+        params.set('list', '1');
+        if (postIndex !== null && postIndex === 0) {
+            // post-0 is the latest, use latest=1 for consistency
+            params.set('latest', '1');
+        } else if (postIndex !== null && postIndex > 0) {
+            params.set('post', postIndex.toString());
+        } else {
+            params.set('latest', '1');
+        }
+        
+        const url = `${FIREBASE_FUNCTION_URL}?${params.toString()}`;
+        console.log('[spark-marketing][blog] Fetching posts from Firebase Function', { url });
+        const response = await fetch(url);
         
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
@@ -450,92 +435,136 @@ async function fetchBlogPosts() {
         
         if (data.success && data.posts && data.posts.length > 0) {
             console.log('[spark-marketing][blog] Posts fetched successfully', {
-                count: data.posts.length,
+                listCount: data.posts.length,
+                hasPost: !!data.post,
                 cached: data.cached,
                 stale: data.stale || false
             });
             
-            // Process posts to ensure fullContent is cleaned
-            const processedPosts = data.posts.map((post, idx) => {
-                if (idx === 0) {
-                    const original = post.fullContent || '';
-                    console.log('[spark-marketing][blog][DEBUG] Original content check:');
-                    console.log('  Has <blockquote> tags:', original.includes('<blockquote'));
-                    
-                    // Check for Steve Jobs quote structure
-                    const jobsQuoteIndex = original.indexOf('Steve Jobs');
-                    if (jobsQuoteIndex > -1) {
-                        const contextStart = Math.max(0, jobsQuoteIndex - 500);
-                        const contextEnd = Math.min(original.length, jobsQuoteIndex + 200);
-                        console.log('  Steve Jobs quote context:', original.substring(contextStart, contextEnd));
-                    }
-                }
-                
-                const cleaned = cleanHtmlForDisplay(post.fullContent || '');
-                if (idx === 0) {
-                    console.log('[spark-marketing][blog][DEBUG] Cleaned content:');
-                    console.log('  Cleaned length:', cleaned.length);
-                    console.log('  Has h2 tags:', cleaned.includes('<h2'));
-                    console.log('  Has blockquote:', cleaned.includes('<blockquote'));
-                    console.log('  Sample HTML:', cleaned.substring(0, 800));
-                }
-                return {
-                    ...post,
-                    fullContent: cleaned
-                };
-            });
+            // Store post list (metadata only)
+            postList = data.posts;
             
-            renderPosts(processedPosts);
+            // Hide loading and error
+            if (loadingEl) loadingEl.classList.add('hidden');
+            if (errorEl) errorEl.classList.add('hidden');
+            
+            // Show content container
+            if (contentContainer) contentContainer.classList.remove('hidden');
+            
+            // Get the post to display
+            let postToDisplay = data.post;
+            if (postToDisplay) {
+                // Mark index for caching (postIndex can be 0 for latest)
+                const displayIndex = postIndex !== null ? postIndex : 0;
+                postToDisplay._index = displayIndex;
+                
+                // Cache the full post
+                fullPostCache.set(displayIndex, postToDisplay);
+                
+                // Render latest/post FIRST for perceived performance
+                if (latestPostContainer) {
+                    renderPostInMain(postToDisplay, latestPostContainer);
+                }
+            }
+            
+            // Render list AFTER main content (perceived performance)
+            // Use requestAnimationFrame to ensure main renders first
+            requestAnimationFrame(() => {
+                renderPostList(postList);
+                
+                // Handle hash highlighting if needed
+                if (postIndex !== null && postIndex >= 0) {
+                    highlightPostInLists(postIndex);
+                }
+            });
         } else {
             throw new Error('No posts returned from API');
         }
 
     } catch (error) {
         console.error('[spark-marketing][blog] Error fetching blog posts:', error);
-        console.log('[spark-marketing][blog][DEBUG] Showing error - fetch failed', {
-            error: error.message,
-            isMobile: window.innerWidth < 1024
-        });
-        if (loadingEl) {
-            loadingEl.classList.add('hidden');
-            loadingEl.style.display = 'none';
-        }
-        if (errorEl) {
-            errorEl.classList.remove('hidden');
-            errorEl.style.display = 'block';
-            console.log('[spark-marketing][blog][DEBUG] Error element displayed', {
-                display: errorEl.style.display,
-                hasHiddenClass: errorEl.classList.contains('hidden'),
-                computedDisplay: window.getComputedStyle(errorEl).display
-            });
-        }
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) errorEl.classList.remove('hidden');
     }
 }
 
+/**
+ * Highlight a post in the sidebar and mobile lists
+ */
+function highlightPostInLists(postIndex) {
+    const mobilePostsContainer = document.getElementById('blog-mobile-posts');
+    const sidebarContainer = document.getElementById('blog-sidebar-posts');
+    
+    const highlightActive = (container) => {
+        if (!container) return;
+        const items = container.querySelectorAll('[data-post-index]');
+        items.forEach((item) => {
+            const idx = parseInt(item.getAttribute('data-post-index'), 10);
+            if (idx === postIndex) {
+                item.classList.add('ring-2', 'ring-brand-500', 'border-brand-500');
+            } else {
+                item.classList.remove('ring-2', 'ring-brand-500', 'border-brand-500');
+            }
+        });
+    };
+    
+    highlightActive(mobilePostsContainer);
+    highlightActive(sidebarContainer);
+}
+
+/**
+ * Show loading state in main content area
+ */
+function showPostLoading(container) {
+    if (!container) return;
+    container.innerHTML = `
+        <div class="bg-white rounded-xl border border-slate-200 p-8 lg:p-12">
+            <div class="text-center py-8">
+                <div class="inline-block animate-pulse text-slate-400">Loading post...</div>
+            </div>
+        </div>
+    `;
+}
+
 // Handle hash changes to show different posts
-function handleHashChange() {
-    if (!allPosts || allPosts.length === 0) return;
+async function handleHashChange() {
+    if (!postList || postList.length === 0) return;
     
     // Ensure error element is hidden when showing content
     const errorEl = document.getElementById('blog-error');
     if (errorEl) {
         errorEl.classList.add('hidden');
-        errorEl.style.display = 'none';
     }
     
     const hash = window.location.hash;
     const postMatch = hash.match(/^#post-(\d+)$/);
     const latestPostContainer = document.getElementById('blog-latest-post');
     const mobilePostContainer = document.getElementById('blog-mobile-selected-post');
-    const mobilePostsContainer = document.getElementById('blog-mobile-posts');
-    const sidebarContainer = document.getElementById('blog-sidebar-posts');
     
     if (!latestPostContainer) return;
     
     if (postMatch) {
         const postIndex = parseInt(postMatch[1], 10);
-        if (postIndex >= 0 && postIndex < allPosts.length) {
-            const post = allPosts[postIndex];
+        if (postIndex >= 0 && postIndex < postList.length) {
+            // Check if we have this post in cache
+            let post = fullPostCache.get(postIndex);
+            
+            if (!post) {
+                // Show loading state
+                showPostLoading(latestPostContainer);
+                if (mobilePostContainer) showPostLoading(mobilePostContainer);
+                
+                try {
+                    // Fetch the post
+                    post = await fetchPostFullContent(postIndex);
+                } catch (error) {
+                    console.error('[spark-marketing][blog] Error fetching post:', error);
+                    if (errorEl) {
+                        errorEl.classList.remove('hidden');
+                    }
+                    return;
+                }
+            }
             
             // Show on desktop
             renderPostInMain(post, latestPostContainer);
@@ -547,21 +576,7 @@ function handleHashChange() {
             }
             
             // Highlight active post in lists
-            const highlightActive = (container) => {
-                if (!container) return;
-                const items = container.querySelectorAll('[data-post-index]');
-                items.forEach((item) => {
-                    const idx = parseInt(item.getAttribute('data-post-index'), 10);
-                    if (idx === postIndex) {
-                        item.classList.add('ring-2', 'ring-brand-500', 'border-brand-500');
-                    } else {
-                        item.classList.remove('ring-2', 'ring-brand-500', 'border-brand-500');
-                    }
-                });
-            };
-            
-            highlightActive(mobilePostsContainer);
-            highlightActive(sidebarContainer);
+            highlightPostInLists(postIndex);
             
             return;
         }
@@ -569,7 +584,7 @@ function handleHashChange() {
     
     // Default: show latest post (only on desktop)
     if (window.innerWidth >= 1024) {
-        const latestPost = allPosts[0];
+        const latestPost = fullPostCache.get(0);
         if (latestPost) {
             renderPostInMain(latestPost, latestPostContainer);
         }
@@ -587,17 +602,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Only run on blog page
     if (window.location.pathname.includes('blog.html') || window.location.pathname.endsWith('/blog')) {
         console.log('[spark-marketing][blog] Initializing blog');
-        fetchBlogPosts();
         
-        // Listen for hash changes
-        window.addEventListener('hashchange', handleHashChange);
-        
-        // Handle initial hash if present
-        setTimeout(() => {
+        // Fetch posts and handle initial hash after fetch completes
+        fetchBlogPosts().then(() => {
+            // Handle initial hash if present (after fetch completes to avoid race condition)
             if (window.location.hash) {
                 handleHashChange();
             }
-        }, 100);
+        }).catch(() => {
+            // Error already handled in fetchBlogPosts
+        });
+        
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleHashChange);
     }
 });
 
