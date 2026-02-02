@@ -180,6 +180,49 @@
   .carousel-snap-stop {
     scroll-snap-stop: always;
   }
+
+  /* Mobile nav: drawer open/close animation (closed by default) */
+  .mobile-nav-drawer {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.2s ease, opacity 0.15s ease;
+  }
+
+  .mobile-nav-drawer.mobile-menu-open {
+    max-height: calc(100vh - 4rem);
+    opacity: 1;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+
+  /* Mobile nav: collapsible sections with expand/collapse animation */
+  .mobile-nav-sublinks {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease;
+  }
+
+  .mobile-nav-section.open .mobile-nav-sublinks {
+    max-height: 50rem;
+  }
+
+  .mobile-nav-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .mobile-nav-chevron {
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-nav-section.open .mobile-nav-chevron {
+    transform: rotate(180deg);
+  }
 }
 
 

@@ -136,6 +136,26 @@ const forTeachersSubpages = [
     { name: 'Case Studies', href: `${BASE_PATH}/for-teachers/case-study-high-school-tutors.html` },
 ];
 
+/** Returns HTML for a collapsible mobile nav section (Product, About, For Instructors). */
+function getMobileNavSectionHtml(link, subpages, currentPath) {
+    const subLinks = subpages.map(sub => {
+        const subActive = currentPath === sub.href;
+        const activeClass = subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50';
+        return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-base font-medium cursor-pointer ${activeClass}">${sub.name}</a>`;
+    }).join('');
+    return `
+        <div class="mobile-nav-section mb-2">
+            <div class="mobile-nav-section-header px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50">
+                <a href="${link.href}" class="cursor-pointer hover:text-brand-600">${link.name}</a>
+                <button type="button" data-mobile-nav-toggle aria-expanded="false" class="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer focus:outline-none">
+                    <span class="mobile-nav-chevron material-symbols-rounded text-[20px] leading-none">expand_more</span>
+                </button>
+            </div>
+            <div class="mobile-nav-sublinks">${subLinks}</div>
+        </div>
+    `;
+}
+
 // Header Component
 function createHeader() {
     const header = document.createElement('header');
@@ -246,7 +266,7 @@ function createHeader() {
                         Join Waitlist
                     </button>
                     <!-- Mobile menu button placeholder (simple implementation) -->
-                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none">
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none cursor-pointer">
                         <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -255,50 +275,20 @@ function createHeader() {
             </div>
         </div>
         <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100">
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-slate-100 mobile-nav-drawer" aria-hidden="true">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 ${navLinks.map(link => {
                     if (link.name === 'Product') {
-                        const mobileSubLinks = productSubpages.map(sub => {
-                            return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-50">– ${sub.name}</a>`;
-                        }).join('');
-
-                        return `
-                            <div class="mb-2">
-                                <a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>
-                                ${mobileSubLinks}
-                            </div>
-                        `;
+                        return getMobileNavSectionHtml(link, productSubpages, currentPath);
                     }
                     if (link.name === 'About') {
-                        const mobileSubLinks = aboutSubpages.map(sub => {
-                            return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-50">– ${sub.name}</a>`;
-                        }).join('');
-
-                        return `
-                            <div class="mb-2">
-                                <a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>
-                                ${mobileSubLinks}
-                            </div>
-                        `;
+                        return getMobileNavSectionHtml(link, aboutSubpages, currentPath);
                     }
                     if (link.name === 'For Instructors') {
-                        const mobileSubLinks = forTeachersSubpages.map(sub => {
-                            return `<a href="${sub.href}" class="block pl-6 pr-3 py-1.5 rounded-md text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-50">– ${sub.name}</a>`;
-                        }).join('');
-
-                        return `
-                            <div class="mb-2">
-                                <a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>
-                                ${mobileSubLinks}
-                            </div>
-                        `;
+                        return getMobileNavSectionHtml(link, forTeachersSubpages, currentPath);
                     }
-                    return `<a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50">${link.name}</a>`;
+                    return `<a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 cursor-pointer">${link.name}</a>`;
                 }).join('')}
-                 <button data-open-waitlist class="block w-full text-center px-4 py-2 mt-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 cursor-pointer">
-                    Join Waitlist
-                </button>
             </div>
         </div>
     `;
@@ -494,7 +484,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const menu = document.getElementById('mobile-menu');
         if (btn && menu) {
             btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
+                menu.classList.toggle('mobile-menu-open');
+                menu.setAttribute('aria-hidden', menu.classList.contains('mobile-menu-open') ? 'false' : 'true');
+            });
+            menu.addEventListener('click', (e) => {
+                const toggle = e.target.closest('[data-mobile-nav-toggle]');
+                if (!toggle) return;
+                const section = toggle.closest('.mobile-nav-section');
+                if (!section) return;
+                const expanded = section.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', String(expanded));
             });
         }
 
