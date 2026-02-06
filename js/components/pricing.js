@@ -66,9 +66,9 @@
     function getMonth2BreakdownLine(model, students) {
         const { baseFee, includedStudents, perExtraStudent } = model;
         const extra = Math.max(0, students - includedStudents);
-        if (extra === 0) return `Base fee (${formatUsd(baseFee)}) only.`;
+        if (extra === 0) return `${formatUsd(baseFee)} for up to ${includedStudents} active students only.`;
         const additionalFee = extra * perExtraStudent;
-        return `Base fee (${formatUsd(baseFee)}) + additional fee for ${extra} students (${formatUsd(additionalFee)}).`;
+        return `${formatUsd(baseFee)} for up to ${includedStudents} active students + ${formatUsd(additionalFee)} for ${extra} additional students.`;
     }
 
     function updateMonth2Section(isOverMax, students, model, founderModel) {
@@ -84,7 +84,7 @@
             overMaxEl.classList.remove('hidden');
             const exampleModel = founderModel || model;
             const exampleLine = getMonth2BreakdownLine(exampleModel, MAX_STUDENTS);
-            overMaxEl.textContent = `Example at ${MAX_STUDENTS} students: ${exampleLine} Contact us for 200+.`;
+            overMaxEl.textContent = `Example at ${MAX_STUDENTS} students: ${exampleLine}. Contact us for 200+.`;
             return;
         }
 
@@ -102,23 +102,29 @@
             if (regularWrapEl) regularWrapEl.classList.add('hidden');
             if (priceEl) priceEl.textContent = formatUsd(reg.price);
         }
+        const totalStudentsEl = document.getElementById('spark-month2-total-students');
+        if (totalStudentsEl) totalStudentsEl.textContent = String(students);
 
         const breakdownOnlyEl = document.getElementById('spark-month2-breakdown-only');
         const breakdownExtraEl = document.getElementById('spark-month2-breakdown-extra');
+        const onlyIncludedEl = document.getElementById('spark-month2-only-included');
+        const onlyBaseEl = document.getElementById('spark-month2-only-base');
+        const includedCountEl = document.getElementById('spark-month2-included-count');
         const baseAmountEl = document.getElementById('spark-month2-base-amount');
         const extraCountEl = document.getElementById('spark-month2-extra-count');
         const extraFeeEl = document.getElementById('spark-month2-extra-fee');
         const extra = Math.max(0, students - displayModel.includedStudents);
+        const { includedStudents } = displayModel;
 
         if (extra === 0) {
-            if (breakdownOnlyEl) {
-                breakdownOnlyEl.textContent = getMonth2BreakdownLine(displayModel, students);
-                breakdownOnlyEl.classList.remove('hidden');
-            }
+            if (breakdownOnlyEl) breakdownOnlyEl.classList.remove('hidden');
             if (breakdownExtraEl) breakdownExtraEl.classList.add('hidden');
+            if (onlyIncludedEl) onlyIncludedEl.textContent = String(includedStudents);
+            if (onlyBaseEl) onlyBaseEl.textContent = formatUsd(displayModel.baseFee);
         } else {
             if (breakdownOnlyEl) breakdownOnlyEl.classList.add('hidden');
             if (breakdownExtraEl) breakdownExtraEl.classList.remove('hidden');
+            if (includedCountEl) includedCountEl.textContent = String(includedStudents);
             if (baseAmountEl) baseAmountEl.textContent = formatUsd(displayModel.baseFee);
             if (extraCountEl) extraCountEl.textContent = String(extra);
             if (extraFeeEl) extraFeeEl.textContent = formatUsd(extra * displayModel.perExtraStudent);
@@ -195,6 +201,8 @@
                 regularPriceEl.textContent = '';
                 priceEl.textContent = formatUsd(computed);
             }
+            const priceStudentsEl = document.getElementById('spark-price-students');
+            if (priceStudentsEl) priceStudentsEl.textContent = String(students);
             updateMonth2Section(false, students, cfg.model, founderModel);
         }
 
