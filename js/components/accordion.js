@@ -52,26 +52,16 @@ function initAccordion(accordionRoot) {
       chevron.classList.toggle('rotate-180', shouldOpen);
     }
 
-    // Handle content visibility
+    // Handle content visibility via CSS classes only
     if (shouldOpen) {
       content.classList.remove('hidden');
-      // Force reflow to enable transition
       content.offsetHeight;
-      // Set max-height to actual content height
-      const height = content.scrollHeight;
-      content.style.maxHeight = height + 'px';
+      content.classList.add('accordion-content-open');
     } else {
-      // Set current height first
-      content.style.maxHeight = content.scrollHeight + 'px';
-      // Force reflow
-      content.offsetHeight;
-      // Then collapse
-      content.style.maxHeight = '0px';
-      // Hide after transition completes
+      content.classList.remove('accordion-content-open');
       setTimeout(() => {
         if (toggle.getAttribute('aria-expanded') === 'false') {
           content.classList.add('hidden');
-          content.style.maxHeight = '';
         }
       }, 300);
     }
@@ -113,10 +103,9 @@ function initAccordion(accordionRoot) {
     if (isInitiallyOpen) {
       item.classList.add('accordion-item-open');
       content.classList.remove('hidden');
-      content.style.maxHeight = 'none';
+      content.classList.add('accordion-content-open');
     } else {
       content.classList.add('hidden');
-      content.style.maxHeight = '0px';
     }
 
     // Click handler

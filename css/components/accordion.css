@@ -1,0 +1,19 @@
+[data-accordion-content] {
+  display: grid;
+  grid-template-rows: minmax(0, 0fr);
+  transition: grid-template-rows 0.3s ease-out;
+  overflow: hidden;
+}
+
+[data-accordion-content].accordion-content-open {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+[data-accordion-content] > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+[data-accordion-chevron] {
+  transition: transform 0.3s ease-out;
+}

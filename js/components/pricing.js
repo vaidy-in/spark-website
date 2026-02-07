@@ -63,6 +63,13 @@
     const SPARK_MODEL = { baseFee: 100, includedStudents: 10, perExtraStudent: 10 };
     const SPARK_FOUNDER_MODEL = { baseFee: 50, includedStudents: 10, perExtraStudent: 5 };
 
+    /** Video processing limits (trial and post-trial). Change here to update copy across the page. */
+    const VIDEO_LIMITS = {
+        trialHoursSd: 5,
+        monthlyHoursSd: 10,
+        hdToSdRatio: 5
+    };
+
     function getMonth2BreakdownLine(model, students) {
         const { baseFee, includedStudents, perExtraStudent } = model;
         const extra = Math.max(0, students - includedStudents);
