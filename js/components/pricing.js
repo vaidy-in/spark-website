@@ -243,7 +243,10 @@
             triggerEl.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (isOpen()) close();
-                else open();
+                else {
+                    open();
+                    inputEl.focus();
+                }
             });
             inputEl.addEventListener('focus', () => open());
             inputEl.addEventListener('blur', () => {
