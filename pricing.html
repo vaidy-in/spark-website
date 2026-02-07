@@ -87,7 +87,7 @@
                         <span id="spark-price-copy-over-max" class="hidden"><span>active students, please write to us at </span><a href="mailto:support@practicenow.us" class="text-brand-600 hover:text-brand-700 underline cursor-pointer">support@practicenow.us</a><span>.</span></span>
                     </div>
                     <p class="mt-3 text-base text-slate-600" id="spark-price-footnote">
-                        <sup class="text-brand-700">*</sup>Founding customer price - 50% off, already applied above. Yours for life. <strong><span class="line-through" id="spark-founder-slots">11</span> <span id="spark-founder-spots-left">7 spots left</span></strong>
+                        <sup class="text-brand-700">*</sup>Founding customer price - 50% off, already applied above.<strong><span class="line-through" id="spark-founder-slots">11</span> <span id="spark-founder-spots-left">7 spots left</span></strong>
                     </p>
                 </div>
 
@@ -118,9 +118,14 @@
                         </div>
                     </div>
                 </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-6">
+                    <span class="inline-flex items-center gap-2">
+                        <span class="material-symbols-rounded text-brand-600">receipt</span>
+                        <span>How you are charged</span>
+                    </span>
+                </h2>
 
                 <div class="border border-slate-200 rounded-2xl p-6 bg-slate-50/50">
-                    <h3 class="text-base font-bold text-slate-900 mb-4">How you are charged</h3>
                     <ul class="pricing-timeline flex flex-col sm:flex-row gap-6 sm:gap-8 list-none pl-0">
                         <li class="flex gap-3 flex-1">
                             <span class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-base font-bold">1</span>
@@ -141,7 +146,7 @@
                                     only. No per-student charge yet.
                                 </p>
                                 <p class="text-xs text-slate-500 mt-1">
-                                    <sup class="text-brand-700">*</sup>Founding customer price - lock in 50% off base fee for life.
+                                    <sup class="text-brand-700">*</sup>Founding customer price - lock in 50% off base fee.
                                 </p>
                             </div>
                         </li>
@@ -163,87 +168,104 @@
                                     </span>
                                     <span id="spark-month2-over-max" class="hidden">Example at 200 students: $50 for up to 10 active students + $950 for 190 additional students. Contact us for 200+.</span>
                                     <span class="block text-xs text-slate-500 mt-1">
-                                        <sup class="text-brand-700">*</sup>Founding customer price - lock in 50% off base fee and per-student rate for life.
+                                        <sup class="text-brand-700">*</sup>Founding customer price - lock in 50% off base fee and per-student rate.
                                     </span>
                                 </p>
                             </div>
                         </li>
                     </ul>
+                </div>
 
-                    <div data-accordion id="pricing-spark-accordion" class="mt-6 space-y-2">
-                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors bg-white">
-                            <button type="button" id="pricing-accordion-toggle-student-count" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-slate-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-inset rounded-xl">
-                                <span>My student count changes month on month. How will I be billed?</span>
+                <section id="faq-how-you-are-charged" class="mt-10 scroll-mt-24">
+                    <div data-accordion id="pricing-spark-accordion" class="space-y-2">
+                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
+                            <button type="button" id="pricing-accordion-toggle-student-count" data-accordion-toggle aria-expanded="false" aria-controls="pricing-spark-content-student-count" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <span class="material-symbols-rounded text-brand-600 mt-0.5 flex-shrink-0">insights</span>
+                                    <h3 class="text-base font-semibold text-slate-900">My student count changes month on month. How will I be billed?</h3>
+                                </div>
                                 <span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span>
                             </button>
-                            <div data-accordion-content>
-                                <div class="px-5 pb-4 pt-2">
-                                    <p class="text-base text-slate-600">
+                            <div data-accordion-content id="pricing-spark-content-student-count" class="hidden" aria-labelledby="pricing-accordion-toggle-student-count">
+                                <div class="px-5 pb-5 pl-[3.75rem]">
+                                    <p class="text-base text-slate-600 leading-relaxed">
                                         Your bill follows your active student count over the last 30 days - like a phone bill. More students, slightly higher bill; fewer students, lower bill. You can always see your projected bill on your dashboard.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors bg-white">
-                            <button type="button" id="pricing-accordion-toggle-active-students" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-slate-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-inset rounded-xl">
-                                <span>What does "active" student mean?</span>
+                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
+                            <button type="button" id="pricing-accordion-toggle-active-students" data-accordion-toggle aria-expanded="false" aria-controls="pricing-spark-content-active-students" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <span class="material-symbols-rounded text-brand-600 mt-0.5 flex-shrink-0">group</span>
+                                    <h3 class="text-base font-semibold text-slate-900">What does "active" student mean?</h3>
+                                </div>
                                 <span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span>
                             </button>
-                            <div data-accordion-content>
-                                <div class="px-5 pb-4 pt-2">
-                                    <p class="text-base text-slate-600">
+                            <div data-accordion-content id="pricing-spark-content-active-students" class="hidden" aria-labelledby="pricing-accordion-toggle-active-students">
+                                <div class="px-5 pb-5 pl-[3.75rem]">
+                                    <p class="text-base text-slate-600 leading-relaxed">
                                         This is the main driver of your bill. We only count students who have a paid subscription or one-time purchase and access to at least one of your courses or live classes. So you are not charged for free trials or people who signed up but never bought.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors bg-white">
-                            <button type="button" id="pricing-accordion-toggle-what-included" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-slate-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-inset rounded-xl">
-                                <span>Is there a minimum monthly charge?</span>
+                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
+                            <button type="button" id="pricing-accordion-toggle-what-included" data-accordion-toggle aria-expanded="false" aria-controls="pricing-spark-content-what-included" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <span class="material-symbols-rounded text-brand-600 mt-0.5 flex-shrink-0">payments</span>
+                                    <h3 class="text-base font-semibold text-slate-900">Is there a minimum monthly charge?</h3>
+                                </div>
                                 <span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span>
                             </button>
-                            <div data-accordion-content>
-                                <div class="px-5 pb-4 pt-2">
-                                    <p class="text-base text-slate-600">
-                                        Yes, there is a minimum monthly charge. Your base plan covers up to 10 active paying students, then $10 per extra student per month. Founding customers get 50% off for life: $50 base and $5 per extra student.
+                            <div data-accordion-content id="pricing-spark-content-what-included" class="hidden" aria-labelledby="pricing-accordion-toggle-what-included">
+                                <div class="px-5 pb-5 pl-[3.75rem]">
+                                    <p class="text-base text-slate-600 leading-relaxed">
+                                        Yes, there is a minimum monthly charge. Your base plan covers up to 10 active paying students, then $10 per extra student per month. Founding customers get 50% off: $50 base and $5 per extra student.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors bg-white">
-                            <button type="button" id="pricing-accordion-toggle-video-ai" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-slate-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-inset rounded-xl">
-                                <span>Are there limits on video upload and AI tutor (chatbot) usage?</span>
+                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
+                            <button type="button" id="pricing-accordion-toggle-video-ai" data-accordion-toggle aria-expanded="false" aria-controls="pricing-spark-content-video-ai" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <span class="material-symbols-rounded text-brand-600 mt-0.5 flex-shrink-0">storage</span>
+                                    <h3 class="text-base font-semibold text-slate-900">Are there limits on video upload and AI tutor (chatbot) usage?</h3>
+                                </div>
                                 <span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span>
                             </button>
-                            <div data-accordion-content>
-                                <div class="px-5 pb-4 pt-2 space-y-4 text-base text-slate-600">
-                                    <p>
+                            <div data-accordion-content id="pricing-spark-content-video-ai" class="hidden" aria-labelledby="pricing-accordion-toggle-video-ai">
+                                <div class="px-5 pb-5 pl-[3.75rem] space-y-4">
+                                    <p class="text-base text-slate-600 leading-relaxed">
                                         <strong class="text-slate-900">Video processing.</strong> When you connect Zoom or upload recordings, we turn them into courses (chapters, notes, slides). We include a generous amount of processing each month. HD video uses significantly more resources, so limits are lower when you use HD - we'll give you a heads-up when you're getting close and show options. No surprise bills.
                                     </p>
-                                    <p>
+                                    <p class="text-base text-slate-600 leading-relaxed">
                                         <strong class="text-slate-900">AI tutor.</strong> Your students get a 24/7 tutor that answers from your course content only. It's included for normal use. We'll let you know if you're approaching the limit and offer more if you need it - no surprise charges.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors bg-white">
-                            <button type="button" id="pricing-accordion-toggle-support" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-slate-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-inset rounded-xl">
-                                <span>What about support? I have more questions.</span>
+                        <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
+                            <button type="button" id="pricing-accordion-toggle-support" data-accordion-toggle aria-expanded="false" aria-controls="pricing-spark-content-support" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl">
+                                <div class="flex items-start gap-4 flex-1">
+                                    <span class="material-symbols-rounded text-brand-600 mt-0.5 flex-shrink-0">help</span>
+                                    <h3 class="text-base font-semibold text-slate-900">What about support? I have more questions.</h3>
+                                </div>
                                 <span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span>
                             </button>
-                            <div data-accordion-content>
-                                <div class="px-5 pb-4 pt-2 space-y-4 text-base text-slate-600">
-                                    <p>
+                            <div data-accordion-content id="pricing-spark-content-support" class="hidden" aria-labelledby="pricing-accordion-toggle-support">
+                                <div class="px-5 pb-5 pl-[3.75rem] space-y-4">
+                                    <p class="text-base text-slate-600 leading-relaxed">
                                         You can reach us by email or WhatsApp. Email <a href="mailto:support@practicenow.us" class="text-brand-600 hover:text-brand-700 underline cursor-pointer">support@practicenow.us</a> for detailed questions or feature requests - we typically respond within 24 hours. For quick questions or a real-time chat, message us on WhatsApp at <a href="https://wa.me/917899156587" target="_blank" rel="noopener noreferrer" class="text-brand-600 hover:text-brand-700 underline cursor-pointer">+91 78991 56587</a>.
                                     </p>
-                                    <p>
+                                    <p class="text-base text-slate-600 leading-relaxed">
                                         We also offer a searchable knowledge base with guides and tutorials, and you can request features or schedule a call for bigger questions. You'll talk to real people - we aim to respond quickly and give you honest answers.
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
                 <div id="pricing-features-root" class="mt-10"></div>
             </div>
