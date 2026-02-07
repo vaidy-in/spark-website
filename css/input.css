@@ -56,6 +56,11 @@
     }
   }
 
+  /* Timeline text column can shrink on narrow viewports so Month 2 copy is not clipped. */
+  .pricing-timeline li > div {
+    min-width: 0;
+  }
+
   @media (min-width: 768px) {
     /* Image on the right: text, metrics, links in left column; image in right column */
     .product-section--image-right .product-section__intro {
