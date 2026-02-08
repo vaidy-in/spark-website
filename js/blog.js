@@ -118,26 +118,21 @@ function cleanHtmlForDisplay(html) {
     
     bodyContent.querySelectorAll('div').forEach(div => {
         const text = div.textContent.trim();
-        const hasQuotes = text.includes('"') || text.includes('"') || text.includes('"') || text.includes('❝');
-        const hasAttribution = text.includes('—') || text.includes('–');
-        const hasSmallTag = div.querySelector('small');
         const hasParagraph = div.querySelector('p');
-        
-        // Pattern 1: div contains p with quotes AND small with attribution
         const quotePara = div.querySelector('p');
         const smallTag = div.querySelector('small');
-        const isQuotePattern1 = quotePara && smallTag && 
-                                (quotePara.textContent.includes('"') || quotePara.textContent.includes('"'));
-        
-        // Pattern 2: div contains quotes symbol (❝) and paragraph
+
+        // Pattern 1: div contains p with quotes AND small with attribution (pull-quote style)
+        const isQuotePattern1 = quotePara && smallTag &&
+            (quotePara.textContent.includes('"') || quotePara.textContent.includes('"'));
+
+        // Pattern 2: div contains decorative quote symbol (❝) and paragraph
         const hasQuoteSymbol = text.includes('❝');
         const isQuotePattern2 = hasQuoteSymbol && hasParagraph;
-        
-        // General pattern: has quotes, paragraph, and reasonable length
-        const isQuoteGeneral = hasQuotes && hasParagraph && text.length < 500 && text.length > 20;
-        
-        // Check if this div looks like a quote block
-        if ((isQuotePattern1 || isQuotePattern2 || isQuoteGeneral) && 
+
+        // Only convert explicit quote blocks (attribution or decorative symbol)
+        // Do NOT convert regular paragraphs that merely contain quoted words
+        if ((isQuotePattern1 || isQuotePattern2) &&
             !div.querySelector('h1, h2, h3, h4, h5, h6, ul, ol, table')) {
             divsToConvert.push(div);
         }
