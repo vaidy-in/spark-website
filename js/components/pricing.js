@@ -374,6 +374,7 @@
         const tabLive = document.getElementById('pricing-tab-live');
         const panelSpark = document.getElementById('pricing-panel-spark');
         const panelLive = document.getElementById('pricing-panel-live');
+        const faqBillingWrapper = document.getElementById('pricing-faq-billing-wrapper');
         const faqWrapper = document.getElementById('pricing-faq-wrapper');
         const ctaSpark = document.getElementById('pricing-cta-spark');
         const ctaLive = document.getElementById('pricing-cta-live');
@@ -384,6 +385,7 @@
                 tabLive: !!tabLive,
                 panelSpark: !!panelSpark,
                 panelLive: !!panelLive,
+                faqBillingWrapper: !!faqBillingWrapper,
                 faqWrapper: !!faqWrapper,
                 ctaSpark: !!ctaSpark,
                 ctaLive: !!ctaLive
@@ -414,6 +416,7 @@
             tabLive.classList.toggle('border-slate-200', isSpark);
             tabLive.classList.toggle('hover:bg-slate-50', isSpark);
 
+            if (faqBillingWrapper) faqBillingWrapper.classList.toggle('hidden', !isSpark);
             if (faqWrapper) faqWrapper.classList.toggle('hidden', !isSpark);
             if (ctaSpark) ctaSpark.classList.toggle('hidden', !isSpark);
             if (ctaLive) ctaLive.classList.toggle('hidden', isSpark);
@@ -439,6 +442,7 @@
         tabLive.addEventListener('click', () => setActive('live', 'click'));
     }
 
+    const FAQ_BILLING_SNIPPET = 'pricing-faq-billing-only.html';
     const FAQ_SNIPPETS = ['pricing-faq-sections-0.html', 'pricing-faq-sections-1.html', 'pricing-faq-sections-2.html', 'pricing-faq-sections-3.html'];
     const FEATURES_SNIPPET = 'pricing-features-list.html';
 
@@ -459,6 +463,32 @@
             console.log(LOG_PREFIX, 'features snippet injected');
         } catch (e) {
             console.error(LOG_PREFIX, 'features snippet load failed', { error: String(e) });
+            root.innerHTML = '';
+        }
+    }
+
+    async function loadFaqBillingSnippet() {
+        const root = document.getElementById('pricing-faq-billing-root');
+        if (!root) return;
+
+        const basePath = resolveBasePath();
+        const snippetPath = `${basePath}/snippets/${FAQ_BILLING_SNIPPET}`;
+
+        console.log(LOG_PREFIX, 'loading FAQ billing snippet', { basePath, snippet: FAQ_BILLING_SNIPPET });
+
+        try {
+            const res = await fetch(snippetPath);
+            if (!res.ok) throw new Error(`FAQ billing snippet fetch failed: ${res.status} ${snippetPath}`);
+            const html = await res.text();
+            root.innerHTML = html;
+
+            const accordions = Array.from(root.querySelectorAll('[data-accordion]'));
+            if (typeof initAccordion === 'function') {
+                accordions.forEach(initAccordion);
+            }
+            console.log(LOG_PREFIX, 'FAQ billing snippet injected', { accordionCount: accordions.length });
+        } catch (e) {
+            console.error(LOG_PREFIX, 'FAQ billing snippet load failed', { error: String(e) });
             root.innerHTML = '';
         }
     }
@@ -523,6 +553,7 @@
 
         (async function loadSnippets() {
             await loadFeaturesSnippet();
+            await loadFaqBillingSnippet();
             await loadFaqSnippet();
         })();
     });
