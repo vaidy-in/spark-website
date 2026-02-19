@@ -117,6 +117,7 @@
             termDisc36:  num('ec-term-disc-36') / 100,
             earlyDisc:   num('ec-early-disc') / 100,
             targetMargin: num('ec-target-margin') / 100,
+            basePricePerSeatINR: num('ec-base-price-per-seat'),
         };
     }
 
@@ -198,11 +199,11 @@
         // Cost per seat per month (INR)
         const costPerSeatPerMonth = costs.total / (inp.seats * termMonths);
 
-        // List price = cost per seat per month ÷ (1 - target margin)
-        // This is the price that, after costs, yields the target margin
-        // (before Athiya share and discounts)
+        // List price: use base price if set, else derive from cost + target margin
         const targetMarginSafe = Math.min(inp.targetMargin, 0.99);
-        const listPricePerSeatPerMonth = costPerSeatPerMonth / (1 - targetMarginSafe);
+        const listPricePerSeatPerMonth = inp.basePricePerSeatINR > 0
+            ? inp.basePricePerSeatINR
+            : costPerSeatPerMonth / (1 - targetMarginSafe);
 
         // Discounts
         const volDisc  = getVolumeDiscount(inp);
@@ -302,6 +303,12 @@
 
         setDual('ec-out-net-seat-mo', pricing.netPricePerSeatPerMonth);
 
+        // Summary (sticky)
+        setDual('ec-summary-net', pricing.netPricePerSeatPerMonth);
+        setDual('ec-summary-tcv', pricing.tcvINR);
+        set('ec-summary-margin-pct', fmtPct(pricing.marginPct));
+        setDual('ec-summary-spark-net', pricing.sparkNetINR);
+
         // Contract value
         setDual('ec-out-acv', pricing.acvINR);
         setDual('ec-out-setup', pricing.setupFeeINR);
@@ -363,7 +370,7 @@
 
     function gatherAllInputValues() {
         const ids = [
-            'ec-fx-rate', 'ec-seats', 'ec-setup-fee',
+            'ec-fx-rate', 'ec-seats', 'ec-setup-fee', 'ec-base-price-per-seat',
             'ec-video-hours-sd', 'ec-hd-sd-factor', 'ec-storage-gb',
             'ec-streaming-hrs', 'ec-tutor-queries', 'ec-quiz-queries',
             'ec-batch-hrs-per-video-hr',
@@ -560,6 +567,34 @@
 
         const btnExportCSV = document.getElementById('ec-btn-export-csv');
         if (btnExportCSV) btnExportCSV.addEventListener('click', exportCSV);
+
+        // Expand / collapse results
+        const btnExpand   = document.getElementById('ec-btn-expand-results');
+        const btnCollapse = document.getElementById('ec-btn-collapse-results');
+        const resultsFull = document.getElementById('ec-results-full');
+        const expandText  = btnExpand ? btnExpand.querySelector('.ec-btn-expand-text') : null;
+        const expandIcon  = btnExpand ? btnExpand.querySelector('.ec-btn-expand-icon') : null;
+
+        function setResultsExpanded(expanded) {
+            if (!resultsFull || !btnExpand) return;
+            resultsFull.classList.toggle('hidden', !expanded);
+            resultsFull.setAttribute('aria-hidden', String(!expanded));
+            btnExpand.setAttribute('aria-expanded', String(expanded));
+            if (expandText) expandText.textContent = expanded ? 'Collapse' : 'Expand';
+            if (expandIcon) {
+                expandIcon.textContent = expanded ? 'expand_less' : 'expand_more';
+            }
+        }
+
+        if (btnExpand && resultsFull) {
+            btnExpand.addEventListener('click', () => {
+                const expanded = btnExpand.getAttribute('aria-expanded') === 'true';
+                setResultsExpanded(!expanded);
+            });
+        }
+        if (btnCollapse && resultsFull) {
+            btnCollapse.addEventListener('click', () => setResultsExpanded(false));
+        }
 
         const btnImportJSON = document.getElementById('ec-btn-import-json');
         const importFile    = document.getElementById('ec-import-file');

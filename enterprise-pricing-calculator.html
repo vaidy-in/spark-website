@@ -509,6 +509,25 @@
                 </div>
                 <div class="ec-card-body space-y-5">
 
+                    <!-- Base price (optional override) -->
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-base-price-per-seat" class="ec-label">Base price per seat / month (₹)</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About base price">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Override derived price</span>
+                                    <span class="tooltip-content">Leave at 0 to derive list price from cost + target margin. Set a value to use this as the list price instead - the margin % will then vary with costs and this price.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <span class="ec-unit ec-unit--prefix">₹</span>
+                            <input id="ec-base-price-per-seat" type="number" min="0" step="50" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Base price per seat per month in INR (0 = derive from cost)">
+                            <span class="ec-unit">/ seat / month</span>
+                        </div>
+                    </div>
+
                     <!-- Volume discount bands -->
                     <div>
                         <p class="ec-subsection-title mb-3">Volume discount bands (seat count)</p>
@@ -615,16 +634,58 @@
         <!-- end inputs col -->
 
         <!-- ═══════════════════════════════════════════════════
-             RIGHT COLUMN: Results (Section 5) - sticky
+             RIGHT COLUMN: Results - sticky summary + expandable full
         ═══════════════════════════════════════════════════ -->
         <div class="ec-results-col">
-            <div class="ec-results-sticky">
-
-                <section class="ec-card ec-card--results" id="ec-section-results">
-                    <div class="ec-card-header">
+            <!-- Sticky wrapper: summary + full results stick together below header when scrolling -->
+            <div class="ec-results-sticky-wrapper">
+                <section class="ec-card ec-card--results ec-card--summary">
+                    <div class="ec-card-header ec-card-header--summary">
                         <span class="material-symbols-rounded ec-card-icon ec-card-icon--results">calculate</span>
                         <h2 class="ec-card-title">Results</h2>
                         <span id="ec-results-tier-badge" class="ec-tier-badge ec-tier-badge--vanilla">Vanilla</span>
+                    </div>
+                    <div class="ec-card-body ec-card-body--summary space-y-3">
+                        <div class="ec-summary-row">
+                            <span class="ec-result-label">Net price / seat / month</span>
+                            <div class="ec-result-dual">
+                                <span id="ec-summary-net-inr" class="ec-result-value ec-result-value--primary">₹0</span>
+                                <span id="ec-summary-net-usd" class="ec-result-value-secondary">$0</span>
+                            </div>
+                        </div>
+                        <div class="ec-summary-row">
+                            <span class="ec-result-label">TCV</span>
+                            <div class="ec-result-dual">
+                                <span id="ec-summary-tcv-inr" class="ec-result-value ec-result-value--primary">₹0</span>
+                                <span id="ec-summary-tcv-usd" class="ec-result-value-secondary">$0</span>
+                            </div>
+                        </div>
+                        <div class="ec-summary-row">
+                            <span class="ec-result-label">Margin %</span>
+                            <span id="ec-summary-margin-pct" class="ec-result-value ec-result-value--margin-pct">0%</span>
+                        </div>
+                        <div class="ec-summary-row">
+                            <span class="ec-result-label">Spark net</span>
+                            <div class="ec-result-dual">
+                                <span id="ec-summary-spark-net-inr" class="ec-result-value ec-result-value--margin">₹0</span>
+                                <span id="ec-summary-spark-net-usd" class="ec-result-value-secondary">$0</span>
+                            </div>
+                        </div>
+                        <button id="ec-btn-expand-results" type="button" class="ec-btn-expand cursor-pointer" aria-expanded="false" aria-controls="ec-results-full">
+                            <span class="ec-btn-expand-text">Expand</span>
+                            <span class="material-symbols-rounded ec-btn-expand-icon">expand_more</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Full results (expandable) - always below summary, sticks with it -->
+                <section id="ec-results-full" class="ec-card ec-card--results ec-results-full hidden" aria-hidden="true">
+                    <div class="ec-card-header">
+                        <span class="material-symbols-rounded ec-card-icon ec-card-icon--results">receipt_long</span>
+                        <h2 class="ec-card-title">Full Results</h2>
+                        <button id="ec-btn-collapse-results" type="button" class="ec-btn-collapse cursor-pointer" aria-label="Collapse results">
+                            <span class="material-symbols-rounded">expand_less</span>
+                        </button>
                     </div>
                     <div class="ec-card-body space-y-6">
 
@@ -822,9 +883,10 @@
                         </div>
 
                     </div>
-                </section>
+            </section>
 
             </div>
+            <!-- end ec-results-sticky-wrapper -->
         </div>
         <!-- end results col -->
 

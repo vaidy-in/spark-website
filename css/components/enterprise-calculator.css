@@ -20,28 +20,83 @@
 
 .ec-results-col {
     min-width: 0;
+    align-self: stretch; /* match left column height so sticky has room to stick */
 }
 
-.ec-results-sticky {
+/* Sticky wrapper: summary + full results stick together below header when scrolling */
+.ec-results-sticky-wrapper {
     position: sticky;
-    top: 80px;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #e2e8f0 transparent;
+    top: 64px; /* matches body pt-16 (header clearance) */
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.ec-results-sticky::-webkit-scrollbar {
-    width: 4px;
+.ec-card--summary .ec-card-body--summary {
+    padding: 16px 20px;
 }
 
-.ec-results-sticky::-webkit-scrollbar-track {
+.ec-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.ec-btn-expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #4f46e5;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 8px;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.ec-btn-expand:hover {
+    background: #e0e7ff;
+    border-color: #a5b4fc;
+}
+
+.ec-btn-expand-icon {
+    font-size: 18px;
+}
+
+.ec-btn-collapse {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    color: #64748b;
     background: transparent;
+    border: none;
+    border-radius: 6px;
+    transition: color 150ms ease, background 150ms ease;
 }
 
-.ec-results-sticky::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
-    border-radius: 9999px;
+.ec-btn-collapse:hover {
+    color: #4f46e5;
+    background: #f1f5f9;
+}
+
+/* Full results (expandable, no height limit) */
+.ec-results-full .ec-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ec-results-full .ec-card-header .ec-btn-collapse {
+    margin-left: auto;
 }
 
 /* ── Toolbar ── */
