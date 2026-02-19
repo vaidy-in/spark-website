@@ -1,0 +1,591 @@
+/**
+ * Enterprise Pricing Calculator
+ *
+ * Reads all input fields, computes costs and pricing, and updates the
+ * results panel. No inline styles - all visual state via CSS classes.
+ *
+ * Sections:
+ *   1. Helpers
+ *   2. Read inputs
+ *   3. Compute costs
+ *   4. Compute pricing
+ *   5. Render results
+ *   6. Export / Import
+ *   7. Event wiring
+ */
+
+(function () {
+    'use strict';
+
+    const LOG = '[ec]';
+
+    // ─────────────────────────────────────────────
+    // 1. Helpers
+    // ─────────────────────────────────────────────
+
+    function num(id) {
+        const el = document.getElementById(id);
+        if (!el) { console.warn(LOG, 'missing element', id); return 0; }
+        const v = parseFloat(el.value);
+        return Number.isFinite(v) ? v : 0;
+    }
+
+    function fmtINR(v) {
+        const n = Math.round(v);
+        if (Math.abs(n) >= 10000000) return '₹' + (n / 10000000).toFixed(2) + ' Cr';
+        if (Math.abs(n) >= 100000)   return '₹' + (n / 100000).toFixed(2) + ' L';
+        return '₹' + n.toLocaleString('en-IN');
+    }
+
+    function fmtUSD(v) {
+        const n = v / num('ec-fx-rate');
+        if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
+        if (Math.abs(n) >= 1000)    return '$' + (n / 1000).toFixed(1) + 'K';
+        return '$' + n.toFixed(2);
+    }
+
+    function fmtPct(v) {
+        return (Math.round(v * 10) / 10).toFixed(1) + '%';
+    }
+
+    function set(id, text) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    }
+
+    function setDual(baseId, inrVal, usdNote) {
+        set(baseId + '-inr', fmtINR(inrVal));
+        set(baseId + '-usd', usdNote !== undefined ? usdNote : fmtUSD(inrVal));
+    }
+
+    // ─────────────────────────────────────────────
+    // 2. Read inputs
+    // ─────────────────────────────────────────────
+
+    function readInputs() {
+        const tierEl = document.querySelector('.ec-tier-btn--active');
+        const tier = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
+
+        const termEl = document.querySelector('.ec-chip--active[data-term]');
+        const term = termEl ? parseInt(termEl.getAttribute('data-term'), 10) : 24;
+
+        const revYearEl = document.querySelector('.ec-chip--active[data-revyear]');
+        const revYear = revYearEl ? parseInt(revYearEl.getAttribute('data-revyear'), 10) : 1;
+
+        return {
+            // Deal
+            tier,
+            seats:          Math.max(100, num('ec-seats')),
+            term,
+            revYear,
+            setupFeeUSD:    num('ec-setup-fee'),
+            fxRate:         Math.max(1, num('ec-fx-rate')),
+
+            // Usage
+            videoHoursSD:       num('ec-video-hours-sd'),
+            hdSdFactor:         Math.max(1, num('ec-hd-sd-factor')),
+            storageGB:          num('ec-storage-gb'),
+            streamingHrsPerSeat: num('ec-streaming-hrs'),
+            tutorQueriesPerSeat: num('ec-tutor-queries'),
+            quizQueriesPerSeat:  num('ec-quiz-queries'),
+            batchHrsPerVideoHr:  num('ec-batch-hrs-per-video-hr'),
+            tutorTokensIn:       num('ec-tutor-tokens-in'),
+            tutorTokensOut:      num('ec-tutor-tokens-out'),
+            quizTokensIn:        num('ec-quiz-tokens-in'),
+            quizTokensOut:       num('ec-quiz-tokens-out'),
+            pipelineTokensIn:    num('ec-pipeline-tokens-in'),
+            pipelineTokensOut:   num('ec-pipeline-tokens-out'),
+
+            // Unit costs (INR)
+            costAssemblyAI:   num('ec-cost-assemblyai'),
+            costS3Storage:    num('ec-cost-s3-storage'),
+            costS3Transfer:   num('ec-cost-s3-transfer'),
+            costBatch:        num('ec-cost-batch'),
+            costGeminiIn:     num('ec-cost-gemini-in'),
+            costGeminiOut:    num('ec-cost-gemini-out'),
+            costOpenAIIn:     num('ec-cost-openai-in'),
+            costOpenAIOut:    num('ec-cost-openai-out'),
+            costMultiplier:   Math.max(1, num('ec-cost-multiplier')),
+
+            // Pricing config
+            volDisc1:    num('ec-vol-disc-1') / 100,
+            volDisc2:    num('ec-vol-disc-2') / 100,
+            volDisc3:    num('ec-vol-disc-3') / 100,
+            volDisc4:    num('ec-vol-disc-4') / 100,
+            termDisc12:  num('ec-term-disc-12') / 100,
+            termDisc24:  num('ec-term-disc-24') / 100,
+            termDisc36:  num('ec-term-disc-36') / 100,
+            earlyDisc:   num('ec-early-disc') / 100,
+            targetMargin: num('ec-target-margin') / 100,
+        };
+    }
+
+    // ─────────────────────────────────────────────
+    // 3. Compute costs (all in INR)
+    // ─────────────────────────────────────────────
+
+    function computeCosts(inp) {
+        // Processing cost: one-time, amortised over contract term
+        const assemblyAI = inp.videoHoursSD * inp.costAssemblyAI;
+        const batch      = inp.videoHoursSD * inp.batchHrsPerVideoHr * inp.costBatch;
+
+        // Pipeline LLM (Gemini) for notes/chapters/slides - one-time
+        const geminiPipeline = (inp.videoHoursSD * inp.pipelineTokensIn / 1e6) * inp.costGeminiIn
+                             + (inp.videoHoursSD * inp.pipelineTokensOut / 1e6) * inp.costGeminiOut;
+
+        // Monthly recurring costs
+        const s3StoragePerMonth   = inp.storageGB * inp.costS3Storage;
+        const gbPerHr             = 1; // ~1 GB per SD video hour streamed
+        const s3StreamingPerMonth = inp.seats * inp.streamingHrsPerSeat * gbPerHr * inp.costS3Transfer;
+
+        // AI Tutor (Gemini) - only for Premium
+        const tutorQueriesTotal = inp.tier === 'premium' ? inp.seats * inp.tutorQueriesPerSeat : 0;
+        const geminiTutorPerMonth = (tutorQueriesTotal * inp.tutorTokensIn / 1e6) * inp.costGeminiIn
+                                  + (tutorQueriesTotal * inp.tutorTokensOut / 1e6) * inp.costGeminiOut;
+
+        // Quiz generation (OpenAI) - both tiers
+        const quizQueriesTotal   = inp.seats * inp.quizQueriesPerSeat;
+        const openAIPerMonth     = (quizQueriesTotal * inp.quizTokensIn / 1e6) * inp.costOpenAIIn
+                                 + (quizQueriesTotal * inp.quizTokensOut / 1e6) * inp.costOpenAIOut;
+
+        // Total over contract term
+        const termMonths = inp.term;
+        const rawCosts = {
+            assemblyAI:  assemblyAI,
+            batch:       batch,
+            s3Storage:   s3StoragePerMonth * termMonths,
+            s3Streaming: s3StreamingPerMonth * termMonths,
+            gemini:      geminiPipeline + geminiTutorPerMonth * termMonths,
+            openAI:      openAIPerMonth * termMonths,
+        };
+
+        // Apply multiplier to each category
+        const costs = {};
+        let total = 0;
+        for (const k in rawCosts) {
+            costs[k] = rawCosts[k] * inp.costMultiplier;
+            total += costs[k];
+        }
+        costs.total = total;
+
+        console.log(LOG, 'costs (INR)', costs);
+        return costs;
+    }
+
+    // ─────────────────────────────────────────────
+    // 4. Compute pricing
+    // ─────────────────────────────────────────────
+
+    const REV_SHARE = { 1: 0.30, 2: 0.20, 3: 0.10, 4: 0.05, 5: 0.05 };
+
+    function getVolumeDiscount(inp) {
+        const s = inp.seats;
+        if (s >= 1000) return inp.volDisc4;
+        if (s >= 500)  return inp.volDisc3;
+        if (s >= 250)  return inp.volDisc2;
+        return inp.volDisc1;
+    }
+
+    function getTermDiscount(inp) {
+        if (inp.term >= 36) return inp.termDisc36;
+        if (inp.term >= 24) return inp.termDisc24;
+        return inp.termDisc12;
+    }
+
+    function computePricing(inp, costs) {
+        const termMonths = inp.term;
+
+        // Cost per seat per month (INR)
+        const costPerSeatPerMonth = costs.total / (inp.seats * termMonths);
+
+        // List price = cost per seat per month ÷ (1 - target margin)
+        // This is the price that, after costs, yields the target margin
+        // (before Athiya share and discounts)
+        const targetMarginSafe = Math.min(inp.targetMargin, 0.99);
+        const listPricePerSeatPerMonth = costPerSeatPerMonth / (1 - targetMarginSafe);
+
+        // Discounts
+        const volDisc  = getVolumeDiscount(inp);
+        const termDisc = getTermDiscount(inp);
+        const earlyDisc = inp.earlyDisc;
+        // Compound discounts: apply sequentially
+        const combinedDiscountFactor = (1 - volDisc) * (1 - termDisc) * (1 - earlyDisc);
+        const totalDiscountPct = 1 - combinedDiscountFactor;
+
+        const netPricePerSeatPerMonth = listPricePerSeatPerMonth * combinedDiscountFactor;
+
+        // ACV = net price × seats × 12
+        const acvINR = netPricePerSeatPerMonth * inp.seats * 12;
+
+        // Setup fee in INR
+        const setupFeeINR = inp.setupFeeUSD * inp.fxRate;
+
+        // TCV = net price × seats × term + setup fee
+        const tcvINR = netPricePerSeatPerMonth * inp.seats * termMonths + setupFeeINR;
+
+        // Revenue (for margin calc) = TCV excluding setup fee
+        const revenueINR = netPricePerSeatPerMonth * inp.seats * termMonths;
+
+        // Athiya share
+        const athiyaShareRate = REV_SHARE[inp.revYear] || 0.30;
+        const athiyaAmountINR = revenueINR * athiyaShareRate;
+        const sparkGrossINR   = revenueINR - athiyaAmountINR;
+
+        // Net margin
+        const sparkNetINR = sparkGrossINR - costs.total;
+        const marginPct   = revenueINR > 0 ? (sparkNetINR / revenueINR) * 100 : 0;
+
+        // Athiya Y1/Y2/Y3 on annual revenue
+        const annualRevINR = acvINR;
+        const athiyaY1 = annualRevINR * REV_SHARE[1];
+        const athiyaY2 = annualRevINR * REV_SHARE[2];
+        const athiyaY3 = annualRevINR * REV_SHARE[3];
+
+        const result = {
+            listPricePerSeatPerMonth,
+            netPricePerSeatPerMonth,
+            totalDiscountPct,
+            volDisc, termDisc, earlyDisc,
+            acvINR,
+            setupFeeINR,
+            tcvINR,
+            revenueINR,
+            athiyaShareRate,
+            athiyaAmountINR,
+            sparkGrossINR,
+            sparkNetINR,
+            marginPct,
+            athiyaY1, athiyaY2, athiyaY3,
+            costPerSeatPerMonth,
+        };
+
+        console.log(LOG, 'pricing (INR)', result);
+        return result;
+    }
+
+    // ─────────────────────────────────────────────
+    // 5. Render results
+    // ─────────────────────────────────────────────
+
+    function renderResults(inp, costs, pricing) {
+        // Tier badge
+        const badge = document.getElementById('ec-results-tier-badge');
+        if (badge) {
+            badge.textContent = inp.tier === 'premium' ? 'Premium' : 'Vanilla';
+            badge.classList.toggle('ec-tier-badge--vanilla', inp.tier === 'vanilla');
+            badge.classList.toggle('ec-tier-badge--premium', inp.tier === 'premium');
+        }
+
+        // Pricing rows
+        const listMo = pricing.listPricePerSeatPerMonth;
+        setDual('ec-out-list-seat-mo', listMo);
+        setDual('ec-out-list-seat-yr', listMo * 12);
+
+        set('ec-out-discounts-pct', pricing.totalDiscountPct > 0
+            ? '-' + fmtPct(pricing.totalDiscountPct * 100)
+            : '0%');
+
+        // Discount breakdown
+        const breakdownEl = document.getElementById('ec-discount-breakdown');
+        if (breakdownEl) {
+            const parts = [];
+            if (pricing.volDisc > 0)  parts.push('Volume: -' + fmtPct(pricing.volDisc * 100));
+            if (pricing.termDisc > 0) parts.push('Term: -' + fmtPct(pricing.termDisc * 100));
+            if (pricing.earlyDisc > 0) parts.push('Early: -' + fmtPct(pricing.earlyDisc * 100));
+            if (parts.length > 0) {
+                breakdownEl.textContent = parts.join(' · ');
+                breakdownEl.classList.remove('hidden');
+            } else {
+                breakdownEl.classList.add('hidden');
+            }
+        }
+
+        setDual('ec-out-net-seat-mo', pricing.netPricePerSeatPerMonth);
+
+        // Contract value
+        setDual('ec-out-acv', pricing.acvINR);
+        setDual('ec-out-setup', pricing.setupFeeINR);
+        set('ec-out-tcv-term', String(inp.term));
+        setDual('ec-out-tcv', pricing.tcvINR);
+
+        // Cost breakdown
+        setDual('ec-cost-out-assemblyai', costs.assemblyAI);
+        setDual('ec-cost-out-s3-storage', costs.s3Storage);
+        setDual('ec-cost-out-s3-streaming', costs.s3Streaming);
+        setDual('ec-cost-out-batch', costs.batch);
+        setDual('ec-cost-out-gemini', costs.gemini);
+        setDual('ec-cost-out-openai', costs.openAI);
+        setDual('ec-cost-out-total', costs.total);
+
+        // Margin
+        setDual('ec-margin-out-revenue', pricing.revenueINR);
+
+        const athiyaLabel = document.getElementById('ec-margin-athiya-label');
+        if (athiyaLabel) {
+            athiyaLabel.textContent = 'Athiya share (Y' + inp.revYear + ' · ' + Math.round(pricing.athiyaShareRate * 100) + '%)';
+        }
+        setDual('ec-margin-out-athiya', pricing.athiyaAmountINR);
+        setDual('ec-margin-out-spark-gross', pricing.sparkGrossINR);
+        setDual('ec-margin-out-cost', costs.total);
+        setDual('ec-margin-out-net', pricing.sparkNetINR);
+        set('ec-margin-out-pct', fmtPct(pricing.marginPct));
+
+        // Margin health indicator
+        const healthEl = document.getElementById('ec-margin-health');
+        if (healthEl) {
+            const targetPct = inp.targetMargin * 100;
+            const actualPct = pricing.marginPct;
+            const diff = actualPct - targetPct;
+            healthEl.classList.remove('ec-margin-health--good', 'ec-margin-health--warn', 'ec-margin-health--bad');
+            if (actualPct >= targetPct) {
+                healthEl.classList.add('ec-margin-health--good');
+                healthEl.textContent = '✓ Margin target met (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
+            } else if (diff >= -10) {
+                healthEl.classList.add('ec-margin-health--warn');
+                healthEl.textContent = '⚠ Below target by ' + fmtPct(Math.abs(diff)) + ' (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
+            } else {
+                healthEl.classList.add('ec-margin-health--bad');
+                healthEl.textContent = '✗ Significantly below target (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
+            }
+        }
+
+        // Athiya Y1/Y2/Y3
+        setDual('ec-athiya-y1', pricing.athiyaY1);
+        setDual('ec-athiya-y2', pricing.athiyaY2);
+        setDual('ec-athiya-y3', pricing.athiyaY3);
+
+        console.log(LOG, 'render complete');
+    }
+
+    // ─────────────────────────────────────────────
+    // 6. Export / Import
+    // ─────────────────────────────────────────────
+
+    function gatherAllInputValues() {
+        const ids = [
+            'ec-fx-rate', 'ec-seats', 'ec-setup-fee',
+            'ec-video-hours-sd', 'ec-hd-sd-factor', 'ec-storage-gb',
+            'ec-streaming-hrs', 'ec-tutor-queries', 'ec-quiz-queries',
+            'ec-batch-hrs-per-video-hr',
+            'ec-tutor-tokens-in', 'ec-tutor-tokens-out',
+            'ec-quiz-tokens-in', 'ec-quiz-tokens-out',
+            'ec-pipeline-tokens-in', 'ec-pipeline-tokens-out',
+            'ec-cost-assemblyai', 'ec-cost-s3-storage', 'ec-cost-s3-transfer',
+            'ec-cost-batch', 'ec-cost-gemini-in', 'ec-cost-gemini-out',
+            'ec-cost-openai-in', 'ec-cost-openai-out', 'ec-cost-multiplier',
+            'ec-vol-disc-1', 'ec-vol-disc-2', 'ec-vol-disc-3', 'ec-vol-disc-4',
+            'ec-term-disc-12', 'ec-term-disc-24', 'ec-term-disc-36',
+            'ec-early-disc', 'ec-target-margin',
+        ];
+        const data = { _version: 1, _ts: new Date().toISOString() };
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) data[id] = el.value;
+        });
+        // Capture toggle state
+        const tierEl = document.querySelector('.ec-tier-btn--active');
+        data['_tier'] = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
+        const termEl = document.querySelector('.ec-chip--active[data-term]');
+        data['_term'] = termEl ? termEl.getAttribute('data-term') : '24';
+        const revYearEl = document.querySelector('.ec-chip--active[data-revyear]');
+        data['_revYear'] = revYearEl ? revYearEl.getAttribute('data-revyear') : '1';
+        return data;
+    }
+
+    function applyImportedValues(data) {
+        for (const key in data) {
+            if (key.startsWith('_')) continue;
+            const el = document.getElementById(key);
+            if (el) el.value = data[key];
+        }
+        // Restore tier
+        if (data['_tier']) {
+            document.querySelectorAll('.ec-tier-btn').forEach(btn => {
+                const active = btn.getAttribute('data-tier') === data['_tier'];
+                btn.classList.toggle('ec-tier-btn--active', active);
+            });
+        }
+        // Restore term
+        if (data['_term']) {
+            document.querySelectorAll('.ec-chip[data-term]').forEach(btn => {
+                const active = btn.getAttribute('data-term') === data['_term'];
+                btn.classList.toggle('ec-chip--active', active);
+            });
+        }
+        // Restore revYear
+        if (data['_revYear']) {
+            document.querySelectorAll('.ec-chip[data-revyear]').forEach(btn => {
+                const active = btn.getAttribute('data-revyear') === data['_revYear'];
+                btn.classList.toggle('ec-chip--active', active);
+            });
+        }
+        recalculate();
+    }
+
+    function exportJSON() {
+        const data = gatherAllInputValues();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'spark-enterprise-pricing-' + new Date().toISOString().slice(0, 10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        console.log(LOG, 'JSON exported');
+    }
+
+    function exportCSV() {
+        const inp = readInputs();
+        const costs = computeCosts(inp);
+        const pricing = computePricing(inp, costs);
+        const fx = inp.fxRate;
+
+        const rows = [
+            ['Spark Enterprise Pricing Calculator', '', ''],
+            ['Generated', new Date().toISOString(), ''],
+            ['', '', ''],
+            ['DEAL PARAMETERS', '', ''],
+            ['Tier', inp.tier, ''],
+            ['Seats', inp.seats, ''],
+            ['Contract term (months)', inp.term, ''],
+            ['Athiya rev-share year', 'Y' + inp.revYear, ''],
+            ['Setup fee (USD)', inp.setupFeeUSD, ''],
+            ['FX rate (INR/USD)', fx, ''],
+            ['', '', ''],
+            ['PRICING', 'INR', 'USD'],
+            ['List price / seat / month', fmtINR(pricing.listPricePerSeatPerMonth), fmtUSD(pricing.listPricePerSeatPerMonth)],
+            ['List price / seat / year', fmtINR(pricing.listPricePerSeatPerMonth * 12), fmtUSD(pricing.listPricePerSeatPerMonth * 12)],
+            ['Total discount %', fmtPct(pricing.totalDiscountPct * 100), ''],
+            ['Net price / seat / month', fmtINR(pricing.netPricePerSeatPerMonth), fmtUSD(pricing.netPricePerSeatPerMonth)],
+            ['ACV (annual contract value)', fmtINR(pricing.acvINR), fmtUSD(pricing.acvINR)],
+            ['Setup fee', fmtINR(pricing.setupFeeINR), fmtUSD(pricing.setupFeeINR)],
+            ['TCV (' + inp.term + ' months + setup)', fmtINR(pricing.tcvINR), fmtUSD(pricing.tcvINR)],
+            ['', '', ''],
+            ['COST BREAKDOWN (total over contract term, after multiplier)', 'INR', 'USD'],
+            ['AssemblyAI', fmtINR(costs.assemblyAI), fmtUSD(costs.assemblyAI)],
+            ['AWS S3 storage', fmtINR(costs.s3Storage), fmtUSD(costs.s3Storage)],
+            ['AWS S3 streaming', fmtINR(costs.s3Streaming), fmtUSD(costs.s3Streaming)],
+            ['AWS Batch', fmtINR(costs.batch), fmtUSD(costs.batch)],
+            ['Gemini API', fmtINR(costs.gemini), fmtUSD(costs.gemini)],
+            ['OpenAI API', fmtINR(costs.openAI), fmtUSD(costs.openAI)],
+            ['Total cost', fmtINR(costs.total), fmtUSD(costs.total)],
+            ['', '', ''],
+            ['MARGIN & REVENUE SHARE', 'INR', 'USD'],
+            ['Total revenue (TCV excl. setup)', fmtINR(pricing.revenueINR), fmtUSD(pricing.revenueINR)],
+            ['Athiya share (Y' + inp.revYear + ' · ' + Math.round(pricing.athiyaShareRate * 100) + '%)', fmtINR(pricing.athiyaAmountINR), fmtUSD(pricing.athiyaAmountINR)],
+            ['Spark gross revenue (after Athiya)', fmtINR(pricing.sparkGrossINR), fmtUSD(pricing.sparkGrossINR)],
+            ['Total cost', fmtINR(costs.total), fmtUSD(costs.total)],
+            ['Spark net margin', fmtINR(pricing.sparkNetINR), fmtUSD(pricing.sparkNetINR)],
+            ['Margin %', fmtPct(pricing.marginPct), ''],
+            ['', '', ''],
+            ['ATHIYA SHARE BY YEAR (based on ACV)', 'INR', 'USD'],
+            ['Y1 (30%)', fmtINR(pricing.athiyaY1), fmtUSD(pricing.athiyaY1)],
+            ['Y2 (20%)', fmtINR(pricing.athiyaY2), fmtUSD(pricing.athiyaY2)],
+            ['Y3 (10%)', fmtINR(pricing.athiyaY3), fmtUSD(pricing.athiyaY3)],
+        ];
+
+        const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'spark-enterprise-pricing-' + new Date().toISOString().slice(0, 10) + '.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+        console.log(LOG, 'CSV exported');
+    }
+
+    // ─────────────────────────────────────────────
+    // Main recalculate
+    // ─────────────────────────────────────────────
+
+    function recalculate() {
+        const inp = readInputs();
+        const costs = computeCosts(inp);
+        const pricing = computePricing(inp, costs);
+        renderResults(inp, costs, pricing);
+    }
+
+    // ─────────────────────────────────────────────
+    // 7. Event wiring
+    // ─────────────────────────────────────────────
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log(LOG, 'DOMContentLoaded');
+
+        // Tier toggle
+        document.querySelectorAll('.ec-tier-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ec-tier-btn').forEach(b => b.classList.remove('ec-tier-btn--active'));
+                btn.classList.add('ec-tier-btn--active');
+                // Tutor queries: default 0 for Vanilla, 20 for Premium
+                const tutorEl = document.getElementById('ec-tutor-queries');
+                if (tutorEl && tutorEl.value === '0' && btn.getAttribute('data-tier') === 'premium') {
+                    tutorEl.value = '20';
+                }
+                if (tutorEl && btn.getAttribute('data-tier') === 'vanilla') {
+                    tutorEl.value = '0';
+                }
+                recalculate();
+            });
+        });
+
+        // Term chips
+        document.querySelectorAll('.ec-chip[data-term]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ec-chip[data-term]').forEach(b => b.classList.remove('ec-chip--active'));
+                btn.classList.add('ec-chip--active');
+                recalculate();
+            });
+        });
+
+        // Rev-year chips
+        document.querySelectorAll('.ec-chip[data-revyear]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ec-chip[data-revyear]').forEach(b => b.classList.remove('ec-chip--active'));
+                btn.classList.add('ec-chip--active');
+                recalculate();
+            });
+        });
+
+        // All number inputs
+        document.querySelectorAll('input[type="number"]').forEach(el => {
+            el.addEventListener('input', recalculate);
+            el.addEventListener('change', recalculate);
+        });
+
+        // Export / Import
+        const btnExportJSON = document.getElementById('ec-btn-export-json');
+        if (btnExportJSON) btnExportJSON.addEventListener('click', exportJSON);
+
+        const btnExportCSV = document.getElementById('ec-btn-export-csv');
+        if (btnExportCSV) btnExportCSV.addEventListener('click', exportCSV);
+
+        const btnImportJSON = document.getElementById('ec-btn-import-json');
+        const importFile    = document.getElementById('ec-import-file');
+        if (btnImportJSON && importFile) {
+            btnImportJSON.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', () => {
+                const file = importFile.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        applyImportedValues(data);
+                        console.log(LOG, 'JSON imported');
+                    } catch (err) {
+                        console.error(LOG, 'JSON import failed', err);
+                        alert('Could not parse the JSON file. Please check the file and try again.');
+                    }
+                };
+                reader.readAsText(file);
+                importFile.value = '';
+            });
+        }
+
+        // Initial calculation
+        recalculate();
+    });
+
+})();
