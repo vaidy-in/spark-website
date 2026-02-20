@@ -58,6 +58,11 @@
         set(baseId + '-usd', usdNote !== undefined ? usdNote : fmtUSD(inrVal));
     }
 
+    function hasSparkInternalParam() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('spark-internal') === '1';
+    }
+
     // ─────────────────────────────────────────────
     // 2. Read inputs
     // ─────────────────────────────────────────────
@@ -69,15 +74,18 @@
         const termEl = document.querySelector('.ec-chip--active[data-term]');
         const term = termEl ? parseInt(termEl.getAttribute('data-term'), 10) : 12;
 
-        const revYearEl = document.querySelector('.ec-chip--active[data-revyear]');
-        const revYear = revYearEl ? parseInt(revYearEl.getAttribute('data-revyear'), 10) : 1;
+        const revShareY1 = Math.min(100, Math.max(0, num('ec-rev-share-y1'))) / 100;
+        const revShareY2 = Math.min(100, Math.max(0, num('ec-rev-share-y2'))) / 100;
+        const revShareY3 = Math.min(100, Math.max(0, num('ec-rev-share-y3'))) / 100;
+        const revShareY4 = Math.min(100, Math.max(0, num('ec-rev-share-y4'))) / 100;
+        const revShareY5 = Math.min(100, Math.max(0, num('ec-rev-share-y5'))) / 100;
 
         return {
             // Deal
             tier,
             seats:          Math.max(100, num('ec-seats')),
             term,
-            revYear,
+            revShare:       { 1: revShareY1, 2: revShareY2, 3: revShareY3, 4: revShareY4, 5: revShareY5 },
             setupFeeINR:    num('ec-setup-fee'),
             fxRate:         Math.max(1, num('ec-fx-rate')),
 
@@ -190,8 +198,6 @@
     // 4. Compute pricing
     // ─────────────────────────────────────────────
 
-    const REV_SHARE = { 1: 0.30, 2: 0.20, 3: 0.10, 4: 0.05, 5: 0.05 };
-
     function getVolumeDiscount(inp) {
         const s = inp.seats;
         if (s >= 1000) return inp.volDisc4;
@@ -205,6 +211,10 @@
         if (inp.term >= 6) return inp.termDisc6;
         if (inp.term >= 3) return inp.termDisc3;
         return inp.termDisc1;
+    }
+
+    function getNumContractYears(termMonths) {
+        return Math.floor(termMonths / 12);
     }
 
     function computePricing(inp, costs) {
@@ -240,20 +250,24 @@
         // Revenue (for margin calc) = TCV excluding setup fee
         const revenueINR = netPricePerSeatPerMonth * inp.seats * termMonths;
 
-        // Athiya share
-        const athiyaShareRate = REV_SHARE[inp.revYear] || 0.30;
-        const athiyaAmountINR = revenueINR * athiyaShareRate;
-        const sparkGrossINR   = revenueINR - athiyaAmountINR;
-
-        // Net margin
-        const sparkNetINR = sparkGrossINR - costs.total;
-        const marginPct   = revenueINR > 0 ? (sparkNetINR / revenueINR) * 100 : 0;
-
-        // Athiya Y1/Y2/Y3 on annual revenue
+        // Year-by-year split: annual revenue, Athiya % per year from config
         const annualRevINR = acvINR;
-        const athiyaY1 = annualRevINR * REV_SHARE[1];
-        const athiyaY2 = annualRevINR * REV_SHARE[2];
-        const athiyaY3 = annualRevINR * REV_SHARE[3];
+        const numYears = getNumContractYears(termMonths);
+        const yearData = [];
+        let athiyaAmountINR = 0;
+        for (let y = 1; y <= numYears && y <= 5; y++) {
+            const shareRate = inp.revShare[y] || 0;
+            const athiyaY = annualRevINR * shareRate;
+            const sparkY = annualRevINR - athiyaY;
+            athiyaAmountINR += athiyaY;
+            yearData.push({ year: y, rev: annualRevINR, athiya: athiyaY, spark: sparkY, pct: shareRate * 100 });
+        }
+
+        const sparkGrossINR = revenueINR - athiyaAmountINR;
+
+        // Setup fee is Spark only, Y1
+        const sparkNetINR = sparkGrossINR + setupFeeINR - costs.total;
+        const marginPct   = revenueINR > 0 ? (sparkNetINR / revenueINR) * 100 : 0;
 
         const result = {
             listPricePerSeatPerMonth,
@@ -264,12 +278,12 @@
             setupFeeINR,
             tcvINR,
             revenueINR,
-            athiyaShareRate,
             athiyaAmountINR,
             sparkGrossINR,
             sparkNetINR,
             marginPct,
-            athiyaY1, athiyaY2, athiyaY3,
+            yearData,
+            numYears,
             costPerSeatPerMonth,
         };
 
@@ -319,8 +333,18 @@
         // Summary (sticky)
         setDual('ec-summary-net', pricing.netPricePerSeatPerMonth);
         setDual('ec-summary-tcv', pricing.tcvINR);
+        setDual('ec-summary-total-rev', pricing.revenueINR);
+        setDual('ec-summary-spark-rev', pricing.sparkGrossINR);
+        setDual('ec-summary-athiya-rev', pricing.athiyaAmountINR);
         set('ec-summary-margin-pct', fmtPct(pricing.marginPct));
         setDual('ec-summary-spark-net', pricing.sparkNetINR);
+
+        // Spark-internal visibility
+        const showSparkInternal = hasSparkInternalParam();
+        const summaryInternal = document.getElementById('ec-summary-spark-internal');
+        const fullInternal = document.getElementById('ec-full-spark-internal');
+        if (summaryInternal) summaryInternal.classList.toggle('hidden', !showSparkInternal);
+        if (fullInternal) fullInternal.classList.toggle('hidden', !showSparkInternal);
 
         // Contract value
         setDual('ec-out-acv', pricing.acvINR);
@@ -339,22 +363,32 @@
         setDual('ec-cost-out-openai', costs.openAI);
         setDual('ec-cost-out-total', costs.total);
 
-        // Margin
+        // Revenue Share
         setDual('ec-margin-out-revenue', pricing.revenueINR);
-
-        const athiyaLabel = document.getElementById('ec-margin-athiya-label');
-        if (athiyaLabel) {
-            athiyaLabel.textContent = 'Athiya share (Y' + inp.revYear + ' · ' + Math.round(pricing.athiyaShareRate * 100) + '%)';
-        }
-        setDual('ec-margin-out-athiya', pricing.athiyaAmountINR);
         setDual('ec-margin-out-spark-gross', pricing.sparkGrossINR);
+        setDual('ec-margin-out-athiya', pricing.athiyaAmountINR);
         setDual('ec-margin-out-cost', costs.total);
         setDual('ec-margin-out-net', pricing.sparkNetINR);
         set('ec-margin-out-pct', fmtPct(pricing.marginPct));
 
-        // Margin health indicator
+        // Year-by-year table
+        const yearContainer = document.getElementById('ec-year-by-year-container');
+        if (yearContainer && pricing.yearData && pricing.yearData.length > 0) {
+            yearContainer.innerHTML = pricing.yearData.map(function (d) {
+                return '<div class="ec-result-row ec-result-row--cost">' +
+                    '<span class="ec-result-label">Y' + d.year + ' (Rev ' + fmtINR(d.rev) + ', Athiya ' + Math.round(d.pct) + '%)</span>' +
+                    '<div class="ec-result-dual">' +
+                    '<span class="ec-result-value">' + fmtINR(d.spark) + '</span>' +
+                    '<span class="ec-result-value-secondary ec-result-value--athiya">Athiya ' + fmtINR(d.athiya) + '</span>' +
+                    '</div></div>';
+            }).join('');
+        } else if (yearContainer) {
+            yearContainer.innerHTML = '';
+        }
+
+        // Margin health indicator (Spark internal)
         const healthEl = document.getElementById('ec-margin-health');
-        if (healthEl) {
+        if (healthEl && showSparkInternal) {
             const targetPct = inp.targetMargin * 100;
             const actualPct = pricing.marginPct;
             const diff = actualPct - targetPct;
@@ -370,11 +404,6 @@
                 healthEl.textContent = '✗ Significantly below target (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
             }
         }
-
-        // Athiya Y1/Y2/Y3
-        setDual('ec-athiya-y1', pricing.athiyaY1);
-        setDual('ec-athiya-y2', pricing.athiyaY2);
-        setDual('ec-athiya-y3', pricing.athiyaY3);
 
         console.log(LOG, 'render complete');
     }
@@ -424,14 +453,23 @@
         'ec-term-disc-12': '10',
         'ec-early-disc': '0',
         'ec-target-margin': '60',
+        'ec-rev-share-y1': '30',
+        'ec-rev-share-y2': '20',
+        'ec-rev-share-y3': '10',
+        'ec-rev-share-y4': '5',
+        'ec-rev-share-y5': '5',
         _tier: 'vanilla',
-        _term: '12',
-        _revYear: '1'
+        _term: '12'
     };
 
     const DEFAULTS_DEAL = {
         'ec-seats': '500', 'ec-setup-fee': '0',
-        _tier: 'vanilla', _term: '12', _revYear: '1'
+        _tier: 'vanilla', _term: '12'
+    };
+
+    const DEFAULTS_REVENUE_SHARE = {
+        'ec-rev-share-y1': '30', 'ec-rev-share-y2': '20', 'ec-rev-share-y3': '10',
+        'ec-rev-share-y4': '5', 'ec-rev-share-y5': '5'
     };
     const DEFAULTS_USAGE = {
         'ec-video-hours-sd': '40', 'ec-video-hours-hd': '0',
@@ -466,6 +504,7 @@
         const data = Object.assign({}, DEFAULTS);
         const sectionDefaults = {
             deal: DEFAULTS_DEAL,
+            'revenue-share': DEFAULTS_REVENUE_SHARE,
             usage: DEFAULTS_USAGE,
             pricing: DEFAULTS_PRICING,
             technical: DEFAULTS_TECHNICAL,
@@ -502,6 +541,7 @@
     function gatherAllInputValues() {
         const ids = [
             'ec-fx-rate', 'ec-seats', 'ec-setup-fee', 'ec-base-price-per-seat',
+            'ec-rev-share-y1', 'ec-rev-share-y2', 'ec-rev-share-y3', 'ec-rev-share-y4', 'ec-rev-share-y5',
             'ec-video-hours-sd', 'ec-video-hours-hd', 'ec-hd-sd-factor', 'ec-gb-per-video-hr',
             'ec-streaming-hrs', 'ec-num-videos', 'ec-tutor-queries', 'ec-quiz-queries',
             'ec-batch-hrs-per-video-hr',
@@ -525,8 +565,6 @@
         data['_tier'] = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
         const termEl = document.querySelector('.ec-chip--active[data-term]');
         data['_term'] = termEl ? termEl.getAttribute('data-term') : '12';
-        const revYearEl = document.querySelector('.ec-chip--active[data-revyear]');
-        data['_revYear'] = revYearEl ? revYearEl.getAttribute('data-revyear') : '1';
         return data;
     }
 
@@ -547,18 +585,11 @@
                 btn.classList.toggle('ec-tier-btn--active', active);
             });
         }
-        // Restore term (map legacy 24/36 to 12 for backward compatibility)
+        // Restore term
         if (data['_term']) {
-            const termVal = ['24', '36'].includes(data['_term']) ? '12' : data['_term'];
+            const termVal = data['_term'];
             document.querySelectorAll('.ec-chip[data-term]').forEach(btn => {
                 const active = btn.getAttribute('data-term') === termVal;
-                btn.classList.toggle('ec-chip--active', active);
-            });
-        }
-        // Restore revYear
-        if (data['_revYear']) {
-            document.querySelectorAll('.ec-chip[data-revyear]').forEach(btn => {
-                const active = btn.getAttribute('data-revyear') === data['_revYear'];
                 btn.classList.toggle('ec-chip--active', active);
             });
         }
@@ -582,6 +613,7 @@
         const costs = computeCosts(inp);
         const pricing = computePricing(inp, costs);
         const fx = inp.fxRate;
+        const showSparkInternal = hasSparkInternalParam();
 
         const rows = [
             ['Spark Enterprise Pricing Calculator', '', ''],
@@ -591,9 +623,9 @@
             ['Tier', inp.tier, ''],
             ['Seats', inp.seats, ''],
             ['Contract term (months)', inp.term, ''],
-            ['Athiya rev-share year', 'Y' + inp.revYear, ''],
-            ['Setup fee (INR)', inp.setupFeeINR, ''],
+            ['Setup fee (INR, Spark only, Y1)', inp.setupFeeINR, ''],
             ['FX rate (INR/USD)', fx, ''],
+            ['Revenue share Y1-Y5 (%)', [1,2,3,4,5].map(function(y){ return Math.round(inp.revShare[y] * 100); }).join('/'), ''],
             ['', '', ''],
             ['PRICING', 'INR', 'USD'],
             ['List price / seat / month', fmtINR(pricing.listPricePerSeatPerMonth), fmtUSD(pricing.listPricePerSeatPerMonth)],
@@ -601,8 +633,22 @@
             ['Total discount %', fmtPct(pricing.totalDiscountPct * 100), ''],
             ['Net price / seat / month', fmtINR(pricing.netPricePerSeatPerMonth), fmtUSD(pricing.netPricePerSeatPerMonth)],
             ['ACV (annual contract value)', fmtINR(pricing.acvINR), fmtUSD(pricing.acvINR)],
-            ['Setup fee', fmtINR(pricing.setupFeeINR), fmtUSD(pricing.setupFeeINR)],
+            ['Setup fee (one-time, Spark only)', fmtINR(pricing.setupFeeINR), fmtUSD(pricing.setupFeeINR)],
             ['TCV (' + inp.term + ' months + setup)', fmtINR(pricing.tcvINR), fmtUSD(pricing.tcvINR)],
+            ['', '', ''],
+            ['REVENUE SHARE', 'INR', 'USD'],
+            ['Total revenue (TCV excl. setup)', fmtINR(pricing.revenueINR), fmtUSD(pricing.revenueINR)],
+            ['Spark revenue', fmtINR(pricing.sparkGrossINR), fmtUSD(pricing.sparkGrossINR)],
+            ['Athiya revenue', fmtINR(pricing.athiyaAmountINR), fmtUSD(pricing.athiyaAmountINR)],
+        ];
+
+        if (pricing.yearData && pricing.yearData.length > 0) {
+            pricing.yearData.forEach(function (d) {
+                rows.push(['Y' + d.year + ' (Rev ' + fmtINR(d.rev) + ', Athiya ' + Math.round(d.pct) + '%)', 'Spark ' + fmtINR(d.spark) + ' / Athiya ' + fmtINR(d.athiya), '']);
+            });
+        }
+
+        rows.push(
             ['', '', ''],
             ['COST BREAKDOWN (total over contract term, after multiplier)', 'INR', 'USD'],
             ['AssemblyAI', fmtINR(costs.assemblyAI), fmtUSD(costs.assemblyAI)],
@@ -611,21 +657,17 @@
             ['AWS Batch', fmtINR(costs.batch), fmtUSD(costs.batch)],
             ['Gemini API (pipeline + tutor + quiz)', fmtINR(costs.gemini), fmtUSD(costs.gemini)],
             ['OpenAI API (embeddings)', fmtINR(costs.openAI), fmtUSD(costs.openAI)],
-            ['Total cost', fmtINR(costs.total), fmtUSD(costs.total)],
-            ['', '', ''],
-            ['MARGIN & REVENUE SHARE', 'INR', 'USD'],
-            ['Total revenue (TCV excl. setup)', fmtINR(pricing.revenueINR), fmtUSD(pricing.revenueINR)],
-            ['Athiya share (Y' + inp.revYear + ' · ' + Math.round(pricing.athiyaShareRate * 100) + '%)', fmtINR(pricing.athiyaAmountINR), fmtUSD(pricing.athiyaAmountINR)],
-            ['Spark gross revenue (after Athiya)', fmtINR(pricing.sparkGrossINR), fmtUSD(pricing.sparkGrossINR)],
-            ['Total cost', fmtINR(costs.total), fmtUSD(costs.total)],
-            ['Spark net margin', fmtINR(pricing.sparkNetINR), fmtUSD(pricing.sparkNetINR)],
-            ['Margin %', fmtPct(pricing.marginPct), ''],
-            ['', '', ''],
-            ['ATHIYA SHARE BY YEAR (based on ACV)', 'INR', 'USD'],
-            ['Y1 (30%)', fmtINR(pricing.athiyaY1), fmtUSD(pricing.athiyaY1)],
-            ['Y2 (20%)', fmtINR(pricing.athiyaY2), fmtUSD(pricing.athiyaY2)],
-            ['Y3 (10%)', fmtINR(pricing.athiyaY3), fmtUSD(pricing.athiyaY3)],
-        ];
+            ['Total cost', fmtINR(costs.total), fmtUSD(costs.total)]
+        );
+
+        if (showSparkInternal) {
+            rows.push(
+                ['', '', ''],
+                ['SPARK MARGIN (internal)', 'INR', 'USD'],
+                ['Spark net margin', fmtINR(pricing.sparkNetINR), fmtUSD(pricing.sparkNetINR)],
+                ['Margin %', fmtPct(pricing.marginPct), '']
+            );
+        }
 
         const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
         const blob = new Blob([csv], { type: 'text/csv' });
@@ -690,15 +732,6 @@
             });
         });
 
-        // Rev-year chips
-        document.querySelectorAll('.ec-chip[data-revyear]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.ec-chip[data-revyear]').forEach(b => b.classList.remove('ec-chip--active'));
-                btn.classList.add('ec-chip--active');
-                recalculate();
-            });
-        });
-
         // All number inputs
         document.querySelectorAll('input[type="number"]').forEach(el => {
             el.addEventListener('input', recalculate);
@@ -715,6 +748,8 @@
         // Per-section reset
         const btnResetDeal = document.getElementById('ec-btn-reset-deal');
         if (btnResetDeal) btnResetDeal.addEventListener('click', () => resetBySection('deal'));
+        const btnResetRevenueShare = document.getElementById('ec-btn-reset-revenue-share');
+        if (btnResetRevenueShare) btnResetRevenueShare.addEventListener('click', () => resetBySection('revenue-share'));
         const btnResetUsage = document.getElementById('ec-btn-reset-usage');
         if (btnResetUsage) btnResetUsage.addEventListener('click', () => resetBySection('usage'));
         const btnResetPricing = document.getElementById('ec-btn-reset-pricing');
@@ -739,6 +774,7 @@
             });
         }
         setupCollapsible('ec-btn-expand-deal', 'ec-deal-body');
+        setupCollapsible('ec-btn-expand-revenue-share', 'ec-revenue-share-body');
         setupCollapsible('ec-btn-expand-usage', 'ec-usage-body');
         setupCollapsible('ec-btn-expand-pricing', 'ec-pricing-body');
         setupCollapsible('ec-btn-expand-technical', 'ec-technical-body');

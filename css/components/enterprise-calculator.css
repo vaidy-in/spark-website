@@ -269,6 +269,14 @@
     color: #64748b;
 }
 
+.ec-field-subtext {
+    flex: 1 1 100%;
+    width: 100%;
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
 /* ── Inputs ── */
 .ec-input {
     width: 100px;
@@ -379,6 +387,36 @@
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
+}
+
+.ec-term-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.ec-term-chip-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ec-term-chip-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    min-width: 72px;
+}
+
+.ec-field-row--term {
+    align-items: flex-start;
+}
+
+.ec-field-row--term .ec-field-label-wrap {
+    padding-top: 2px;
 }
 
 .ec-chip {
@@ -492,6 +530,18 @@
     letter-spacing: 0;
     font-size: 0.6875rem;
     color: #94a3b8;
+}
+
+.ec-result-block-subtitle {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.ec-year-by-year {
+    margin-top: 0;
 }
 
 .ec-result-row {
