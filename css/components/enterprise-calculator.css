@@ -163,6 +163,75 @@
     font-weight: 500;
 }
 
+/* Per-section reset button */
+.ec-btn-reset-section {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.ec-btn-reset-section:hover {
+    color: #4f46e5;
+    background: #f8fafc;
+    border-color: #c7d2fe;
+}
+
+/* Collapsible section - entire header is clickable */
+.ec-card--collapsible .ec-card-header--collapsible {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 150ms ease;
+}
+
+.ec-card--collapsible .ec-card-header--collapsible:hover {
+    background: #f1f5f9;
+}
+
+.ec-card-expand-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 6px;
+    margin: -6px 0 -6px -6px;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    transition: color 150ms ease, background 150ms ease;
+    pointer-events: none;
+}
+
+.ec-card--collapsible .ec-card-header--collapsible:hover .ec-card-expand-btn {
+    color: #4f46e5;
+}
+
+.ec-card-expand-btn[aria-expanded="true"] .ec-card-expand-icon {
+    transform: rotate(180deg);
+}
+
+.ec-card-expand-icon {
+    font-size: 20px;
+    transition: transform 150ms ease;
+}
+
+.ec-card--collapsible .ec-card-header--collapsible .ec-btn-reset-section {
+    margin-left: auto;
+    pointer-events: auto;
+}
+
 .ec-card-body {
     padding: 20px;
 }

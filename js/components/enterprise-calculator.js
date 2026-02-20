@@ -67,7 +67,7 @@
         const tier = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
 
         const termEl = document.querySelector('.ec-chip--active[data-term]');
-        const term = termEl ? parseInt(termEl.getAttribute('data-term'), 10) : 24;
+        const term = termEl ? parseInt(termEl.getAttribute('data-term'), 10) : 12;
 
         const revYearEl = document.querySelector('.ec-chip--active[data-revyear]');
         const revYear = revYearEl ? parseInt(revYearEl.getAttribute('data-revyear'), 10) : 1;
@@ -78,16 +78,18 @@
             seats:          Math.max(100, num('ec-seats')),
             term,
             revYear,
-            setupFeeUSD:    num('ec-setup-fee'),
+            setupFeeINR:    num('ec-setup-fee'),
             fxRate:         Math.max(1, num('ec-fx-rate')),
 
             // Usage
-            videoHoursSD:       num('ec-video-hours-sd'),
+            videoHoursSDPerMonth: num('ec-video-hours-sd'),
+            videoHoursHDPerMonth: Math.max(0, num('ec-video-hours-hd')),
             hdSdFactor:         Math.max(1, num('ec-hd-sd-factor')),
-            storageGB:          num('ec-storage-gb'),
+            gbPerVideoHr:       Math.max(0, num('ec-gb-per-video-hr')),
             streamingHrsPerSeat: num('ec-streaming-hrs'),
             tutorQueriesPerSeat: num('ec-tutor-queries'),
-            quizQueriesPerSeat:  num('ec-quiz-queries'),
+            numVideosPerMonth:   num('ec-num-videos'),
+            quizQuestionsPerVideoPerMonth: num('ec-quiz-queries'),
             batchHrsPerVideoHr:  num('ec-batch-hrs-per-video-hr'),
             tutorTokensIn:       num('ec-tutor-tokens-in'),
             tutorTokensOut:      num('ec-tutor-tokens-out'),
@@ -103,8 +105,8 @@
             costBatch:        num('ec-cost-batch'),
             costGeminiIn:     num('ec-cost-gemini-in'),
             costGeminiOut:    num('ec-cost-gemini-out'),
-            costOpenAIIn:     num('ec-cost-openai-in'),
-            costOpenAIOut:    num('ec-cost-openai-out'),
+            embeddingTokensPerVideoHr: num('ec-embedding-tokens'),
+            costOpenAIEmbedding: num('ec-cost-openai-embedding'),
             costMultiplier:   Math.max(1, num('ec-cost-multiplier')),
 
             // Pricing config
@@ -112,9 +114,10 @@
             volDisc2:    num('ec-vol-disc-2') / 100,
             volDisc3:    num('ec-vol-disc-3') / 100,
             volDisc4:    num('ec-vol-disc-4') / 100,
+            termDisc1:   num('ec-term-disc-1') / 100,
+            termDisc3:   num('ec-term-disc-3') / 100,
+            termDisc6:   num('ec-term-disc-6') / 100,
             termDisc12:  num('ec-term-disc-12') / 100,
-            termDisc24:  num('ec-term-disc-24') / 100,
-            termDisc36:  num('ec-term-disc-36') / 100,
             earlyDisc:   num('ec-early-disc') / 100,
             targetMargin: num('ec-target-margin') / 100,
             basePricePerSeatINR: num('ec-base-price-per-seat'),
@@ -126,16 +129,22 @@
     // ─────────────────────────────────────────────
 
     function computeCosts(inp) {
-        // Processing cost: one-time, amortised over contract term
-        const assemblyAI = inp.videoHoursSD * inp.costAssemblyAI;
-        const batch      = inp.videoHoursSD * inp.batchHrsPerVideoHr * inp.costBatch;
+        const termMonths = inp.term;
+        const effectiveVideoHoursPerMonth = inp.videoHoursSDPerMonth + inp.videoHoursHDPerMonth * inp.hdSdFactor;
+        const totalVideoHours = effectiveVideoHoursPerMonth * termMonths;
 
-        // Pipeline LLM (Gemini) for notes/chapters/slides - one-time
-        const geminiPipeline = (inp.videoHoursSD * inp.pipelineTokensIn / 1e6) * inp.costGeminiIn
-                             + (inp.videoHoursSD * inp.pipelineTokensOut / 1e6) * inp.costGeminiOut;
+        // Processing cost: total over contract (video hours/month × months)
+        const assemblyAI = totalVideoHours * inp.costAssemblyAI;
+        const batch      = totalVideoHours * inp.batchHrsPerVideoHr * inp.costBatch;
 
-        // Monthly recurring costs
-        const s3StoragePerMonth   = inp.storageGB * inp.costS3Storage;
+        // Pipeline LLM (Gemini) for notes/chapters/slides - total over contract
+        const geminiPipeline = (totalVideoHours * inp.pipelineTokensIn / 1e6) * inp.costGeminiIn
+                             + (totalVideoHours * inp.pipelineTokensOut / 1e6) * inp.costGeminiOut;
+
+        // Storage: calculated from video hours × contract × GB per video hour; cost uses triangular sum (storage grows monthly)
+        const storageGB = effectiveVideoHoursPerMonth * termMonths * inp.gbPerVideoHr;
+        const storageMonthSum = (termMonths * (termMonths + 1)) / 2; // 1+2+...+term
+        const s3StorageCost   = effectiveVideoHoursPerMonth * inp.gbPerVideoHr * storageMonthSum * inp.costS3Storage;
         const gbPerHr             = 1; // ~1 GB per SD video hour streamed
         const s3StreamingPerMonth = inp.seats * inp.streamingHrsPerSeat * gbPerHr * inp.costS3Transfer;
 
@@ -144,19 +153,22 @@
         const geminiTutorPerMonth = (tutorQueriesTotal * inp.tutorTokensIn / 1e6) * inp.costGeminiIn
                                   + (tutorQueriesTotal * inp.tutorTokensOut / 1e6) * inp.costGeminiOut;
 
-        // Quiz generation (OpenAI) - both tiers
-        const quizQueriesTotal   = inp.seats * inp.quizQueriesPerSeat;
-        const openAIPerMonth     = (quizQueriesTotal * inp.quizTokensIn / 1e6) * inp.costOpenAIIn
-                                 + (quizQueriesTotal * inp.quizTokensOut / 1e6) * inp.costOpenAIOut;
+        // Quiz generation (Gemini) - both tiers (trainers create quizzes per video, not per seat)
+        const quizQueriesTotal   = inp.numVideosPerMonth * inp.quizQuestionsPerVideoPerMonth;
+        const geminiQuizPerMonth = (quizQueriesTotal * inp.quizTokensIn / 1e6) * inp.costGeminiIn
+                                 + (quizQueriesTotal * inp.quizTokensOut / 1e6) * inp.costGeminiOut;
+
+        // OpenAI embeddings (semantic search) - text-embedding-3-small, input tokens only (per video hour)
+        const embeddingTokensPerMonth = inp.embeddingTokensPerVideoHr * effectiveVideoHoursPerMonth;
+        const openAIPerMonth = (embeddingTokensPerMonth / 1e6) * inp.costOpenAIEmbedding;
 
         // Total over contract term
-        const termMonths = inp.term;
         const rawCosts = {
             assemblyAI:  assemblyAI,
             batch:       batch,
-            s3Storage:   s3StoragePerMonth * termMonths,
+            s3Storage:   s3StorageCost,
             s3Streaming: s3StreamingPerMonth * termMonths,
-            gemini:      geminiPipeline + geminiTutorPerMonth * termMonths,
+            gemini:      geminiPipeline + (geminiTutorPerMonth + geminiQuizPerMonth) * termMonths,
             openAI:      openAIPerMonth * termMonths,
         };
 
@@ -168,6 +180,7 @@
             total += costs[k];
         }
         costs.total = total;
+        costs.storageGB = storageGB; // for display
 
         console.log(LOG, 'costs (INR)', costs);
         return costs;
@@ -188,9 +201,10 @@
     }
 
     function getTermDiscount(inp) {
-        if (inp.term >= 36) return inp.termDisc36;
-        if (inp.term >= 24) return inp.termDisc24;
-        return inp.termDisc12;
+        if (inp.term >= 12) return inp.termDisc12;
+        if (inp.term >= 6) return inp.termDisc6;
+        if (inp.term >= 3) return inp.termDisc3;
+        return inp.termDisc1;
     }
 
     function computePricing(inp, costs) {
@@ -218,8 +232,7 @@
         // ACV = net price × seats × 12
         const acvINR = netPricePerSeatPerMonth * inp.seats * 12;
 
-        // Setup fee in INR
-        const setupFeeINR = inp.setupFeeUSD * inp.fxRate;
+        const setupFeeINR = inp.setupFeeINR;
 
         // TCV = net price × seats × term + setup fee
         const tcvINR = netPricePerSeatPerMonth * inp.seats * termMonths + setupFeeINR;
@@ -317,6 +330,8 @@
 
         // Cost breakdown
         setDual('ec-cost-out-assemblyai', costs.assemblyAI);
+        set('ec-storage-calculated', Math.round(costs.storageGB) + ' GB');
+        set('ec-cost-out-storage-gb', Math.round(costs.storageGB));
         setDual('ec-cost-out-s3-storage', costs.s3Storage);
         setDual('ec-cost-out-s3-streaming', costs.s3Streaming);
         setDual('ec-cost-out-batch', costs.batch);
@@ -365,23 +380,139 @@
     }
 
     // ─────────────────────────────────────────────
-    // 6. Export / Import
+    // 6. Export / Import / localStorage
     // ─────────────────────────────────────────────
+
+    const STORAGE_KEY = 'spark-enterprise-pricing';
+
+    const DEFAULTS = {
+        'ec-fx-rate': '84',
+        'ec-seats': '500',
+        'ec-setup-fee': '0',
+        'ec-base-price-per-seat': '0',
+        'ec-video-hours-sd': '40',
+        'ec-video-hours-hd': '0',
+        'ec-hd-sd-factor': '5',
+        'ec-gb-per-video-hr': '0.75',
+        'ec-streaming-hrs': '2',
+        'ec-num-videos': '40',
+        'ec-tutor-queries': '20',
+        'ec-quiz-queries': '5',
+        'ec-embedding-tokens': '25000',
+        'ec-batch-hrs-per-video-hr': '0.5',
+        'ec-tutor-tokens-in': '2000',
+        'ec-tutor-tokens-out': '500',
+        'ec-quiz-tokens-in': '5000',
+        'ec-quiz-tokens-out': '2000',
+        'ec-pipeline-tokens-in': '500000',
+        'ec-pipeline-tokens-out': '200000',
+        'ec-cost-assemblyai': '55',
+        'ec-cost-s3-storage': '1.93',
+        'ec-cost-s3-transfer': '7.56',
+        'ec-cost-batch': '4.03',
+        'ec-cost-gemini-in': '6.30',
+        'ec-cost-gemini-out': '25.20',
+        'ec-cost-openai-embedding': '1.68',
+        'ec-cost-multiplier': '1.3',
+        'ec-vol-disc-1': '0',
+        'ec-vol-disc-2': '5',
+        'ec-vol-disc-3': '10',
+        'ec-vol-disc-4': '15',
+        'ec-term-disc-1': '0',
+        'ec-term-disc-3': '2',
+        'ec-term-disc-6': '5',
+        'ec-term-disc-12': '10',
+        'ec-early-disc': '0',
+        'ec-target-margin': '60',
+        _tier: 'vanilla',
+        _term: '12',
+        _revYear: '1'
+    };
+
+    const DEFAULTS_DEAL = {
+        'ec-seats': '500', 'ec-setup-fee': '0',
+        _tier: 'vanilla', _term: '12', _revYear: '1'
+    };
+    const DEFAULTS_USAGE = {
+        'ec-video-hours-sd': '40', 'ec-video-hours-hd': '0',
+        'ec-streaming-hrs': '2', 'ec-tutor-queries': '20',
+        'ec-num-videos': '40', 'ec-quiz-queries': '5'
+    };
+    const DEFAULTS_PRICING = {
+        'ec-base-price-per-seat': '0',
+        'ec-vol-disc-1': '0', 'ec-vol-disc-2': '5', 'ec-vol-disc-3': '10', 'ec-vol-disc-4': '15',
+        'ec-term-disc-1': '0', 'ec-term-disc-3': '2', 'ec-term-disc-6': '5', 'ec-term-disc-12': '10',
+        'ec-early-disc': '0', 'ec-target-margin': '60'
+    };
+    const DEFAULTS_TECHNICAL = {
+        'ec-hd-sd-factor': '5', 'ec-gb-per-video-hr': '0.75',
+        'ec-embedding-tokens': '25000', 'ec-batch-hrs-per-video-hr': '0.5',
+        'ec-tutor-tokens-in': '2000', 'ec-tutor-tokens-out': '500',
+        'ec-quiz-tokens-in': '5000', 'ec-quiz-tokens-out': '2000',
+        'ec-pipeline-tokens-in': '500000', 'ec-pipeline-tokens-out': '200000'
+    };
+    const DEFAULTS_COSTS = {
+        'ec-cost-assemblyai': '55', 'ec-cost-s3-storage': '1.93', 'ec-cost-s3-transfer': '7.56',
+        'ec-cost-batch': '4.03', 'ec-cost-gemini-in': '6.30', 'ec-cost-gemini-out': '25.20',
+        'ec-cost-openai-embedding': '1.68', 'ec-cost-multiplier': '1.3'
+    };
+
+    function resetToDefaults() {
+        applyImportedValues(DEFAULTS);
+        console.log(LOG, 'reset to defaults');
+    }
+
+    function resetBySection(section) {
+        const data = Object.assign({}, DEFAULTS);
+        const sectionDefaults = {
+            deal: DEFAULTS_DEAL,
+            usage: DEFAULTS_USAGE,
+            pricing: DEFAULTS_PRICING,
+            technical: DEFAULTS_TECHNICAL,
+            costs: DEFAULTS_COSTS
+        }[section];
+        if (!sectionDefaults) return;
+        Object.assign(data, sectionDefaults);
+        applyImportedValues(data);
+        console.log(LOG, 'reset section', section);
+    }
+
+    function saveToLocalStorage() {
+        try {
+            const data = gatherAllInputValues();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.warn(LOG, 'localStorage save failed', e);
+        }
+    }
+
+    function loadFromLocalStorage() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                const data = JSON.parse(raw);
+                if (data && typeof data === 'object') return data;
+            }
+        } catch (e) {
+            console.warn(LOG, 'localStorage load failed', e);
+        }
+        return null;
+    }
 
     function gatherAllInputValues() {
         const ids = [
             'ec-fx-rate', 'ec-seats', 'ec-setup-fee', 'ec-base-price-per-seat',
-            'ec-video-hours-sd', 'ec-hd-sd-factor', 'ec-storage-gb',
-            'ec-streaming-hrs', 'ec-tutor-queries', 'ec-quiz-queries',
+            'ec-video-hours-sd', 'ec-video-hours-hd', 'ec-hd-sd-factor', 'ec-gb-per-video-hr',
+            'ec-streaming-hrs', 'ec-num-videos', 'ec-tutor-queries', 'ec-quiz-queries',
             'ec-batch-hrs-per-video-hr',
             'ec-tutor-tokens-in', 'ec-tutor-tokens-out',
             'ec-quiz-tokens-in', 'ec-quiz-tokens-out',
             'ec-pipeline-tokens-in', 'ec-pipeline-tokens-out',
             'ec-cost-assemblyai', 'ec-cost-s3-storage', 'ec-cost-s3-transfer',
             'ec-cost-batch', 'ec-cost-gemini-in', 'ec-cost-gemini-out',
-            'ec-cost-openai-in', 'ec-cost-openai-out', 'ec-cost-multiplier',
+            'ec-embedding-tokens', 'ec-cost-openai-embedding', 'ec-cost-multiplier',
             'ec-vol-disc-1', 'ec-vol-disc-2', 'ec-vol-disc-3', 'ec-vol-disc-4',
-            'ec-term-disc-12', 'ec-term-disc-24', 'ec-term-disc-36',
+            'ec-term-disc-1', 'ec-term-disc-3', 'ec-term-disc-6', 'ec-term-disc-12',
             'ec-early-disc', 'ec-target-margin',
         ];
         const data = { _version: 1, _ts: new Date().toISOString() };
@@ -393,13 +524,17 @@
         const tierEl = document.querySelector('.ec-tier-btn--active');
         data['_tier'] = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
         const termEl = document.querySelector('.ec-chip--active[data-term]');
-        data['_term'] = termEl ? termEl.getAttribute('data-term') : '24';
+        data['_term'] = termEl ? termEl.getAttribute('data-term') : '12';
         const revYearEl = document.querySelector('.ec-chip--active[data-revyear]');
         data['_revYear'] = revYearEl ? revYearEl.getAttribute('data-revyear') : '1';
         return data;
     }
 
     function applyImportedValues(data) {
+        // Backward compat: map old OpenAI input cost to embedding cost
+        if (data['ec-cost-openai-in'] && !data['ec-cost-openai-embedding']) {
+            data['ec-cost-openai-embedding'] = data['ec-cost-openai-in'];
+        }
         for (const key in data) {
             if (key.startsWith('_')) continue;
             const el = document.getElementById(key);
@@ -412,10 +547,11 @@
                 btn.classList.toggle('ec-tier-btn--active', active);
             });
         }
-        // Restore term
+        // Restore term (map legacy 24/36 to 12 for backward compatibility)
         if (data['_term']) {
+            const termVal = ['24', '36'].includes(data['_term']) ? '12' : data['_term'];
             document.querySelectorAll('.ec-chip[data-term]').forEach(btn => {
-                const active = btn.getAttribute('data-term') === data['_term'];
+                const active = btn.getAttribute('data-term') === termVal;
                 btn.classList.toggle('ec-chip--active', active);
             });
         }
@@ -456,7 +592,7 @@
             ['Seats', inp.seats, ''],
             ['Contract term (months)', inp.term, ''],
             ['Athiya rev-share year', 'Y' + inp.revYear, ''],
-            ['Setup fee (USD)', inp.setupFeeUSD, ''],
+            ['Setup fee (INR)', inp.setupFeeINR, ''],
             ['FX rate (INR/USD)', fx, ''],
             ['', '', ''],
             ['PRICING', 'INR', 'USD'],
@@ -470,11 +606,11 @@
             ['', '', ''],
             ['COST BREAKDOWN (total over contract term, after multiplier)', 'INR', 'USD'],
             ['AssemblyAI', fmtINR(costs.assemblyAI), fmtUSD(costs.assemblyAI)],
-            ['AWS S3 storage', fmtINR(costs.s3Storage), fmtUSD(costs.s3Storage)],
+            ['AWS S3 storage (' + Math.round(costs.storageGB) + ' GB)', fmtINR(costs.s3Storage), fmtUSD(costs.s3Storage)],
             ['AWS S3 streaming', fmtINR(costs.s3Streaming), fmtUSD(costs.s3Streaming)],
             ['AWS Batch', fmtINR(costs.batch), fmtUSD(costs.batch)],
-            ['Gemini API', fmtINR(costs.gemini), fmtUSD(costs.gemini)],
-            ['OpenAI API', fmtINR(costs.openAI), fmtUSD(costs.openAI)],
+            ['Gemini API (pipeline + tutor + quiz)', fmtINR(costs.gemini), fmtUSD(costs.gemini)],
+            ['OpenAI API (embeddings)', fmtINR(costs.openAI), fmtUSD(costs.openAI)],
             ['Total cost', fmtINR(costs.total), fmtUSD(costs.total)],
             ['', '', ''],
             ['MARGIN & REVENUE SHARE', 'INR', 'USD'],
@@ -511,6 +647,7 @@
         const costs = computeCosts(inp);
         const pricing = computePricing(inp, costs);
         renderResults(inp, costs, pricing);
+        saveToLocalStorage();
     }
 
     // ─────────────────────────────────────────────
@@ -519,6 +656,13 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         console.log(LOG, 'DOMContentLoaded');
+
+        // Restore from localStorage
+        const saved = loadFromLocalStorage();
+        if (saved) {
+            applyImportedValues(saved);
+            console.log(LOG, 'restored from localStorage');
+        }
 
         // Tier toggle
         document.querySelectorAll('.ec-tier-btn').forEach(btn => {
@@ -567,6 +711,38 @@
 
         const btnExportCSV = document.getElementById('ec-btn-export-csv');
         if (btnExportCSV) btnExportCSV.addEventListener('click', exportCSV);
+
+        // Per-section reset
+        const btnResetDeal = document.getElementById('ec-btn-reset-deal');
+        if (btnResetDeal) btnResetDeal.addEventListener('click', () => resetBySection('deal'));
+        const btnResetUsage = document.getElementById('ec-btn-reset-usage');
+        if (btnResetUsage) btnResetUsage.addEventListener('click', () => resetBySection('usage'));
+        const btnResetPricing = document.getElementById('ec-btn-reset-pricing');
+        if (btnResetPricing) btnResetPricing.addEventListener('click', () => resetBySection('pricing'));
+        const btnResetTechnical = document.getElementById('ec-btn-reset-technical');
+        if (btnResetTechnical) btnResetTechnical.addEventListener('click', () => resetBySection('technical'));
+        const btnResetCosts = document.getElementById('ec-btn-reset-costs');
+        if (btnResetCosts) btnResetCosts.addEventListener('click', () => resetBySection('costs'));
+
+        // Collapsible: all sections (entire header is clickable except Reset)
+        function setupCollapsible(btnId, bodyId) {
+            const btn = document.getElementById(btnId);
+            const body = document.getElementById(bodyId);
+            const header = btn ? btn.closest('.ec-card-header--collapsible') : null;
+            if (!btn || !body || !header) return;
+            header.addEventListener('click', (e) => {
+                if (e.target.closest('.ec-btn-reset-section')) return;
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                body.classList.toggle('hidden', expanded);
+                body.setAttribute('aria-hidden', String(expanded));
+                btn.setAttribute('aria-expanded', String(!expanded));
+            });
+        }
+        setupCollapsible('ec-btn-expand-deal', 'ec-deal-body');
+        setupCollapsible('ec-btn-expand-usage', 'ec-usage-body');
+        setupCollapsible('ec-btn-expand-pricing', 'ec-pricing-body');
+        setupCollapsible('ec-btn-expand-technical', 'ec-technical-body');
+        setupCollapsible('ec-btn-expand-costs', 'ec-costs-body');
 
         // Expand / collapse results
         const btnExpand   = document.getElementById('ec-btn-expand-results');

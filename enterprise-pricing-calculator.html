@@ -41,11 +41,11 @@
         </div>
         <div class="flex items-center gap-2">
             <button id="ec-btn-export-json" type="button" class="ec-btn-secondary cursor-pointer">
-                <span class="material-symbols-rounded text-[16px]">download</span>
+                <span class="material-symbols-rounded text-[16px]">upload</span>
                 Export JSON
             </button>
             <button id="ec-btn-import-json" type="button" class="ec-btn-secondary cursor-pointer">
-                <span class="material-symbols-rounded text-[16px]">upload</span>
+                <span class="material-symbols-rounded text-[16px]">download</span>
                 Import JSON
             </button>
             <button id="ec-btn-export-csv" type="button" class="ec-btn-secondary cursor-pointer">
@@ -64,12 +64,19 @@
         <div class="ec-inputs-col space-y-6">
 
             <!-- ── Section 1: Deal Parameters ── -->
-            <section class="ec-card" id="ec-section-deal">
-                <div class="ec-card-header">
+            <section class="ec-card ec-card--collapsible" id="ec-section-deal">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-deal" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="true" aria-controls="ec-deal-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
                     <span class="material-symbols-rounded ec-card-icon">handshake</span>
                     <h2 class="ec-card-title">Deal Parameters</h2>
+                    <button id="ec-btn-reset-deal" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Deal Parameters to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
                 </div>
-                <div class="ec-card-body space-y-5">
+                <div id="ec-deal-body" class="ec-card-body space-y-5">
 
                     <!-- Tier -->
                     <div class="ec-field-row">
@@ -120,9 +127,10 @@
                             </span>
                         </div>
                         <div class="ec-chip-group" role="group" aria-label="Contract term">
-                            <button type="button" class="ec-chip cursor-pointer" data-term="12">12 mo</button>
-                            <button type="button" class="ec-chip ec-chip--active cursor-pointer" data-term="24">24 mo</button>
-                            <button type="button" class="ec-chip cursor-pointer" data-term="36">36 mo</button>
+                            <button type="button" class="ec-chip cursor-pointer" data-term="1">1 mo</button>
+                            <button type="button" class="ec-chip cursor-pointer" data-term="3">3 mo</button>
+                            <button type="button" class="ec-chip cursor-pointer" data-term="6">6 mo</button>
+                            <button type="button" class="ec-chip ec-chip--active cursor-pointer" data-term="12">12 mo</button>
                         </div>
                     </div>
 
@@ -158,8 +166,8 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <span class="ec-unit ec-unit--prefix">$</span>
-                            <input id="ec-setup-fee" type="number" min="0" step="500" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Setup fee in USD">
+                            <span class="ec-unit ec-unit--prefix">₹</span>
+                            <input id="ec-setup-fee" type="number" min="0" step="500" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Setup fee in INR">
                         </div>
                     </div>
 
@@ -167,61 +175,51 @@
             </section>
 
             <!-- ── Section 2: Usage Inputs ── -->
-            <section class="ec-card" id="ec-section-usage">
-                <div class="ec-card-header">
+            <section class="ec-card ec-card--collapsible" id="ec-section-usage">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-usage" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-usage-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
                     <span class="material-symbols-rounded ec-card-icon">data_usage</span>
                     <h2 class="ec-card-title">Usage Inputs</h2>
+                    <button id="ec-btn-reset-usage" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Usage to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
                 </div>
-                <div class="ec-card-body space-y-5">
+                <div id="ec-usage-body" class="ec-card-body space-y-5 hidden" aria-hidden="true">
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-video-hours-sd" class="ec-label">Video hours to process (SD equivalent)</label>
+                            <label for="ec-video-hours-sd" class="ec-label">SD video hours / month</label>
                             <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About video processing hours">?</button>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About SD video hours">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">Total SD-equivalent video hours</span>
-                                    <span class="tooltip-content">Total hours of video content to be processed through the pipeline (transcription, chaptering, notes, slides). HD video is converted to SD-equivalent using the HD-to-SD factor below. Processing is a one-time cost spread over the contract term.</span>
+                                    <span class="tooltip-title">SD video processing hours</span>
+                                    <span class="tooltip-content">Standard-definition video hours processed each month (transcription, chaptering, notes, slides). New content is uploaded continuously.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-video-hours-sd" type="number" min="0" step="1" value="40" class="ec-input cursor-text" aria-label="Video hours SD equivalent">
-                            <span class="ec-unit">hrs (SD equiv.)</span>
+                            <input id="ec-video-hours-sd" type="number" min="0" step="1" value="40" class="ec-input cursor-text" aria-label="SD video hours per month">
+                            <span class="ec-unit">hrs / month</span>
                         </div>
                     </div>
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-hd-sd-factor" class="ec-label">HD-to-SD cost factor</label>
+                            <label for="ec-video-hours-hd" class="ec-label">HD video hours / month</label>
                             <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD to SD factor">?</button>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD video hours">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">HD vs SD cost ratio</span>
-                                    <span class="tooltip-content">1 hour of HD video costs this many times more to process than 1 hour of SD. Default 5x based on current pipeline benchmarks. Adjust if the customer's content is primarily HD.</span>
+                                    <span class="tooltip-title">HD video processing hours</span>
+                                    <span class="tooltip-content">High-definition video hours per month. Converted to SD-equivalent using the HD cost multiplier below for cost calculations.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-hd-sd-factor" type="number" min="1" step="0.5" value="5" class="ec-input cursor-text" aria-label="HD to SD factor">
-                            <span class="ec-unit">× (HD costs this much more)</span>
-                        </div>
-                    </div>
-
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-storage-gb" class="ec-label">Total video storage (GB)</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About storage">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">S3 storage footprint</span>
-                                    <span class="tooltip-content">Total GB stored in S3 across all processed videos. Rule of thumb: ~1 GB per SD video hour. This is an ongoing monthly cost for the full contract term.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-storage-gb" type="number" min="0" step="5" value="40" class="ec-input cursor-text" aria-label="Storage in GB">
-                            <span class="ec-unit">GB</span>
+                            <input id="ec-video-hours-hd" type="number" min="0" step="1" value="0" class="ec-input cursor-text" aria-label="HD video hours per month">
+                            <span class="ec-unit">hrs / month</span>
                         </div>
                     </div>
 
@@ -261,18 +259,251 @@
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-quiz-queries" class="ec-label">Quiz generation queries / seat / month</label>
+                            <label for="ec-num-videos" class="ec-label">Number of videos per month</label>
                             <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About number of videos per month">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">Quiz generation (OpenAI)</span>
-                                    <span class="tooltip-content">Number of quiz generation API calls per seat per month. Each call generates a set of questions using OpenAI. Applies to both tiers.</span>
+                                    <span class="tooltip-title">Monthly video upload rate</span>
+                                    <span class="tooltip-content">New videos added to the catalog each month. Customers typically keep uploading content month after month. Used with quiz questions per video to estimate quiz generation volume. Trainers/admins generate quizzes, not learners.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-quiz-queries" type="number" min="0" step="1" value="5" class="ec-input cursor-text" aria-label="Quiz generation queries per seat per month">
-                            <span class="ec-unit">queries / seat / month</span>
+                            <input id="ec-num-videos" type="number" min="0" step="1" value="40" class="ec-input cursor-text" aria-label="Number of videos per month">
+                            <span class="ec-unit">videos / month</span>
+                        </div>
+                    </div>
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-quiz-queries" class="ec-label">Quiz questions per video / month</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Quiz generation (Gemini)</span>
+                                    <span class="tooltip-content">Number of quiz questions generated per video per month. Trainers/admins create quizzes for each video; learners do not generate their own. Total per month = this × videos per month. Uses Gemini API. Applies to both tiers.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-quiz-queries" type="number" min="0" step="1" value="5" class="ec-input cursor-text" aria-label="Quiz questions per video per month">
+                            <span class="ec-unit">questions / video / month</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── Section 3: Pricing Config ── -->
+            <section class="ec-card ec-card--collapsible" id="ec-section-pricing-config">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-pricing" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-pricing-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
+                    <span class="material-symbols-rounded ec-card-icon">tune</span>
+                    <h2 class="ec-card-title">Pricing Config</h2>
+                    <button id="ec-btn-reset-pricing" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Pricing Config to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
+                </div>
+                <div id="ec-pricing-body" class="ec-card-body space-y-5 hidden" aria-hidden="true">
+
+                    <!-- Base price (optional override) -->
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-base-price-per-seat" class="ec-label">Base price per seat / month (₹)</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About base price">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Override derived price</span>
+                                    <span class="tooltip-content">Leave at 0 to derive list price from cost + target margin. Set a value to use this as the list price instead - the margin % will then vary with costs and this price.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <span class="ec-unit ec-unit--prefix">₹</span>
+                            <input id="ec-base-price-per-seat" type="number" min="0" step="50" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Base price per seat per month in INR (0 = derive from cost)">
+                            <span class="ec-unit">/ seat / month</span>
+                        </div>
+                    </div>
+
+                    <!-- Volume discount bands -->
+                    <div>
+                        <p class="ec-subsection-title mb-3">Volume discount bands (seat count)</p>
+                        <div class="space-y-3">
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-1" class="ec-label ec-label--sm">100 - 249 seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-1" type="number" min="0" max="100" step="1" value="0" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 100-249 seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-2" class="ec-label ec-label--sm">250 - 499 seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-2" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 250-499 seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-3" class="ec-label ec-label--sm">500 - 999 seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-3" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 500-999 seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-4" class="ec-label ec-label--sm">1000+ seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-4" type="number" min="0" max="100" step="1" value="15" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 1000+ seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Term discounts -->
+                    <div>
+                        <p class="ec-subsection-title mb-3">Term discounts</p>
+                        <div class="space-y-3">
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-term-disc-1" class="ec-label ec-label--sm">1 month</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-term-disc-1" type="number" min="0" max="100" step="1" value="0" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 1 month">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-term-disc-3" class="ec-label ec-label--sm">3 months</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-term-disc-3" type="number" min="0" max="100" step="1" value="2" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 3 months">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-term-disc-6" class="ec-label ec-label--sm">6 months</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-term-disc-6" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 6 months">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-term-disc-12" class="ec-label ec-label--sm">12 months</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-term-disc-12" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 12 months">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Early customer discount -->
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-early-disc" class="ec-label">Early customer discount</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About early customer discount">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Early adopter discount</span>
+                                    <span class="tooltip-content">Additional % discount for early enterprise customers (e.g. first 5 deals). Applied on top of volume and term discounts. Set to 0 to exclude.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-early-disc" type="number" min="0" max="100" step="1" value="0" class="ec-input cursor-text" aria-label="Early customer discount percentage">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+
+                    <!-- Target margin -->
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-target-margin" class="ec-label">Target gross margin</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About target margin">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Target gross margin %</span>
+                                    <span class="tooltip-content">Your desired gross margin after costs and Athiya's revenue share. Used to show whether the calculated price meets your margin target. Does not affect the price calculation itself.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-target-margin" type="number" min="0" max="100" step="5" value="60" class="ec-input cursor-text" aria-label="Target gross margin percentage">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── Section 4: Technical (collapsible) ── -->
+            <section class="ec-card ec-card--collapsible" id="ec-section-technical">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-technical" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-technical-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
+                    <span class="material-symbols-rounded ec-card-icon">code</span>
+                    <h2 class="ec-card-title">Technical Assumptions</h2>
+                    <button id="ec-btn-reset-technical" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Technical to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
+                </div>
+                <div id="ec-technical-body" class="ec-card-body space-y-5 hidden" aria-hidden="true">
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-hd-sd-factor" class="ec-label">HD cost multiplier</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD cost multiplier">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">HD vs SD cost ratio</span>
+                                    <span class="tooltip-content">1 hour of HD video costs this many times more to process than 1 hour of SD. Default 5x based on current pipeline benchmarks. Adjust if the customer's content is primarily HD.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-hd-sd-factor" type="number" min="1" step="0.5" value="5" class="ec-input cursor-text" aria-label="HD cost multiplier">
+                            <span class="ec-unit">× (HD costs this much more)</span>
+                        </div>
+                    </div>
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-gb-per-video-hr" class="ec-label">GB per video hour</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About storage per video hour">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Storage per video hour</span>
+                                    <span class="tooltip-content">GB of S3 storage per hour of video. Default 0.75 (750 MB/hr). Used to calculate total video storage = video hours/month × contract months × this value.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-gb-per-video-hr" type="number" min="0" step="0.05" value="0.75" class="ec-input cursor-text" aria-label="GB per video hour">
+                            <span class="ec-unit">GB / video hr</span>
+                        </div>
+                    </div>
+                    <div class="ec-field-row ec-field-row--readonly">
+                        <span class="ec-label">Total video storage (calculated)</span>
+                        <span id="ec-storage-calculated" class="ec-result-value">0 GB</span>
+                    </div>
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-embedding-tokens" class="ec-label">Embedding tokens per hour of video</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About embedding tokens">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">OpenAI embeddings (semantic search)</span>
+                                    <span class="tooltip-content">Tokens sent to OpenAI text-embedding-3-small per video hour processed. Includes indexing content (study notes, video titles) for semantic search. Total per month = this × video hours/month.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-embedding-tokens" type="number" min="0" step="1000" value="25000" class="ec-input cursor-text" aria-label="Embedding tokens per hour of video">
+                            <span class="ec-unit">tokens / video hr</span>
                         </div>
                     </div>
 
@@ -306,11 +537,11 @@
                                 <input id="ec-tutor-tokens-out" type="number" min="0" step="100" value="500" class="ec-input ec-input--sm cursor-text" aria-label="Tutor output tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-quiz-tokens-in" class="ec-label ec-label--sm">Quiz gen: input tokens / query</label>
+                                <label for="ec-quiz-tokens-in" class="ec-label ec-label--sm">Quiz gen (Gemini): input tokens / query</label>
                                 <input id="ec-quiz-tokens-in" type="number" min="0" step="100" value="5000" class="ec-input ec-input--sm cursor-text" aria-label="Quiz input tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-quiz-tokens-out" class="ec-label ec-label--sm">Quiz gen: output tokens / query</label>
+                                <label for="ec-quiz-tokens-out" class="ec-label ec-label--sm">Quiz gen (Gemini): output tokens / query</label>
                                 <input id="ec-quiz-tokens-out" type="number" min="0" step="100" value="2000" class="ec-input ec-input--sm cursor-text" aria-label="Quiz output tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
@@ -327,14 +558,21 @@
                 </div>
             </section>
 
-            <!-- ── Section 3: Unit Costs ── -->
-            <section class="ec-card" id="ec-section-costs">
-                <div class="ec-card-header">
+            <!-- ── Section 5: Unit Costs (collapsible) ── -->
+            <section class="ec-card ec-card--collapsible" id="ec-section-costs">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-costs" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-costs-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
                     <span class="material-symbols-rounded ec-card-icon">receipt_long</span>
                     <h2 class="ec-card-title">Unit Costs</h2>
                     <span class="ec-card-note">All costs in ₹ INR</span>
+                    <button id="ec-btn-reset-costs" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Unit Costs to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
                 </div>
-                <div class="ec-card-body space-y-5">
+                <div id="ec-costs-body" class="ec-card-body space-y-5 hidden" aria-hidden="true">
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
@@ -343,14 +581,14 @@
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="AssemblyAI cost info">?</button>
                                 <div class="tooltip">
                                     <span class="tooltip-title">AssemblyAI transcription</span>
-                                    <span class="tooltip-content">Cost per audio hour for speech-to-text transcription. Default: ₹55/hr ($0.65/hr at ₹84/$). Used for every video hour processed.</span>
+                                    <span class="tooltip-content">Cost per video hour for speech-to-text transcription. Default: ₹55/hr ($0.65/hr at ₹84/$). Used for every video hour processed.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-assemblyai" type="number" min="0" step="1" value="55" class="ec-input ec-input--prefixed cursor-text" aria-label="AssemblyAI cost per audio hour in INR">
-                            <span class="ec-unit">/ audio hr</span>
+                            <input id="ec-cost-assemblyai" type="number" min="0" step="1" value="55" class="ec-input ec-input--prefixed cursor-text" aria-label="AssemblyAI cost per video hour in INR">
+                            <span class="ec-unit">/ video hr</span>
                         </div>
                     </div>
 
@@ -414,8 +652,8 @@
                             <span class="tooltip-container" data-tooltip>
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="Gemini input cost info">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">Gemini 1.5 Flash input tokens</span>
-                                    <span class="tooltip-content">Cost per 1M input tokens for Gemini API. Default: ₹6.30/1M ($0.075/1M). Used for pipeline (notes, chapters, slides) and AI Tutor queries.</span>
+                                    <span class="tooltip-title">Gemini 2.5 Flash input tokens</span>
+                                    <span class="tooltip-content">Cost per 1M input tokens for Gemini API. Default: ₹6.30/1M ($0.075/1M). Used for pipeline (notes, chapters, slides), AI Tutor queries, and quiz generation.</span>
                                 </div>
                             </span>
                         </div>
@@ -432,8 +670,8 @@
                             <span class="tooltip-container" data-tooltip>
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="Gemini output cost info">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">Gemini 1.5 Flash output tokens</span>
-                                    <span class="tooltip-content">Cost per 1M output tokens for Gemini API. Default: ₹25.20/1M ($0.30/1M). Output tokens are typically 3-5× more expensive than input.</span>
+                                    <span class="tooltip-title">Gemini 2.5 Flash output tokens</span>
+                                    <span class="tooltip-content">Cost per 1M output tokens for Gemini API. Default: ₹25.20/1M ($0.30/1M). Used for pipeline, AI Tutor, and quiz generation. Output tokens are typically 3-5× more expensive than input.</span>
                                 </div>
                             </span>
                         </div>
@@ -446,36 +684,18 @@
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-cost-openai-in" class="ec-label">OpenAI API input</label>
+                            <label for="ec-cost-openai-embedding" class="ec-label">OpenAI embedding (text-embedding-3-small)</label>
                             <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="OpenAI input cost info">?</button>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="OpenAI embedding cost info">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">OpenAI input tokens</span>
-                                    <span class="tooltip-content">Cost per 1M input tokens for OpenAI API (GPT-4o mini). Default: ₹12.60/1M ($0.15/1M). Used primarily for quiz generation.</span>
+                                    <span class="tooltip-title">OpenAI embeddings</span>
+                                    <span class="tooltip-content">Cost per 1M tokens for OpenAI text-embedding-3-small. Default: ₹1.68/1M ($0.02/1M). Used only for semantic search and embeddings (KB search, AI Tutor search, quiz shortlisting).</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-openai-in" type="number" min="0" step="0.5" value="12.60" class="ec-input ec-input--prefixed cursor-text" aria-label="OpenAI input cost per 1M tokens in INR">
-                            <span class="ec-unit">/ 1M tokens</span>
-                        </div>
-                    </div>
-
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-cost-openai-out" class="ec-label">OpenAI API output</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="OpenAI output cost info">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">OpenAI output tokens</span>
-                                    <span class="tooltip-content">Cost per 1M output tokens for OpenAI API (GPT-4o mini). Default: ₹50.40/1M ($0.60/1M). Used for quiz answer generation.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-input-with-unit">
-                            <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-openai-out" type="number" min="0" step="0.5" value="50.40" class="ec-input ec-input--prefixed cursor-text" aria-label="OpenAI output cost per 1M tokens in INR">
+                            <input id="ec-cost-openai-embedding" type="number" min="0" step="0.1" value="1.68" class="ec-input ec-input--prefixed cursor-text" aria-label="OpenAI embedding cost per 1M tokens in INR">
                             <span class="ec-unit">/ 1M tokens</span>
                         </div>
                     </div>
@@ -495,135 +715,6 @@
                         <div class="ec-input-with-unit">
                             <input id="ec-cost-multiplier" type="number" min="1" step="0.1" value="1.3" class="ec-input cursor-text" aria-label="Cost safety multiplier">
                             <span class="ec-unit">× multiplier</span>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- ── Section 4: Pricing Config ── -->
-            <section class="ec-card" id="ec-section-pricing-config">
-                <div class="ec-card-header">
-                    <span class="material-symbols-rounded ec-card-icon">tune</span>
-                    <h2 class="ec-card-title">Pricing Config</h2>
-                </div>
-                <div class="ec-card-body space-y-5">
-
-                    <!-- Base price (optional override) -->
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-base-price-per-seat" class="ec-label">Base price per seat / month (₹)</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About base price">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Override derived price</span>
-                                    <span class="tooltip-content">Leave at 0 to derive list price from cost + target margin. Set a value to use this as the list price instead - the margin % will then vary with costs and this price.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-input-with-unit">
-                            <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-base-price-per-seat" type="number" min="0" step="50" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Base price per seat per month in INR (0 = derive from cost)">
-                            <span class="ec-unit">/ seat / month</span>
-                        </div>
-                    </div>
-
-                    <!-- Volume discount bands -->
-                    <div>
-                        <p class="ec-subsection-title mb-3">Volume discount bands (seat count)</p>
-                        <div class="space-y-3">
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-vol-disc-1" class="ec-label ec-label--sm">100 - 249 seats</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-1" type="number" min="0" max="100" step="1" value="0" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 100-249 seats">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-vol-disc-2" class="ec-label ec-label--sm">250 - 499 seats</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-2" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 250-499 seats">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-vol-disc-3" class="ec-label ec-label--sm">500 - 999 seats</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-3" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 500-999 seats">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-vol-disc-4" class="ec-label ec-label--sm">1000+ seats</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-4" type="number" min="0" max="100" step="1" value="15" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 1000+ seats">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Term discounts -->
-                    <div>
-                        <p class="ec-subsection-title mb-3">Term discounts</p>
-                        <div class="space-y-3">
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-term-disc-12" class="ec-label ec-label--sm">12 months</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-12" type="number" min="0" max="100" step="1" value="0" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 12 months">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-term-disc-24" class="ec-label ec-label--sm">24 months</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-24" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 24 months">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-term-disc-36" class="ec-label ec-label--sm">36 months</label>
-                                <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-36" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 36 months">
-                                    <span class="ec-unit">%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Early customer discount -->
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-early-disc" class="ec-label">Early customer discount</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About early customer discount">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Early adopter discount</span>
-                                    <span class="tooltip-content">Additional % discount for early enterprise customers (e.g. first 5 deals). Applied on top of volume and term discounts. Set to 0 to exclude.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-early-disc" type="number" min="0" max="100" step="1" value="0" class="ec-input cursor-text" aria-label="Early customer discount percentage">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-
-                    <!-- Target margin -->
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-target-margin" class="ec-label">Target gross margin</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About target margin">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Target gross margin %</span>
-                                    <span class="tooltip-content">Your desired gross margin after costs and Athiya's revenue share. Used to show whether the calculated price meets your margin target. Does not affect the price calculation itself.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-target-margin" type="number" min="0" max="100" step="5" value="60" class="ec-input cursor-text" aria-label="Target gross margin percentage">
-                            <span class="ec-unit">%</span>
                         </div>
                     </div>
 
@@ -762,7 +853,7 @@
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
-                                    <span class="ec-result-label">AWS S3 storage</span>
+                                    <span class="ec-result-label">AWS S3 storage (<span id="ec-cost-out-storage-gb">0</span> GB)</span>
                                     <div class="ec-result-dual">
                                         <span id="ec-cost-out-s3-storage-inr" class="ec-result-value ec-result-value--cost">₹0</span>
                                         <span id="ec-cost-out-s3-storage-usd" class="ec-result-value-secondary">$0</span>
@@ -783,14 +874,14 @@
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
-                                    <span class="ec-result-label">Gemini API (pipeline + tutor)</span>
+                                    <span class="ec-result-label">Gemini API (pipeline + tutor + quiz)</span>
                                     <div class="ec-result-dual">
                                         <span id="ec-cost-out-gemini-inr" class="ec-result-value ec-result-value--cost">₹0</span>
                                         <span id="ec-cost-out-gemini-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
-                                    <span class="ec-result-label">OpenAI API (quiz gen)</span>
+                                    <span class="ec-result-label">OpenAI API (embeddings)</span>
                                     <div class="ec-result-dual">
                                         <span id="ec-cost-out-openai-inr" class="ec-result-value ec-result-value--cost">₹0</span>
                                         <span id="ec-cost-out-openai-usd" class="ec-result-value-secondary">$0</span>
