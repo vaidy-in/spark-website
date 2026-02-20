@@ -36,7 +36,7 @@
     <div class="ec-toolbar flex flex-wrap items-center justify-between gap-4 mb-8">
         <div class="flex items-center gap-3">
             <label class="text-sm font-medium text-slate-600 whitespace-nowrap">USD/INR rate</label>
-            <input id="ec-fx-rate" type="number" min="1" step="0.5" value="84" class="ec-input-sm w-24 cursor-text" aria-label="USD to INR exchange rate">
+            <input id="ec-fx-rate" type="number" min="1" step="0.5" class="ec-input-sm w-24 cursor-text" aria-label="USD to INR exchange rate">
             <span class="text-sm text-slate-400">₹ per $1</span>
         </div>
         <div class="flex items-center gap-2">
@@ -104,12 +104,12 @@
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About seats">?</button>
                                 <div class="tooltip">
                                     <span class="tooltip-title">Seat count</span>
-                                    <span class="tooltip-content">How many employees will have access to the platform. Minimum 100 for enterprise deals. Volume discounts apply automatically based on bands in Pricing Config.<br><br>Example: 500 seats = 500 employees can log in and use the platform.</span>
+                                    <span class="tooltip-content">How many employees will have access to the platform. Volume discounts apply automatically based on bands in Pricing Config.<br><br>Example: 500 seats = 500 employees can log in and use the platform.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-seats" type="number" min="100" step="50" value="500" class="ec-input cursor-text" aria-label="Number of seats">
+                            <input id="ec-seats" type="number" min="1" step="1" class="ec-input cursor-text" aria-label="Number of seats">
                             <span class="ec-unit">seats</span>
                         </div>
                     </div>
@@ -144,7 +144,10 @@
                                     <button type="button" class="ec-chip cursor-pointer" data-term="60">5 years</button>
                                 </div>
                             </div>
-                            <p class="ec-field-subtext">Also consider including potential contract extensions</p>
+                            <p class="ec-field-subtext">
+                                Tip: Try including potential contract extensions as well.<br>
+                                <span class="ec-field-example">Example: If a customer will likely renew after 1 year, consider selecting 24 or 36 months.</span>
+                            </p>
                         </div>
                     </div>
 
@@ -162,66 +165,14 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-setup-fee" type="number" min="0" step="500" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Setup fee in INR">
+                            <input id="ec-setup-fee" type="number" min="0" step="500" class="ec-input ec-input--prefixed cursor-text" aria-label="Setup fee in INR">
                         </div>
                     </div>
 
                 </div>
             </section>
 
-            <!-- ── Section: Revenue Share ── -->
-            <section class="ec-card ec-card--collapsible" id="ec-section-revenue-share">
-                <div class="ec-card-header ec-card-header--collapsible">
-                    <button id="ec-btn-expand-revenue-share" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="true" aria-controls="ec-revenue-share-body">
-                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
-                    </button>
-                    <span class="material-symbols-rounded ec-card-icon">percent</span>
-                    <h2 class="ec-card-title">Athiya's Revenue Share</h2>
-                    <button id="ec-btn-reset-revenue-share" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Revenue Share to defaults">
-                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
-                        Reset
-                    </button>
-                </div>
-                <div id="ec-revenue-share-body" class="ec-card-body space-y-5" aria-hidden="false">
-                    <div class="ec-field-row ec-field-row--compact">
-                        <label for="ec-rev-share-y1" class="ec-label ec-label--sm">Y1</label>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-rev-share-y1" type="number" min="0" max="100" step="1" value="30" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 1">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-                    <div class="ec-field-row ec-field-row--compact">
-                        <label for="ec-rev-share-y2" class="ec-label ec-label--sm">Y2</label>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-rev-share-y2" type="number" min="0" max="100" step="1" value="20" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 2">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-                    <div class="ec-field-row ec-field-row--compact">
-                        <label for="ec-rev-share-y3" class="ec-label ec-label--sm">Y3</label>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-rev-share-y3" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 3">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-                    <div class="ec-field-row ec-field-row--compact">
-                        <label for="ec-rev-share-y4" class="ec-label ec-label--sm">Y4</label>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-rev-share-y4" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 4">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-                    <div class="ec-field-row ec-field-row--compact">
-                        <label for="ec-rev-share-y5" class="ec-label ec-label--sm">Y5</label>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-rev-share-y5" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 5">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ── Section 2: Usage Inputs ── -->
+            <!-- ── Section: Usage Inputs ── -->
             <section class="ec-card ec-card--collapsible" id="ec-section-usage">
                 <div class="ec-card-header ec-card-header--collapsible">
                     <button id="ec-btn-expand-usage" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-usage-body">
@@ -248,7 +199,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-video-hours-sd" type="number" min="0" step="1" value="40" class="ec-input cursor-text" aria-label="SD video hours per month">
+                            <input id="ec-video-hours-sd" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="SD video hours per month">
                             <span class="ec-unit">hrs / month</span>
                         </div>
                     </div>
@@ -265,7 +216,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-video-hours-hd" type="number" min="0" step="1" value="0" class="ec-input cursor-text" aria-label="HD video hours per month">
+                            <input id="ec-video-hours-hd" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="HD video hours per month">
                             <span class="ec-unit">hrs / month</span>
                         </div>
                     </div>
@@ -282,8 +233,25 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-streaming-hrs" type="number" min="0" step="0.5" value="2" class="ec-input cursor-text" aria-label="Streaming hours per seat per month">
+                            <input id="ec-streaming-hrs" type="number" min="0" step="0.5" class="ec-input cursor-text" aria-label="Streaming hours per seat per month">
                             <span class="ec-unit">hrs / seat / month</span>
+                        </div>
+                    </div>
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label class="ec-label">AI Tutor included in Vanilla plan?</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AI Tutor in Vanilla">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Vanilla tier AI Tutor</span>
+                                    <span class="tooltip-content">When Yes, AI Tutor costs are included for Vanilla tier (e.g. if negotiated as part of the deal). When No, AI Tutor applies only to Premium. Use this flag to model scenarios where Vanilla includes AI Tutor.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-tier-toggle" role="group" aria-label="AI Tutor in Vanilla">
+                            <button id="ec-tutor-vanilla-no" type="button" class="ec-tier-btn ec-tier-btn--active cursor-pointer" data-tutor-vanilla="no">No</button>
+                            <button id="ec-tutor-vanilla-yes" type="button" class="ec-tier-btn cursor-pointer" data-tutor-vanilla="yes">Yes</button>
                         </div>
                     </div>
 
@@ -293,13 +261,13 @@
                             <span class="tooltip-container" data-tooltip>
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AI Tutor queries">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">AI Tutor usage (Premium only)</span>
-                                    <span class="tooltip-content">How many questions each learner asks the AI Tutor per month. Only applies to Premium tier. Set to 0 for Vanilla.<br><br>Example: 20 = each employee asks the AI about 20 questions per month (e.g., clarifying course content, getting help on topics).</span>
+                                    <span class="tooltip-title">AI Tutor usage</span>
+                                    <span class="tooltip-content">How many questions each learner asks the AI Tutor per month. Applies to Premium always; applies to Vanilla when "AI Tutor included in Vanilla plan?" is Yes. <br><br>Example: 20 = each employee asks the AI about 20 questions per month (e.g., clarifying course content, getting help on topics).</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-tutor-queries" type="number" min="0" step="5" value="20" class="ec-input cursor-text" aria-label="AI Tutor queries per seat per month">
+                            <input id="ec-tutor-queries" type="number" min="0" step="5" class="ec-input cursor-text" aria-label="AI Tutor queries per seat per month">
                             <span class="ec-unit">queries / seat / month</span>
                         </div>
                     </div>
@@ -311,12 +279,12 @@
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About number of videos per month">?</button>
                                 <div class="tooltip">
                                     <span class="tooltip-title">Monthly video upload rate</span>
-                                    <span class="tooltip-content">How many new videos are added to the platform each month. Customers typically keep uploading content month after month. Used with quiz questions per video to estimate how many quiz questions are generated. Trainers and admins create quizzes for each video - learners do not generate their own.<br><br>Example: 40 = about 40 new training videos are added to the platform each month.</span>
+                                    <span class="tooltip-content">How many new videos are added to the platform each month. Customers typically keep uploading content month after month. <br><br> Or rather Spark automatically detects new recordings in Team/Zoom cloud and nudges the L&D admin to convert them into courses.<br><br>Example: 40 = about 40 new training videos are added to the platform each month.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-num-videos" type="number" min="0" step="1" value="40" class="ec-input cursor-text" aria-label="Number of videos per month">
+                            <input id="ec-num-videos" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month">
                             <span class="ec-unit">videos / month</span>
                         </div>
                     </div>
@@ -333,7 +301,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-quiz-queries" type="number" min="0" step="1" value="5" class="ec-input cursor-text" aria-label="Quiz questions per video per month">
+                            <input id="ec-quiz-queries" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video per month">
                             <span class="ec-unit">questions / video / month</span>
                         </div>
                     </div>
@@ -341,7 +309,7 @@
                 </div>
             </section>
 
-            <!-- ── Section 3: Pricing Config ── -->
+            <!-- ── Section: Pricing Config ── -->
             <section class="ec-card ec-card--collapsible" id="ec-section-pricing-config">
                 <div class="ec-card-header ec-card-header--collapsible">
                     <button id="ec-btn-expand-pricing" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-pricing-body">
@@ -356,23 +324,28 @@
                 </div>
                 <div id="ec-pricing-body" class="ec-card-body space-y-5 hidden" aria-hidden="true">
 
-                    <!-- Base price (optional override) -->
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-base-price-per-seat" class="ec-label">Base price per seat / month (₹)</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About base price">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Fixed price vs suggested price</span>
-                                    <span class="tooltip-content">Leave at 0 to let the calculator suggest a price based on costs and target margin. Set a value to use a fixed price instead - the margin % will then vary with costs and this price.<br><br>Example: ₹0 = calculator suggests a price. ₹500 = you have decided to charge ₹500 per employee per month regardless of costs.</span>
+                    <!-- Base price per tier -->
+                    <div>
+                        <p class="ec-subsection-title mb-3">Base price per seat / month (₹)</p>
+                        <div class="space-y-3">
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-base-price-vanilla" class="ec-label ec-label--sm">Vanilla</label>
+                                <div class="ec-input-with-unit">
+                                    <span class="ec-unit ec-unit--prefix">₹</span>
+                                    <input id="ec-base-price-vanilla" type="number" min="0" step="50" class="ec-input ec-input--sm ec-input--prefixed cursor-text" aria-label="Base price Vanilla per seat per month">
+                                    <span class="ec-unit">/ seat / month</span>
                                 </div>
-                            </span>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-base-price-premium" class="ec-label ec-label--sm">Premium</label>
+                                <div class="ec-input-with-unit">
+                                    <span class="ec-unit ec-unit--prefix">₹</span>
+                                    <input id="ec-base-price-premium" type="number" min="0" step="50" class="ec-input ec-input--sm ec-input--prefixed cursor-text" aria-label="Base price Premium per seat per month">
+                                    <span class="ec-unit">/ seat / month</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-base-price-per-seat" type="number" min="0" step="50" value="0" class="ec-input ec-input--prefixed cursor-text" aria-label="Base price per seat per month in INR (0 = derive from cost)">
-                            <span class="ec-unit">/ seat / month</span>
-                        </div>
+                        <p class="ec-field-hint mt-2">The price before discounts.</p>
                     </div>
 
                     <!-- Volume discount bands -->
@@ -380,30 +353,51 @@
                         <p class="ec-subsection-title mb-3">Volume discount bands (seat count)</p>
                         <div class="space-y-3">
                             <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-vol-disc-1" class="ec-label ec-label--sm">100 - 249 seats</label>
+                                <label for="ec-vol-disc-1" class="ec-label ec-label--sm">1 - 249 seats</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-1" type="number" min="0" max="100" step="1" value="0" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 100-249 seats">
+                                    <input id="ec-vol-disc-1" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 1-249 seats">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-vol-disc-2" class="ec-label ec-label--sm">250 - 499 seats</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-2" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 250-499 seats">
+                                    <input id="ec-vol-disc-2" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 250-499 seats">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-vol-disc-3" class="ec-label ec-label--sm">500 - 999 seats</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-3" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 500-999 seats">
+                                    <input id="ec-vol-disc-3" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 500-999 seats">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-vol-disc-4" class="ec-label ec-label--sm">1000+ seats</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-vol-disc-4" type="number" min="0" max="100" step="1" value="15" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 1000+ seats">
+                                    <input id="ec-vol-disc-4" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 1000+ seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-5" class="ec-label ec-label--sm">5000+ seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-5" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 5000+ seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-6" class="ec-label ec-label--sm">10000+ seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-6" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 10000+ seats">
+                                    <span class="ec-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="ec-field-row ec-field-row--compact">
+                                <label for="ec-vol-disc-7" class="ec-label ec-label--sm">50000+ seats</label>
+                                <div class="ec-input-with-unit">
+                                    <input id="ec-vol-disc-7" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Volume discount for 50000+ seats">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
@@ -417,28 +411,28 @@
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-term-disc-1" class="ec-label ec-label--sm">1 month</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-1" type="number" min="0" max="100" step="1" value="0" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 1 month">
+                                    <input id="ec-term-disc-1" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 1 month">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-term-disc-3" class="ec-label ec-label--sm">3 months</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-3" type="number" min="0" max="100" step="1" value="2" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 3 months">
+                                    <input id="ec-term-disc-3" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 3 months">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-term-disc-6" class="ec-label ec-label--sm">6 months</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-6" type="number" min="0" max="100" step="1" value="5" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 6 months">
+                                    <input id="ec-term-disc-6" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 6 months">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-term-disc-12" class="ec-label ec-label--sm">12 months</label>
                                 <div class="ec-input-with-unit">
-                                    <input id="ec-term-disc-12" type="number" min="0" max="100" step="1" value="10" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 12 months">
+                                    <input id="ec-term-disc-12" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Term discount for 12 months">
                                     <span class="ec-unit">%</span>
                                 </div>
                             </div>
@@ -453,30 +447,12 @@
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About early customer discount">?</button>
                                 <div class="tooltip">
                                     <span class="tooltip-title">Early adopter discount</span>
-                                    <span class="tooltip-content">Extra % discount for early enterprise customers (e.g. first few pilot deals). Applied on top of volume and term discounts. Set to 0 to exclude.<br><br>Example: 5% = an additional 5% off for early adopters such as the first few pilot customers.</span>
+                                    <span class="tooltip-content">Optional extra discount for early adopters or pilots. Applied on top of volume and term discounts.<br><br>Example: 5% = additional 5% off for being an early customer.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-early-disc" type="number" min="0" max="100" step="1" value="0" class="ec-input cursor-text" aria-label="Early customer discount percentage">
-                            <span class="ec-unit">%</span>
-                        </div>
-                    </div>
-
-                    <!-- Target margin -->
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-target-margin" class="ec-label">Target gross margin</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About target margin">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Desired profit target</span>
-                                    <span class="tooltip-content">How much profit Spark wants to keep (as % of revenue) after paying Athiya and covering all costs. The calculator shows whether the suggested price hits this target. Does not affect the price calculation itself.<br><br>Example: 60% = Spark aims to keep 60% of revenue as profit after Athiya share and costs.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-target-margin" type="number" min="0" max="100" step="5" value="60" class="ec-input cursor-text" aria-label="Target gross margin percentage">
+                            <input id="ec-early-disc" type="number" min="0" max="100" step="1" class="ec-input cursor-text" aria-label="Early customer discount percentage">
                             <span class="ec-unit">%</span>
                         </div>
                     </div>
@@ -484,8 +460,60 @@
                 </div>
             </section>
 
+            <!-- ── Section: Revenue Share ── -->
+            <section class="ec-card ec-card--collapsible" id="ec-section-revenue-share">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-revenue-share" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-revenue-share-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
+                    <span class="material-symbols-rounded ec-card-icon">percent</span>
+                    <h2 class="ec-card-title">Athiya's Revenue Share</h2>
+                    <button id="ec-btn-reset-revenue-share" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Revenue Share to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
+                </div>
+                <div id="ec-revenue-share-body" class="ec-card-body space-y-5 hidden" aria-hidden="true">
+                    <div class="ec-field-row ec-field-row--compact">
+                        <label for="ec-rev-share-y1" class="ec-label ec-label--sm">Y1</label>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-rev-share-y1" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 1">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="ec-field-row ec-field-row--compact">
+                        <label for="ec-rev-share-y2" class="ec-label ec-label--sm">Y2</label>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-rev-share-y2" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 2">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="ec-field-row ec-field-row--compact">
+                        <label for="ec-rev-share-y3" class="ec-label ec-label--sm">Y3</label>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-rev-share-y3" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 3">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="ec-field-row ec-field-row--compact">
+                        <label for="ec-rev-share-y4" class="ec-label ec-label--sm">Y4</label>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-rev-share-y4" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 4">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="ec-field-row ec-field-row--compact">
+                        <label for="ec-rev-share-y5" class="ec-label ec-label--sm">Y5</label>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-rev-share-y5" type="number" min="0" max="100" step="1" class="ec-input ec-input--sm cursor-text" aria-label="Revenue share Year 5">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- ── Section 4: Technical (collapsible) ── -->
-            <section class="ec-card ec-card--collapsible" id="ec-section-technical">
+            <section class="ec-card ec-card--collapsible ec-spark-internal-only hidden" id="ec-section-technical">
                 <div class="ec-card-header ec-card-header--collapsible">
                     <button id="ec-btn-expand-technical" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-technical-body">
                         <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
@@ -511,7 +539,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-hd-sd-factor" type="number" min="1" step="0.5" value="5" class="ec-input cursor-text" aria-label="HD cost multiplier">
+                            <input id="ec-hd-sd-factor" type="number" min="1" step="0.5" class="ec-input cursor-text" aria-label="HD cost multiplier">
                             <span class="ec-unit">× (HD costs this much more)</span>
                         </div>
                     </div>
@@ -528,7 +556,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-gb-per-video-hr" type="number" min="0" step="0.05" value="0.75" class="ec-input cursor-text" aria-label="GB per video hour">
+                            <input id="ec-gb-per-video-hr" type="number" min="0" step="0.05" class="ec-input cursor-text" aria-label="GB per video hour">
                             <span class="ec-unit">GB / video hr</span>
                         </div>
                     </div>
@@ -549,7 +577,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-embedding-tokens" type="number" min="0" step="1000" value="25000" class="ec-input cursor-text" aria-label="Embedding tokens per hour of video">
+                            <input id="ec-embedding-tokens" type="number" min="0" step="1000" class="ec-input cursor-text" aria-label="Embedding tokens per hour of video">
                             <span class="ec-unit">tokens / video hr</span>
                         </div>
                     </div>
@@ -566,7 +594,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-batch-hrs-per-video-hr" type="number" min="0" step="0.1" value="0.5" class="ec-input cursor-text" aria-label="AWS Batch hours per video hour">
+                            <input id="ec-batch-hrs-per-video-hr" type="number" min="0" step="0.1" class="ec-input cursor-text" aria-label="AWS Batch hours per video hour">
                             <span class="ec-unit">vCPU-hrs / video hr</span>
                         </div>
                     </div>
@@ -577,27 +605,27 @@
                         <div class="space-y-4">
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-tutor-tokens-in" class="ec-label ec-label--sm">Tutor: input tokens / query</label>
-                                <input id="ec-tutor-tokens-in" type="number" min="0" step="100" value="2000" class="ec-input ec-input--sm cursor-text" aria-label="Tutor input tokens per query">
+                                <input id="ec-tutor-tokens-in" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Tutor input tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-tutor-tokens-out" class="ec-label ec-label--sm">Tutor: output tokens / query</label>
-                                <input id="ec-tutor-tokens-out" type="number" min="0" step="100" value="500" class="ec-input ec-input--sm cursor-text" aria-label="Tutor output tokens per query">
+                                <input id="ec-tutor-tokens-out" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Tutor output tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-quiz-tokens-in" class="ec-label ec-label--sm">Quiz gen (Gemini): input tokens / query</label>
-                                <input id="ec-quiz-tokens-in" type="number" min="0" step="100" value="5000" class="ec-input ec-input--sm cursor-text" aria-label="Quiz input tokens per query">
+                                <input id="ec-quiz-tokens-in" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Quiz input tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-quiz-tokens-out" class="ec-label ec-label--sm">Quiz gen (Gemini): output tokens / query</label>
-                                <input id="ec-quiz-tokens-out" type="number" min="0" step="100" value="2000" class="ec-input ec-input--sm cursor-text" aria-label="Quiz output tokens per query">
+                                <input id="ec-quiz-tokens-out" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Quiz output tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-pipeline-tokens-in" class="ec-label ec-label--sm">Pipeline: input tokens / video hr</label>
-                                <input id="ec-pipeline-tokens-in" type="number" min="0" step="1000" value="500000" class="ec-input ec-input--sm cursor-text" aria-label="Pipeline input tokens per video hour">
+                                <input id="ec-pipeline-tokens-in" type="number" min="0" step="1000" class="ec-input ec-input--sm cursor-text" aria-label="Pipeline input tokens per video hour">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-pipeline-tokens-out" class="ec-label ec-label--sm">Pipeline: output tokens / video hr</label>
-                                <input id="ec-pipeline-tokens-out" type="number" min="0" step="1000" value="200000" class="ec-input ec-input--sm cursor-text" aria-label="Pipeline output tokens per video hour">
+                                <input id="ec-pipeline-tokens-out" type="number" min="0" step="1000" class="ec-input ec-input--sm cursor-text" aria-label="Pipeline output tokens per video hour">
                             </div>
                         </div>
                     </div>
@@ -606,7 +634,7 @@
             </section>
 
             <!-- ── Section 5: Unit Costs (collapsible) ── -->
-            <section class="ec-card ec-card--collapsible" id="ec-section-costs">
+            <section class="ec-card ec-card--collapsible ec-spark-internal-only hidden" id="ec-section-costs">
                 <div class="ec-card-header ec-card-header--collapsible">
                     <button id="ec-btn-expand-costs" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-costs-body">
                         <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
@@ -634,7 +662,7 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-assemblyai" type="number" min="0" step="1" value="55" class="ec-input ec-input--prefixed cursor-text" aria-label="AssemblyAI cost per video hour in INR">
+                            <input id="ec-cost-assemblyai" type="number" min="0" step="1" class="ec-input ec-input--prefixed cursor-text" aria-label="AssemblyAI cost per video hour in INR">
                             <span class="ec-unit">/ video hr</span>
                         </div>
                     </div>
@@ -652,7 +680,7 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-s3-storage" type="number" min="0" step="0.1" value="1.93" class="ec-input ec-input--prefixed cursor-text" aria-label="S3 storage cost per GB per month in INR">
+                            <input id="ec-cost-s3-storage" type="number" min="0" step="0.1" class="ec-input ec-input--prefixed cursor-text" aria-label="S3 storage cost per GB per month in INR">
                             <span class="ec-unit">/ GB / month</span>
                         </div>
                     </div>
@@ -670,7 +698,7 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-s3-transfer" type="number" min="0" step="0.1" value="7.56" class="ec-input ec-input--prefixed cursor-text" aria-label="S3 transfer cost per GB in INR">
+                            <input id="ec-cost-s3-transfer" type="number" min="0" step="0.1" class="ec-input ec-input--prefixed cursor-text" aria-label="S3 transfer cost per GB in INR">
                             <span class="ec-unit">/ GB out</span>
                         </div>
                     </div>
@@ -688,7 +716,7 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-batch" type="number" min="0" step="0.1" value="4.03" class="ec-input ec-input--prefixed cursor-text" aria-label="AWS Batch cost per vCPU hour in INR">
+                            <input id="ec-cost-batch" type="number" min="0" step="0.1" class="ec-input ec-input--prefixed cursor-text" aria-label="AWS Batch cost per vCPU hour in INR">
                             <span class="ec-unit">/ vCPU-hr</span>
                         </div>
                     </div>
@@ -706,7 +734,7 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-gemini-in" type="number" min="0" step="0.1" value="6.30" class="ec-input ec-input--prefixed cursor-text" aria-label="Gemini input cost per 1M tokens in INR">
+                            <input id="ec-cost-gemini-in" type="number" min="0" step="0.1" class="ec-input ec-input--prefixed cursor-text" aria-label="Gemini input cost per 1M tokens in INR">
                             <span class="ec-unit">/ 1M tokens</span>
                         </div>
                     </div>
@@ -724,7 +752,7 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-gemini-out" type="number" min="0" step="0.5" value="25.20" class="ec-input ec-input--prefixed cursor-text" aria-label="Gemini output cost per 1M tokens in INR">
+                            <input id="ec-cost-gemini-out" type="number" min="0" step="0.5" class="ec-input ec-input--prefixed cursor-text" aria-label="Gemini output cost per 1M tokens in INR">
                             <span class="ec-unit">/ 1M tokens</span>
                         </div>
                     </div>
@@ -742,8 +770,26 @@
                         </div>
                         <div class="ec-input-with-unit">
                             <span class="ec-unit ec-unit--prefix">₹</span>
-                            <input id="ec-cost-openai-embedding" type="number" min="0" step="0.1" value="1.68" class="ec-input ec-input--prefixed cursor-text" aria-label="OpenAI embedding cost per 1M tokens in INR">
+                            <input id="ec-cost-openai-embedding" type="number" min="0" step="0.1" class="ec-input ec-input--prefixed cursor-text" aria-label="OpenAI embedding cost per 1M tokens in INR">
                             <span class="ec-unit">/ 1M tokens</span>
+                        </div>
+                    </div>
+
+                    <!-- Min cost markup -->
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-min-margin" class="ec-label">Min. cost markup for Spark</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About min cost markup">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Minimum cost markup target</span>
+                                    <span class="tooltip-content">Target minimum Spark net as a % of total costs. A 90% markup means Spark's net equals 0.9× its costs. Base prices for Vanilla and Premium are auto-set to achieve this markup. Vanilla base price is computed from costs; Premium is set to 50% higher than Vanilla.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-min-margin" type="number" min="0" step="1" class="ec-input ec-input--readonly" aria-label="Min cost markup for Spark" readonly>
+                            <span class="ec-unit">%</span>
                         </div>
                     </div>
 
@@ -760,7 +806,7 @@
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-cost-multiplier" type="number" min="1" step="0.1" value="1.3" class="ec-input cursor-text" aria-label="Cost safety multiplier">
+                            <input id="ec-cost-multiplier" type="number" min="1" step="0.1" class="ec-input cursor-text" aria-label="Cost safety multiplier">
                             <span class="ec-unit">× multiplier</span>
                         </div>
                     </div>
@@ -784,25 +830,29 @@
                         <span id="ec-results-tier-badge" class="ec-tier-badge ec-tier-badge--vanilla">Vanilla</span>
                     </div>
                     <div class="ec-card-body ec-card-body--summary space-y-3">
-                        <div class="ec-summary-row">
-                            <span class="ec-result-label">Net price / seat / month</span>
+                        <div id="ec-results-error" class="ec-results-error hidden" role="alert" aria-live="polite"></div>
+                        <div id="ec-results-content" class="ec-results-content">
+                        <div class="ec-summary-row ec-summary-row--header">
+                            <span class="ec-result-label"></span>
+                            <div class="ec-result-dual">
+                                <span class="ec-result-currency-label">INR</span>
+                                <span class="ec-result-currency-label">USD</span>
+                            </div>
+                        </div>
+                        <div class="ec-summary-row ec-summary-row--primary">
+                            <div class="ec-result-label text-left">
+                                Final price (after discounts) <br> / seat / month
+                            </div>
                             <div class="ec-result-dual">
                                 <span id="ec-summary-net-inr" class="ec-result-value ec-result-value--primary">₹0</span>
                                 <span id="ec-summary-net-usd" class="ec-result-value-secondary">$0</span>
                             </div>
                         </div>
-                        <div class="ec-summary-row">
-                            <span class="ec-result-label">TCV</span>
+                        <div class="ec-summary-row ec-summary-row--primary">
+                            <span class="ec-result-label">Total Contract Value</span>
                             <div class="ec-result-dual">
                                 <span id="ec-summary-tcv-inr" class="ec-result-value ec-result-value--primary">₹0</span>
                                 <span id="ec-summary-tcv-usd" class="ec-result-value-secondary">$0</span>
-                            </div>
-                        </div>
-                        <div class="ec-summary-row">
-                            <span class="ec-result-label">Total revenue</span>
-                            <div class="ec-result-dual">
-                                <span id="ec-summary-total-rev-inr" class="ec-result-value">₹0</span>
-                                <span id="ec-summary-total-rev-usd" class="ec-result-value-secondary">$0</span>
                             </div>
                         </div>
                         <div class="ec-summary-row">
@@ -815,13 +865,13 @@
                         <div class="ec-summary-row">
                             <span class="ec-result-label">Athiya revenue</span>
                             <div class="ec-result-dual">
-                                <span id="ec-summary-athiya-rev-inr" class="ec-result-value ec-result-value--athiya">₹0</span>
+                                <span id="ec-summary-athiya-rev-inr" class="ec-result-value">₹0</span>
                                 <span id="ec-summary-athiya-rev-usd" class="ec-result-value-secondary">$0</span>
                             </div>
                         </div>
                         <div id="ec-summary-spark-internal" class="ec-spark-internal-only hidden">
                             <div class="ec-summary-row">
-                                <span class="ec-result-label">Margin %</span>
+                                <span class="ec-result-label">Cost markup %</span>
                                 <span id="ec-summary-margin-pct" class="ec-result-value ec-result-value--margin-pct">0%</span>
                             </div>
                             <div class="ec-summary-row">
@@ -836,6 +886,7 @@
                             <span class="ec-btn-expand-text">Expand</span>
                             <span class="material-symbols-rounded ec-btn-expand-icon">expand_more</span>
                         </button>
+                        </div>
                     </div>
                 </section>
 
@@ -853,7 +904,15 @@
                         <!-- Price summary -->
                         <div class="ec-result-block">
                             <p class="ec-result-block-title">Pricing</p>
-                            <div class="space-y-3">
+                            <div class="ec-result-table">
+                                <div class="ec-result-row ec-result-row--header">
+                                    <span class="ec-result-label"></span>
+                                    <div class="ec-result-dual">
+                                        <span class="ec-result-currency-label">INR</span>
+                                        <span class="ec-result-currency-label">USD</span>
+                                    </div>
+                                </div>
+                            <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">List price / seat / month</span>
                                     <div class="ec-result-dual">
@@ -881,12 +940,21 @@
                                     </div>
                                 </div>
                             </div>
+                            </div>
                         </div>
 
                         <!-- ACV / TCV -->
                         <div class="ec-result-block">
                             <p class="ec-result-block-title">Contract Value</p>
-                            <div class="space-y-3">
+                            <div class="ec-result-table">
+                                <div class="ec-result-row ec-result-row--header">
+                                    <span class="ec-result-label"></span>
+                                    <div class="ec-result-dual">
+                                        <span class="ec-result-currency-label">INR</span>
+                                        <span class="ec-result-currency-label">USD</span>
+                                    </div>
+                                </div>
+                            <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">ACV (annual contract value)</span>
                                     <div class="ec-result-dual">
@@ -909,12 +977,21 @@
                                     </div>
                                 </div>
                             </div>
+                            </div>
                         </div>
 
-                        <!-- Cost breakdown -->
-                        <div class="ec-result-block">
+                        <!-- Cost breakdown (internal only) -->
+                        <div id="ec-cost-breakdown-block" class="ec-result-block ec-spark-internal-only hidden">
                             <p class="ec-result-block-title">Cost Breakdown <span class="ec-result-block-note">(total over contract term, after multiplier)</span></p>
-                            <div class="space-y-2">
+                            <div class="ec-result-table">
+                                <div class="ec-result-row ec-result-row--header">
+                                    <span class="ec-result-label"></span>
+                                    <div class="ec-result-dual">
+                                        <span class="ec-result-currency-label">INR</span>
+                                        <span class="ec-result-currency-label">USD</span>
+                                    </div>
+                                </div>
+                            <div class="space-y-2 ec-result-table-body">
                                 <div class="ec-result-row ec-result-row--cost">
                                     <span class="ec-result-label">AssemblyAI (transcription)</span>
                                     <div class="ec-result-dual">
@@ -965,19 +1042,21 @@
                                     </div>
                                 </div>
                             </div>
+                            </div>
                         </div>
 
                         <!-- Revenue Share -->
                         <div class="ec-result-block">
                             <p class="ec-result-block-title">Revenue Share</p>
-                            <div class="space-y-3">
-                                <div class="ec-result-row">
-                                    <span class="ec-result-label">Total revenue (TCV excl. setup)</span>
+                            <div class="ec-result-table">
+                                <div class="ec-result-row ec-result-row--header">
+                                    <span class="ec-result-label"></span>
                                     <div class="ec-result-dual">
-                                        <span id="ec-margin-out-revenue-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-margin-out-revenue-usd" class="ec-result-value-secondary">$0</span>
+                                        <span class="ec-result-currency-label">INR</span>
+                                        <span class="ec-result-currency-label">USD</span>
                                     </div>
                                 </div>
+                            <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row ec-result-row--highlight">
                                     <span class="ec-result-label ec-result-label--strong">Spark revenue</span>
                                     <div class="ec-result-dual">
@@ -988,21 +1067,30 @@
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Athiya revenue</span>
                                     <div class="ec-result-dual">
-                                        <span id="ec-margin-out-athiya-inr" class="ec-result-value ec-result-value--athiya">₹0</span>
+                                        <span id="ec-margin-out-athiya-inr" class="ec-result-value">₹0</span>
                                         <span id="ec-margin-out-athiya-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <p class="ec-result-block-subtitle">Year-by-year split</p>
-                                <div id="ec-year-by-year-container" class="ec-year-by-year space-y-2">
-                                    <!-- Year-by-year rows injected by JS -->
+                                <div id="ec-year-by-year-container" class="ec-year-by-year space-y-4">
+                                    <!-- Year sections injected by JS -->
                                 </div>
+                            </div>
                             </div>
                         </div>
 
                         <!-- Spark margin (internal only) -->
                         <div id="ec-full-spark-internal" class="ec-result-block ec-spark-internal-only hidden">
                             <p class="ec-result-block-title">Spark Margin</p>
-                            <div class="space-y-3">
+                            <div class="ec-result-table">
+                                <div class="ec-result-row ec-result-row--header">
+                                    <span class="ec-result-label"></span>
+                                    <div class="ec-result-dual">
+                                        <span class="ec-result-currency-label">INR</span>
+                                        <span class="ec-result-currency-label">USD</span>
+                                    </div>
+                                </div>
+                            <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Total cost (contract term)</span>
                                     <div class="ec-result-dual">
@@ -1018,10 +1106,10 @@
                                     </div>
                                 </div>
                                 <div class="ec-result-row">
-                                    <span class="ec-result-label">Margin %</span>
+                                    <span class="ec-result-label">Cost markup %</span>
                                     <span id="ec-margin-out-pct" class="ec-result-value ec-result-value--margin-pct">0%</span>
                                 </div>
-                                <div id="ec-margin-health" class="ec-margin-health"></div>
+                            </div>
                             </div>
                         </div>
 

@@ -326,6 +326,30 @@
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
+/* Invalid state - Stripe-style red outline */
+.ec-input.ec-input--invalid,
+.ec-input-sm.ec-input--invalid {
+    border-color: #df1b41;
+    box-shadow: 0 0 0 1px #df1b41;
+}
+
+.ec-input.ec-input--invalid:focus,
+.ec-input-sm.ec-input--invalid:focus {
+    border-color: #df1b41;
+    box-shadow: 0 0 0 2px rgba(223, 27, 65, 0.2);
+}
+
+.ec-input-with-unit:has(.ec-input--invalid) .ec-unit--prefix {
+    border-color: #df1b41;
+}
+
+.ec-input--readonly,
+.ec-input[readonly] {
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: default;
+}
+
 .ec-input-with-unit {
     display: flex;
     align-items: center;
@@ -483,6 +507,11 @@
     margin-bottom: 12px;
 }
 
+.ec-field-hint {
+    font-size: 0.8125rem;
+    color: #94a3b8;
+}
+
 /* ── Buttons ── */
 .ec-btn-secondary {
     display: inline-flex;
@@ -502,6 +531,37 @@
     background: #f8fafc;
     border-color: #c7d2fe;
     color: #4f46e5;
+}
+
+/* ── Results error state (Stripe-style) ── */
+.ec-results-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 16px 20px;
+}
+
+.ec-results-error-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #991b1b;
+    margin: 0 0 10px 0;
+}
+
+.ec-results-error-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 0.875rem;
+    color: #b91c1c;
+    line-height: 1.6;
+}
+
+.ec-results-error-list li {
+    margin-bottom: 4px;
+}
+
+.ec-results-error-list li:last-child {
+    margin-bottom: 0;
 }
 
 /* ── Results ── */
@@ -542,6 +602,53 @@
 
 .ec-year-by-year {
     margin-top: 0;
+}
+
+.ec-year-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.ec-year-section-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 10px 0;
+}
+
+.ec-year-section-note {
+    font-weight: 400;
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.ec-year-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-year-section-header .ec-result-currency-label {
+    font-size: 0.625rem;
+}
+
+.ec-year-section-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 4px;
+}
+
+.ec-result-row--setup-fee {
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 8px;
+    margin-top: 4px;
 }
 
 .ec-result-row {
@@ -595,11 +702,44 @@
 }
 
 .ec-result-dual {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 1px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+    min-width: 140px;
     flex-shrink: 0;
+    text-align: right;
+}
+
+.ec-result-currency-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ec-result-row--header {
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-result-row--header .ec-result-dual {
+    padding-bottom: 0;
+}
+
+.ec-summary-row--header {
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-summary-row--header .ec-result-currency-label {
+    font-size: 0.625rem;
+}
+
+.ec-result-table-body {
+    margin-top: 4px;
 }
 
 .ec-result-value {
@@ -615,9 +755,16 @@
 }
 
 .ec-result-value--secondary {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    text-align: right;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.ec-summary-row--primary .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--highlight .ec-result-dual .ec-result-value-secondary {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4f46e5;
 }
 
 .ec-result-value--cost {
@@ -629,9 +776,6 @@
     color: #dc2626;
 }
 
-.ec-result-value--athiya {
-    color: #d97706;
-}
 
 .ec-result-value--margin {
     font-size: 1rem;
@@ -680,29 +824,3 @@
     color: #5b21b6;
 }
 
-/* ── Margin health ── */
-.ec-margin-health {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin-top: 4px;
-}
-
-.ec-margin-health--good {
-    background: #f0fdf4;
-    color: #15803d;
-    border: 1px solid #bbf7d0;
-}
-
-.ec-margin-health--warn {
-    background: #fffbeb;
-    color: #92400e;
-    border: 1px solid #fde68a;
-}
-
-.ec-margin-health--bad {
-    background: #fef2f2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
-}

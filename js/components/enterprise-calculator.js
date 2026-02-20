@@ -37,10 +37,24 @@
         return '₹' + n.toLocaleString('en-IN');
     }
 
+    function fmtINRRound(v) {
+        const n = Math.round(v);
+        if (Math.abs(n) >= 10000000) return '₹' + (n / 10000000).toFixed(2) + ' Cr';
+        if (Math.abs(n) >= 100000)   return '₹' + (n / 100000).toFixed(2) + ' L';
+        return '₹' + n.toLocaleString('en-IN');
+    }
+
     function fmtUSD(v) {
         const n = v / num('ec-fx-rate');
         if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
-        if (Math.abs(n) >= 1000)    return '$' + (n / 1000).toFixed(1) + 'K';
+        if (Math.abs(n) >= 1000)    return '$' + (n / 1000).toFixed(2) + 'K';
+        return '$' + n.toFixed(2);
+    }
+
+    function fmtUSDRound(v) {
+        const n = v / num('ec-fx-rate');
+        if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
+        if (Math.abs(n) >= 1000)    return '$' + (n / 1000).toFixed(2) + 'K';
         return '$' + n.toFixed(2);
     }
 
@@ -58,9 +72,192 @@
         set(baseId + '-usd', usdNote !== undefined ? usdNote : fmtUSD(inrVal));
     }
 
+    function setDualRound(baseId, inrVal, usdNote) {
+        set(baseId + '-inr', fmtINRRound(inrVal));
+        set(baseId + '-usd', usdNote !== undefined ? usdNote : fmtUSDRound(inrVal));
+    }
+
     function hasSparkInternalParam() {
         const params = new URLSearchParams(window.location.search);
         return params.get('spark-internal') === '1';
+    }
+
+    // ─────────────────────────────────────────────
+    // 1b. Validation
+    // ─────────────────────────────────────────────
+
+    const VALIDATION_CONFIG = [
+        { id: 'ec-fx-rate', label: 'USD/INR rate', min: 1 },
+        { id: 'ec-seats', label: 'Seats', min: 1 },
+        { id: 'ec-setup-fee', label: 'Setup fee', min: 0 },
+        { id: 'ec-video-hours-sd', label: 'SD video hours / month', min: 0 },
+        { id: 'ec-video-hours-hd', label: 'HD video hours / month', min: 0 },
+        { id: 'ec-streaming-hrs', label: 'Avg streaming per seat / month', min: 0 },
+        { id: 'ec-tutor-queries', label: 'AI Tutor queries / seat / month', min: 0 },
+        { id: 'ec-num-videos', label: 'Number of videos per month', min: 0 },
+        { id: 'ec-quiz-queries', label: 'Quiz questions per video / month', min: 0 },
+        { id: 'ec-min-margin', label: 'Min. cost markup for Spark', min: 0 },
+        { id: 'ec-base-price-vanilla', label: 'Base price Vanilla', min: 0 },
+        { id: 'ec-base-price-premium', label: 'Base price Premium', min: 0 },
+        { id: 'ec-vol-disc-1', label: 'Volume discount (1 - 249 seats)', min: 0, max: 100 },
+        { id: 'ec-vol-disc-2', label: 'Volume discount (250 - 499 seats)', min: 0, max: 100 },
+        { id: 'ec-vol-disc-3', label: 'Volume discount (500 - 999 seats)', min: 0, max: 100 },
+        { id: 'ec-vol-disc-4', label: 'Volume discount (1000+ seats)', min: 0, max: 100 },
+        { id: 'ec-vol-disc-5', label: 'Volume discount (5000+ seats)', min: 0, max: 100 },
+        { id: 'ec-vol-disc-6', label: 'Volume discount (10000+ seats)', min: 0, max: 100 },
+        { id: 'ec-vol-disc-7', label: 'Volume discount (50000+ seats)', min: 0, max: 100 },
+        { id: 'ec-term-disc-1', label: 'Term discount (1 month)', min: 0, max: 100 },
+        { id: 'ec-term-disc-3', label: 'Term discount (3 months)', min: 0, max: 100 },
+        { id: 'ec-term-disc-6', label: 'Term discount (6 months)', min: 0, max: 100 },
+        { id: 'ec-term-disc-12', label: 'Term discount (12 months)', min: 0, max: 100 },
+        { id: 'ec-early-disc', label: 'Early customer discount', min: 0, max: 100 },
+        { id: 'ec-rev-share-y1', label: 'Revenue share Y1', min: 0, max: 100 },
+        { id: 'ec-rev-share-y2', label: 'Revenue share Y2', min: 0, max: 100 },
+        { id: 'ec-rev-share-y3', label: 'Revenue share Y3', min: 0, max: 100 },
+        { id: 'ec-rev-share-y4', label: 'Revenue share Y4', min: 0, max: 100 },
+        { id: 'ec-rev-share-y5', label: 'Revenue share Y5', min: 0, max: 100 },
+        { id: 'ec-hd-sd-factor', label: 'HD cost multiplier', min: 1 },
+        { id: 'ec-gb-per-video-hr', label: 'GB per video hour', min: 0 },
+        { id: 'ec-embedding-tokens', label: 'Embedding tokens per hour', min: 0 },
+        { id: 'ec-batch-hrs-per-video-hr', label: 'AWS Batch hrs per video hour', min: 0 },
+        { id: 'ec-tutor-tokens-in', label: 'Tutor input tokens / query', min: 0 },
+        { id: 'ec-tutor-tokens-out', label: 'Tutor output tokens / query', min: 0 },
+        { id: 'ec-quiz-tokens-in', label: 'Quiz input tokens / query', min: 0 },
+        { id: 'ec-quiz-tokens-out', label: 'Quiz output tokens / query', min: 0 },
+        { id: 'ec-pipeline-tokens-in', label: 'Pipeline input tokens / video hr', min: 0 },
+        { id: 'ec-pipeline-tokens-out', label: 'Pipeline output tokens / video hr', min: 0 },
+        { id: 'ec-cost-assemblyai', label: 'AssemblyAI cost', min: 0 },
+        { id: 'ec-cost-s3-storage', label: 'S3 storage cost', min: 0 },
+        { id: 'ec-cost-s3-transfer', label: 'S3 transfer cost', min: 0 },
+        { id: 'ec-cost-batch', label: 'AWS Batch cost', min: 0 },
+        { id: 'ec-cost-gemini-in', label: 'Gemini input cost', min: 0 },
+        { id: 'ec-cost-gemini-out', label: 'Gemini output cost', min: 0 },
+        { id: 'ec-cost-openai-embedding', label: 'OpenAI embedding cost', min: 0 },
+        { id: 'ec-cost-multiplier', label: 'Cost safety multiplier', min: 1 }
+    ];
+
+    function getInputValue(el) {
+        const raw = (el && el.value) ? String(el.value).trim() : '';
+        if (raw === '') return null;
+        const v = parseFloat(raw);
+        return Number.isFinite(v) ? v : null;
+    }
+
+    function validateInputs() {
+        const errors = [];
+        const invalidIds = new Set();
+
+        VALIDATION_CONFIG.forEach(function (cfg) {
+            const el = document.getElementById(cfg.id);
+            if (!el) return;
+
+            const val = getInputValue(el);
+            let msg = null;
+
+            if (val === null) {
+                msg = cfg.label + ' is required';
+            } else if (cfg.min !== undefined && val < cfg.min) {
+                msg = cfg.label + ' must be at least ' + cfg.min;
+            } else if (cfg.max !== undefined && val > cfg.max) {
+                msg = cfg.label + ' must be at most ' + cfg.max;
+            }
+
+            if (msg) {
+                errors.push({ id: cfg.id, label: cfg.label, message: msg });
+                invalidIds.add(cfg.id);
+            }
+        });
+
+        if (errors.length === 0) {
+            const basePriceErrors = validateBasePrices();
+            basePriceErrors.forEach(function (e) {
+                errors.push(e);
+                invalidIds.add(e.id);
+            });
+        }
+
+        document.querySelectorAll('input[type="number"]').forEach(function (el) {
+            el.classList.toggle('ec-input--invalid', invalidIds.has(el.id));
+        });
+
+        return { valid: errors.length === 0, errors: errors };
+    }
+
+    function validateBasePrices() {
+        const errs = [];
+        const inp = readInputs();
+        const costsVanilla = computeCosts(Object.assign({}, inp, { tier: 'vanilla' }));
+        const volDisc = getVolumeDiscount(inp);
+        const termDisc = getTermDiscount(inp);
+        const combinedDiscountFactor = (1 - volDisc) * (1 - termDisc) * (1 - inp.earlyDisc);
+        const numYears = getNumContractYears(inp.term);
+        let effectiveAthiyaRate = 0;
+        if (numYears > 0) {
+            for (let y = 1; y <= numYears && y <= 5; y++) {
+                effectiveAthiyaRate += inp.revShare[y] || 0;
+            }
+            effectiveAthiyaRate /= numYears;
+        }
+        // Markup-on-cost: sparkNet >= costs × minMarginPct
+        // sparkNet = revenue × (1 - effectiveAthiyaRate) + setupFee - costs
+        // → minRevenue = (costs × (1 + minMarginPct) - setupFee) / (1 - effectiveAthiyaRate)
+        const athiyaDenom = 1 - effectiveAthiyaRate;
+        const minRevenue = athiyaDenom > 0.001
+            ? Math.max(0, costsVanilla.total * (1 + inp.minMarginPct) - inp.setupFeeINR) / athiyaDenom
+            : 0;
+        const minBasePriceVanilla = (inp.seats * inp.term * combinedDiscountFactor) > 0
+            ? minRevenue / (inp.seats * inp.term * combinedDiscountFactor)
+            : 0;
+        const baseVanilla = num('ec-base-price-vanilla');
+        const basePremium = num('ec-base-price-premium');
+
+        if (baseVanilla < minBasePriceVanilla) {
+            errs.push({ id: 'ec-base-price-vanilla', label: 'Base price Vanilla', message: 'Base price Vanilla: the min value has to be at least INR ' + Math.round(minBasePriceVanilla).toLocaleString('en-IN') });
+        }
+        if (basePremium <= baseVanilla && (baseVanilla > 0 || basePremium > 0)) {
+            errs.push({ id: 'ec-base-price-premium', label: 'Base price Premium', message: 'Base price Premium must be higher than Vanilla' });
+        }
+        return errs;
+    }
+
+    function updateBasePricesFromMinMargin() {
+        const inp = readInputs();
+        if (inp.seats < 1 || inp.term < 1) return;
+
+        const costsVanilla = computeCosts(Object.assign({}, inp, { tier: 'vanilla' }));
+        const volDisc = getVolumeDiscount(inp);
+        const termDisc = getTermDiscount(inp);
+        const combinedDiscountFactor = (1 - volDisc) * (1 - termDisc) * (1 - inp.earlyDisc);
+        const numYears = getNumContractYears(inp.term);
+        let effectiveAthiyaRate = 0;
+        if (numYears > 0) {
+            for (let y = 1; y <= numYears && y <= 5; y++) {
+                effectiveAthiyaRate += inp.revShare[y] || 0;
+            }
+            effectiveAthiyaRate /= numYears;
+        }
+        const athiyaDenom = 1 - effectiveAthiyaRate;
+        const minRevenue = athiyaDenom > 0.001
+            ? Math.max(0, costsVanilla.total * (1 + inp.minMarginPct) - inp.setupFeeINR) / athiyaDenom
+            : 0;
+        const minBasePriceVanilla = (inp.seats * inp.term * combinedDiscountFactor) > 0
+            ? minRevenue / (inp.seats * inp.term * combinedDiscountFactor)
+            : 0;
+        const baseVanilla = Math.round(minBasePriceVanilla / 50) * 50;
+        const basePremium = Math.round(baseVanilla * 1.5 / 50) * 50;
+
+        const elVanilla = document.getElementById('ec-base-price-vanilla');
+        const elPremium = document.getElementById('ec-base-price-premium');
+        if (elVanilla) elVanilla.value = String(baseVanilla);
+        if (elPremium) elPremium.value = String(basePremium);
+
+        recalculate();
+    }
+
+    function clearInputInvalidState() {
+        document.querySelectorAll('.ec-input--invalid').forEach(function (el) {
+            el.classList.remove('ec-input--invalid');
+        });
     }
 
     // ─────────────────────────────────────────────
@@ -74,26 +271,27 @@
         const termEl = document.querySelector('.ec-chip--active[data-term]');
         const term = termEl ? parseInt(termEl.getAttribute('data-term'), 10) : 12;
 
-        const revShareY1 = Math.min(100, Math.max(0, num('ec-rev-share-y1'))) / 100;
-        const revShareY2 = Math.min(100, Math.max(0, num('ec-rev-share-y2'))) / 100;
-        const revShareY3 = Math.min(100, Math.max(0, num('ec-rev-share-y3'))) / 100;
-        const revShareY4 = Math.min(100, Math.max(0, num('ec-rev-share-y4'))) / 100;
-        const revShareY5 = Math.min(100, Math.max(0, num('ec-rev-share-y5'))) / 100;
+        const revShareY1 = num('ec-rev-share-y1') / 100;
+        const revShareY2 = num('ec-rev-share-y2') / 100;
+        const revShareY3 = num('ec-rev-share-y3') / 100;
+        const revShareY4 = num('ec-rev-share-y4') / 100;
+        const revShareY5 = num('ec-rev-share-y5') / 100;
 
         return {
             // Deal
             tier,
-            seats:          Math.max(100, num('ec-seats')),
+            seats:          num('ec-seats'),
             term,
             revShare:       { 1: revShareY1, 2: revShareY2, 3: revShareY3, 4: revShareY4, 5: revShareY5 },
             setupFeeINR:    num('ec-setup-fee'),
-            fxRate:         Math.max(1, num('ec-fx-rate')),
+            fxRate:         num('ec-fx-rate'),
 
             // Usage
+            tutorInVanilla:     document.querySelector('.ec-tier-btn--active[data-tutor-vanilla]')?.getAttribute('data-tutor-vanilla') === 'yes',
             videoHoursSDPerMonth: num('ec-video-hours-sd'),
-            videoHoursHDPerMonth: Math.max(0, num('ec-video-hours-hd')),
-            hdSdFactor:         Math.max(1, num('ec-hd-sd-factor')),
-            gbPerVideoHr:       Math.max(0, num('ec-gb-per-video-hr')),
+            videoHoursHDPerMonth: num('ec-video-hours-hd'),
+            hdSdFactor:         num('ec-hd-sd-factor'),
+            gbPerVideoHr:       num('ec-gb-per-video-hr'),
             streamingHrsPerSeat: num('ec-streaming-hrs'),
             tutorQueriesPerSeat: num('ec-tutor-queries'),
             numVideosPerMonth:   num('ec-num-videos'),
@@ -115,20 +313,23 @@
             costGeminiOut:    num('ec-cost-gemini-out'),
             embeddingTokensPerVideoHr: num('ec-embedding-tokens'),
             costOpenAIEmbedding: num('ec-cost-openai-embedding'),
-            costMultiplier:   Math.max(1, num('ec-cost-multiplier')),
+            costMultiplier:   num('ec-cost-multiplier'),
+            minMarginPct:     num('ec-min-margin') / 100,
 
             // Pricing config
             volDisc1:    num('ec-vol-disc-1') / 100,
             volDisc2:    num('ec-vol-disc-2') / 100,
             volDisc3:    num('ec-vol-disc-3') / 100,
             volDisc4:    num('ec-vol-disc-4') / 100,
+            volDisc5:    num('ec-vol-disc-5') / 100,
+            volDisc6:    num('ec-vol-disc-6') / 100,
+            volDisc7:    num('ec-vol-disc-7') / 100,
             termDisc1:   num('ec-term-disc-1') / 100,
             termDisc3:   num('ec-term-disc-3') / 100,
             termDisc6:   num('ec-term-disc-6') / 100,
             termDisc12:  num('ec-term-disc-12') / 100,
             earlyDisc:   num('ec-early-disc') / 100,
-            targetMargin: num('ec-target-margin') / 100,
-            basePricePerSeatINR: num('ec-base-price-per-seat'),
+            basePricePerSeatINR: tier === 'premium' ? num('ec-base-price-premium') : num('ec-base-price-vanilla'),
         };
     }
 
@@ -156,8 +357,9 @@
         const gbPerHr             = 1; // ~1 GB per SD video hour streamed
         const s3StreamingPerMonth = inp.seats * inp.streamingHrsPerSeat * gbPerHr * inp.costS3Transfer;
 
-        // AI Tutor (Gemini) - only for Premium
-        const tutorQueriesTotal = inp.tier === 'premium' ? inp.seats * inp.tutorQueriesPerSeat : 0;
+        // AI Tutor (Gemini) - Premium always; Vanilla when tutorInVanilla flag is set
+        const includeTutor = inp.tier === 'premium' || inp.tutorInVanilla;
+        const tutorQueriesTotal = includeTutor ? inp.seats * inp.tutorQueriesPerSeat : 0;
         const geminiTutorPerMonth = (tutorQueriesTotal * inp.tutorTokensIn / 1e6) * inp.costGeminiIn
                                   + (tutorQueriesTotal * inp.tutorTokensOut / 1e6) * inp.costGeminiOut;
 
@@ -200,9 +402,12 @@
 
     function getVolumeDiscount(inp) {
         const s = inp.seats;
-        if (s >= 1000) return inp.volDisc4;
-        if (s >= 500)  return inp.volDisc3;
-        if (s >= 250)  return inp.volDisc2;
+        if (s >= 50000) return inp.volDisc7;
+        if (s >= 10000) return inp.volDisc6;
+        if (s >= 5000)  return inp.volDisc5;
+        if (s >= 1000)  return inp.volDisc4;
+        if (s >= 500)   return inp.volDisc3;
+        if (s >= 250)   return inp.volDisc2;
         return inp.volDisc1;
     }
 
@@ -223,11 +428,8 @@
         // Cost per seat per month (INR)
         const costPerSeatPerMonth = costs.total / (inp.seats * termMonths);
 
-        // List price: use base price if set, else derive from cost + target margin
-        const targetMarginSafe = Math.min(inp.targetMargin, 0.99);
-        const listPricePerSeatPerMonth = inp.basePricePerSeatINR > 0
-            ? inp.basePricePerSeatINR
-            : costPerSeatPerMonth / (1 - targetMarginSafe);
+        // List price: base price per seat per month
+        const listPricePerSeatPerMonth = inp.basePricePerSeatINR;
 
         // Discounts
         const volDisc  = getVolumeDiscount(inp);
@@ -267,7 +469,8 @@
 
         // Setup fee is Spark only, Y1
         const sparkNetINR = sparkGrossINR + setupFeeINR - costs.total;
-        const marginPct   = revenueINR > 0 ? (sparkNetINR / revenueINR) * 100 : 0;
+        // Margin expressed as markup on cost: 90% means Spark net = 0.9× costs (i.e. 9x return on cost)
+        const marginPct   = costs.total > 0 ? (sparkNetINR / costs.total) * 100 : 0;
 
         const result = {
             listPricePerSeatPerMonth,
@@ -295,7 +498,33 @@
     // 5. Render results
     // ─────────────────────────────────────────────
 
+    function renderError(errors) {
+        const errorEl = document.getElementById('ec-results-error');
+        const contentEl = document.getElementById('ec-results-content');
+        const resultsFull = document.getElementById('ec-results-full');
+
+        if (errorEl) {
+            errorEl.innerHTML = '<p class="ec-results-error-title">Please correct the following:</p><ul class="ec-results-error-list">' +
+                errors.map(function (e) { return '<li>' + e.message + '</li>'; }).join('') + '</ul>';
+            errorEl.classList.remove('hidden');
+        }
+        if (contentEl) contentEl.classList.add('hidden');
+        if (resultsFull) resultsFull.classList.add('hidden');
+    }
+
+    function hideErrorShowContent() {
+        const errorEl = document.getElementById('ec-results-error');
+        const contentEl = document.getElementById('ec-results-content');
+
+        if (errorEl) {
+            errorEl.innerHTML = '';
+            errorEl.classList.add('hidden');
+        }
+        if (contentEl) contentEl.classList.remove('hidden');
+    }
+
     function renderResults(inp, costs, pricing) {
+        hideErrorShowContent();
         // Tier badge
         const badge = document.getElementById('ec-results-tier-badge');
         if (badge) {
@@ -330,79 +559,94 @@
 
         setDual('ec-out-net-seat-mo', pricing.netPricePerSeatPerMonth);
 
-        // Summary (sticky)
+        // Summary (sticky) - per-unit keeps decimals, aggregates rounded
         setDual('ec-summary-net', pricing.netPricePerSeatPerMonth);
-        setDual('ec-summary-tcv', pricing.tcvINR);
-        setDual('ec-summary-total-rev', pricing.revenueINR);
-        setDual('ec-summary-spark-rev', pricing.sparkGrossINR);
-        setDual('ec-summary-athiya-rev', pricing.athiyaAmountINR);
+        setDualRound('ec-summary-tcv', pricing.tcvINR);
+        setDualRound('ec-summary-spark-rev', pricing.sparkGrossINR);
+        setDualRound('ec-summary-athiya-rev', pricing.athiyaAmountINR);
         set('ec-summary-margin-pct', fmtPct(pricing.marginPct));
-        setDual('ec-summary-spark-net', pricing.sparkNetINR);
+        setDualRound('ec-summary-spark-net', pricing.sparkNetINR);
 
         // Spark-internal visibility
         const showSparkInternal = hasSparkInternalParam();
         const summaryInternal = document.getElementById('ec-summary-spark-internal');
         const fullInternal = document.getElementById('ec-full-spark-internal');
+        const sectionTechnical = document.getElementById('ec-section-technical');
+        const sectionCosts = document.getElementById('ec-section-costs');
+        const costBreakdownBlock = document.getElementById('ec-cost-breakdown-block');
         if (summaryInternal) summaryInternal.classList.toggle('hidden', !showSparkInternal);
         if (fullInternal) fullInternal.classList.toggle('hidden', !showSparkInternal);
+        if (sectionTechnical) sectionTechnical.classList.toggle('hidden', !showSparkInternal);
+        if (sectionCosts) sectionCosts.classList.toggle('hidden', !showSparkInternal);
+        if (costBreakdownBlock) costBreakdownBlock.classList.toggle('hidden', !showSparkInternal);
 
-        // Contract value
-        setDual('ec-out-acv', pricing.acvINR);
-        setDual('ec-out-setup', pricing.setupFeeINR);
+        // Contract value - aggregates rounded
+        setDualRound('ec-out-acv', pricing.acvINR);
+        setDualRound('ec-out-setup', pricing.setupFeeINR);
         set('ec-out-tcv-term', String(inp.term));
-        setDual('ec-out-tcv', pricing.tcvINR);
+        setDualRound('ec-out-tcv', pricing.tcvINR);
 
-        // Cost breakdown
-        setDual('ec-cost-out-assemblyai', costs.assemblyAI);
+        // Cost breakdown - aggregates rounded
+        setDualRound('ec-cost-out-assemblyai', costs.assemblyAI);
         set('ec-storage-calculated', Math.round(costs.storageGB) + ' GB');
         set('ec-cost-out-storage-gb', Math.round(costs.storageGB));
-        setDual('ec-cost-out-s3-storage', costs.s3Storage);
-        setDual('ec-cost-out-s3-streaming', costs.s3Streaming);
-        setDual('ec-cost-out-batch', costs.batch);
-        setDual('ec-cost-out-gemini', costs.gemini);
-        setDual('ec-cost-out-openai', costs.openAI);
-        setDual('ec-cost-out-total', costs.total);
+        setDualRound('ec-cost-out-s3-storage', costs.s3Storage);
+        setDualRound('ec-cost-out-s3-streaming', costs.s3Streaming);
+        setDualRound('ec-cost-out-batch', costs.batch);
+        setDualRound('ec-cost-out-gemini', costs.gemini);
+        setDualRound('ec-cost-out-openai', costs.openAI);
+        setDualRound('ec-cost-out-total', costs.total);
 
-        // Revenue Share
-        setDual('ec-margin-out-revenue', pricing.revenueINR);
-        setDual('ec-margin-out-spark-gross', pricing.sparkGrossINR);
-        setDual('ec-margin-out-athiya', pricing.athiyaAmountINR);
-        setDual('ec-margin-out-cost', costs.total);
-        setDual('ec-margin-out-net', pricing.sparkNetINR);
+        // Revenue Share - aggregates rounded
+        setDualRound('ec-margin-out-spark-gross', pricing.sparkGrossINR);
+        setDualRound('ec-margin-out-athiya', pricing.athiyaAmountINR);
+        setDualRound('ec-margin-out-cost', costs.total);
+        setDualRound('ec-margin-out-net', pricing.sparkNetINR);
         set('ec-margin-out-pct', fmtPct(pricing.marginPct));
 
-        // Year-by-year table
+        // Year-by-year: one section per year, Total revenue / Spark / Athiya rows with INR and USD
         const yearContainer = document.getElementById('ec-year-by-year-container');
+        const setupFeeINR = inp.setupFeeINR || 0;
         if (yearContainer && pricing.yearData && pricing.yearData.length > 0) {
             yearContainer.innerHTML = pricing.yearData.map(function (d) {
-                return '<div class="ec-result-row ec-result-row--cost">' +
-                    '<span class="ec-result-label">Y' + d.year + ' (Rev ' + fmtINR(d.rev) + ', Athiya ' + Math.round(d.pct) + '%)</span>' +
+                var rows = '<div class="ec-result-row">' +
+                    '<span class="ec-result-label">Total revenue</span>' +
                     '<div class="ec-result-dual">' +
-                    '<span class="ec-result-value">' + fmtINR(d.spark) + '</span>' +
-                    '<span class="ec-result-value-secondary ec-result-value--athiya">Athiya ' + fmtINR(d.athiya) + '</span>' +
+                    '<span class="ec-result-value">' + fmtINRRound(d.rev) + '</span>' +
+                    '<span class="ec-result-value-secondary">' + fmtUSDRound(d.rev) + '</span>' +
+                    '</div></div>' +
+                    '<div class="ec-result-row">' +
+                    '<span class="ec-result-label">Spark (recurring)</span>' +
+                    '<div class="ec-result-dual">' +
+                    '<span class="ec-result-value">' + fmtINRRound(d.spark) + '</span>' +
+                    '<span class="ec-result-value-secondary">' + fmtUSDRound(d.spark) + '</span>' +
+                    '</div></div>' +
+                    '<div class="ec-result-row">' +
+                    '<span class="ec-result-label">Athiya</span>' +
+                    '<div class="ec-result-dual">' +
+                    '<span class="ec-result-value">' + fmtINRRound(d.athiya) + '</span>' +
+                    '<span class="ec-result-value-secondary">' + fmtUSDRound(d.athiya) + '</span>' +
                     '</div></div>';
+                if (d.year === 1 && setupFeeINR > 0) {
+                    rows += '<div class="ec-result-row ec-result-row--setup-fee">' +
+                        '<span class="ec-result-label">Setup fee (one-time, Spark only)</span>' +
+                        '<div class="ec-result-dual">' +
+                        '<span class="ec-result-value">' + fmtINRRound(setupFeeINR) + '</span>' +
+                        '<span class="ec-result-value-secondary">' + fmtUSDRound(setupFeeINR) + '</span>' +
+                        '</div></div>';
+                }
+                return '<div class="ec-year-section">' +
+                    '<p class="ec-year-section-title">Year ' + d.year + ' <span class="ec-year-section-note">(Athiya ' + Math.round(d.pct) + '%)</span></p>' +
+                    '<div class="ec-year-section-header">' +
+                    '<span class="ec-result-label"></span>' +
+                    '<div class="ec-result-dual">' +
+                    '<span class="ec-result-currency-label">INR</span>' +
+                    '<span class="ec-result-currency-label">USD</span>' +
+                    '</div></div>' +
+                    '<div class="ec-year-section-rows">' + rows + '</div></div>';
             }).join('');
         } else if (yearContainer) {
             yearContainer.innerHTML = '';
-        }
-
-        // Margin health indicator (Spark internal)
-        const healthEl = document.getElementById('ec-margin-health');
-        if (healthEl && showSparkInternal) {
-            const targetPct = inp.targetMargin * 100;
-            const actualPct = pricing.marginPct;
-            const diff = actualPct - targetPct;
-            healthEl.classList.remove('ec-margin-health--good', 'ec-margin-health--warn', 'ec-margin-health--bad');
-            if (actualPct >= targetPct) {
-                healthEl.classList.add('ec-margin-health--good');
-                healthEl.textContent = '✓ Margin target met (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
-            } else if (diff >= -10) {
-                healthEl.classList.add('ec-margin-health--warn');
-                healthEl.textContent = '⚠ Below target by ' + fmtPct(Math.abs(diff)) + ' (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
-            } else {
-                healthEl.classList.add('ec-margin-health--bad');
-                healthEl.textContent = '✗ Significantly below target (' + fmtPct(actualPct) + ' vs target ' + fmtPct(targetPct) + ')';
-            }
         }
 
         console.log(LOG, 'render complete');
@@ -415,10 +659,11 @@
     const STORAGE_KEY = 'spark-enterprise-pricing';
 
     const DEFAULTS = {
-        'ec-fx-rate': '84',
+        'ec-fx-rate': '91',
         'ec-seats': '500',
         'ec-setup-fee': '0',
-        'ec-base-price-per-seat': '0',
+        'ec-base-price-vanilla': '450',
+        'ec-base-price-premium': '900',
         'ec-video-hours-sd': '40',
         'ec-video-hours-hd': '0',
         'ec-hd-sd-factor': '5',
@@ -443,23 +688,27 @@
         'ec-cost-gemini-out': '25.20',
         'ec-cost-openai-embedding': '1.68',
         'ec-cost-multiplier': '1.3',
+        'ec-min-margin': '80',
         'ec-vol-disc-1': '0',
         'ec-vol-disc-2': '5',
         'ec-vol-disc-3': '10',
         'ec-vol-disc-4': '15',
+        'ec-vol-disc-5': '20',
+        'ec-vol-disc-6': '25',
+        'ec-vol-disc-7': '30',
         'ec-term-disc-1': '0',
         'ec-term-disc-3': '2',
         'ec-term-disc-6': '5',
         'ec-term-disc-12': '10',
         'ec-early-disc': '0',
-        'ec-target-margin': '60',
         'ec-rev-share-y1': '30',
         'ec-rev-share-y2': '20',
         'ec-rev-share-y3': '10',
         'ec-rev-share-y4': '5',
         'ec-rev-share-y5': '5',
         _tier: 'vanilla',
-        _term: '12'
+        _term: '12',
+        _tutorVanilla: 'no'
     };
 
     const DEFAULTS_DEAL = {
@@ -474,13 +723,16 @@
     const DEFAULTS_USAGE = {
         'ec-video-hours-sd': '40', 'ec-video-hours-hd': '0',
         'ec-streaming-hrs': '2', 'ec-tutor-queries': '20',
-        'ec-num-videos': '40', 'ec-quiz-queries': '5'
+        'ec-num-videos': '40', 'ec-quiz-queries': '5',
+        _tutorVanilla: 'no'
     };
     const DEFAULTS_PRICING = {
-        'ec-base-price-per-seat': '0',
+        'ec-base-price-vanilla': '450',
+        'ec-base-price-premium': '900',
         'ec-vol-disc-1': '0', 'ec-vol-disc-2': '5', 'ec-vol-disc-3': '10', 'ec-vol-disc-4': '15',
+        'ec-vol-disc-5': '20', 'ec-vol-disc-6': '25', 'ec-vol-disc-7': '30',
         'ec-term-disc-1': '0', 'ec-term-disc-3': '2', 'ec-term-disc-6': '5', 'ec-term-disc-12': '10',
-        'ec-early-disc': '0', 'ec-target-margin': '60'
+        'ec-early-disc': '0'
     };
     const DEFAULTS_TECHNICAL = {
         'ec-hd-sd-factor': '5', 'ec-gb-per-video-hr': '0.75',
@@ -492,7 +744,7 @@
     const DEFAULTS_COSTS = {
         'ec-cost-assemblyai': '55', 'ec-cost-s3-storage': '1.93', 'ec-cost-s3-transfer': '7.56',
         'ec-cost-batch': '4.03', 'ec-cost-gemini-in': '6.30', 'ec-cost-gemini-out': '25.20',
-        'ec-cost-openai-embedding': '1.68', 'ec-cost-multiplier': '1.3'
+        'ec-cost-openai-embedding': '1.68', 'ec-cost-multiplier': '1.3', 'ec-min-margin': '30'
     };
 
     function resetToDefaults() {
@@ -540,7 +792,7 @@
 
     function gatherAllInputValues() {
         const ids = [
-            'ec-fx-rate', 'ec-seats', 'ec-setup-fee', 'ec-base-price-per-seat',
+            'ec-fx-rate', 'ec-seats', 'ec-setup-fee', 'ec-base-price-vanilla', 'ec-base-price-premium',
             'ec-rev-share-y1', 'ec-rev-share-y2', 'ec-rev-share-y3', 'ec-rev-share-y4', 'ec-rev-share-y5',
             'ec-video-hours-sd', 'ec-video-hours-hd', 'ec-hd-sd-factor', 'ec-gb-per-video-hr',
             'ec-streaming-hrs', 'ec-num-videos', 'ec-tutor-queries', 'ec-quiz-queries',
@@ -550,10 +802,11 @@
             'ec-pipeline-tokens-in', 'ec-pipeline-tokens-out',
             'ec-cost-assemblyai', 'ec-cost-s3-storage', 'ec-cost-s3-transfer',
             'ec-cost-batch', 'ec-cost-gemini-in', 'ec-cost-gemini-out',
-            'ec-embedding-tokens', 'ec-cost-openai-embedding', 'ec-cost-multiplier',
+            'ec-embedding-tokens', 'ec-cost-openai-embedding', 'ec-cost-multiplier', 'ec-min-margin',
             'ec-vol-disc-1', 'ec-vol-disc-2', 'ec-vol-disc-3', 'ec-vol-disc-4',
+            'ec-vol-disc-5', 'ec-vol-disc-6', 'ec-vol-disc-7',
             'ec-term-disc-1', 'ec-term-disc-3', 'ec-term-disc-6', 'ec-term-disc-12',
-            'ec-early-disc', 'ec-target-margin',
+            'ec-early-disc',
         ];
         const data = { _version: 1, _ts: new Date().toISOString() };
         ids.forEach(id => {
@@ -561,10 +814,12 @@
             if (el) data[id] = el.value;
         });
         // Capture toggle state
-        const tierEl = document.querySelector('.ec-tier-btn--active');
+        const tierEl = document.querySelector('.ec-tier-btn--active[data-tier]');
         data['_tier'] = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
         const termEl = document.querySelector('.ec-chip--active[data-term]');
         data['_term'] = termEl ? termEl.getAttribute('data-term') : '12';
+        const tutorVanillaEl = document.querySelector('.ec-tier-btn--active[data-tutor-vanilla]');
+        data['_tutorVanilla'] = tutorVanillaEl ? tutorVanillaEl.getAttribute('data-tutor-vanilla') : 'no';
         return data;
     }
 
@@ -573,6 +828,11 @@
         if (data['ec-cost-openai-in'] && !data['ec-cost-openai-embedding']) {
             data['ec-cost-openai-embedding'] = data['ec-cost-openai-in'];
         }
+        // Backward compat: map old single base price to both tiers
+        if (data['ec-base-price-per-seat'] !== undefined && data['ec-base-price-vanilla'] === undefined) {
+            data['ec-base-price-vanilla'] = data['ec-base-price-per-seat'];
+            data['ec-base-price-premium'] = data['ec-base-price-per-seat'];
+        }
         for (const key in data) {
             if (key.startsWith('_')) continue;
             const el = document.getElementById(key);
@@ -580,7 +840,7 @@
         }
         // Restore tier
         if (data['_tier']) {
-            document.querySelectorAll('.ec-tier-btn').forEach(btn => {
+            document.querySelectorAll('.ec-tier-btn[data-tier]').forEach(btn => {
                 const active = btn.getAttribute('data-tier') === data['_tier'];
                 btn.classList.toggle('ec-tier-btn--active', active);
             });
@@ -591,6 +851,13 @@
             document.querySelectorAll('.ec-chip[data-term]').forEach(btn => {
                 const active = btn.getAttribute('data-term') === termVal;
                 btn.classList.toggle('ec-chip--active', active);
+            });
+        }
+        // Restore tutor-in-vanilla flag
+        if (data['_tutorVanilla']) {
+            document.querySelectorAll('.ec-tier-btn[data-tutor-vanilla]').forEach(btn => {
+                const active = btn.getAttribute('data-tutor-vanilla') === data['_tutorVanilla'];
+                btn.classList.toggle('ec-tier-btn--active', active);
             });
         }
         recalculate();
@@ -609,6 +876,12 @@
     }
 
     function exportCSV() {
+        const validation = validateInputs();
+        if (!validation.valid) {
+            alert('Please correct all validation errors before exporting CSV.');
+            return;
+        }
+        clearInputInvalidState();
         const inp = readInputs();
         const costs = computeCosts(inp);
         const pricing = computePricing(inp, costs);
@@ -626,6 +899,7 @@
             ['Setup fee (INR, Spark only, Y1)', inp.setupFeeINR, ''],
             ['FX rate (INR/USD)', fx, ''],
             ['Revenue share Y1-Y5 (%)', [1,2,3,4,5].map(function(y){ return Math.round(inp.revShare[y] * 100); }).join('/'), ''],
+            ['AI Tutor in Vanilla', inp.tutorInVanilla ? 'Yes' : 'No', ''],
             ['', '', ''],
             ['PRICING', 'INR', 'USD'],
             ['List price / seat / month', fmtINR(pricing.listPricePerSeatPerMonth), fmtUSD(pricing.listPricePerSeatPerMonth)],
@@ -685,6 +959,15 @@
     // ─────────────────────────────────────────────
 
     function recalculate() {
+        const validation = validateInputs();
+
+        if (!validation.valid) {
+            renderError(validation.errors);
+            saveToLocalStorage();
+            return;
+        }
+
+        clearInputInvalidState();
         const inp = readInputs();
         const costs = computeCosts(inp);
         const pricing = computePricing(inp, costs);
@@ -699,17 +982,19 @@
     document.addEventListener('DOMContentLoaded', () => {
         console.log(LOG, 'DOMContentLoaded');
 
-        // Restore from localStorage
+        // Restore from localStorage or apply defaults
         const saved = loadFromLocalStorage();
         if (saved) {
             applyImportedValues(saved);
             console.log(LOG, 'restored from localStorage');
+        } else {
+            applyImportedValues(DEFAULTS);
         }
 
         // Tier toggle
-        document.querySelectorAll('.ec-tier-btn').forEach(btn => {
+        document.querySelectorAll('.ec-tier-btn[data-tier]').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.ec-tier-btn').forEach(b => b.classList.remove('ec-tier-btn--active'));
+                document.querySelectorAll('.ec-tier-btn[data-tier]').forEach(b => b.classList.remove('ec-tier-btn--active'));
                 btn.classList.add('ec-tier-btn--active');
                 // Tutor queries: default 0 for Vanilla, 20 for Premium
                 const tutorEl = document.getElementById('ec-tutor-queries');
@@ -719,6 +1004,15 @@
                 if (tutorEl && btn.getAttribute('data-tier') === 'vanilla') {
                     tutorEl.value = '0';
                 }
+                recalculate();
+            });
+        });
+
+        // AI Tutor in Vanilla toggle
+        document.querySelectorAll('.ec-tier-btn[data-tutor-vanilla]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ec-tier-btn[data-tutor-vanilla]').forEach(b => b.classList.remove('ec-tier-btn--active'));
+                btn.classList.add('ec-tier-btn--active');
                 recalculate();
             });
         });
@@ -753,11 +1047,17 @@
         const btnResetUsage = document.getElementById('ec-btn-reset-usage');
         if (btnResetUsage) btnResetUsage.addEventListener('click', () => resetBySection('usage'));
         const btnResetPricing = document.getElementById('ec-btn-reset-pricing');
-        if (btnResetPricing) btnResetPricing.addEventListener('click', () => resetBySection('pricing'));
+        if (btnResetPricing) btnResetPricing.addEventListener('click', () => {
+            resetBySection('pricing');
+            updateBasePricesFromMinMargin();
+        });
         const btnResetTechnical = document.getElementById('ec-btn-reset-technical');
         if (btnResetTechnical) btnResetTechnical.addEventListener('click', () => resetBySection('technical'));
         const btnResetCosts = document.getElementById('ec-btn-reset-costs');
-        if (btnResetCosts) btnResetCosts.addEventListener('click', () => resetBySection('costs'));
+        if (btnResetCosts) btnResetCosts.addEventListener('click', () => {
+            resetBySection('costs');
+            updateBasePricesFromMinMargin();
+        });
 
         // Collapsible: all sections (entire header is clickable except Reset)
         function setupCollapsible(btnId, bodyId) {
@@ -831,7 +1131,7 @@
             });
         }
 
-        // Initial calculation
+        // Initial calculation: validate and compute (do not auto-set base prices - allows validation errors to show)
         recalculate();
     });
 
