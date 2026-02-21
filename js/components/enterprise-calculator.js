@@ -189,7 +189,7 @@
         const costsVanilla = computeCosts(Object.assign({}, inp, { tier: 'vanilla' }));
         const volDisc = getVolumeDiscount(inp);
         const termDisc = getTermDiscount(inp);
-        const combinedDiscountFactor = (1 - volDisc) * (1 - termDisc) * (1 - inp.earlyDisc);
+        const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inp.earlyDisc);
         const numYears = getNumContractYears(inp.term);
         let effectiveAthiyaRate = 0;
         if (numYears > 0) {
@@ -227,7 +227,7 @@
         const costsVanilla = computeCosts(Object.assign({}, inp, { tier: 'vanilla' }));
         const volDisc = getVolumeDiscount(inp);
         const termDisc = getTermDiscount(inp);
-        const combinedDiscountFactor = (1 - volDisc) * (1 - termDisc) * (1 - inp.earlyDisc);
+        const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inp.earlyDisc);
         const numYears = getNumContractYears(inp.term);
         let effectiveAthiyaRate = 0;
         if (numYears > 0) {
@@ -515,6 +515,11 @@
         return inp.termDisc1;
     }
 
+    function getCombinedDiscountFactor(volDisc, termDisc, earlyDisc) {
+        const totalPct = volDisc + termDisc + earlyDisc;
+        return Math.max(0, 1 - totalPct);
+    }
+
     function getNumContractYears(termMonths) {
         return Math.floor(termMonths / 12);
     }
@@ -532,9 +537,9 @@
         const volDisc  = getVolumeDiscount(inp);
         const termDisc = getTermDiscount(inp);
         const earlyDisc = inp.earlyDisc;
-        // Compound discounts: apply sequentially
-        const combinedDiscountFactor = (1 - volDisc) * (1 - termDisc) * (1 - earlyDisc);
+        const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, earlyDisc);
         const totalDiscountPct = 1 - combinedDiscountFactor;
+        const totalDiscountPctDisplay = volDisc + termDisc + earlyDisc;
 
         const netPricePerSeatPerMonth = listPricePerSeatPerMonth * combinedDiscountFactor;
 
@@ -573,6 +578,7 @@
             listPricePerSeatPerMonth,
             netPricePerSeatPerMonth,
             totalDiscountPct,
+            totalDiscountPctDisplay,
             volDisc, termDisc, earlyDisc,
             acvINR,
             setupFeeINR,
@@ -596,28 +602,41 @@
     // ─────────────────────────────────────────────
 
     function renderError(errors) {
+        const errorHtml = '<p class="ec-results-error-title">Please correct the following:</p><ul class="ec-results-error-list">' +
+            errors.map(function (e) { return '<li>' + e.message + '</li>'; }).join('') + '</ul>';
         const errorEl = document.getElementById('ec-results-error');
         const contentEl = document.getElementById('ec-results-content');
-        const resultsFull = document.getElementById('ec-results-full');
+        const fullErrorEl = document.getElementById('ec-results-full-error');
+        const fullContentEl = document.getElementById('ec-results-full-content');
 
         if (errorEl) {
-            errorEl.innerHTML = '<p class="ec-results-error-title">Please correct the following:</p><ul class="ec-results-error-list">' +
-                errors.map(function (e) { return '<li>' + e.message + '</li>'; }).join('') + '</ul>';
+            errorEl.innerHTML = errorHtml;
             errorEl.classList.remove('hidden');
         }
         if (contentEl) contentEl.classList.add('hidden');
-        if (resultsFull) resultsFull.classList.add('hidden');
+        if (fullErrorEl) {
+            fullErrorEl.innerHTML = errorHtml;
+            fullErrorEl.classList.remove('hidden');
+        }
+        if (fullContentEl) fullContentEl.classList.add('hidden');
     }
 
     function hideErrorShowContent() {
         const errorEl = document.getElementById('ec-results-error');
         const contentEl = document.getElementById('ec-results-content');
+        const fullErrorEl = document.getElementById('ec-results-full-error');
+        const fullContentEl = document.getElementById('ec-results-full-content');
 
         if (errorEl) {
             errorEl.innerHTML = '';
             errorEl.classList.add('hidden');
         }
         if (contentEl) contentEl.classList.remove('hidden');
+        if (fullErrorEl) {
+            fullErrorEl.innerHTML = '';
+            fullErrorEl.classList.add('hidden');
+        }
+        if (fullContentEl) fullContentEl.classList.remove('hidden');
     }
 
     function fmtNum(v) {
@@ -753,7 +772,7 @@
         html += '<div class="ec-detail-label ec-result-label--strong">Total (before multiplier)</div>';
         html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.totalPreMultiplier) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.totalPreMultiplier) + '</span></div>';
         html += '</div>';
-        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-row ec-detail-row--total">';
         html += '<div class="ec-detail-label">x Cost safety multiplier (' + fmtNum(d.costMultiplier) + ')</div>';
         html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINRRound(costs.total) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(costs.total) + '</span></div>';
         html += '</div>';
@@ -789,8 +808,8 @@
         setDual('ec-out-list-seat-mo', listMo);
         setDual('ec-out-list-seat-yr', listMo * 12);
 
-        set('ec-out-discounts-pct', pricing.totalDiscountPct > 0
-            ? '-' + fmtPct(pricing.totalDiscountPct * 100)
+        set('ec-out-discounts-pct', pricing.totalDiscountPctDisplay > 0
+            ? '-' + fmtPct(pricing.totalDiscountPctDisplay * 100)
             : '0%');
 
         // Discount breakdown
@@ -1149,7 +1168,7 @@
             ['PRICING', 'INR', 'USD'],
             ['List price / seat / month', fmtINR(pricing.listPricePerSeatPerMonth), fmtUSD(pricing.listPricePerSeatPerMonth)],
             ['List price / seat / year', fmtINR(pricing.listPricePerSeatPerMonth * 12), fmtUSD(pricing.listPricePerSeatPerMonth * 12)],
-            ['Total discount %', fmtPct(pricing.totalDiscountPct * 100), ''],
+            ['Total discount %', fmtPct(pricing.totalDiscountPctDisplay * 100), ''],
             ['Net price / seat / month', fmtINR(pricing.netPricePerSeatPerMonth), fmtUSD(pricing.netPricePerSeatPerMonth)],
             ['ACV (annual contract value)', fmtINR(pricing.acvINR), fmtUSD(pricing.acvINR)],
             ['Setup fee (one-time, Spark only)', fmtINR(pricing.setupFeeINR), fmtUSD(pricing.setupFeeINR)],
@@ -1203,7 +1222,27 @@
     // Main recalculate
     // ─────────────────────────────────────────────
 
+    function updateTutorFieldVisibility() {
+        const tierEl = document.querySelector('.ec-tier-btn--active[data-tier]');
+        const tier = tierEl ? tierEl.getAttribute('data-tier') : 'vanilla';
+        const tutorVanillaEl = document.querySelector('.ec-tier-btn--active[data-tutor-vanilla]');
+        const tutorInVanilla = tutorVanillaEl ? tutorVanillaEl.getAttribute('data-tutor-vanilla') === 'yes' : false;
+
+        const rowTutorVanilla = document.getElementById('ec-row-tutor-vanilla');
+        const rowTutorQueries = document.getElementById('ec-row-tutor-queries');
+
+        if (rowTutorVanilla) {
+            rowTutorVanilla.classList.toggle('ec-hidden', tier === 'premium');
+        }
+        if (rowTutorQueries) {
+            const showQueries = tier === 'premium' || (tier === 'vanilla' && tutorInVanilla);
+            rowTutorQueries.classList.toggle('ec-hidden', !showQueries);
+        }
+    }
+
     function recalculate() {
+        updateTutorFieldVisibility();
+
         const validation = validateInputs();
 
         if (!validation.valid) {

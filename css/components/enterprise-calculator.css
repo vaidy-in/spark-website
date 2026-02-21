@@ -1,5 +1,9 @@
 /* Enterprise Pricing Calculator styles */
 
+.ec-hidden {
+    display: none !important;
+}
+
 /* ── Layout ── */
 .ec-layout {
     display: grid;
@@ -689,6 +693,13 @@
     margin: 4px -10px;
 }
 
+.ec-result-row--margin .ec-result-dual .ec-result-value,
+.ec-result-row--margin .ec-result-dual .ec-result-value-secondary,
+#ec-summary-spark-internal .ec-result-dual .ec-result-value,
+#ec-summary-spark-internal .ec-result-dual .ec-result-value-secondary {
+    color: #1e293b;
+}
+
 .ec-result-label {
     font-size: 0.8125rem;
     color: #64748b;
@@ -708,6 +719,12 @@
     min-width: 140px;
     flex-shrink: 0;
     text-align: right;
+}
+
+.ec-result-dual .ec-result-value,
+.ec-result-dual .ec-result-value-secondary {
+    font-size: 0.875rem;
+    font-weight: 400;
 }
 
 .ec-result-currency-label {
@@ -744,36 +761,48 @@
 
 .ec-result-value {
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #1e293b;
     text-align: right;
 }
 
 .ec-result-value--primary {
     font-size: 1rem;
-    color: #4f46e5;
 }
 
 .ec-result-value--secondary {
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #1e293b;
 }
 
+.ec-summary-row--primary .ec-result-dual .ec-result-value,
 .ec-summary-row--primary .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--highlight .ec-result-dual .ec-result-value,
 .ec-result-row--highlight .ec-result-dual .ec-result-value-secondary {
     font-size: 1rem;
     font-weight: 600;
     color: #4f46e5;
 }
 
+.ec-result-row--cost-total .ec-result-dual .ec-result-value,
+.ec-result-row--cost-total .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--margin .ec-result-dual .ec-result-value,
+.ec-result-row--margin .ec-result-dual .ec-result-value-secondary,
+.ec-detail-row--subtotal .ec-detail-amount .ec-result-value,
+.ec-detail-row--subtotal .ec-detail-amount .ec-result-value-secondary,
+.ec-detail-row--total .ec-detail-amount .ec-result-value,
+.ec-detail-row--total .ec-detail-amount .ec-result-value-secondary {
+    font-weight: 600;
+}
+
 .ec-result-value--cost {
-    color: #dc2626;
+    color: #1e293b;
 }
 
 .ec-result-value--cost-total {
     font-size: 0.9375rem;
-    color: #dc2626;
+    color: #1e293b;
 }
 
 

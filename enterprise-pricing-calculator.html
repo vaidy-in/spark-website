@@ -242,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div class="ec-field-row">
+                    <div id="ec-row-tutor-vanilla" class="ec-field-row">
                         <div class="ec-field-label-wrap">
                             <label class="ec-label">AI Tutor included in Vanilla plan?</label>
                             <span class="tooltip-container" data-tooltip>
@@ -259,7 +259,7 @@
                         </div>
                     </div>
 
-                    <div class="ec-field-row">
+                    <div id="ec-row-tutor-queries" class="ec-field-row">
                         <div class="ec-field-label-wrap">
                             <label for="ec-tutor-queries" class="ec-label">AI Tutor queries / seat / month</label>
                             <span class="tooltip-container" data-tooltip>
@@ -899,6 +899,8 @@
                         </button>
                     </div>
                     <div class="ec-card-body space-y-6">
+                        <div id="ec-results-full-error" class="ec-results-error hidden" role="alert" aria-live="polite"></div>
+                        <div id="ec-results-full-content" class="ec-results-full-content space-y-6">
 
                         <!-- Price summary -->
                         <div class="ec-result-block">
@@ -1059,8 +1061,8 @@
                                     </div>
                                 </div>
                             <div class="space-y-3 ec-result-table-body">
-                                <div class="ec-result-row ec-result-row--highlight">
-                                    <span class="ec-result-label ec-result-label--strong">Spark revenue</span>
+                                <div class="ec-result-row">
+                                    <span class="ec-result-label">Spark revenue</span>
                                     <div class="ec-result-dual">
                                         <span id="ec-margin-out-spark-gross-inr" class="ec-result-value">₹0</span>
                                         <span id="ec-margin-out-spark-gross-usd" class="ec-result-value-secondary">$0</span>
@@ -1115,6 +1117,7 @@
                             </div>
                         </div>
 
+                        </div>
                     </div>
             </section>
 
