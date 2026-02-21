@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="app-version" content="1.0.11">
+    <meta name="app-version" content="1.0.12">
     <title>Spark Enterprise Pricing Calculator</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -85,24 +85,6 @@
                     </button>
                 </div>
                 <div id="ec-deal-body" class="ec-card-body ec-accordion-body space-y-5">
-
-                    <!-- Tier -->
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label class="ec-label">Tier</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About tiers">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Vanilla vs Premium</span>
-                                    <span class="tooltip-content">Vanilla includes core course creation, player, basic quizzes, portal, and roles. Premium adds AI Tutor, evaluation quizzes, live reporting, trainer analytics, segments, and advanced features.<br><br>Example: For a sales training program with AI-powered Q&A for learners, choose Premium.</span>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="ec-tier-toggle" role="group" aria-label="Tier selection">
-                            <button id="ec-tier-vanilla" type="button" class="ec-tier-btn ec-tier-btn--active cursor-pointer" data-tier="vanilla">Vanilla</button>
-                            <button id="ec-tier-premium" type="button" class="ec-tier-btn cursor-pointer" data-tier="premium">Premium</button>
-                        </div>
-                    </div>
 
                     <!-- Seats -->
                     <div class="ec-field-row">
@@ -195,122 +177,150 @@
                 </div>
                 <div id="ec-usage-body" class="ec-card-body ec-accordion-body space-y-5 ec-accordion--collapsed" aria-hidden="true">
 
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-video-hours-sd" class="ec-label">SD video hours / month</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About SD video hours">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">SD video processing hours</span>
-                                    <span class="tooltip-content">How many hours of standard-quality video (720p or lower) the platform processes each month - converting speech to text, adding chapters, generating notes, and extracting slides. New content is typically uploaded month after month.<br><br>Example: 40 hrs = about 40 one-hour training videos (or equivalent) processed each month.</span>
-                                </div>
-                            </span>
+                    <div class="ec-inputs-two-col">
+                        <div class="ec-inputs-two-col-header">
+                            <span></span>
+                            <span class="ec-col-header">Vanilla</span>
+                            <span class="ec-col-header">Premium</span>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-video-hours-sd" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="SD video hours per month">
-                            <span class="ec-unit">hrs / month</span>
-                        </div>
-                    </div>
 
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-video-hours-hd" class="ec-label">HD video hours / month</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD video hours">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">HD video processing hours</span>
-                                    <span class="tooltip-content">How many hours of high-definition video (1080p or higher) are processed per month. HD costs more to process than standard video - the Technical Assumptions section has a multiplier that converts HD hours to an equivalent cost.<br><br>Example: 10 hrs HD at 5x multiplier = roughly the same processing cost as 50 hrs of standard video.</span>
-                                </div>
-                            </span>
+                        <div class="ec-field-row ec-field-row--two-col">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-video-hours-sd-vanilla" class="ec-label">SD video hours / month</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About SD video hours">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">SD video processing hours</span>
+                                        <span class="tooltip-content">How many hours of standard-quality video (720p or lower) the platform processes each month - converting speech to text, adding chapters, generating notes, and extracting slides. New content is typically uploaded month after month.<br><br>Example: 40 hrs = about 40 one-hour training videos (or equivalent) processed each month.</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-video-hours-sd-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="SD video hours per month Vanilla">
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-video-hours-sd-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="SD video hours per month Premium">
+                            </div>
+                            <span class="ec-unit ec-unit--below">hrs / month</span>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-video-hours-hd" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="HD video hours per month">
-                            <span class="ec-unit">hrs / month</span>
-                        </div>
-                    </div>
 
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-streaming-hrs" class="ec-label">Avg streaming per seat / month</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About streaming">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">S3 data transfer (streaming)</span>
-                                    <span class="tooltip-content">How many hours of video each employee watches per month on average. Data is sent when learners stream (watch) videos. In practice, most users watch 20-50% of content and rarely rewatch.<br><br>Example: 2 hrs = each employee watches about 2 hours of training videos per month on average.</span>
-                                </div>
-                            </span>
+                        <div class="ec-field-row ec-field-row--two-col">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-video-hours-hd-vanilla" class="ec-label">HD video hours / month</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD video hours">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">HD video processing hours</span>
+                                        <span class="tooltip-content">How many hours of high-definition video (1080p or higher) are processed per month. HD costs more to process than standard video - the Technical Assumptions section has a multiplier that converts HD hours to an equivalent cost.<br><br>Example: 10 hrs HD at 5x multiplier = roughly the same processing cost as 50 hrs of standard video.</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-video-hours-hd-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="HD video hours per month Vanilla">
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-video-hours-hd-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="HD video hours per month Premium">
+                            </div>
+                            <span class="ec-unit ec-unit--below">hrs / month</span>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-streaming-hrs" type="number" min="0" step="0.5" class="ec-input cursor-text" aria-label="Streaming hours per seat per month">
-                            <span class="ec-unit">hrs / seat / month</span>
-                        </div>
-                    </div>
 
-                    <div id="ec-row-tutor-vanilla" class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label class="ec-label">AI Tutor included in Vanilla plan?</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AI Tutor in Vanilla">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Vanilla tier AI Tutor</span>
-                                    <span class="tooltip-content">When Yes, AI Tutor costs are included for Vanilla tier (e.g. if negotiated as part of the deal). When No, AI Tutor applies only to Premium. Use this flag to model scenarios where Vanilla includes AI Tutor.</span>
-                                </div>
-                            </span>
+                        <div class="ec-field-row ec-field-row--two-col">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-streaming-hrs-vanilla" class="ec-label">Streaming hrs / seat / month</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About streaming">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">S3 data transfer (streaming)</span>
+                                        <span class="tooltip-content">How many hours of video each employee watches per month on average. Data is sent when learners stream (watch) videos. In practice, most users watch 20-50% of content and rarely rewatch.<br><br>Example: 2 hrs = each employee watches about 2 hours of training videos per month on average.</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-streaming-hrs-vanilla" type="number" min="0" step="0.5" class="ec-input cursor-text" aria-label="Streaming hours per seat per month Vanilla">
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-streaming-hrs-premium" type="number" min="0" step="0.5" class="ec-input cursor-text" aria-label="Streaming hours per seat per month Premium">
+                            </div>
+                            <span class="ec-unit ec-unit--below">hrs / seat / month</span>
                         </div>
-                        <div class="ec-tier-toggle" role="group" aria-label="AI Tutor in Vanilla">
-                            <button id="ec-tutor-vanilla-no" type="button" class="ec-tier-btn ec-tier-btn--active cursor-pointer" data-tutor-vanilla="no">No</button>
-                            <button id="ec-tutor-vanilla-yes" type="button" class="ec-tier-btn cursor-pointer" data-tutor-vanilla="yes">Yes</button>
-                        </div>
-                    </div>
 
-                    <div id="ec-row-tutor-queries" class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-tutor-queries" class="ec-label">AI Tutor queries / seat / month</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AI Tutor queries">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">AI Tutor usage</span>
-                                    <span class="tooltip-content">How many questions each learner asks the AI Tutor per month. Applies to Premium always; applies to Vanilla when "AI Tutor included in Vanilla plan?" is Yes. <br><br>Example: 20 = each employee asks the AI about 20 questions per month (e.g., clarifying course content, getting help on topics).</span>
-                                </div>
-                            </span>
+                        <div id="ec-row-tutor-vanilla" class="ec-field-row ec-field-row--two-col ec-field-row--toggle">
+                            <div class="ec-field-label-wrap">
+                                <label class="ec-label">AI Tutor included in Vanilla plan?</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AI Tutor in Vanilla">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">Vanilla tier AI Tutor</span>
+                                        <span class="tooltip-content">When Yes, AI Tutor costs are included for Vanilla tier (e.g. if negotiated as part of the deal). When No, AI Tutor applies only to Premium. Use this flag to model scenarios where Vanilla includes AI Tutor.</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap ec-input-wrap--empty"></div>
+                            <div class="ec-tier-toggle" role="group" aria-label="AI Tutor in Vanilla">
+                                <button id="ec-tutor-vanilla-no" type="button" class="ec-tier-btn ec-tier-btn--active cursor-pointer" data-tutor-vanilla="no">No</button>
+                                <button id="ec-tutor-vanilla-yes" type="button" class="ec-tier-btn cursor-pointer" data-tutor-vanilla="yes">Yes</button>
+                            </div>
+                            <span class="ec-unit ec-unit--below ec-unit--below-empty"></span>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-tutor-queries" type="number" min="0" step="5" class="ec-input cursor-text" aria-label="AI Tutor queries per seat per month">
-                            <span class="ec-unit">queries / seat / month</span>
-                        </div>
-                    </div>
 
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-num-videos" class="ec-label">Number of videos per month</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About number of videos per month">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Monthly video upload rate</span>
-                                    <span class="tooltip-content">How many new videos are added to the platform each month. Customers typically keep uploading content month after month. <br><br> Or rather Spark automatically detects new recordings in Team/Zoom cloud and nudges the L&D admin to convert them into courses.<br><br>Example: 40 = about 40 new training videos are added to the platform each month.</span>
-                                </div>
-                            </span>
+                        <div id="ec-row-tutor-queries" class="ec-field-row ec-field-row--two-col">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-tutor-queries-vanilla" class="ec-label">AI Tutor queries / seat / month</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AI Tutor queries">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">AI Tutor usage</span>
+                                        <span class="tooltip-content">How many questions each learner asks the AI Tutor per month. Applies to Premium always; applies to Vanilla when "AI Tutor included in Vanilla plan?" is Yes. <br><br>Example: 20 = each employee asks the AI about 20 questions per month (e.g., clarifying course content, getting help on topics).</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-tutor-queries-vanilla" type="number" min="0" step="5" class="ec-input cursor-text" aria-label="AI Tutor queries per seat per month Vanilla">
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-tutor-queries-premium" type="number" min="0" step="5" class="ec-input cursor-text" aria-label="AI Tutor queries per seat per month Premium">
+                            </div>
+                            <span class="ec-unit ec-unit--below">queries / seat / month</span>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-num-videos" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month">
-                            <span class="ec-unit">videos / month</span>
-                        </div>
-                    </div>
 
-                    <div class="ec-field-row">
-                        <div class="ec-field-label-wrap">
-                            <label for="ec-quiz-queries" class="ec-label">Quiz questions per video / month</label>
-                            <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
-                                <div class="tooltip">
-                                    <span class="tooltip-title">Quiz generation (Gemini)</span>
-                                    <span class="tooltip-content">How many quiz questions are created per video per month. Trainers and admins create quizzes for each video; learners do not generate their own. Total per month = this value × number of videos per month. Applies to both tiers.<br><br>Example: 5 questions × 40 videos = 200 quiz questions generated per month total.</span>
-                                </div>
-                            </span>
+                        <div class="ec-field-row ec-field-row--two-col">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-num-videos-vanilla" class="ec-label">Videos / month</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About number of videos per month">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">Monthly video upload rate</span>
+                                        <span class="tooltip-content">How many new videos are added to the platform each month. Customers typically keep uploading content month after month. <br><br> Or rather Spark automatically detects new recordings in Team/Zoom cloud and nudges the L&D admin to convert them into courses.<br><br>Example: 40 = about 40 new training videos are added to the platform each month.</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-num-videos-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Vanilla">
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-num-videos-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Premium">
+                            </div>
+                            <span class="ec-unit ec-unit--below">videos / month</span>
                         </div>
-                        <div class="ec-input-with-unit">
-                            <input id="ec-quiz-queries" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video per month">
-                            <span class="ec-unit">questions / video / month</span>
+
+                        <div class="ec-field-row ec-field-row--two-col">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-quiz-queries-vanilla" class="ec-label">Quiz questions / video / month</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">Quiz generation (Gemini)</span>
+                                        <span class="tooltip-content">How many quiz questions are created per video per month. Trainers and admins create quizzes for each video; learners do not generate their own. Total per month = this value × number of videos per month. Applies to both tiers.<br><br>Example: 5 questions × 40 videos = 200 quiz questions generated per month total.</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-quiz-queries-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video per month Vanilla">
+                            </div>
+                            <div class="ec-input-wrap">
+                                <input id="ec-quiz-queries-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video per month Premium">
+                            </div>
+                            <span class="ec-unit ec-unit--below">questions / video / month</span>
                         </div>
                     </div>
 
@@ -335,22 +345,32 @@
                     <!-- Base price per tier -->
                     <div>
                         <p class="ec-subsection-title mb-3">Base price per seat / month (₹)</p>
-                        <div class="space-y-3">
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-base-price-vanilla" class="ec-label ec-label--sm">Vanilla</label>
+                        <div class="ec-inputs-two-col ec-inputs-two-col--compact ec-inputs-two-col--base-price">
+                            <div class="ec-inputs-two-col-header">
+                                <span></span>
+                                <span class="ec-col-header">Vanilla</span>
+                                <span class="ec-col-header">Premium</span>
+                            </div>
+                            <div class="ec-field-row ec-field-row--two-col ec-field-row--compact">
+                                <div class="ec-field-label-wrap">
+                                    <label for="ec-base-price-vanilla" class="ec-label ec-label--sm">Base price</label>
+                                    <span class="tooltip-container" data-tooltip>
+                                        <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About base price">?</button>
+                                        <div class="tooltip">
+                                            <span class="tooltip-title">Base price per seat / month</span>
+                                            <span class="tooltip-content">The list price before any volume, term, or early customer discounts. Vanilla and Premium can have different base prices based on tier features and usage. Use Reset to auto-compute from min cost markup.</span>
+                                        </div>
+                                    </span>
+                                </div>
                                 <div class="ec-input-with-unit">
                                     <span class="ec-unit ec-unit--prefix">₹</span>
                                     <input id="ec-base-price-vanilla" type="number" min="0" step="50" class="ec-input ec-input--sm ec-input--prefixed cursor-text" aria-label="Base price Vanilla per seat per month">
-                                    <span class="ec-unit">/ seat / month</span>
                                 </div>
-                            </div>
-                            <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-base-price-premium" class="ec-label ec-label--sm">Premium</label>
                                 <div class="ec-input-with-unit">
                                     <span class="ec-unit ec-unit--prefix">₹</span>
                                     <input id="ec-base-price-premium" type="number" min="0" step="50" class="ec-input ec-input--sm ec-input--prefixed cursor-text" aria-label="Base price Premium per seat per month">
-                                    <span class="ec-unit">/ seat / month</span>
                                 </div>
+                                <span class="ec-unit ec-unit--below">/ seat / mo</span>
                             </div>
                         </div>
                         <p class="ec-field-hint mt-2">The price before discounts.</p>
@@ -358,7 +378,16 @@
 
                     <!-- Volume discount bands -->
                     <div>
-                        <p class="ec-subsection-title mb-3">Volume discount bands (seat count)</p>
+                        <div class="ec-subsection-header">
+                            <p class="ec-subsection-title">Volume discount bands (seat count)</p>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About volume discount bands">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Volume discount by seat count</span>
+                                    <span class="tooltip-content">Discount applied based on total seats. The calculator picks the band that matches the deal's seat count. Higher seat counts get larger discounts. All bands use the same % for Vanilla and Premium.</span>
+                                </div>
+                            </span>
+                        </div>
                         <div class="space-y-3">
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-vol-disc-1" class="ec-label ec-label--sm">1 - 249 seats</label>
@@ -414,7 +443,16 @@
 
                     <!-- Term discounts -->
                     <div>
-                        <p class="ec-subsection-title mb-3">Term discounts</p>
+                        <div class="ec-subsection-header">
+                            <p class="ec-subsection-title">Term discounts</p>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About term discounts">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Discount by contract length</span>
+                                    <span class="tooltip-content">Discount applied based on the contract term selected in Deal Parameters. Longer commitments get larger discounts. 1/3/6/12 mo use these rates; multi-year (24/36/60 mo) uses the 12-month rate.</span>
+                                </div>
+                            </span>
+                        </div>
                         <div class="space-y-3">
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-term-disc-1" class="ec-label ec-label--sm">1 month</label>
@@ -825,65 +863,90 @@
         ═══════════════════════════════════════════════════ -->
         <div class="ec-results-col">
             <!-- Sticky wrapper: summary + full results stick together below header when scrolling -->
-            <div class="ec-results-sticky-wrapper">
+            <div class="ec-results-sticky-wrapper ec-results-usd-only" id="ec-results-sticky-wrapper">
                 <section class="ec-card ec-card--results ec-card--summary">
                     <div class="ec-card-header ec-card-header--summary">
                         <span class="material-symbols-rounded ec-card-icon ec-card-icon--results">calculate</span>
                         <h2 class="ec-card-title">Results</h2>
-                        <span id="ec-results-tier-badge" class="ec-tier-badge ec-tier-badge--vanilla">Vanilla</span>
+                        <div class="ec-results-currency-toggle" role="group" aria-label="Currency display">
+                            <button id="ec-btn-usd-only" type="button" class="ec-currency-toggle-btn ec-currency-toggle-btn--active cursor-pointer" aria-pressed="true" data-currency="usd-only">USD</button>
+                            <button id="ec-btn-with-inr" type="button" class="ec-currency-toggle-btn cursor-pointer" aria-pressed="false" data-currency="with-inr">USD + INR</button>
+                        </div>
                     </div>
                     <div class="ec-card-body ec-card-body--summary space-y-3">
                         <div id="ec-results-error" class="ec-results-error hidden" role="alert" aria-live="polite"></div>
                         <div id="ec-results-content" class="ec-results-content">
-                        <div class="ec-summary-row ec-summary-row--header">
-                            <span class="ec-result-label"></span>
-                            <div class="ec-result-dual">
-                                <span class="ec-result-currency-label">INR</span>
-                                <span class="ec-result-currency-label">USD</span>
-                            </div>
-                        </div>
-                        <div class="ec-summary-row ec-summary-row--primary">
-                            <div class="ec-result-label text-left">
-                                Final price (after discounts) <br> / seat / month
-                            </div>
-                            <div class="ec-result-dual">
-                                <span id="ec-summary-net-inr" class="ec-result-value ec-result-value--primary">₹0</span>
-                                <span id="ec-summary-net-usd" class="ec-result-value-secondary">$0</span>
-                            </div>
-                        </div>
-                        <div class="ec-summary-row ec-summary-row--primary">
-                            <span class="ec-result-label">Total Contract Value</span>
-                            <div class="ec-result-dual">
-                                <span id="ec-summary-tcv-inr" class="ec-result-value ec-result-value--primary">₹0</span>
-                                <span id="ec-summary-tcv-usd" class="ec-result-value-secondary">$0</span>
-                            </div>
-                        </div>
-                        <div class="ec-summary-row">
-                            <span class="ec-result-label">Spark revenue</span>
-                            <div class="ec-result-dual">
-                                <span id="ec-summary-spark-rev-inr" class="ec-result-value">₹0</span>
-                                <span id="ec-summary-spark-rev-usd" class="ec-result-value-secondary">$0</span>
-                            </div>
-                        </div>
-                        <div class="ec-summary-row">
-                            <span class="ec-result-label">Athiya revenue</span>
-                            <div class="ec-result-dual">
-                                <span id="ec-summary-athiya-rev-inr" class="ec-result-value">₹0</span>
-                                <span id="ec-summary-athiya-rev-usd" class="ec-result-value-secondary">$0</span>
-                            </div>
-                        </div>
+                        <table class="ec-results-grid" role="presentation">
+                            <colgroup>
+                                <col class="ec-col-label">
+                                <col class="ec-result-inr">
+                                <col class="ec-col-usd">
+                                <col class="ec-result-inr">
+                                <col class="ec-col-usd">
+                            </colgroup>
+                            <thead>
+                                <tr class="ec-results-grid-row ec-results-grid-row--header">
+                                    <th class="ec-result-label"></th>
+                                    <th class="ec-result-currency-label ec-result-inr">Vanilla INR</th>
+                                    <th class="ec-result-currency-label">Vanilla USD</th>
+                                    <th class="ec-result-currency-label ec-result-inr">Premium INR</th>
+                                    <th class="ec-result-currency-label">Premium USD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="ec-results-grid-row ec-results-grid-row--primary">
+                                    <td class="ec-result-label">Final price (after discounts) / seat / month</td>
+                                    <td id="ec-summary-net-v-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</td>
+                                    <td id="ec-summary-net-v-usd" class="ec-result-value ec-result-value--primary">$0</td>
+                                    <td id="ec-summary-net-p-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</td>
+                                    <td id="ec-summary-net-p-usd" class="ec-result-value ec-result-value--primary">$0</td>
+                                </tr>
+                                <tr class="ec-results-grid-row ec-results-grid-row--primary">
+                                    <td class="ec-result-label">Total Contract Value</td>
+                                    <td id="ec-summary-tcv-v-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</td>
+                                    <td id="ec-summary-tcv-v-usd" class="ec-result-value ec-result-value--primary">$0</td>
+                                    <td id="ec-summary-tcv-p-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</td>
+                                    <td id="ec-summary-tcv-p-usd" class="ec-result-value ec-result-value--primary">$0</td>
+                                </tr>
+                                <tr class="ec-results-grid-row">
+                                    <td class="ec-result-label">Spark revenue</td>
+                                    <td id="ec-summary-spark-rev-v-inr" class="ec-result-value ec-result-inr">₹0</td>
+                                    <td id="ec-summary-spark-rev-v-usd" class="ec-result-value">$0</td>
+                                    <td id="ec-summary-spark-rev-p-inr" class="ec-result-value ec-result-inr">₹0</td>
+                                    <td id="ec-summary-spark-rev-p-usd" class="ec-result-value">$0</td>
+                                </tr>
+                                <tr class="ec-results-grid-row">
+                                    <td class="ec-result-label">Athiya revenue</td>
+                                    <td id="ec-summary-athiya-rev-v-inr" class="ec-result-value ec-result-inr">₹0</td>
+                                    <td id="ec-summary-athiya-rev-v-usd" class="ec-result-value">$0</td>
+                                    <td id="ec-summary-athiya-rev-p-inr" class="ec-result-value ec-result-inr">₹0</td>
+                                    <td id="ec-summary-athiya-rev-p-usd" class="ec-result-value">$0</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <div id="ec-summary-spark-internal" class="ec-spark-internal-only hidden">
-                            <div class="ec-summary-row">
-                                <span class="ec-result-label">Cost markup %</span>
-                                <span id="ec-summary-margin-pct" class="ec-result-value ec-result-value--margin-pct">0%</span>
-                            </div>
-                            <div class="ec-summary-row">
-                                <span class="ec-result-label">Spark net</span>
-                                <div class="ec-result-dual">
-                                    <span id="ec-summary-spark-net-inr" class="ec-result-value ec-result-value--margin">₹0</span>
-                                    <span id="ec-summary-spark-net-usd" class="ec-result-value-secondary">$0</span>
-                                </div>
-                            </div>
+                            <table class="ec-results-grid" role="presentation">
+                                <colgroup>
+                                    <col class="ec-col-label">
+                                    <col class="ec-result-inr">
+                                    <col class="ec-col-usd">
+                                    <col class="ec-result-inr">
+                                    <col class="ec-col-usd">
+                                </colgroup>
+                                <tbody>
+                                    <tr class="ec-results-grid-row">
+                                        <td class="ec-result-label">Cost markup %</td>
+                                        <td id="ec-summary-margin-pct" class="ec-result-value ec-result-value--margin-pct" colspan="4">0%</td>
+                                    </tr>
+                                    <tr class="ec-results-grid-row">
+                                        <td class="ec-result-label">Spark net</td>
+                                        <td id="ec-summary-spark-net-v-inr" class="ec-result-value ec-result-value--margin ec-result-inr">₹0</td>
+                                        <td id="ec-summary-spark-net-v-usd" class="ec-result-value ec-result-value--margin">$0</td>
+                                        <td id="ec-summary-spark-net-p-inr" class="ec-result-value ec-result-value--margin ec-result-inr">₹0</td>
+                                        <td id="ec-summary-spark-net-p-usd" class="ec-result-value ec-result-value--margin">$0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="ec-btn-expand-results" type="button" class="ec-btn-expand cursor-pointer" aria-expanded="false" aria-controls="ec-results-full">
                             <span class="ec-btn-expand-text">Expand</span>
@@ -912,24 +975,30 @@
                             <div class="ec-result-table">
                                 <div class="ec-result-row ec-result-row--header">
                                     <span class="ec-result-label"></span>
-                                    <div class="ec-result-dual">
-                                        <span class="ec-result-currency-label">INR</span>
-                                        <span class="ec-result-currency-label">USD</span>
+                                    <div class="ec-result-quad">
+                                        <span class="ec-result-currency-label ec-result-inr">Vanilla INR</span>
+                                        <span class="ec-result-currency-label">Vanilla USD</span>
+                                        <span class="ec-result-currency-label ec-result-inr">Premium INR</span>
+                                        <span class="ec-result-currency-label">Premium USD</span>
                                     </div>
                                 </div>
                             <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">List price / seat / month</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-out-list-seat-mo-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-out-list-seat-mo-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-out-list-seat-mo-v-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-list-seat-mo-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-out-list-seat-mo-p-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-list-seat-mo-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">List price / seat / year</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-out-list-seat-yr-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-out-list-seat-yr-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-out-list-seat-yr-v-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-list-seat-yr-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-out-list-seat-yr-p-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-list-seat-yr-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--divider">
@@ -939,9 +1008,11 @@
                                 <div id="ec-discount-breakdown" class="ec-discount-breakdown hidden"></div>
                                 <div class="ec-result-row ec-result-row--highlight">
                                     <span class="ec-result-label ec-result-label--strong">Net price / seat / month</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-out-net-seat-mo-inr" class="ec-result-value ec-result-value--primary">₹0</span>
-                                        <span id="ec-out-net-seat-mo-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-out-net-seat-mo-v-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</span>
+                                        <span id="ec-out-net-seat-mo-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-out-net-seat-mo-p-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</span>
+                                        <span id="ec-out-net-seat-mo-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                             </div>
@@ -954,31 +1025,39 @@
                             <div class="ec-result-table">
                                 <div class="ec-result-row ec-result-row--header">
                                     <span class="ec-result-label"></span>
-                                    <div class="ec-result-dual">
-                                        <span class="ec-result-currency-label">INR</span>
-                                        <span class="ec-result-currency-label">USD</span>
+                                    <div class="ec-result-quad">
+                                        <span class="ec-result-currency-label ec-result-inr">Vanilla INR</span>
+                                        <span class="ec-result-currency-label">Vanilla USD</span>
+                                        <span class="ec-result-currency-label ec-result-inr">Premium INR</span>
+                                        <span class="ec-result-currency-label">Premium USD</span>
                                     </div>
                                 </div>
                             <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">ACV (annual contract value)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-out-acv-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-out-acv-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-out-acv-v-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-acv-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-out-acv-p-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-acv-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Setup fee (one-time, Spark only, Y1)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-out-setup-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-out-setup-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-out-setup-v-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-setup-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-out-setup-p-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-out-setup-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--highlight">
                                     <span class="ec-result-label ec-result-label--strong">TCV (<span id="ec-out-tcv-term">24</span> months + setup)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-out-tcv-inr" class="ec-result-value ec-result-value--primary">₹0</span>
-                                        <span id="ec-out-tcv-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-out-tcv-v-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</span>
+                                        <span id="ec-out-tcv-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-out-tcv-p-inr" class="ec-result-value ec-result-value--primary ec-result-inr">₹0</span>
+                                        <span id="ec-out-tcv-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                             </div>
@@ -1059,24 +1138,30 @@
                             <div class="ec-result-table">
                                 <div class="ec-result-row ec-result-row--header">
                                     <span class="ec-result-label"></span>
-                                    <div class="ec-result-dual">
-                                        <span class="ec-result-currency-label">INR</span>
-                                        <span class="ec-result-currency-label">USD</span>
+                                    <div class="ec-result-quad">
+                                        <span class="ec-result-currency-label ec-result-inr">Vanilla INR</span>
+                                        <span class="ec-result-currency-label">Vanilla USD</span>
+                                        <span class="ec-result-currency-label ec-result-inr">Premium INR</span>
+                                        <span class="ec-result-currency-label">Premium USD</span>
                                     </div>
                                 </div>
                             <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Spark revenue</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-margin-out-spark-gross-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-margin-out-spark-gross-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-margin-out-spark-gross-v-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-spark-gross-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-margin-out-spark-gross-p-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-spark-gross-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Athiya revenue</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-margin-out-athiya-inr" class="ec-result-value">₹0</span>
-                                        <span id="ec-margin-out-athiya-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-margin-out-athiya-v-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-athiya-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-margin-out-athiya-p-inr" class="ec-result-value ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-athiya-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <p class="ec-result-block-subtitle">Year-by-year split</p>
@@ -1093,29 +1178,40 @@
                             <div class="ec-result-table">
                                 <div class="ec-result-row ec-result-row--header">
                                     <span class="ec-result-label"></span>
-                                    <div class="ec-result-dual">
-                                        <span class="ec-result-currency-label">INR</span>
-                                        <span class="ec-result-currency-label">USD</span>
+                                    <div class="ec-result-quad">
+                                        <span class="ec-result-currency-label ec-result-inr">Vanilla INR</span>
+                                        <span class="ec-result-currency-label">Vanilla USD</span>
+                                        <span class="ec-result-currency-label ec-result-inr">Premium INR</span>
+                                        <span class="ec-result-currency-label">Premium USD</span>
                                     </div>
                                 </div>
                             <div class="space-y-3 ec-result-table-body">
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Total cost (contract term)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-margin-out-cost-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-margin-out-cost-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-margin-out-cost-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-cost-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-margin-out-cost-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-cost-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--highlight ec-result-row--margin">
                                     <span class="ec-result-label ec-result-label--strong">Spark net margin</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-margin-out-net-inr" class="ec-result-value ec-result-value--margin">₹0</span>
-                                        <span id="ec-margin-out-net-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-margin-out-net-v-inr" class="ec-result-value ec-result-value--margin ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-net-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-margin-out-net-p-inr" class="ec-result-value ec-result-value--margin ec-result-inr">₹0</span>
+                                        <span id="ec-margin-out-net-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row">
                                     <span class="ec-result-label">Cost markup %</span>
-                                    <span id="ec-margin-out-pct" class="ec-result-value ec-result-value--margin-pct">0%</span>
+                                    <div class="ec-result-quad">
+                                        <span class="ec-result-inr"></span>
+                                        <span id="ec-margin-out-pct-v" class="ec-result-value ec-result-value--margin-pct">0%</span>
+                                        <span class="ec-result-inr"></span>
+                                        <span id="ec-margin-out-pct-p" class="ec-result-value ec-result-value--margin-pct">0%</span>
+                                    </div>
                                 </div>
                             </div>
                             </div>

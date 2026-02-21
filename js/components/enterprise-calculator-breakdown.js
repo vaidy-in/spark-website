@@ -35,7 +35,32 @@
         costGeminiOut: 'Gemini API output',
         costOpenAIEmbedding: 'OpenAI embedding',
         costMultiplier: 'Cost safety multiplier',
+        minMarginPct: 'Min. cost markup for Spark',
+        setupFeeINR: 'Setup fee (one-time)',
+        revShare: 'Athiya revenue share',
     };
+
+    function getVolumeDiscount(inp) {
+        const s = inp.seats;
+        if (s >= 50000) return inp.volDisc7;
+        if (s >= 10000) return inp.volDisc6;
+        if (s >= 5000) return inp.volDisc5;
+        if (s >= 1000) return inp.volDisc4;
+        if (s >= 500) return inp.volDisc3;
+        if (s >= 250) return inp.volDisc2;
+        return inp.volDisc1;
+    }
+
+    function getTermDiscount(inp) {
+        if (inp.term >= 12) return inp.termDisc12;
+        if (inp.term >= 6) return inp.termDisc6;
+        if (inp.term >= 3) return inp.termDisc3;
+        return inp.termDisc1;
+    }
+
+    function getCombinedDiscountFactor(volDisc, termDisc, earlyDisc) {
+        return Math.max(0, 1 - (volDisc + termDisc + earlyDisc));
+    }
 
     function fmtNum(v) {
         if (Number.isInteger(v)) return v.toLocaleString('en-IN');
@@ -45,16 +70,16 @@
 
     function fmtINR(v) {
         const n = Math.round(v);
-        if (Math.abs(n) >= 10000000) return '₹' + (n / 10000000).toFixed(2) + ' Cr';
-        if (Math.abs(n) >= 100000) return '₹' + (n / 100000).toFixed(2) + ' L';
+        if (Math.abs(n) >= 10000000) return '₹' + (n / 10000000).toFixed(2) + '\u00A0Cr';
+        if (Math.abs(n) >= 100000) return '₹' + (n / 100000).toFixed(2) + '\u00A0L';
         return '₹' + n.toLocaleString('en-IN');
     }
 
     function fmtUSD(v, fxRate) {
         if (!fxRate || fxRate <= 0) return '$0';
         const n = v / fxRate;
-        if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
-        if (Math.abs(n) >= 1000) return '$' + (n / 1000).toFixed(2) + 'K';
+        if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + '\u00A0M';
+        if (Math.abs(n) >= 1000) return '$' + (n / 1000).toFixed(2) + '\u00A0K';
         return '$' + n.toFixed(2);
     }
 
@@ -62,7 +87,9 @@
         return '<div class="ec-detail-step ec-detail-' + cls + '">' + text + '</div>';
     }
 
-    function renderDetailedCostBreakdown(inp, costs) {
+    function renderDetailedCostBreakdown(inpVanilla, costsVanilla, inpPremium, costsPremium) {
+        const inp = inpVanilla;
+        const costs = costsVanilla;
         const d = costs.detail;
         if (!d) return;
 
@@ -70,13 +97,30 @@
         if (!container) return;
 
         const fx = inp.fxRate || 83;
+
+        /* ToC - Stripe-style nav for detailed breakdown */
+        const tocItems = [
+            { id: 'ec-breakdown-video', label: 'Video-based costs' },
+            { id: 'ec-breakdown-student', label: 'Student-based costs' },
+            { id: 'ec-breakdown-total', label: 'Total & multiplier' },
+            { id: 'ec-breakdown-cost-seat', label: 'Cost per seat per month' },
+            { id: 'ec-breakdown-min-base', label: 'Minimum base price' },
+        ];
         const videoSubtotal = d.transcription.amount + d.storage.totalAmount + d.batch.totalAmount +
             d.pipeline.amount + d.quiz.amount + d.embeddings.amount;
         const studentSubtotal = d.tutor.amount + d.streaming.amount;
 
         let html = '';
 
-        html += '<div class="ec-detail-block">';
+        html += '<nav id="ec-breakdown-toc" class="ec-breakdown-toc" aria-label="Breakdown contents">';
+        html += '<p class="ec-breakdown-toc-title">On this page</p>';
+        html += '<ol class="ec-breakdown-toc-list">';
+        tocItems.forEach(function (item) {
+            html += '<li><a class="ec-breakdown-toc-link" href="#' + item.id + '">' + item.label + '</a></li>';
+        });
+        html += '</ol></nav>';
+
+        html += '<div id="ec-breakdown-video" class="ec-detail-block">';
         html += '<p class="ec-detail-block-title">Video-based costs</p>';
 
         html += '<div class="ec-detail-row">';
@@ -174,10 +218,11 @@
         html += '<div class="ec-detail-label ec-result-label--strong">Video-based subtotal</div>';
         html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(videoSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSD(videoSubtotal, fx) + '</span></div>';
         html += '</div>';
+        html += '<a href="#ec-breakdown-toc" class="ec-breakdown-back-link">Back to top</a>';
 
         html += '</div>';
 
-        html += '<div class="ec-detail-block">';
+        html += '<div id="ec-breakdown-student" class="ec-detail-block">';
         html += '<p class="ec-detail-block-title">Student-based costs</p>';
 
         html += '<div class="ec-detail-row">';
@@ -207,10 +252,11 @@
         html += '<div class="ec-detail-label ec-result-label--strong">Student-based subtotal</div>';
         html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(studentSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSD(studentSubtotal, fx) + '</span></div>';
         html += '</div>';
+        html += '<a href="#ec-breakdown-toc" class="ec-breakdown-back-link">Back to top</a>';
 
         html += '</div>';
 
-        html += '<div class="ec-detail-block">';
+        html += '<div id="ec-breakdown-total" class="ec-detail-block">';
         html += '<div class="ec-detail-row ec-detail-row--total">';
         html += '<div class="ec-detail-label ec-result-label--strong">Total (before multiplier)</div>';
         html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.totalPreMultiplier) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.totalPreMultiplier, fx) + '</span></div>';
@@ -219,6 +265,87 @@
         html += '<div class="ec-detail-label">× ' + INPUT_LABELS.costMultiplier + ' (' + fmtNum(d.costMultiplier) + ')</div>';
         html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(costs.total) + '</span><span class="ec-result-value-secondary">' + fmtUSD(costs.total, fx) + '</span></div>';
         html += '</div>';
+        html += '<a href="#ec-breakdown-toc" class="ec-breakdown-back-link">Back to top</a>';
+        html += '</div>';
+
+        const seatMonths = inp.seats * d.termMonths;
+        const costPerSeatPerMonthVanilla = seatMonths > 0 ? costsVanilla.total / seatMonths : 0;
+        const costPerSeatPerMonthPremium = seatMonths > 0 ? costsPremium.total / seatMonths : 0;
+
+        html += '<div id="ec-breakdown-cost-seat" class="ec-detail-block">';
+        html += '<p class="ec-detail-block-title">Cost per seat per month</p>';
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Vanilla</div>';
+        html += '<div class="ec-detail-workings">';
+        html += step('workings', 'Inputs: ' + INPUT_LABELS.seats + ': ' + fmtNum(inp.seats) + ', ' + INPUT_LABELS.term + ': ' + d.termMonths + ' mo. Vanilla total cost (after ' + INPUT_LABELS.costMultiplier + '): ' + fmtINR(costsVanilla.total) + '.');
+        html += step('workings', 'Total seat-months = seats × term = ' + fmtNum(inp.seats) + ' × ' + d.termMonths + ' = ' + fmtNum(seatMonths) + ' seat-months.');
+        html += step('formula', 'Vanilla cost per seat per month = total cost ÷ seat-months = ' + fmtINR(costsVanilla.total) + ' ÷ ' + fmtNum(seatMonths) + ' = ' + fmtINR(costPerSeatPerMonthVanilla) + '.');
+        html += '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(costPerSeatPerMonthVanilla) + '</span><span class="ec-result-value-secondary">' + fmtUSD(costPerSeatPerMonthVanilla, fx) + '</span></div>';
+        html += '</div>';
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Premium</div>';
+        html += '<div class="ec-detail-workings">';
+        html += step('workings', 'Inputs: ' + INPUT_LABELS.seats + ': ' + fmtNum(inp.seats) + ', ' + INPUT_LABELS.term + ': ' + d.termMonths + ' mo. Premium total cost (after ' + INPUT_LABELS.costMultiplier + '): ' + fmtINR(costsPremium.total) + '.');
+        html += step('workings', 'Total seat-months = seats × term = ' + fmtNum(inp.seats) + ' × ' + d.termMonths + ' = ' + fmtNum(seatMonths) + ' seat-months.');
+        html += step('formula', 'Premium cost per seat per month = total cost ÷ seat-months = ' + fmtINR(costsPremium.total) + ' ÷ ' + fmtNum(seatMonths) + ' = ' + fmtINR(costPerSeatPerMonthPremium) + '.');
+        html += '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(costPerSeatPerMonthPremium) + '</span><span class="ec-result-value-secondary">' + fmtUSD(costPerSeatPerMonthPremium, fx) + '</span></div>';
+        html += '</div>';
+        html += '<a href="#ec-breakdown-toc" class="ec-breakdown-back-link">Back to top</a>';
+        html += '</div>';
+
+        const volDisc = getVolumeDiscount(inpVanilla);
+        const termDisc = getTermDiscount(inpVanilla);
+        const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inpVanilla.earlyDisc);
+        let effectiveAthiyaRate = 0;
+        let remainingMonths = inpVanilla.term;
+        let currentYear = 1;
+        while (remainingMonths > 0 && currentYear <= 5) {
+            const monthsInThisYear = Math.min(12, remainingMonths);
+            const shareRate = inpVanilla.revShare[currentYear] || 0;
+            effectiveAthiyaRate += shareRate * (monthsInThisYear / inpVanilla.term);
+            remainingMonths -= monthsInThisYear;
+            currentYear++;
+        }
+        const athiyaDenom = 1 - effectiveAthiyaRate;
+        const minRevenueVanilla = athiyaDenom > 0.001
+            ? Math.max(0, costsVanilla.total * (1 + inpVanilla.minMarginPct) - inpVanilla.setupFeeINR) / athiyaDenom
+            : 0;
+        const minRevenuePremium = athiyaDenom > 0.001
+            ? Math.max(0, costsPremium.total * (1 + inpPremium.minMarginPct) - inpPremium.setupFeeINR) / athiyaDenom
+            : 0;
+        const seatMonthsForBase = inpVanilla.seats * d.termMonths;
+        const denomVanilla = seatMonthsForBase * combinedDiscountFactor;
+        const minBasePriceVanilla = denomVanilla > 0 ? minRevenueVanilla / denomVanilla : 0;
+        const denomPremium = inpPremium.seats * d.termMonths * combinedDiscountFactor;
+        const minBasePricePremium = denomPremium > 0 ? minRevenuePremium / denomPremium : 0;
+
+        html += '<div id="ec-breakdown-min-base" class="ec-detail-block">';
+        html += '<p class="ec-detail-block-title">Minimum base price per seat per month</p>';
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Vanilla</div>';
+        html += '<div class="ec-detail-workings">';
+        html += step('workings', 'Target: Spark net ≥ costs × ' + INPUT_LABELS.minMarginPct + ' (' + fmtNum(inpVanilla.minMarginPct * 100) + '%). Revenue share to Athiya: ' + (effectiveAthiyaRate * 100).toFixed(1) + '%.');
+        html += step('workings', 'Inputs: total cost (after ' + INPUT_LABELS.costMultiplier + '): ' + fmtINR(costsVanilla.total) + ', ' + INPUT_LABELS.setupFeeINR + ': ' + fmtINR(inpVanilla.setupFeeINR) + ', ' + INPUT_LABELS.seats + ': ' + fmtNum(inpVanilla.seats) + ', ' + INPUT_LABELS.term + ': ' + d.termMonths + ' mo.');
+        html += step('workings', 'Volume discount: ' + (volDisc * 100).toFixed(1) + '%, term discount: ' + (termDisc * 100).toFixed(1) + '%, early discount: ' + (inpVanilla.earlyDisc * 100).toFixed(1) + '%. Combined discount factor = 1 - (vol + term + early) = ' + fmtNum(combinedDiscountFactor) + '.');
+        html += step('formula', 'Min revenue = (costs × (1 + markup) - setupFee) ÷ (1 - Athiya rate) = (' + fmtINR(costsVanilla.total) + ' × ' + fmtNum(1 + inpVanilla.minMarginPct) + ' - ' + fmtINR(inpVanilla.setupFeeINR) + ') ÷ ' + fmtNum(athiyaDenom) + ' = ' + fmtINR(minRevenueVanilla) + '.');
+        html += step('formula', 'Min base price = min revenue ÷ (seats × term × discount factor) = ' + fmtINR(minRevenueVanilla) + ' ÷ (' + fmtNum(inpVanilla.seats) + ' × ' + d.termMonths + ' × ' + fmtNum(combinedDiscountFactor) + ') = ' + fmtINR(minBasePriceVanilla) + '.');
+        html += '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(minBasePriceVanilla) + '</span><span class="ec-result-value-secondary">' + fmtUSD(minBasePriceVanilla, fx) + '</span></div>';
+        html += '</div>';
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Premium</div>';
+        html += '<div class="ec-detail-workings">';
+        html += step('workings', 'Target: Spark net ≥ costs × ' + INPUT_LABELS.minMarginPct + ' (' + fmtNum(inpPremium.minMarginPct * 100) + '%). Revenue share to Athiya: ' + (effectiveAthiyaRate * 100).toFixed(1) + '%.');
+        html += step('workings', 'Inputs: total cost (after ' + INPUT_LABELS.costMultiplier + '): ' + fmtINR(costsPremium.total) + ', ' + INPUT_LABELS.setupFeeINR + ': ' + fmtINR(inpPremium.setupFeeINR) + ', ' + INPUT_LABELS.seats + ': ' + fmtNum(inpPremium.seats) + ', ' + INPUT_LABELS.term + ': ' + d.termMonths + ' mo.');
+        html += step('workings', 'Volume discount: ' + (volDisc * 100).toFixed(1) + '%, term discount: ' + (termDisc * 100).toFixed(1) + '%, early discount: ' + (inpPremium.earlyDisc * 100).toFixed(1) + '%. Combined discount factor = ' + fmtNum(combinedDiscountFactor) + '.');
+        html += step('formula', 'Min revenue = (costs × (1 + markup) - setupFee) ÷ (1 - Athiya rate) = (' + fmtINR(costsPremium.total) + ' × ' + fmtNum(1 + inpPremium.minMarginPct) + ' - ' + fmtINR(inpPremium.setupFeeINR) + ') ÷ ' + fmtNum(athiyaDenom) + ' = ' + fmtINR(minRevenuePremium) + '.');
+        html += step('formula', 'Min base price = min revenue ÷ (seats × term × discount factor) = ' + fmtINR(minRevenuePremium) + ' ÷ (' + fmtNum(inpPremium.seats) + ' × ' + d.termMonths + ' × ' + fmtNum(combinedDiscountFactor) + ') = ' + fmtINR(minBasePricePremium) + '.');
+        html += '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(minBasePricePremium) + '</span><span class="ec-result-value-secondary">' + fmtUSD(minBasePricePremium, fx) + '</span></div>';
+        html += '</div>';
+        html += '<a href="#ec-breakdown-toc" class="ec-breakdown-back-link">Back to top</a>';
         html += '</div>';
 
         container.innerHTML = html;

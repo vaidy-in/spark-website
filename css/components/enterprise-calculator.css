@@ -7,12 +7,12 @@
 /* ── Layout ── */
 .ec-layout {
     display: grid;
-    grid-template-columns: 1fr 420px;
+    grid-template-columns: 3fr 2fr;
     gap: 24px;
     align-items: start;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
     .ec-layout {
         grid-template-columns: 1fr;
     }
@@ -20,6 +20,133 @@
 
 .ec-inputs-col {
     min-width: 0;
+}
+
+/* ── Two-column input layout (Usage, Pricing Config) ── */
+.ec-inputs-two-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ec-inputs-two-col-header {
+    display: grid;
+    grid-template-columns: 1fr minmax(48px, 72px) minmax(48px, 72px);
+    gap: 12px 10px;
+    align-items: center;
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-col-header {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ec-field-row--two-col {
+    display: grid;
+    grid-template-columns: 1fr minmax(48px, 72px) minmax(48px, 72px);
+    grid-template-rows: auto auto;
+    gap: 2px 10px;
+    align-items: center;
+}
+
+.ec-field-row--two-col .ec-field-label-wrap,
+.ec-field-row--two-col > label:first-child {
+    grid-row: 1 / -1;
+    align-self: start;
+    min-width: 0;
+    padding-top: 2px;
+}
+
+.ec-field-row--two-col .ec-field-label-wrap .ec-label {
+    white-space: normal;
+    line-height: 1.35;
+}
+
+.ec-field-row--two-col .ec-input-wrap:nth-child(2),
+.ec-field-row--two-col .ec-input-with-unit:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.ec-field-row--two-col .ec-input-wrap:nth-child(3),
+.ec-field-row--two-col .ec-input-with-unit:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+/* Toggle spans both value columns so No/Yes buttons fit */
+.ec-field-row--two-col .ec-tier-toggle {
+    grid-column: 2 / -1;
+    grid-row: 1;
+    justify-self: end;
+}
+
+.ec-field-row--two-col .ec-unit--below {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    padding-top: 1px;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.ec-field-row--two-col .ec-unit--below-empty {
+    visibility: hidden;
+}
+
+/* Toggle row: single row, no unit */
+.ec-field-row--toggle {
+    grid-template-rows: auto;
+}
+
+.ec-field-row--toggle .ec-field-label-wrap {
+    grid-row: 1;
+}
+
+.ec-field-row--toggle .ec-unit--below {
+    grid-row: 1;
+    visibility: hidden;
+}
+
+.ec-field-row--two-col .ec-input-wrap,
+.ec-field-row--two-col .ec-input-with-unit {
+    min-width: 0;
+}
+
+.ec-field-row--two-col .ec-input {
+    width: 100%;
+    max-width: 72px;
+    min-width: 48px;
+}
+
+.ec-input-wrap {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ec-input-wrap .ec-input {
+    width: 100%;
+}
+
+.ec-input-wrap--empty {
+    min-height: 0;
+}
+
+.ec-field-row--full-width {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .ec-results-col {
@@ -152,6 +279,101 @@
     border-bottom-color: #c7d2fe;
 }
 
+.ec-card-header--summary {
+    flex-wrap: wrap;
+}
+
+.ec-results-currency-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-left: auto;
+    background: #e0e7ff;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.ec-currency-toggle-btn {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #64748b;
+    transition: background 150ms, color 150ms;
+}
+
+.ec-currency-toggle-btn:hover {
+    color: #4f46e5;
+}
+
+.ec-currency-toggle-btn--active {
+    background: #fff;
+    color: #4f46e5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+/* USD-only: hide INR columns */
+.ec-results-usd-only .ec-result-inr {
+    display: none;
+}
+
+.ec-results-usd-only col.ec-result-inr {
+    visibility: collapse;
+}
+
+.ec-results-usd-only .ec-result-quad {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Results grid (table) for aligned columns */
+.ec-results-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ec-results-grid th,
+.ec-results-grid td {
+    padding: 6px 12px 6px 0;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.ec-results-grid th:first-child,
+.ec-results-grid td:first-child {
+    text-align: left;
+}
+
+.ec-results-grid .ec-result-label {
+    flex: none;
+    font-size: 0.8125rem;
+    color: #64748b;
+}
+
+.ec-results-grid .ec-result-currency-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ec-results-grid-row--header th {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-results-grid-row--primary .ec-result-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.ec-results-grid + .ec-results-grid {
+    margin-top: 8px;
+}
+
 .ec-card-icon {
     font-size: 18px;
     color: #6366f1;
@@ -266,6 +488,11 @@
     padding-bottom: 0;
 }
 
+/* Allow tooltips to extend beyond card when expanded */
+.ec-accordion-body:not(.ec-accordion--collapsed) {
+    overflow: visible;
+}
+
 /* Results full section expand/collapse */
 .ec-results-full {
     overflow: hidden;
@@ -290,8 +517,33 @@
     flex-wrap: wrap;
 }
 
+/* Override: two-col rows must use grid + tighter row gap (ec-field-row gap: 12px was overriding) */
+.ec-field-row.ec-field-row--two-col {
+    display: grid;
+    gap: 6px 10px; /* row gap 6px = 50% of 12px */
+}
+
 .ec-field-row--compact {
     gap: 8px;
+}
+
+.ec-inputs-two-col--compact .ec-inputs-two-col-header,
+.ec-inputs-two-col--compact .ec-field-row--two-col {
+    grid-template-columns: 1fr minmax(48px, 64px) minmax(48px, 64px);
+}
+
+.ec-inputs-two-col--compact .ec-field-row--two-col .ec-input {
+    max-width: 64px;
+}
+
+/* Base price fields: 40% wider for 4-digit numbers */
+.ec-inputs-two-col--base-price.ec-inputs-two-col--compact .ec-inputs-two-col-header,
+.ec-inputs-two-col--base-price.ec-inputs-two-col--compact .ec-field-row--two-col {
+    grid-template-columns: 1fr minmax(64px, 90px) minmax(64px, 90px);
+}
+
+.ec-inputs-two-col--base-price.ec-inputs-two-col--compact .ec-field-row--two-col .ec-input {
+    max-width: 90px;
 }
 
 .ec-field-label-wrap {
@@ -333,6 +585,7 @@
     background: #fff;
     transition: border-color 150ms ease, box-shadow 150ms ease;
     text-align: right;
+    cursor: text;
 }
 
 .ec-input:focus {
@@ -389,7 +642,8 @@
 }
 
 .ec-input--readonly,
-.ec-input[readonly] {
+.ec-input[readonly],
+.ec-input:disabled {
     background: #f1f5f9;
     color: #64748b;
     cursor: default;
@@ -418,6 +672,11 @@
     font-size: 0.875rem;
     color: #64748b;
     font-weight: 500;
+}
+
+.ec-input-with-unit:has(.ec-input--sm) .ec-unit--prefix {
+    padding: 5px 8px;
+    font-size: 0.6125rem;
 }
 
 /* ── Tier toggle ── */
@@ -559,6 +818,17 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin-bottom: 12px;
+}
+
+.ec-subsection-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.ec-subsection-header .ec-subsection-title {
+    margin-bottom: 0;
 }
 
 .ec-field-hint {
@@ -749,8 +1019,12 @@
 
 .ec-result-row--margin .ec-result-dual .ec-result-value,
 .ec-result-row--margin .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--margin .ec-result-quad .ec-result-value,
+.ec-result-row--margin .ec-result-quad .ec-result-value-secondary,
 #ec-summary-spark-internal .ec-result-dual .ec-result-value,
-#ec-summary-spark-internal .ec-result-dual .ec-result-value-secondary {
+#ec-summary-spark-internal .ec-result-dual .ec-result-value-secondary,
+#ec-summary-spark-internal .ec-result-quad .ec-result-value,
+#ec-summary-spark-internal .ec-result-quad .ec-result-value-secondary {
     color: #1e293b;
 }
 
@@ -775,8 +1049,19 @@
     text-align: right;
 }
 
+.ec-result-quad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px 16px;
+    min-width: 260px;
+    flex-shrink: 0;
+    text-align: right;
+}
+
 .ec-result-dual .ec-result-value,
-.ec-result-dual .ec-result-value-secondary {
+.ec-result-dual .ec-result-value-secondary,
+.ec-result-quad .ec-result-value,
+.ec-result-quad .ec-result-value-secondary {
     font-size: 0.875rem;
     font-weight: 400;
 }
@@ -795,8 +1080,13 @@
     border-bottom: 1px solid #e2e8f0;
 }
 
-.ec-result-row--header .ec-result-dual {
+.ec-result-row--header .ec-result-dual,
+.ec-result-row--header .ec-result-quad {
     padding-bottom: 0;
+}
+
+.ec-summary-row--header .ec-result-quad .ec-result-currency-label {
+    font-size: 0.625rem;
 }
 
 .ec-summary-row--header {
@@ -832,8 +1122,12 @@
 
 .ec-summary-row--primary .ec-result-dual .ec-result-value,
 .ec-summary-row--primary .ec-result-dual .ec-result-value-secondary,
+.ec-summary-row--primary .ec-result-quad .ec-result-value,
+.ec-summary-row--primary .ec-result-quad .ec-result-value-secondary,
 .ec-result-row--highlight .ec-result-dual .ec-result-value,
-.ec-result-row--highlight .ec-result-dual .ec-result-value-secondary {
+.ec-result-row--highlight .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--highlight .ec-result-quad .ec-result-value,
+.ec-result-row--highlight .ec-result-quad .ec-result-value-secondary {
     font-size: 1rem;
     font-weight: 600;
     color: #4f46e5;
@@ -841,8 +1135,12 @@
 
 .ec-result-row--cost-total .ec-result-dual .ec-result-value,
 .ec-result-row--cost-total .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--cost-total .ec-result-quad .ec-result-value,
+.ec-result-row--cost-total .ec-result-quad .ec-result-value-secondary,
 .ec-result-row--margin .ec-result-dual .ec-result-value,
 .ec-result-row--margin .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--margin .ec-result-quad .ec-result-value,
+.ec-result-row--margin .ec-result-quad .ec-result-value-secondary,
 .ec-detail-row--subtotal .ec-detail-amount .ec-result-value,
 .ec-detail-row--subtotal .ec-detail-amount .ec-result-value-secondary,
 .ec-detail-row--total .ec-detail-amount .ec-result-value,
@@ -931,6 +1229,96 @@
     max-width: 100%;
 }
 
+/* Detailed breakdown has more content - needs larger max-height when expanded */
+#ec-detailed-breakdown-body.ec-accordion-body:not(.ec-accordion--collapsed) {
+    max-height: 5000px;
+}
+
+#ec-detailed-breakdown-content {
+    padding-bottom: 24px;
+}
+
+/* Smooth scroll for ToC anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Scroll margin so targets don't sit under sticky header */
+#ec-detailed-breakdown-content .ec-detail-block[id] {
+    scroll-margin-top: 24px;
+}
+
+/* ── ToC: Stripe-style nav for detailed breakdown ── */
+.ec-breakdown-toc {
+    margin-bottom: 28px;
+    padding: 16px 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.ec-breakdown-toc-title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 10px 0;
+}
+
+.ec-breakdown-toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+}
+
+.ec-breakdown-toc-list li {
+    margin: 0;
+}
+
+.ec-breakdown-toc-link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #64748b;
+    text-decoration: none;
+    padding: 4px 0;
+    border-radius: 4px;
+    transition: color 150ms ease, background 150ms ease;
+    display: inline-block;
+}
+
+.ec-breakdown-toc-link:hover {
+    color: #4f46e5;
+}
+
+.ec-breakdown-toc-link:focus {
+    outline: none;
+    color: #4f46e5;
+    background: rgba(79, 70, 229, 0.08);
+}
+
+.ec-breakdown-toc-link:active {
+    color: #4338ca;
+}
+
+/* Back to top link - at end of each section */
+.ec-breakdown-back-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 150ms ease;
+}
+
+.ec-breakdown-back-link:hover {
+    color: #4f46e5;
+}
+
 .ec-detail-block {
     padding-bottom: 24px;
     border-bottom: 1px solid #e2e8f0;
@@ -938,7 +1326,7 @@
 
 .ec-detail-block:last-child {
     border-bottom: none;
-    padding-bottom: 0;
+    padding-bottom: 24px;
 }
 
 .ec-detail-block-title {
