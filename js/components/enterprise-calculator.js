@@ -243,8 +243,8 @@
         const minBasePriceVanilla = (inp.seats * inp.term * combinedDiscountFactor) > 0
             ? minRevenue / (inp.seats * inp.term * combinedDiscountFactor)
             : 0;
-        const baseVanilla = Math.round(minBasePriceVanilla / 50) * 50;
-        const basePremium = Math.round(baseVanilla * 1.5 / 50) * 50;
+        const baseVanilla = Math.ceil(minBasePriceVanilla);
+        const basePremium = Math.round(baseVanilla * 1.5);
 
         const elVanilla = document.getElementById('ec-base-price-vanilla');
         const elPremium = document.getElementById('ec-base-price-premium');
@@ -339,47 +339,69 @@
 
     function computeCosts(inp) {
         const termMonths = inp.term;
-        const effectiveVideoHoursPerMonth = inp.videoHoursSDPerMonth + inp.videoHoursHDPerMonth * inp.hdSdFactor;
+        const videoHoursSDPerMonth = inp.videoHoursSDPerMonth;
+        const videoHoursHDPerMonth = inp.videoHoursHDPerMonth;
+        const effectiveVideoHoursPerMonth = videoHoursSDPerMonth + videoHoursHDPerMonth * inp.hdSdFactor;
         const totalVideoHours = effectiveVideoHoursPerMonth * termMonths;
+        const totalVideoHoursSD = videoHoursSDPerMonth * termMonths;
+        const totalVideoHoursHD = videoHoursHDPerMonth * termMonths;
 
-        // Processing cost: total over contract (video hours/month × months)
+        // Processing cost: total over contract (video hours/month x months)
         const assemblyAI = totalVideoHours * inp.costAssemblyAI;
-        const batch      = totalVideoHours * inp.batchHrsPerVideoHr * inp.costBatch;
+
+        // Batch: SD and HD split (HD uses hdSdFactor for compute hours)
+        const batchHrsSD = totalVideoHoursSD * inp.batchHrsPerVideoHr;
+        const batchHrsHD = totalVideoHoursHD * inp.hdSdFactor * inp.batchHrsPerVideoHr;
+        const batchSD = batchHrsSD * inp.costBatch;
+        const batchHD = batchHrsHD * inp.costBatch;
+        const batch = batchSD + batchHD;
 
         // Pipeline LLM (Gemini) for notes/chapters/slides - total over contract
         const geminiPipeline = (totalVideoHours * inp.pipelineTokensIn / 1e6) * inp.costGeminiIn
                              + (totalVideoHours * inp.pipelineTokensOut / 1e6) * inp.costGeminiOut;
 
-        // Storage: calculated from video hours × contract × GB per video hour; cost uses triangular sum (storage grows monthly)
-        const storageGB = effectiveVideoHoursPerMonth * termMonths * inp.gbPerVideoHr;
+        // Storage: SD and HD split; triangular sum (storage grows monthly)
         const storageMonthSum = (termMonths * (termMonths + 1)) / 2; // 1+2+...+term
-        const s3StorageCost   = effectiveVideoHoursPerMonth * inp.gbPerVideoHr * storageMonthSum * inp.costS3Storage;
-        const gbPerHr             = 1; // ~1 GB per SD video hour streamed
+        const monthlyNewGB_SD = videoHoursSDPerMonth * inp.gbPerVideoHr;
+        const monthlyNewGB_HD = videoHoursHDPerMonth * inp.gbPerVideoHr * inp.hdSdFactor;
+        const storageGB_SD = monthlyNewGB_SD * termMonths;
+        const storageGB_HD = monthlyNewGB_HD * termMonths;
+        const storageGB = storageGB_SD + storageGB_HD;
+        const s3StorageCost_SD = monthlyNewGB_SD * storageMonthSum * inp.costS3Storage;
+        const s3StorageCost_HD = monthlyNewGB_HD * storageMonthSum * inp.costS3Storage;
+        const s3StorageCost = s3StorageCost_SD + s3StorageCost_HD;
+
+        const gbPerHr = 1; // ~1 GB per SD video hour streamed
         const s3StreamingPerMonth = inp.seats * inp.streamingHrsPerSeat * gbPerHr * inp.costS3Transfer;
+        const s3Streaming = s3StreamingPerMonth * termMonths;
 
         // AI Tutor (Gemini) - Premium always; Vanilla when tutorInVanilla flag is set
         const includeTutor = inp.tier === 'premium' || inp.tutorInVanilla;
         const tutorQueriesTotal = includeTutor ? inp.seats * inp.tutorQueriesPerSeat : 0;
         const geminiTutorPerMonth = (tutorQueriesTotal * inp.tutorTokensIn / 1e6) * inp.costGeminiIn
                                   + (tutorQueriesTotal * inp.tutorTokensOut / 1e6) * inp.costGeminiOut;
+        const geminiTutor = geminiTutorPerMonth * termMonths;
 
-        // Quiz generation (Gemini) - both tiers (trainers create quizzes per video, not per seat)
-        const quizQueriesTotal   = inp.numVideosPerMonth * inp.quizQuestionsPerVideoPerMonth;
+        // Quiz generation (Gemini) - both tiers
+        const quizQueriesTotal = inp.numVideosPerMonth * inp.quizQuestionsPerVideoPerMonth;
         const geminiQuizPerMonth = (quizQueriesTotal * inp.quizTokensIn / 1e6) * inp.costGeminiIn
                                  + (quizQueriesTotal * inp.quizTokensOut / 1e6) * inp.costGeminiOut;
+        const geminiQuiz = geminiQuizPerMonth * termMonths;
 
-        // OpenAI embeddings (semantic search) - text-embedding-3-small, input tokens only (per video hour)
+        // OpenAI embeddings (per video hour)
         const embeddingTokensPerMonth = inp.embeddingTokensPerVideoHr * effectiveVideoHoursPerMonth;
-        const openAIPerMonth = (embeddingTokensPerMonth / 1e6) * inp.costOpenAIEmbedding;
+        const openAI = (embeddingTokensPerMonth / 1e6) * inp.costOpenAIEmbedding * termMonths;
 
-        // Total over contract term
+        const gemini = geminiPipeline + geminiTutor + geminiQuiz;
+
+        // Total over contract term (pre-multiplier)
         const rawCosts = {
             assemblyAI:  assemblyAI,
             batch:       batch,
             s3Storage:   s3StorageCost,
-            s3Streaming: s3StreamingPerMonth * termMonths,
-            gemini:      geminiPipeline + (geminiTutorPerMonth + geminiQuizPerMonth) * termMonths,
-            openAI:      openAIPerMonth * termMonths,
+            s3Streaming: s3Streaming,
+            gemini:      gemini,
+            openAI:      openAI,
         };
 
         // Apply multiplier to each category
@@ -390,7 +412,82 @@
             total += costs[k];
         }
         costs.total = total;
-        costs.storageGB = storageGB; // for display
+        costs.storageGB = storageGB;
+
+        // Detail for full breakdown (pre-multiplier values)
+        costs.detail = {
+            termMonths,
+            transcription: { totalVideoHours, unitCost: inp.costAssemblyAI, amount: assemblyAI },
+            storage: {
+                sd: storageGB_SD > 0 ? { storageGB: storageGB_SD, monthlyNewGB: monthlyNewGB_SD, amount: s3StorageCost_SD } : null,
+                hd: storageGB_HD > 0 ? { storageGB: storageGB_HD, monthlyNewGB: monthlyNewGB_HD, amount: s3StorageCost_HD } : null,
+                storageMonthSum,
+                gbPerVideoHr: inp.gbPerVideoHr,
+                hdSdFactor: inp.hdSdFactor,
+                costPerGB: inp.costS3Storage,
+                videoHoursSDPerMonth,
+                videoHoursHDPerMonth,
+                totalAmount: s3StorageCost,
+            },
+            batch: {
+                sd: batchHrsSD > 0 ? { batchHrs: batchHrsSD, amount: batchSD } : null,
+                hd: batchHrsHD > 0 ? { batchHrs: batchHrsHD, amount: batchHD } : null,
+                batchHrsPerVideoHr: inp.batchHrsPerVideoHr,
+                hdSdFactor: inp.hdSdFactor,
+                costPerVcpuHr: inp.costBatch,
+                totalVideoHoursSD,
+                totalVideoHoursHD,
+                totalAmount: batch,
+            },
+            pipeline: {
+                totalVideoHours,
+                tokensIn: inp.pipelineTokensIn,
+                tokensOut: inp.pipelineTokensOut,
+                costIn: inp.costGeminiIn,
+                costOut: inp.costGeminiOut,
+                amount: geminiPipeline,
+            },
+            quiz: {
+                numVideosPerMonth: inp.numVideosPerMonth,
+                quizQuestionsPerVideoPerMonth: inp.quizQuestionsPerVideoPerMonth,
+                quizQueriesTotalPerMonth: quizQueriesTotal,
+                termMonths,
+                tokensIn: inp.quizTokensIn,
+                tokensOut: inp.quizTokensOut,
+                costIn: inp.costGeminiIn,
+                costOut: inp.costGeminiOut,
+                amount: geminiQuiz,
+            },
+            tutor: {
+                seats: inp.seats,
+                queriesPerSeat: inp.tutorQueriesPerSeat,
+                tutorQueriesTotalPerMonth: tutorQueriesTotal,
+                termMonths,
+                tokensIn: inp.tutorTokensIn,
+                tokensOut: inp.tutorTokensOut,
+                costIn: inp.costGeminiIn,
+                costOut: inp.costGeminiOut,
+                amount: geminiTutor,
+                includeTutor,
+            },
+            streaming: {
+                seats: inp.seats,
+                streamingHrsPerSeat: inp.streamingHrsPerSeat,
+                gbPerHr,
+                costPerGB: inp.costS3Transfer,
+                amount: s3Streaming,
+            },
+            embeddings: {
+                effectiveVideoHoursPerMonth,
+                embeddingTokensPerVideoHr: inp.embeddingTokensPerVideoHr,
+                embeddingTokensPerMonth,
+                termMonths,
+                costPer1MTokens: inp.costOpenAIEmbedding,
+                amount: openAI,
+            },
+            costMultiplier: inp.costMultiplier,
+            totalPreMultiplier: assemblyAI + s3StorageCost + s3Streaming + batch + gemini + openAI,
+        };
 
         console.log(LOG, 'costs (INR)', costs);
         return costs;
@@ -523,6 +620,160 @@
         if (contentEl) contentEl.classList.remove('hidden');
     }
 
+    function fmtNum(v) {
+        if (Number.isInteger(v)) return v.toLocaleString('en-IN');
+        const s = v.toFixed(2);
+        return s.replace(/\.?0+$/, '');
+    }
+
+    function renderDetailedCostBreakdown(inp, costs) {
+        const d = costs.detail;
+        if (!d) return;
+
+        const container = document.getElementById('ec-detailed-breakdown-content');
+        if (!container) return;
+
+        const videoSubtotal = d.transcription.amount + d.storage.totalAmount + d.batch.totalAmount +
+            d.pipeline.amount + d.quiz.amount + d.embeddings.amount;
+        const studentSubtotal = d.tutor.amount + d.streaming.amount;
+
+        let html = '';
+
+        html += '<div class="ec-detail-block">';
+        html += '<p class="ec-detail-block-title">Video-based costs</p>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Transcription (AssemblyAI)</div>';
+        html += '<div class="ec-detail-workings">';
+        html += 'Usage: (SD ' + fmtNum(inp.videoHoursSDPerMonth) + ' + HD ' + fmtNum(inp.videoHoursHDPerMonth) + ' x ' + fmtNum(inp.hdSdFactor) + ') x ' + d.termMonths + ' mo = ' + fmtNum(d.transcription.totalVideoHours) + ' video hrs';
+        html += '</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.transcription.unitCost) + ' / video hr (Unit Costs)</div>';
+        html += '<div class="ec-detail-formula">' + fmtNum(d.transcription.totalVideoHours) + ' x ' + fmtNum(d.transcription.unitCost) + ' = ' + fmtINRRound(d.transcription.amount) + '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.transcription.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.transcription.amount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Cloud storage (S3)</div>';
+        html += '<div class="ec-detail-workings">';
+        if (d.storage.sd) {
+            html += 'SD: ' + fmtNum(d.storage.videoHoursSDPerMonth) + ' hrs/mo x ' + fmtNum(d.storage.gbPerVideoHr) + ' GB/hr x ' + d.termMonths + ' mo = ' + fmtNum(Math.round(d.storage.sd.storageGB)) + ' GB end-state. ';
+        }
+        if (d.storage.hd) {
+            html += 'HD: ' + fmtNum(d.storage.videoHoursHDPerMonth) + ' hrs/mo x ' + fmtNum(d.storage.gbPerVideoHr) + ' x ' + fmtNum(d.storage.hdSdFactor) + ' x ' + d.termMonths + ' mo = ' + fmtNum(Math.round(d.storage.hd.storageGB)) + ' GB end-state.';
+        }
+        if (!d.storage.sd && !d.storage.hd) {
+            html += 'No video storage (0 SD, 0 HD hrs)';
+        }
+        html += '</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.storage.gbPerVideoHr) + ' GB / SD video hr (Technical). Cost uses triangular sum (storage grows monthly).</div>';
+        html += '<button type="button" class="ec-detail-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-storage-triangle">Show formula</button>';
+        html += '<div id="ec-storage-triangle" class="ec-detail-triangle hidden" aria-hidden="true">';
+        if (d.storage.sd) {
+            html += 'SD: monthly new GB = ' + fmtNum(d.storage.sd.monthlyNewGB) + '. Sum 1+2+...+' + d.termMonths + ' = ' + d.storage.storageMonthSum + '. Cost = ' + fmtNum(d.storage.sd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINRRound(d.storage.sd.amount) + '. ';
+        }
+        if (d.storage.hd) {
+            html += 'HD: monthly new GB = ' + fmtNum(d.storage.hd.monthlyNewGB) + '. Cost = ' + fmtNum(d.storage.hd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINRRound(d.storage.hd.amount) + '.';
+        }
+        html += '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.storage.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.storage.totalAmount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Video processing (AWS Batch)</div>';
+        html += '<div class="ec-detail-workings">';
+        if (d.batch.sd) {
+            html += 'SD: ' + fmtNum(d.batch.totalVideoHoursSD) + ' video hrs x ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' vCPU-hrs/video hr = ' + fmtNum(d.batch.sd.batchHrs) + ' vCPU-hrs. ';
+        }
+        if (d.batch.hd) {
+            html += 'HD: ' + fmtNum(d.batch.totalVideoHoursHD) + ' video hrs x ' + fmtNum(d.batch.hdSdFactor) + ' x ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' = ' + fmtNum(d.batch.hd.batchHrs) + ' vCPU-hrs.';
+        }
+        if (!d.batch.sd && !d.batch.hd) {
+            html += 'No video processing (0 SD, 0 HD hrs)';
+        }
+        html += '</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' vCPU-hrs / SD video hr, HD ' + fmtNum(d.batch.hdSdFactor) + 'x (Technical)</div>';
+        html += '<div class="ec-detail-formula">' + fmtNum(d.batch.costPerVcpuHr) + ' / vCPU-hr (Unit Costs)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.batch.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.batch.totalAmount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">LLM - course creation (Gemini)</div>';
+        html += '<div class="ec-detail-workings">' + fmtNum(d.pipeline.totalVideoHours) + ' video hrs x (' + fmtNum(d.pipeline.tokensIn) + ' in + ' + fmtNum(d.pipeline.tokensOut) + ' out) tokens</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.pipeline.tokensIn) + ' in / video hr, ' + fmtNum(d.pipeline.tokensOut) + ' out / video hr (Technical). ' + fmtNum(d.pipeline.costIn) + ' / 1M in, ' + fmtNum(d.pipeline.costOut) + ' / 1M out (Unit Costs)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.pipeline.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.pipeline.amount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">LLM - quiz creation (Gemini)</div>';
+        html += '<div class="ec-detail-workings">' + fmtNum(d.quiz.numVideosPerMonth) + ' videos/mo x ' + fmtNum(d.quiz.quizQuestionsPerVideoPerMonth) + ' questions/video x ' + d.quiz.termMonths + ' mo = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth * d.quiz.termMonths) + ' questions</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.quiz.tokensIn) + ' in / question, ' + fmtNum(d.quiz.tokensOut) + ' out / question (Technical)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.quiz.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.quiz.amount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Embeddings (OpenAI)</div>';
+        html += '<div class="ec-detail-workings">' + fmtNum(d.embeddings.effectiveVideoHoursPerMonth) + ' video hrs/mo x ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens/hr x ' + d.embeddings.termMonths + ' mo = ' + fmtNum(d.embeddings.embeddingTokensPerMonth * d.embeddings.termMonths) + ' tokens</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens / video hr (Technical). ' + fmtNum(d.embeddings.costPer1MTokens) + ' / 1M tokens (Unit Costs)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.embeddings.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.embeddings.amount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row ec-detail-row--subtotal">';
+        html += '<div class="ec-detail-label ec-result-label--strong">Video-based subtotal</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(videoSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(videoSubtotal) + '</span></div>';
+        html += '</div>';
+
+        html += '</div>';
+
+        html += '<div class="ec-detail-block">';
+        html += '<p class="ec-detail-block-title">Student-based costs</p>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">LLM - AI Tutor (Gemini)</div>';
+        html += '<div class="ec-detail-workings">' + fmtNum(d.tutor.seats) + ' seats x ' + fmtNum(d.tutor.queriesPerSeat) + ' queries/seat/mo x ' + d.tutor.termMonths + ' mo = ' + fmtNum(d.tutor.tutorQueriesTotalPerMonth * d.tutor.termMonths) + ' queries' + (d.tutor.includeTutor ? '' : ' (N/A - not in tier)') + '</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.tutor.tokensIn) + ' in / query, ' + fmtNum(d.tutor.tokensOut) + ' out / query (Technical)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.tutor.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.tutor.amount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">Video streaming (S3 data transfer)</div>';
+        html += '<div class="ec-detail-workings">' + fmtNum(d.streaming.seats) + ' seats x ' + fmtNum(d.streaming.streamingHrsPerSeat) + ' hrs/seat/mo x ' + fmtNum(d.streaming.gbPerHr) + ' GB/hr x ' + d.termMonths + ' mo = ' + fmtNum(d.streaming.seats * d.streaming.streamingHrsPerSeat * d.streaming.gbPerHr * d.termMonths) + ' GB. Cost = GB x ' + fmtNum(d.streaming.costPerGB) + ' / GB</div>';
+        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.streaming.gbPerHr) + ' GB / streamed hr. ' + fmtNum(d.streaming.costPerGB) + ' / GB out (Unit Costs)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.streaming.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.streaming.amount) + '</span></div>';
+        html += '</div>';
+
+        html += '<div class="ec-detail-row ec-detail-row--subtotal">';
+        html += '<div class="ec-detail-label ec-result-label--strong">Student-based subtotal</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(studentSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(studentSubtotal) + '</span></div>';
+        html += '</div>';
+
+        html += '</div>';
+
+        html += '<div class="ec-detail-block">';
+        html += '<div class="ec-detail-row ec-detail-row--total">';
+        html += '<div class="ec-detail-label ec-result-label--strong">Total (before multiplier)</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.totalPreMultiplier) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.totalPreMultiplier) + '</span></div>';
+        html += '</div>';
+        html += '<div class="ec-detail-row">';
+        html += '<div class="ec-detail-label">x Cost safety multiplier (' + fmtNum(d.costMultiplier) + ')</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINRRound(costs.total) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(costs.total) + '</span></div>';
+        html += '</div>';
+        html += '</div>';
+
+        container.innerHTML = html;
+
+        const expandBtn = container.querySelector('.ec-detail-expand-btn');
+        const triangleEl = document.getElementById('ec-storage-triangle');
+        if (expandBtn && triangleEl) {
+            expandBtn.addEventListener('click', function () {
+                const expanded = expandBtn.getAttribute('aria-expanded') === 'true';
+                triangleEl.classList.toggle('hidden', expanded);
+                triangleEl.setAttribute('aria-hidden', String(expanded));
+                expandBtn.setAttribute('aria-expanded', String(!expanded));
+                expandBtn.textContent = expanded ? 'Show formula' : 'Hide formula';
+            });
+        }
+    }
+
     function renderResults(inp, costs, pricing) {
         hideErrorShowContent();
         // Tier badge
@@ -580,6 +831,15 @@
         if (sectionCosts) sectionCosts.classList.toggle('hidden', !showSparkInternal);
         if (costBreakdownBlock) costBreakdownBlock.classList.toggle('hidden', !showSparkInternal);
 
+        const linkDetailed = document.getElementById('ec-link-detailed-breakdown');
+        const sectionDetailed = document.getElementById('ec-detailed-cost-breakdown');
+        if (linkDetailed) linkDetailed.classList.toggle('hidden', !showSparkInternal);
+        if (sectionDetailed) sectionDetailed.classList.toggle('hidden', !showSparkInternal);
+
+        if (showSparkInternal && costs.detail) {
+            renderDetailedCostBreakdown(inp, costs);
+        }
+
         // Contract value - aggregates rounded
         setDualRound('ec-out-acv', pricing.acvINR);
         setDualRound('ec-out-setup', pricing.setupFeeINR);
@@ -588,7 +848,6 @@
 
         // Cost breakdown - aggregates rounded
         setDualRound('ec-cost-out-assemblyai', costs.assemblyAI);
-        set('ec-storage-calculated', Math.round(costs.storageGB) + ' GB');
         set('ec-cost-out-storage-gb', Math.round(costs.storageGB));
         setDualRound('ec-cost-out-s3-storage', costs.s3Storage);
         setDualRound('ec-cost-out-s3-streaming', costs.s3Streaming);
@@ -711,41 +970,27 @@
         _tutorVanilla: 'no'
     };
 
-    const DEFAULTS_DEAL = {
-        'ec-seats': '500', 'ec-setup-fee': '0',
-        _tier: 'vanilla', _term: '12'
+    function pickFromDefaults(keys) {
+        const out = {};
+        keys.forEach(function (k) { if (DEFAULTS[k] !== undefined) out[k] = DEFAULTS[k]; });
+        return out;
+    }
+
+    const SECTION_KEYS = {
+        deal: ['ec-seats', 'ec-setup-fee', '_tier', '_term'],
+        'revenue-share': ['ec-rev-share-y1', 'ec-rev-share-y2', 'ec-rev-share-y3', 'ec-rev-share-y4', 'ec-rev-share-y5'],
+        usage: ['ec-video-hours-sd', 'ec-video-hours-hd', 'ec-streaming-hrs', 'ec-tutor-queries', 'ec-num-videos', 'ec-quiz-queries', '_tutorVanilla'],
+        pricing: ['ec-base-price-vanilla', 'ec-base-price-premium', 'ec-vol-disc-1', 'ec-vol-disc-2', 'ec-vol-disc-3', 'ec-vol-disc-4', 'ec-vol-disc-5', 'ec-vol-disc-6', 'ec-vol-disc-7', 'ec-term-disc-1', 'ec-term-disc-3', 'ec-term-disc-6', 'ec-term-disc-12', 'ec-early-disc'],
+        technical: ['ec-hd-sd-factor', 'ec-gb-per-video-hr', 'ec-embedding-tokens', 'ec-batch-hrs-per-video-hr', 'ec-tutor-tokens-in', 'ec-tutor-tokens-out', 'ec-quiz-tokens-in', 'ec-quiz-tokens-out', 'ec-pipeline-tokens-in', 'ec-pipeline-tokens-out'],
+        costs: ['ec-cost-assemblyai', 'ec-cost-s3-storage', 'ec-cost-s3-transfer', 'ec-cost-batch', 'ec-cost-gemini-in', 'ec-cost-gemini-out', 'ec-cost-openai-embedding', 'ec-cost-multiplier', 'ec-min-margin']
     };
 
-    const DEFAULTS_REVENUE_SHARE = {
-        'ec-rev-share-y1': '30', 'ec-rev-share-y2': '20', 'ec-rev-share-y3': '10',
-        'ec-rev-share-y4': '5', 'ec-rev-share-y5': '5'
-    };
-    const DEFAULTS_USAGE = {
-        'ec-video-hours-sd': '40', 'ec-video-hours-hd': '0',
-        'ec-streaming-hrs': '2', 'ec-tutor-queries': '20',
-        'ec-num-videos': '40', 'ec-quiz-queries': '5',
-        _tutorVanilla: 'no'
-    };
-    const DEFAULTS_PRICING = {
-        'ec-base-price-vanilla': '450',
-        'ec-base-price-premium': '900',
-        'ec-vol-disc-1': '0', 'ec-vol-disc-2': '5', 'ec-vol-disc-3': '10', 'ec-vol-disc-4': '15',
-        'ec-vol-disc-5': '20', 'ec-vol-disc-6': '25', 'ec-vol-disc-7': '30',
-        'ec-term-disc-1': '0', 'ec-term-disc-3': '2', 'ec-term-disc-6': '5', 'ec-term-disc-12': '10',
-        'ec-early-disc': '0'
-    };
-    const DEFAULTS_TECHNICAL = {
-        'ec-hd-sd-factor': '5', 'ec-gb-per-video-hr': '0.75',
-        'ec-embedding-tokens': '25000', 'ec-batch-hrs-per-video-hr': '0.5',
-        'ec-tutor-tokens-in': '2000', 'ec-tutor-tokens-out': '500',
-        'ec-quiz-tokens-in': '5000', 'ec-quiz-tokens-out': '2000',
-        'ec-pipeline-tokens-in': '500000', 'ec-pipeline-tokens-out': '200000'
-    };
-    const DEFAULTS_COSTS = {
-        'ec-cost-assemblyai': '55', 'ec-cost-s3-storage': '1.93', 'ec-cost-s3-transfer': '7.56',
-        'ec-cost-batch': '4.03', 'ec-cost-gemini-in': '6.30', 'ec-cost-gemini-out': '25.20',
-        'ec-cost-openai-embedding': '1.68', 'ec-cost-multiplier': '1.3', 'ec-min-margin': '30'
-    };
+    const DEFAULTS_DEAL = pickFromDefaults(SECTION_KEYS.deal);
+    const DEFAULTS_REVENUE_SHARE = pickFromDefaults(SECTION_KEYS['revenue-share']);
+    const DEFAULTS_USAGE = pickFromDefaults(SECTION_KEYS.usage);
+    const DEFAULTS_PRICING = pickFromDefaults(SECTION_KEYS.pricing);
+    const DEFAULTS_TECHNICAL = pickFromDefaults(SECTION_KEYS.technical);
+    const DEFAULTS_COSTS = pickFromDefaults(SECTION_KEYS.costs);
 
     function resetToDefaults() {
         applyImportedValues(DEFAULTS);
@@ -1047,16 +1292,15 @@
         const btnResetUsage = document.getElementById('ec-btn-reset-usage');
         if (btnResetUsage) btnResetUsage.addEventListener('click', () => resetBySection('usage'));
         const btnResetPricing = document.getElementById('ec-btn-reset-pricing');
-        if (btnResetPricing) btnResetPricing.addEventListener('click', () => {
-            resetBySection('pricing');
-            updateBasePricesFromMinMargin();
-        });
+        if (btnResetPricing) btnResetPricing.addEventListener('click', () => resetBySection('pricing'));
         const btnResetTechnical = document.getElementById('ec-btn-reset-technical');
         if (btnResetTechnical) btnResetTechnical.addEventListener('click', () => resetBySection('technical'));
         const btnResetCosts = document.getElementById('ec-btn-reset-costs');
-        if (btnResetCosts) btnResetCosts.addEventListener('click', () => {
-            resetBySection('costs');
-            updateBasePricesFromMinMargin();
+        if (btnResetCosts) btnResetCosts.addEventListener('click', () => resetBySection('costs'));
+
+        const btnResetAll = document.getElementById('ec-btn-reset-all');
+        if (btnResetAll) btnResetAll.addEventListener('click', () => {
+            if (confirm('Reset all inputs to defaults?')) resetToDefaults();
         });
 
         // Collapsible: all sections (entire header is clickable except Reset)
@@ -1079,6 +1323,24 @@
         setupCollapsible('ec-btn-expand-pricing', 'ec-pricing-body');
         setupCollapsible('ec-btn-expand-technical', 'ec-technical-body');
         setupCollapsible('ec-btn-expand-costs', 'ec-costs-body');
+        setupCollapsible('ec-btn-expand-detailed-breakdown', 'ec-detailed-breakdown-body');
+
+        const linkDetailed = document.getElementById('ec-link-detailed-breakdown');
+        const sectionDetailed = document.getElementById('ec-detailed-cost-breakdown');
+        const btnExpandDetailed = document.getElementById('ec-btn-expand-detailed-breakdown');
+        const bodyDetailed = document.getElementById('ec-detailed-breakdown-body');
+        if (linkDetailed && sectionDetailed && btnExpandDetailed && bodyDetailed) {
+            linkDetailed.addEventListener('click', function (e) {
+                e.preventDefault();
+                sectionDetailed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const expanded = btnExpandDetailed.getAttribute('aria-expanded') === 'true';
+                if (!expanded) {
+                    bodyDetailed.classList.remove('hidden');
+                    bodyDetailed.setAttribute('aria-hidden', 'false');
+                    btnExpandDetailed.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
 
         // Expand / collapse results
         const btnExpand   = document.getElementById('ec-btn-expand-results');

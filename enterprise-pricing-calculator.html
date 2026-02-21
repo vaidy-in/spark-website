@@ -52,6 +52,10 @@
                 <span class="material-symbols-rounded text-[16px]">table_view</span>
                 Export CSV
             </button>
+            <button id="ec-btn-reset-all" type="button" class="ec-btn-secondary cursor-pointer" aria-label="Reset all inputs to defaults">
+                <span class="material-symbols-rounded text-[16px]">restart_alt</span>
+                Reset All
+            </button>
             <input id="ec-import-file" type="file" accept=".json" class="hidden" aria-label="Import JSON file">
         </div>
     </div>
@@ -546,7 +550,7 @@
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-gb-per-video-hr" class="ec-label">GB per video hour</label>
+                            <label for="ec-gb-per-video-hr" class="ec-label">GB per SD video hour</label>
                             <span class="tooltip-container" data-tooltip>
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About storage per video hour">?</button>
                                 <div class="tooltip">
@@ -560,11 +564,6 @@
                             <span class="ec-unit">GB / video hr</span>
                         </div>
                     </div>
-                    <div class="ec-field-row ec-field-row--readonly">
-                        <span class="ec-label">Total video storage (calculated)</span>
-                        <span id="ec-storage-calculated" class="ec-result-value">0 GB</span>
-                    </div>
-
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
                             <label for="ec-embedding-tokens" class="ec-label">Embedding tokens per hour of video</label>
@@ -584,7 +583,7 @@
 
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-batch-hrs-per-video-hr" class="ec-label">AWS Batch hrs per video hour</label>
+                            <label for="ec-batch-hrs-per-video-hr" class="ec-label">AWS Batch hrs per SD video hour</label>
                             <span class="tooltip-container" data-tooltip>
                                 <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About AWS Batch">?</button>
                                 <div class="tooltip">
@@ -612,12 +611,12 @@
                                 <input id="ec-tutor-tokens-out" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Tutor output tokens per query">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-quiz-tokens-in" class="ec-label ec-label--sm">Quiz gen (Gemini): input tokens / query</label>
-                                <input id="ec-quiz-tokens-in" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Quiz input tokens per query">
+                                <label for="ec-quiz-tokens-in" class="ec-label ec-label--sm">Quiz gen (Gemini): input tokens / question</label>
+                                <input id="ec-quiz-tokens-in" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Quiz input tokens per question">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
-                                <label for="ec-quiz-tokens-out" class="ec-label ec-label--sm">Quiz gen (Gemini): output tokens / query</label>
-                                <input id="ec-quiz-tokens-out" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Quiz output tokens per query">
+                                <label for="ec-quiz-tokens-out" class="ec-label ec-label--sm">Quiz gen (Gemini): output tokens / question</label>
+                                <input id="ec-quiz-tokens-out" type="number" min="0" step="100" class="ec-input ec-input--sm cursor-text" aria-label="Quiz output tokens per question">
                             </div>
                             <div class="ec-field-row ec-field-row--compact">
                                 <label for="ec-pipeline-tokens-in" class="ec-label ec-label--sm">Pipeline: input tokens / video hr</label>
@@ -1043,6 +1042,9 @@
                                 </div>
                             </div>
                             </div>
+                            <a id="ec-link-detailed-breakdown" href="#ec-detailed-cost-breakdown" class="ec-link-detailed-breakdown hidden">
+                                Detailed breakdown
+                            </a>
                         </div>
 
                         <!-- Revenue Share -->
@@ -1123,6 +1125,26 @@
 
     </div>
     <!-- end ec-layout -->
+
+    <!-- Full-width collapsible: Detailed cost breakdown -->
+    <section id="ec-detailed-cost-breakdown" class="ec-detailed-breakdown ec-spark-internal-only hidden" aria-labelledby="ec-detailed-breakdown-title">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+            <div class="ec-card">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-detailed-breakdown" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-detailed-breakdown-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
+                    <span class="material-symbols-rounded ec-card-icon">receipt_long</span>
+                    <h2 id="ec-detailed-breakdown-title" class="ec-card-title">Detailed cost breakdown</h2>
+                </div>
+                <div id="ec-detailed-breakdown-body" class="ec-card-body hidden" aria-hidden="true">
+                    <div id="ec-detailed-breakdown-content">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     </div>
 </main>
