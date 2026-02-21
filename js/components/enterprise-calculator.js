@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.8';
+    window.APP_VERSION = '1.0.9';
 
     const LOG = '[ec]';
 
@@ -191,14 +191,19 @@
         const volDisc = getVolumeDiscount(inp);
         const termDisc = getTermDiscount(inp);
         const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inp.earlyDisc);
-        const numYears = getNumContractYears(inp.term);
+        
         let effectiveAthiyaRate = 0;
-        if (numYears > 0) {
-            for (let y = 1; y <= numYears && y <= 5; y++) {
-                effectiveAthiyaRate += inp.revShare[y] || 0;
-            }
-            effectiveAthiyaRate /= numYears;
+        let remainingMonths = inp.term;
+        let currentYear = 1;
+        while (remainingMonths > 0 && currentYear <= 5) {
+            const monthsInThisYear = Math.min(12, remainingMonths);
+            const shareRate = inp.revShare[currentYear] || 0;
+            // weight by the fraction of the total term
+            effectiveAthiyaRate += shareRate * (monthsInThisYear / inp.term);
+            remainingMonths -= monthsInThisYear;
+            currentYear++;
         }
+
         // Markup-on-cost: sparkNet >= costs × minMarginPct
         // sparkNet = revenue × (1 - effectiveAthiyaRate) + setupFee - costs
         // → minRevenue = (costs × (1 + minMarginPct) - setupFee) / (1 - effectiveAthiyaRate)
@@ -229,14 +234,19 @@
         const volDisc = getVolumeDiscount(inp);
         const termDisc = getTermDiscount(inp);
         const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inp.earlyDisc);
-        const numYears = getNumContractYears(inp.term);
+        
         let effectiveAthiyaRate = 0;
-        if (numYears > 0) {
-            for (let y = 1; y <= numYears && y <= 5; y++) {
-                effectiveAthiyaRate += inp.revShare[y] || 0;
-            }
-            effectiveAthiyaRate /= numYears;
+        let remainingMonths = inp.term;
+        let currentYear = 1;
+        while (remainingMonths > 0 && currentYear <= 5) {
+            const monthsInThisYear = Math.min(12, remainingMonths);
+            const shareRate = inp.revShare[currentYear] || 0;
+            // weight by the fraction of the total term
+            effectiveAthiyaRate += shareRate * (monthsInThisYear / inp.term);
+            remainingMonths -= monthsInThisYear;
+            currentYear++;
         }
+
         const athiyaDenom = 1 - effectiveAthiyaRate;
         const minRevenue = athiyaDenom > 0.001
             ? Math.max(0, costsVanilla.total * (1 + inp.minMarginPct) - inp.setupFeeINR) / athiyaDenom
@@ -521,10 +531,6 @@
         return Math.max(0, 1 - totalPct);
     }
 
-    function getNumContractYears(termMonths) {
-        return Math.floor(termMonths / 12);
-    }
-
     function computePricing(inp, costs) {
         const termMonths = inp.term;
 
@@ -556,18 +562,37 @@
         const revenueINR = netPricePerSeatPerMonth * inp.seats * termMonths;
 
         // Year-by-year split: annual revenue, Athiya % per year from config
-        const annualRevINR = acvINR;
-        const numYears = getNumContractYears(termMonths);
         const yearData = [];
         let athiyaAmountINR = 0;
-        for (let y = 1; y <= numYears && y <= 5; y++) {
-            const shareRate = inp.revShare[y] || 0;
-            const athiyaY = annualRevINR * shareRate;
-            const sparkY = annualRevINR - athiyaY;
+        let remainingMonths = termMonths;
+        let currentYear = 1;
+
+        while (remainingMonths > 0) {
+            const monthsInThisYear = Math.min(12, remainingMonths);
+            // Revenue for this specific block of months
+            const revThisYear = netPricePerSeatPerMonth * inp.seats * monthsInThisYear;
+            
+            // Apply revenue share for up to 5 years (default to 0 if beyond 5)
+            const shareRate = (currentYear <= 5) ? (inp.revShare[currentYear] || 0) : 0;
+            
+            const athiyaY = revThisYear * shareRate;
+            const sparkY = revThisYear - athiyaY;
             athiyaAmountINR += athiyaY;
-            yearData.push({ year: y, rev: annualRevINR, athiya: athiyaY, spark: sparkY, pct: shareRate * 100 });
+            
+            yearData.push({ 
+                year: currentYear, 
+                months: monthsInThisYear,
+                rev: revThisYear, 
+                athiya: athiyaY, 
+                spark: sparkY, 
+                pct: shareRate * 100 
+            });
+
+            remainingMonths -= monthsInThisYear;
+            currentYear++;
         }
 
+        const numYears = yearData.length;
         const sparkGrossINR = revenueINR - athiyaAmountINR;
 
         // Setup fee is Spark only, Y1
@@ -914,8 +939,9 @@
                         '<span class="ec-result-value-secondary">' + fmtUSDRound(setupFeeINR) + '</span>' +
                         '</div></div>';
                 }
+                const yearLabel = d.months < 12 ? 'Year ' + d.year + ' (' + d.months + ' months)' : 'Year ' + d.year;
                 return '<div class="ec-year-section">' +
-                    '<p class="ec-year-section-title">Year ' + d.year + ' <span class="ec-year-section-note">(Athiya ' + Math.round(d.pct) + '%)</span></p>' +
+                    '<p class="ec-year-section-title">' + yearLabel + ' <span class="ec-year-section-note">(Athiya ' + Math.round(d.pct) + '%)</span></p>' +
                     '<div class="ec-year-section-header">' +
                     '<span class="ec-result-label"></span>' +
                     '<div class="ec-result-dual">' +
@@ -1183,7 +1209,8 @@
 
         if (pricing.yearData && pricing.yearData.length > 0) {
             pricing.yearData.forEach(function (d) {
-                rows.push(['Y' + d.year + ' (Rev ' + fmtINR(d.rev) + ', Athiya ' + Math.round(d.pct) + '%)', 'Spark ' + fmtINR(d.spark) + ' / Athiya ' + fmtINR(d.athiya), '']);
+                const yearLabel = d.months < 12 ? 'Y' + d.year + ' (' + d.months + ' mo)' : 'Y' + d.year;
+                rows.push([yearLabel + ' (Rev ' + fmtINR(d.rev) + ', Athiya ' + Math.round(d.pct) + '%)', 'Spark ' + fmtINR(d.spark) + ' / Athiya ' + fmtINR(d.athiya), '']);
             });
         }
 
