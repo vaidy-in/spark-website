@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.7';
+    window.APP_VERSION = '1.0.8';
 
     const LOG = '[ec]';
 
@@ -1352,7 +1352,7 @@
             header.addEventListener('click', (e) => {
                 if (e.target.closest('.ec-btn-reset-section')) return;
                 const expanded = btn.getAttribute('aria-expanded') === 'true';
-                body.classList.toggle('hidden', expanded);
+                body.classList.toggle('ec-accordion--collapsed', expanded);
                 body.setAttribute('aria-hidden', String(expanded));
                 btn.setAttribute('aria-expanded', String(!expanded));
             });
@@ -1375,7 +1375,7 @@
                 sectionDetailed.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 const expanded = btnExpandDetailed.getAttribute('aria-expanded') === 'true';
                 if (!expanded) {
-                    bodyDetailed.classList.remove('hidden');
+                    bodyDetailed.classList.remove('ec-accordion--collapsed');
                     bodyDetailed.setAttribute('aria-hidden', 'false');
                     btnExpandDetailed.setAttribute('aria-expanded', 'true');
                 }
@@ -1391,7 +1391,7 @@
 
         function setResultsExpanded(expanded) {
             if (!resultsFull || !btnExpand) return;
-            resultsFull.classList.toggle('hidden', !expanded);
+            resultsFull.classList.toggle('ec-results-full--collapsed', !expanded);
             resultsFull.setAttribute('aria-hidden', String(!expanded));
             btnExpand.setAttribute('aria-expanded', String(expanded));
             if (expandText) expandText.textContent = expanded ? 'Collapse' : 'Expand';

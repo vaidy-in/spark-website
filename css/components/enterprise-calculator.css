@@ -63,12 +63,16 @@
     background: #eef2ff;
     border: 1px solid #c7d2fe;
     border-radius: 8px;
-    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
 }
 
 .ec-btn-expand:hover {
     background: #e0e7ff;
     border-color: #a5b4fc;
+}
+
+.ec-btn-expand:active {
+    transform: scale(0.98);
 }
 
 .ec-btn-expand-icon {
@@ -84,12 +88,16 @@
     background: transparent;
     border: none;
     border-radius: 6px;
-    transition: color 150ms ease, background 150ms ease;
+    transition: color 150ms ease-out, background 150ms ease-out, transform 150ms ease-out;
 }
 
 .ec-btn-collapse:hover {
     color: #4f46e5;
     background: #f1f5f9;
+}
+
+.ec-btn-collapse:active {
+    transform: scale(0.98);
 }
 
 /* Full results (expandable, no height limit) */
@@ -179,13 +187,17 @@
     background: transparent;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
 }
 
 .ec-btn-reset-section:hover {
     color: #4f46e5;
     background: #f8fafc;
     border-color: #c7d2fe;
+}
+
+.ec-btn-reset-section:active {
+    transform: scale(0.98);
 }
 
 /* Collapsible section - entire header is clickable */
@@ -228,7 +240,7 @@
 
 .ec-card-expand-icon {
     font-size: 20px;
-    transition: transform 150ms ease;
+    transition: transform 200ms ease-out;
 }
 
 .ec-card--collapsible .ec-card-header--collapsible .ec-btn-reset-section {
@@ -238,6 +250,35 @@
 
 .ec-card-body {
     padding: 20px;
+}
+
+/* ── Accordion expand/collapse animation (max-height) ── */
+.ec-accordion-body {
+    overflow: hidden;
+    max-height: 2500px;
+    transition: max-height 0.25s ease-out, opacity 0.2s ease-out;
+}
+
+.ec-accordion-body.ec-accordion--collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Results full section expand/collapse */
+.ec-results-full {
+    overflow: hidden;
+    max-height: 3000px;
+    transition: max-height 0.25s ease-out, opacity 0.2s ease-out;
+}
+
+.ec-results-full.ec-results-full--collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-top: -16px;
+    margin-bottom: 0;
+    border-width: 0;
 }
 
 /* ── Field rows ── */
@@ -396,7 +437,7 @@
     color: #64748b;
     background: transparent;
     border: none;
-    transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease;
+    transition: background 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out, transform 150ms ease-out;
 }
 
 .ec-tier-btn:hover {
@@ -408,6 +449,11 @@
     background: #fff;
     color: #4f46e5;
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.10);
+    transition: background 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+
+.ec-tier-btn:active {
+    transform: scale(0.98);
 }
 
 /* ── Chip group ── */
@@ -455,7 +501,7 @@
     color: #64748b;
     background: #f1f5f9;
     border: 1px solid #e2e8f0;
-    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+    transition: background 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out, transform 150ms ease-out;
 }
 
 .ec-chip:hover {
@@ -469,6 +515,10 @@
     color: #4f46e5;
     border-color: #a5b4fc;
     font-weight: 600;
+}
+
+.ec-chip:active {
+    transform: scale(0.98);
 }
 
 /* ── Help button ── */
@@ -528,13 +578,17 @@
     color: #475569;
     background: #fff;
     border: 1px solid #e2e8f0;
-    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
 }
 
 .ec-btn-secondary:hover {
     background: #f8fafc;
     border-color: #c7d2fe;
     color: #4f46e5;
+}
+
+.ec-btn-secondary:active {
+    transform: scale(0.98);
 }
 
 /* ── Results error state (Stripe-style) ── */
