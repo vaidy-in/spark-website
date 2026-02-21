@@ -16,6 +16,7 @@
 
 (function () {
     'use strict';
+    window.APP_VERSION = '1.0.7';
 
     const LOG = '[ec]';
 
