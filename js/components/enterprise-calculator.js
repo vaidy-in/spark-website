@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.9';
+    window.APP_VERSION = '1.0.10';
 
     const LOG = '[ec]';
 
@@ -38,21 +38,7 @@
         return '₹' + n.toLocaleString('en-IN');
     }
 
-    function fmtINRRound(v) {
-        const n = Math.round(v);
-        if (Math.abs(n) >= 10000000) return '₹' + (n / 10000000).toFixed(2) + ' Cr';
-        if (Math.abs(n) >= 100000)   return '₹' + (n / 100000).toFixed(2) + ' L';
-        return '₹' + n.toLocaleString('en-IN');
-    }
-
     function fmtUSD(v) {
-        const n = v / num('ec-fx-rate');
-        if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
-        if (Math.abs(n) >= 1000)    return '$' + (n / 1000).toFixed(2) + 'K';
-        return '$' + n.toFixed(2);
-    }
-
-    function fmtUSDRound(v) {
         const n = v / num('ec-fx-rate');
         if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
         if (Math.abs(n) >= 1000)    return '$' + (n / 1000).toFixed(2) + 'K';
@@ -71,11 +57,6 @@
     function setDual(baseId, inrVal, usdNote) {
         set(baseId + '-inr', fmtINR(inrVal));
         set(baseId + '-usd', usdNote !== undefined ? usdNote : fmtUSD(inrVal));
-    }
-
-    function setDualRound(baseId, inrVal, usdNote) {
-        set(baseId + '-inr', fmtINRRound(inrVal));
-        set(baseId + '-usd', usdNote !== undefined ? usdNote : fmtUSDRound(inrVal));
     }
 
     function hasSparkInternalParam() {
@@ -204,6 +185,11 @@
             currentYear++;
         }
 
+        if (effectiveAthiyaRate >= 0.999) {
+            errs.push({ id: 'ec-rev-share-y1', label: 'Revenue share', message: 'Athiya share cannot be 100% - minimum margin cannot be achieved' });
+            return errs;
+        }
+
         // Markup-on-cost: sparkNet >= costs × minMarginPct
         // sparkNet = revenue × (1 - effectiveAthiyaRate) + setupFee - costs
         // → minRevenue = (costs × (1 + minMarginPct) - setupFee) / (1 - effectiveAthiyaRate)
@@ -248,9 +234,9 @@
         }
 
         const athiyaDenom = 1 - effectiveAthiyaRate;
-        const minRevenue = athiyaDenom > 0.001
-            ? Math.max(0, costsVanilla.total * (1 + inp.minMarginPct) - inp.setupFeeINR) / athiyaDenom
-            : 0;
+        if (athiyaDenom <= 0.001) return;
+
+        const minRevenue = Math.max(0, costsVanilla.total * (1 + inp.minMarginPct) - inp.setupFeeINR) / athiyaDenom;
         const minBasePriceVanilla = (inp.seats * inp.term * combinedDiscountFactor) > 0
             ? minRevenue / (inp.seats * inp.term * combinedDiscountFactor)
             : 0;
@@ -354,11 +340,14 @@
         const videoHoursHDPerMonth = inp.videoHoursHDPerMonth;
         const effectiveVideoHoursPerMonth = videoHoursSDPerMonth + videoHoursHDPerMonth * inp.hdSdFactor;
         const totalVideoHours = effectiveVideoHoursPerMonth * termMonths;
+        const baseVideoHoursPerMonth = videoHoursSDPerMonth + videoHoursHDPerMonth;
+        const baseTotalVideoHours = baseVideoHoursPerMonth * termMonths;
         const totalVideoHoursSD = videoHoursSDPerMonth * termMonths;
         const totalVideoHoursHD = videoHoursHDPerMonth * termMonths;
 
         // Processing cost: total over contract (video hours/month x months)
-        const assemblyAI = totalVideoHours * inp.costAssemblyAI;
+        // Transcription, notes, embeddings use base hours (HD vs SD makes no difference for audio/transcript length)
+        const assemblyAI = baseTotalVideoHours * inp.costAssemblyAI;
 
         // Batch: SD and HD split (HD uses hdSdFactor for compute hours)
         const batchHrsSD = totalVideoHoursSD * inp.batchHrsPerVideoHr;
@@ -367,9 +356,9 @@
         const batchHD = batchHrsHD * inp.costBatch;
         const batch = batchSD + batchHD;
 
-        // Pipeline LLM (Gemini) for notes/chapters/slides - total over contract
-        const geminiPipeline = (totalVideoHours * inp.pipelineTokensIn / 1e6) * inp.costGeminiIn
-                             + (totalVideoHours * inp.pipelineTokensOut / 1e6) * inp.costGeminiOut;
+        // Pipeline LLM (Gemini) for notes/chapters/slides - total over contract (base hours, not HD-multiplied)
+        const geminiPipeline = (baseTotalVideoHours * inp.pipelineTokensIn / 1e6) * inp.costGeminiIn
+                             + (baseTotalVideoHours * inp.pipelineTokensOut / 1e6) * inp.costGeminiOut;
 
         // Storage: SD and HD split; triangular sum (storage grows monthly)
         const storageMonthSum = (termMonths * (termMonths + 1)) / 2; // 1+2+...+term
@@ -399,8 +388,8 @@
                                  + (quizQueriesTotal * inp.quizTokensOut / 1e6) * inp.costGeminiOut;
         const geminiQuiz = geminiQuizPerMonth * termMonths;
 
-        // OpenAI embeddings (per video hour)
-        const embeddingTokensPerMonth = inp.embeddingTokensPerVideoHr * effectiveVideoHoursPerMonth;
+        // OpenAI embeddings (per video hour; base hours, not HD-multiplied)
+        const embeddingTokensPerMonth = inp.embeddingTokensPerVideoHr * baseVideoHoursPerMonth;
         const openAI = (embeddingTokensPerMonth / 1e6) * inp.costOpenAIEmbedding * termMonths;
 
         const gemini = geminiPipeline + geminiTutor + geminiQuiz;
@@ -428,7 +417,7 @@
         // Detail for full breakdown (pre-multiplier values)
         costs.detail = {
             termMonths,
-            transcription: { totalVideoHours, unitCost: inp.costAssemblyAI, amount: assemblyAI },
+            transcription: { totalVideoHours: baseTotalVideoHours, unitCost: inp.costAssemblyAI, amount: assemblyAI },
             storage: {
                 sd: storageGB_SD > 0 ? { storageGB: storageGB_SD, monthlyNewGB: monthlyNewGB_SD, amount: s3StorageCost_SD } : null,
                 hd: storageGB_HD > 0 ? { storageGB: storageGB_HD, monthlyNewGB: monthlyNewGB_HD, amount: s3StorageCost_HD } : null,
@@ -451,7 +440,7 @@
                 totalAmount: batch,
             },
             pipeline: {
-                totalVideoHours,
+                totalVideoHours: baseTotalVideoHours,
                 tokensIn: inp.pipelineTokensIn,
                 tokensOut: inp.pipelineTokensOut,
                 costIn: inp.costGeminiIn,
@@ -489,7 +478,7 @@
                 amount: s3Streaming,
             },
             embeddings: {
-                effectiveVideoHoursPerMonth,
+                baseVideoHoursPerMonth,
                 embeddingTokensPerVideoHr: inp.embeddingTokensPerVideoHr,
                 embeddingTokensPerMonth,
                 termMonths,
@@ -690,11 +679,11 @@
         html += '<div class="ec-detail-row">';
         html += '<div class="ec-detail-label">Transcription (AssemblyAI)</div>';
         html += '<div class="ec-detail-workings">';
-        html += 'Usage: (SD ' + fmtNum(inp.videoHoursSDPerMonth) + ' + HD ' + fmtNum(inp.videoHoursHDPerMonth) + ' x ' + fmtNum(inp.hdSdFactor) + ') x ' + d.termMonths + ' mo = ' + fmtNum(d.transcription.totalVideoHours) + ' video hrs';
+        html += 'Usage: (SD ' + fmtNum(inp.videoHoursSDPerMonth) + ' + HD ' + fmtNum(inp.videoHoursHDPerMonth) + ') x ' + d.termMonths + ' mo = ' + fmtNum(d.transcription.totalVideoHours) + ' video hrs';
         html += '</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.transcription.unitCost) + ' / video hr (Unit Costs)</div>';
-        html += '<div class="ec-detail-formula">' + fmtNum(d.transcription.totalVideoHours) + ' x ' + fmtNum(d.transcription.unitCost) + ' = ' + fmtINRRound(d.transcription.amount) + '</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.transcription.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.transcription.amount) + '</span></div>';
+        html += '<div class="ec-detail-formula">' + fmtNum(d.transcription.totalVideoHours) + ' x ' + fmtNum(d.transcription.unitCost) + ' = ' + fmtINR(d.transcription.amount) + '</div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.transcription.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.transcription.amount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row">';
@@ -714,13 +703,13 @@
         html += '<button type="button" class="ec-detail-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-storage-triangle">Show formula</button>';
         html += '<div id="ec-storage-triangle" class="ec-detail-triangle hidden" aria-hidden="true">';
         if (d.storage.sd) {
-            html += 'SD: monthly new GB = ' + fmtNum(d.storage.sd.monthlyNewGB) + '. Sum 1+2+...+' + d.termMonths + ' = ' + d.storage.storageMonthSum + '. Cost = ' + fmtNum(d.storage.sd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINRRound(d.storage.sd.amount) + '. ';
+            html += 'SD: monthly new GB = ' + fmtNum(d.storage.sd.monthlyNewGB) + '. Sum 1+2+...+' + d.termMonths + ' = ' + d.storage.storageMonthSum + '. Cost = ' + fmtNum(d.storage.sd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINR(d.storage.sd.amount) + '. ';
         }
         if (d.storage.hd) {
-            html += 'HD: monthly new GB = ' + fmtNum(d.storage.hd.monthlyNewGB) + '. Cost = ' + fmtNum(d.storage.hd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINRRound(d.storage.hd.amount) + '.';
+            html += 'HD: monthly new GB = ' + fmtNum(d.storage.hd.monthlyNewGB) + '. Cost = ' + fmtNum(d.storage.hd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINR(d.storage.hd.amount) + '.';
         }
         html += '</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.storage.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.storage.totalAmount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.storage.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.storage.totalAmount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row">';
@@ -738,33 +727,33 @@
         html += '</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' vCPU-hrs / SD video hr, HD ' + fmtNum(d.batch.hdSdFactor) + 'x (Technical)</div>';
         html += '<div class="ec-detail-formula">' + fmtNum(d.batch.costPerVcpuHr) + ' / vCPU-hr (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.batch.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.batch.totalAmount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.batch.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.batch.totalAmount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row">';
         html += '<div class="ec-detail-label">LLM - course creation (Gemini)</div>';
         html += '<div class="ec-detail-workings">' + fmtNum(d.pipeline.totalVideoHours) + ' video hrs x (' + fmtNum(d.pipeline.tokensIn) + ' in + ' + fmtNum(d.pipeline.tokensOut) + ' out) tokens</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.pipeline.tokensIn) + ' in / video hr, ' + fmtNum(d.pipeline.tokensOut) + ' out / video hr (Technical). ' + fmtNum(d.pipeline.costIn) + ' / 1M in, ' + fmtNum(d.pipeline.costOut) + ' / 1M out (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.pipeline.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.pipeline.amount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.pipeline.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.pipeline.amount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row">';
         html += '<div class="ec-detail-label">LLM - quiz creation (Gemini)</div>';
         html += '<div class="ec-detail-workings">' + fmtNum(d.quiz.numVideosPerMonth) + ' videos/mo x ' + fmtNum(d.quiz.quizQuestionsPerVideoPerMonth) + ' questions/video x ' + d.quiz.termMonths + ' mo = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth * d.quiz.termMonths) + ' questions</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.quiz.tokensIn) + ' in / question, ' + fmtNum(d.quiz.tokensOut) + ' out / question (Technical)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.quiz.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.quiz.amount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.quiz.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.quiz.amount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row">';
         html += '<div class="ec-detail-label">Embeddings (OpenAI)</div>';
-        html += '<div class="ec-detail-workings">' + fmtNum(d.embeddings.effectiveVideoHoursPerMonth) + ' video hrs/mo x ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens/hr x ' + d.embeddings.termMonths + ' mo = ' + fmtNum(d.embeddings.embeddingTokensPerMonth * d.embeddings.termMonths) + ' tokens</div>';
+        html += '<div class="ec-detail-workings">' + fmtNum(d.embeddings.baseVideoHoursPerMonth) + ' video hrs/mo x ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens/hr x ' + d.embeddings.termMonths + ' mo = ' + fmtNum(d.embeddings.embeddingTokensPerMonth * d.embeddings.termMonths) + ' tokens</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens / video hr (Technical). ' + fmtNum(d.embeddings.costPer1MTokens) + ' / 1M tokens (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.embeddings.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.embeddings.amount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.embeddings.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.embeddings.amount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row ec-detail-row--subtotal">';
         html += '<div class="ec-detail-label ec-result-label--strong">Video-based subtotal</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(videoSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(videoSubtotal) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(videoSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSD(videoSubtotal) + '</span></div>';
         html += '</div>';
 
         html += '</div>';
@@ -776,19 +765,19 @@
         html += '<div class="ec-detail-label">LLM - AI Tutor (Gemini)</div>';
         html += '<div class="ec-detail-workings">' + fmtNum(d.tutor.seats) + ' seats x ' + fmtNum(d.tutor.queriesPerSeat) + ' queries/seat/mo x ' + d.tutor.termMonths + ' mo = ' + fmtNum(d.tutor.tutorQueriesTotalPerMonth * d.tutor.termMonths) + ' queries' + (d.tutor.includeTutor ? '' : ' (N/A - not in tier)') + '</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.tutor.tokensIn) + ' in / query, ' + fmtNum(d.tutor.tokensOut) + ' out / query (Technical)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.tutor.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.tutor.amount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.tutor.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.tutor.amount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row">';
         html += '<div class="ec-detail-label">Video streaming (S3 data transfer)</div>';
         html += '<div class="ec-detail-workings">' + fmtNum(d.streaming.seats) + ' seats x ' + fmtNum(d.streaming.streamingHrsPerSeat) + ' hrs/seat/mo x ' + fmtNum(d.streaming.gbPerHr) + ' GB/hr x ' + d.termMonths + ' mo = ' + fmtNum(d.streaming.seats * d.streaming.streamingHrsPerSeat * d.streaming.gbPerHr * d.termMonths) + ' GB. Cost = GB x ' + fmtNum(d.streaming.costPerGB) + ' / GB</div>';
         html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.streaming.gbPerHr) + ' GB / streamed hr. ' + fmtNum(d.streaming.costPerGB) + ' / GB out (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.streaming.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.streaming.amount) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.streaming.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.streaming.amount) + '</span></div>';
         html += '</div>';
 
         html += '<div class="ec-detail-row ec-detail-row--subtotal">';
         html += '<div class="ec-detail-label ec-result-label--strong">Student-based subtotal</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(studentSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(studentSubtotal) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(studentSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSD(studentSubtotal) + '</span></div>';
         html += '</div>';
 
         html += '</div>';
@@ -796,11 +785,11 @@
         html += '<div class="ec-detail-block">';
         html += '<div class="ec-detail-row ec-detail-row--total">';
         html += '<div class="ec-detail-label ec-result-label--strong">Total (before multiplier)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINRRound(d.totalPreMultiplier) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(d.totalPreMultiplier) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.totalPreMultiplier) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.totalPreMultiplier) + '</span></div>';
         html += '</div>';
         html += '<div class="ec-detail-row ec-detail-row--total">';
         html += '<div class="ec-detail-label">x Cost safety multiplier (' + fmtNum(d.costMultiplier) + ')</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINRRound(costs.total) + '</span><span class="ec-result-value-secondary">' + fmtUSDRound(costs.total) + '</span></div>';
+        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(costs.total) + '</span><span class="ec-result-value-secondary">' + fmtUSD(costs.total) + '</span></div>';
         html += '</div>';
         html += '</div>';
 
@@ -857,11 +846,11 @@
 
         // Summary (sticky) - per-unit keeps decimals, aggregates rounded
         setDual('ec-summary-net', pricing.netPricePerSeatPerMonth);
-        setDualRound('ec-summary-tcv', pricing.tcvINR);
-        setDualRound('ec-summary-spark-rev', pricing.sparkGrossINR);
-        setDualRound('ec-summary-athiya-rev', pricing.athiyaAmountINR);
+        setDual('ec-summary-tcv', pricing.tcvINR);
+        setDual('ec-summary-spark-rev', pricing.sparkGrossINR);
+        setDual('ec-summary-athiya-rev', pricing.athiyaAmountINR);
         set('ec-summary-margin-pct', fmtPct(pricing.marginPct));
-        setDualRound('ec-summary-spark-net', pricing.sparkNetINR);
+        setDual('ec-summary-spark-net', pricing.sparkNetINR);
 
         // Spark-internal visibility
         const showSparkInternal = hasSparkInternalParam();
@@ -886,26 +875,26 @@
         }
 
         // Contract value - aggregates rounded
-        setDualRound('ec-out-acv', pricing.acvINR);
-        setDualRound('ec-out-setup', pricing.setupFeeINR);
+        setDual('ec-out-acv', pricing.acvINR);
+        setDual('ec-out-setup', pricing.setupFeeINR);
         set('ec-out-tcv-term', String(inp.term));
-        setDualRound('ec-out-tcv', pricing.tcvINR);
+        setDual('ec-out-tcv', pricing.tcvINR);
 
         // Cost breakdown - aggregates rounded
-        setDualRound('ec-cost-out-assemblyai', costs.assemblyAI);
+        setDual('ec-cost-out-assemblyai', costs.assemblyAI);
         set('ec-cost-out-storage-gb', Math.round(costs.storageGB));
-        setDualRound('ec-cost-out-s3-storage', costs.s3Storage);
-        setDualRound('ec-cost-out-s3-streaming', costs.s3Streaming);
-        setDualRound('ec-cost-out-batch', costs.batch);
-        setDualRound('ec-cost-out-gemini', costs.gemini);
-        setDualRound('ec-cost-out-openai', costs.openAI);
-        setDualRound('ec-cost-out-total', costs.total);
+        setDual('ec-cost-out-s3-storage', costs.s3Storage);
+        setDual('ec-cost-out-s3-streaming', costs.s3Streaming);
+        setDual('ec-cost-out-batch', costs.batch);
+        setDual('ec-cost-out-gemini', costs.gemini);
+        setDual('ec-cost-out-openai', costs.openAI);
+        setDual('ec-cost-out-total', costs.total);
 
         // Revenue Share - aggregates rounded
-        setDualRound('ec-margin-out-spark-gross', pricing.sparkGrossINR);
-        setDualRound('ec-margin-out-athiya', pricing.athiyaAmountINR);
-        setDualRound('ec-margin-out-cost', costs.total);
-        setDualRound('ec-margin-out-net', pricing.sparkNetINR);
+        setDual('ec-margin-out-spark-gross', pricing.sparkGrossINR);
+        setDual('ec-margin-out-athiya', pricing.athiyaAmountINR);
+        setDual('ec-margin-out-cost', costs.total);
+        setDual('ec-margin-out-net', pricing.sparkNetINR);
         set('ec-margin-out-pct', fmtPct(pricing.marginPct));
 
         // Year-by-year: one section per year, Total revenue / Spark / Athiya rows with INR and USD
@@ -916,27 +905,27 @@
                 var rows = '<div class="ec-result-row">' +
                     '<span class="ec-result-label">Total revenue</span>' +
                     '<div class="ec-result-dual">' +
-                    '<span class="ec-result-value">' + fmtINRRound(d.rev) + '</span>' +
-                    '<span class="ec-result-value-secondary">' + fmtUSDRound(d.rev) + '</span>' +
+                    '<span class="ec-result-value">' + fmtINR(d.rev) + '</span>' +
+                    '<span class="ec-result-value-secondary">' + fmtUSD(d.rev) + '</span>' +
                     '</div></div>' +
                     '<div class="ec-result-row">' +
                     '<span class="ec-result-label">Spark (recurring)</span>' +
                     '<div class="ec-result-dual">' +
-                    '<span class="ec-result-value">' + fmtINRRound(d.spark) + '</span>' +
-                    '<span class="ec-result-value-secondary">' + fmtUSDRound(d.spark) + '</span>' +
+                    '<span class="ec-result-value">' + fmtINR(d.spark) + '</span>' +
+                    '<span class="ec-result-value-secondary">' + fmtUSD(d.spark) + '</span>' +
                     '</div></div>' +
                     '<div class="ec-result-row">' +
                     '<span class="ec-result-label">Athiya</span>' +
                     '<div class="ec-result-dual">' +
-                    '<span class="ec-result-value">' + fmtINRRound(d.athiya) + '</span>' +
-                    '<span class="ec-result-value-secondary">' + fmtUSDRound(d.athiya) + '</span>' +
+                    '<span class="ec-result-value">' + fmtINR(d.athiya) + '</span>' +
+                    '<span class="ec-result-value-secondary">' + fmtUSD(d.athiya) + '</span>' +
                     '</div></div>';
                 if (d.year === 1 && setupFeeINR > 0) {
                     rows += '<div class="ec-result-row ec-result-row--setup-fee">' +
                         '<span class="ec-result-label">Setup fee (one-time, Spark only)</span>' +
                         '<div class="ec-result-dual">' +
-                        '<span class="ec-result-value">' + fmtINRRound(setupFeeINR) + '</span>' +
-                        '<span class="ec-result-value-secondary">' + fmtUSDRound(setupFeeINR) + '</span>' +
+                        '<span class="ec-result-value">' + fmtINR(setupFeeINR) + '</span>' +
+                        '<span class="ec-result-value-secondary">' + fmtUSD(setupFeeINR) + '</span>' +
                         '</div></div>';
                 }
                 const yearLabel = d.months < 12 ? 'Year ' + d.year + ' (' + d.months + ' months)' : 'Year ' + d.year;
@@ -1044,7 +1033,6 @@
     }
 
     function resetBySection(section) {
-        const data = Object.assign({}, DEFAULTS);
         const sectionDefaults = {
             deal: DEFAULTS_DEAL,
             'revenue-share': DEFAULTS_REVENUE_SHARE,
@@ -1054,6 +1042,7 @@
             costs: DEFAULTS_COSTS
         }[section];
         if (!sectionDefaults) return;
+        const data = gatherAllInputValues();
         Object.assign(data, sectionDefaults);
         applyImportedValues(data);
         console.log(LOG, 'reset section', section);
@@ -1308,23 +1297,19 @@
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.ec-tier-btn[data-tier]').forEach(b => b.classList.remove('ec-tier-btn--active'));
                 btn.classList.add('ec-tier-btn--active');
-                // Tutor queries: default 0 for Vanilla, 20 for Premium
-                const tutorEl = document.getElementById('ec-tutor-queries');
-                if (tutorEl && tutorEl.value === '0' && btn.getAttribute('data-tier') === 'premium') {
-                    tutorEl.value = '20';
-                }
-                if (tutorEl && btn.getAttribute('data-tier') === 'vanilla') {
-                    tutorEl.value = '0';
-                }
                 recalculate();
             });
         });
 
-        // AI Tutor in Vanilla toggle
+        // AI Tutor in Vanilla toggle: only auto-set tutor queries to 0 when user selects No
         document.querySelectorAll('.ec-tier-btn[data-tutor-vanilla]').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.ec-tier-btn[data-tutor-vanilla]').forEach(b => b.classList.remove('ec-tier-btn--active'));
                 btn.classList.add('ec-tier-btn--active');
+                if (btn.getAttribute('data-tutor-vanilla') === 'no') {
+                    const tutorEl = document.getElementById('ec-tutor-queries');
+                    if (tutorEl) tutorEl.value = '0';
+                }
                 recalculate();
             });
         });
