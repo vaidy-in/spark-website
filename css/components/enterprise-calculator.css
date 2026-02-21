@@ -985,6 +985,18 @@
     line-height: 1.5;
 }
 
+.ec-detail-step {
+    margin-top: 6px;
+}
+
+.ec-detail-step:first-child {
+    margin-top: 0;
+}
+
+.ec-detail-step.ec-detail-formula {
+    margin-top: 8px;
+}
+
 .ec-detail-assumption {
     font-style: italic;
 }

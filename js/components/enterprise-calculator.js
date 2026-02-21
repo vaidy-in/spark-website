@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.10';
+    window.APP_VERSION = '1.0.11';
 
     const LOG = '[ec]';
 
@@ -661,150 +661,8 @@
     }
 
     function renderDetailedCostBreakdown(inp, costs) {
-        const d = costs.detail;
-        if (!d) return;
-
-        const container = document.getElementById('ec-detailed-breakdown-content');
-        if (!container) return;
-
-        const videoSubtotal = d.transcription.amount + d.storage.totalAmount + d.batch.totalAmount +
-            d.pipeline.amount + d.quiz.amount + d.embeddings.amount;
-        const studentSubtotal = d.tutor.amount + d.streaming.amount;
-
-        let html = '';
-
-        html += '<div class="ec-detail-block">';
-        html += '<p class="ec-detail-block-title">Video-based costs</p>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">Transcription (AssemblyAI)</div>';
-        html += '<div class="ec-detail-workings">';
-        html += 'Usage: (SD ' + fmtNum(inp.videoHoursSDPerMonth) + ' + HD ' + fmtNum(inp.videoHoursHDPerMonth) + ') x ' + d.termMonths + ' mo = ' + fmtNum(d.transcription.totalVideoHours) + ' video hrs';
-        html += '</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.transcription.unitCost) + ' / video hr (Unit Costs)</div>';
-        html += '<div class="ec-detail-formula">' + fmtNum(d.transcription.totalVideoHours) + ' x ' + fmtNum(d.transcription.unitCost) + ' = ' + fmtINR(d.transcription.amount) + '</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.transcription.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.transcription.amount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">Cloud storage (S3)</div>';
-        html += '<div class="ec-detail-workings">';
-        if (d.storage.sd) {
-            html += 'SD: ' + fmtNum(d.storage.videoHoursSDPerMonth) + ' hrs/mo x ' + fmtNum(d.storage.gbPerVideoHr) + ' GB/hr x ' + d.termMonths + ' mo = ' + fmtNum(Math.round(d.storage.sd.storageGB)) + ' GB end-state. ';
-        }
-        if (d.storage.hd) {
-            html += 'HD: ' + fmtNum(d.storage.videoHoursHDPerMonth) + ' hrs/mo x ' + fmtNum(d.storage.gbPerVideoHr) + ' x ' + fmtNum(d.storage.hdSdFactor) + ' x ' + d.termMonths + ' mo = ' + fmtNum(Math.round(d.storage.hd.storageGB)) + ' GB end-state.';
-        }
-        if (!d.storage.sd && !d.storage.hd) {
-            html += 'No video storage (0 SD, 0 HD hrs)';
-        }
-        html += '</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.storage.gbPerVideoHr) + ' GB / SD video hr (Technical). Cost uses triangular sum (storage grows monthly).</div>';
-        html += '<button type="button" class="ec-detail-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-storage-triangle">Show formula</button>';
-        html += '<div id="ec-storage-triangle" class="ec-detail-triangle hidden" aria-hidden="true">';
-        if (d.storage.sd) {
-            html += 'SD: monthly new GB = ' + fmtNum(d.storage.sd.monthlyNewGB) + '. Sum 1+2+...+' + d.termMonths + ' = ' + d.storage.storageMonthSum + '. Cost = ' + fmtNum(d.storage.sd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINR(d.storage.sd.amount) + '. ';
-        }
-        if (d.storage.hd) {
-            html += 'HD: monthly new GB = ' + fmtNum(d.storage.hd.monthlyNewGB) + '. Cost = ' + fmtNum(d.storage.hd.monthlyNewGB) + ' x ' + d.storage.storageMonthSum + ' x ' + fmtNum(d.storage.costPerGB) + ' = ' + fmtINR(d.storage.hd.amount) + '.';
-        }
-        html += '</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.storage.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.storage.totalAmount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">Video processing (AWS Batch)</div>';
-        html += '<div class="ec-detail-workings">';
-        if (d.batch.sd) {
-            html += 'SD: ' + fmtNum(d.batch.totalVideoHoursSD) + ' video hrs x ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' vCPU-hrs/video hr = ' + fmtNum(d.batch.sd.batchHrs) + ' vCPU-hrs. ';
-        }
-        if (d.batch.hd) {
-            html += 'HD: ' + fmtNum(d.batch.totalVideoHoursHD) + ' video hrs x ' + fmtNum(d.batch.hdSdFactor) + ' x ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' = ' + fmtNum(d.batch.hd.batchHrs) + ' vCPU-hrs.';
-        }
-        if (!d.batch.sd && !d.batch.hd) {
-            html += 'No video processing (0 SD, 0 HD hrs)';
-        }
-        html += '</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.batch.batchHrsPerVideoHr) + ' vCPU-hrs / SD video hr, HD ' + fmtNum(d.batch.hdSdFactor) + 'x (Technical)</div>';
-        html += '<div class="ec-detail-formula">' + fmtNum(d.batch.costPerVcpuHr) + ' / vCPU-hr (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.batch.totalAmount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.batch.totalAmount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">LLM - course creation (Gemini)</div>';
-        html += '<div class="ec-detail-workings">' + fmtNum(d.pipeline.totalVideoHours) + ' video hrs x (' + fmtNum(d.pipeline.tokensIn) + ' in + ' + fmtNum(d.pipeline.tokensOut) + ' out) tokens</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.pipeline.tokensIn) + ' in / video hr, ' + fmtNum(d.pipeline.tokensOut) + ' out / video hr (Technical). ' + fmtNum(d.pipeline.costIn) + ' / 1M in, ' + fmtNum(d.pipeline.costOut) + ' / 1M out (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.pipeline.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.pipeline.amount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">LLM - quiz creation (Gemini)</div>';
-        html += '<div class="ec-detail-workings">' + fmtNum(d.quiz.numVideosPerMonth) + ' videos/mo x ' + fmtNum(d.quiz.quizQuestionsPerVideoPerMonth) + ' questions/video x ' + d.quiz.termMonths + ' mo = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth * d.quiz.termMonths) + ' questions</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.quiz.tokensIn) + ' in / question, ' + fmtNum(d.quiz.tokensOut) + ' out / question (Technical)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.quiz.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.quiz.amount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">Embeddings (OpenAI)</div>';
-        html += '<div class="ec-detail-workings">' + fmtNum(d.embeddings.baseVideoHoursPerMonth) + ' video hrs/mo x ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens/hr x ' + d.embeddings.termMonths + ' mo = ' + fmtNum(d.embeddings.embeddingTokensPerMonth * d.embeddings.termMonths) + ' tokens</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' tokens / video hr (Technical). ' + fmtNum(d.embeddings.costPer1MTokens) + ' / 1M tokens (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.embeddings.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.embeddings.amount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row ec-detail-row--subtotal">';
-        html += '<div class="ec-detail-label ec-result-label--strong">Video-based subtotal</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(videoSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSD(videoSubtotal) + '</span></div>';
-        html += '</div>';
-
-        html += '</div>';
-
-        html += '<div class="ec-detail-block">';
-        html += '<p class="ec-detail-block-title">Student-based costs</p>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">LLM - AI Tutor (Gemini)</div>';
-        html += '<div class="ec-detail-workings">' + fmtNum(d.tutor.seats) + ' seats x ' + fmtNum(d.tutor.queriesPerSeat) + ' queries/seat/mo x ' + d.tutor.termMonths + ' mo = ' + fmtNum(d.tutor.tutorQueriesTotalPerMonth * d.tutor.termMonths) + ' queries' + (d.tutor.includeTutor ? '' : ' (N/A - not in tier)') + '</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.tutor.tokensIn) + ' in / query, ' + fmtNum(d.tutor.tokensOut) + ' out / query (Technical)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.tutor.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.tutor.amount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row">';
-        html += '<div class="ec-detail-label">Video streaming (S3 data transfer)</div>';
-        html += '<div class="ec-detail-workings">' + fmtNum(d.streaming.seats) + ' seats x ' + fmtNum(d.streaming.streamingHrsPerSeat) + ' hrs/seat/mo x ' + fmtNum(d.streaming.gbPerHr) + ' GB/hr x ' + d.termMonths + ' mo = ' + fmtNum(d.streaming.seats * d.streaming.streamingHrsPerSeat * d.streaming.gbPerHr * d.termMonths) + ' GB. Cost = GB x ' + fmtNum(d.streaming.costPerGB) + ' / GB</div>';
-        html += '<div class="ec-detail-assumption">Assumption: ' + fmtNum(d.streaming.gbPerHr) + ' GB / streamed hr. ' + fmtNum(d.streaming.costPerGB) + ' / GB out (Unit Costs)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.streaming.amount) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.streaming.amount) + '</span></div>';
-        html += '</div>';
-
-        html += '<div class="ec-detail-row ec-detail-row--subtotal">';
-        html += '<div class="ec-detail-label ec-result-label--strong">Student-based subtotal</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(studentSubtotal) + '</span><span class="ec-result-value-secondary">' + fmtUSD(studentSubtotal) + '</span></div>';
-        html += '</div>';
-
-        html += '</div>';
-
-        html += '<div class="ec-detail-block">';
-        html += '<div class="ec-detail-row ec-detail-row--total">';
-        html += '<div class="ec-detail-label ec-result-label--strong">Total (before multiplier)</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost">' + fmtINR(d.totalPreMultiplier) + '</span><span class="ec-result-value-secondary">' + fmtUSD(d.totalPreMultiplier) + '</span></div>';
-        html += '</div>';
-        html += '<div class="ec-detail-row ec-detail-row--total">';
-        html += '<div class="ec-detail-label">x Cost safety multiplier (' + fmtNum(d.costMultiplier) + ')</div>';
-        html += '<div class="ec-detail-amount"><span class="ec-result-value ec-result-value--cost-total">' + fmtINR(costs.total) + '</span><span class="ec-result-value-secondary">' + fmtUSD(costs.total) + '</span></div>';
-        html += '</div>';
-        html += '</div>';
-
-        container.innerHTML = html;
-
-        const expandBtn = container.querySelector('.ec-detail-expand-btn');
-        const triangleEl = document.getElementById('ec-storage-triangle');
-        if (expandBtn && triangleEl) {
-            expandBtn.addEventListener('click', function () {
-                const expanded = expandBtn.getAttribute('aria-expanded') === 'true';
-                triangleEl.classList.toggle('hidden', expanded);
-                triangleEl.setAttribute('aria-hidden', String(expanded));
-                expandBtn.setAttribute('aria-expanded', String(!expanded));
-                expandBtn.textContent = expanded ? 'Show formula' : 'Hide formula';
-            });
+        if (window.EC_BREAKDOWN && window.EC_BREAKDOWN.renderDetailedCostBreakdown) {
+            window.EC_BREAKDOWN.renderDetailedCostBreakdown(inp, costs);
         }
     }
 
