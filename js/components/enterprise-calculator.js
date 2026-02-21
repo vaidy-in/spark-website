@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.12';
+    window.APP_VERSION = '1.0.13';
 
     const LOG = '[ec]';
 
@@ -91,8 +91,8 @@
         { id: 'ec-tutor-queries-premium', label: 'AI Tutor queries / seat / month (Premium)', min: 0 },
         { id: 'ec-num-videos-vanilla', label: 'Number of videos per month (Vanilla)', min: 0 },
         { id: 'ec-num-videos-premium', label: 'Number of videos per month (Premium)', min: 0 },
-        { id: 'ec-quiz-queries-vanilla', label: 'Quiz questions per video / month (Vanilla)', min: 0 },
-        { id: 'ec-quiz-queries-premium', label: 'Quiz questions per video / month (Premium)', min: 0 },
+        { id: 'ec-quiz-queries-vanilla', label: 'Quiz questions per video (Vanilla)', min: 0 },
+        { id: 'ec-quiz-queries-premium', label: 'Quiz questions per video (Premium)', min: 0 },
         { id: 'ec-min-margin', label: 'Min. cost markup for Spark', min: 0 },
         { id: 'ec-base-price-vanilla', label: 'Base price Vanilla', min: 0 },
         { id: 'ec-base-price-premium', label: 'Base price Premium', min: 0 },
@@ -905,23 +905,23 @@
         'ec-num-videos-vanilla': '40',
         'ec-num-videos-premium': '40',
         'ec-tutor-queries-vanilla': '0',
-        'ec-tutor-queries-premium': '20',
-        'ec-quiz-queries-vanilla': '5',
-        'ec-quiz-queries-premium': '5',
-        'ec-embedding-tokens': '25000',
-        'ec-batch-hrs-per-video-hr': '0.5',
-        'ec-tutor-tokens-in': '2000',
+        'ec-tutor-queries-premium': '100',
+        'ec-quiz-queries-vanilla': '50',
+        'ec-quiz-queries-premium': '100',
+        'ec-embedding-tokens': '15000',
+        'ec-batch-hrs-per-video-hr': '3',
+        'ec-tutor-tokens-in': '350',
         'ec-tutor-tokens-out': '500',
         'ec-quiz-tokens-in': '5000',
         'ec-quiz-tokens-out': '2000',
-        'ec-pipeline-tokens-in': '500000',
-        'ec-pipeline-tokens-out': '200000',
-        'ec-cost-assemblyai': '55',
+        'ec-pipeline-tokens-in': '200000',
+        'ec-pipeline-tokens-out': '300000',
+        'ec-cost-assemblyai': '20',
         'ec-cost-s3-storage': '1.93',
         'ec-cost-s3-transfer': '7.56',
         'ec-cost-batch': '4.03',
-        'ec-cost-gemini-in': '6.30',
-        'ec-cost-gemini-out': '25.20',
+        'ec-cost-gemini-in': '27',
+        'ec-cost-gemini-out': '225',
         'ec-cost-openai-embedding': '1.68',
         'ec-cost-multiplier': '1.3',
         'ec-min-margin': '800',
@@ -969,7 +969,8 @@
     const DEFAULTS_COSTS = pickFromDefaults(SECTION_KEYS.costs);
 
     function resetToDefaults() {
-        applyImportedValues(DEFAULTS);
+        applyImportedValues(DEFAULTS, { skipRecalc: true });
+        updateBasePricesFromMinMargin();
         console.log(LOG, 'reset to defaults');
     }
 
@@ -1044,7 +1045,7 @@
         return data;
     }
 
-    function applyImportedValues(data) {
+    function applyImportedValues(data, options) {
         // Backward compat: map old OpenAI input cost to embedding cost
         if (data['ec-cost-openai-in'] && !data['ec-cost-openai-embedding']) {
             data['ec-cost-openai-embedding'] = data['ec-cost-openai-in'];
@@ -1089,7 +1090,7 @@
                 btn.classList.toggle('ec-tier-btn--active', active);
             });
         }
-        recalculate();
+        if (!(options && options.skipRecalc)) recalculate();
     }
 
     function exportJSON() {

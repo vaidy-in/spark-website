@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="app-version" content="1.0.12">
+    <meta name="app-version" content="1.0.13">
     <title>Spark Enterprise Pricing Calculator</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -305,22 +305,22 @@
 
                         <div class="ec-field-row ec-field-row--two-col">
                             <div class="ec-field-label-wrap">
-                                <label for="ec-quiz-queries-vanilla" class="ec-label">Quiz questions / video / month</label>
+                                <label for="ec-quiz-queries-vanilla" class="ec-label">Quiz questions / video</label>
                                 <span class="tooltip-container" data-tooltip>
                                     <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
                                     <div class="tooltip">
                                         <span class="tooltip-title">Quiz generation (Gemini)</span>
-                                        <span class="tooltip-content">How many quiz questions are created per video per month. Trainers and admins create quizzes for each video; learners do not generate their own. Total per month = this value × number of videos per month. Applies to both tiers.<br><br>Example: 5 questions × 40 videos = 200 quiz questions generated per month total.</span>
+                                        <span class="tooltip-content">How many quiz questions are generated per video when it is first added. Total per month = this value × number of new videos per month. Applies to both tiers.<br><br>Example: 8 questions × 40 new videos = 320 quiz questions generated per month.</span>
                                     </div>
                                 </span>
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-quiz-queries-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video per month Vanilla">
+                                <input id="ec-quiz-queries-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video Vanilla">
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-quiz-queries-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video per month Premium">
+                                <input id="ec-quiz-queries-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video Premium">
                             </div>
-                            <span class="ec-unit ec-unit--below">questions / video / month</span>
+                            <span class="ec-unit ec-unit--below">questions / video</span>
                         </div>
                     </div>
 

@@ -23,7 +23,7 @@
         streamingHrsPerSeat: 'Avg streaming per seat / month',
         tutorQueriesPerSeat: 'AI Tutor queries / seat / month',
         numVideosPerMonth: 'Number of videos per month',
-        quizQuestionsPerVideoPerMonth: 'Quiz questions per video / month',
+        quizQuestionsPerVideoPerMonth: 'Quiz questions per video',
         pipelineTokensIn: 'Pipeline: input tokens / video hr',
         pipelineTokensOut: 'Pipeline: output tokens / video hr',
         tutorTokensIn: 'Tutor: input tokens / query',
