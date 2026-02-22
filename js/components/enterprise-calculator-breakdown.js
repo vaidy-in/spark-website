@@ -23,7 +23,7 @@
         streamingHrsPerSeat: 'Avg streaming per seat / month',
         tutorQueriesPerSeat: 'AI Tutor queries / seat / month',
         numVideosPerMonth: 'Number of videos per month',
-        quizQuestionsPerVideoPerMonth: 'Quiz questions per video',
+        quizQuestionsPerHour: 'Quiz questions per hour',
         pipelineTokensIn: 'Pipeline: input tokens / video hr',
         pipelineTokensOut: 'Pipeline: output tokens / video hr',
         tutorTokensIn: 'Tutor: input tokens / query',
@@ -196,8 +196,8 @@
         html += '<div class="ec-detail-row">';
         html += '<div class="ec-detail-label">LLM - quiz creation (Gemini)</div>';
         html += '<div class="ec-detail-workings">';
-        html += step('workings', 'Inputs: ' + INPUT_LABELS.numVideosPerMonth + ': ' + fmtNum(d.quiz.numVideosPerMonth) + ', ' + INPUT_LABELS.quizQuestionsPerVideoPerMonth + ': ' + fmtNum(d.quiz.quizQuestionsPerVideoPerMonth) + ', ' + INPUT_LABELS.term + ': ' + d.quiz.termMonths + ' mo.');
-        html += step('workings', 'Questions/mo = videos/mo × questions/video = ' + fmtNum(d.quiz.numVideosPerMonth) + ' × ' + fmtNum(d.quiz.quizQuestionsPerVideoPerMonth) + ' = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth) + '. Total questions = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth) + ' × ' + d.quiz.termMonths + ' = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth * d.quiz.termMonths) + '.');
+        html += step('workings', 'Inputs: video hrs/mo = ' + fmtNum(d.quiz.baseVideoHoursPerMonth) + ', ' + INPUT_LABELS.quizQuestionsPerHour + ': ' + fmtNum(d.quiz.quizQuestionsPerHour) + ', ' + INPUT_LABELS.term + ': ' + d.quiz.termMonths + ' mo.');
+        html += step('workings', 'Questions/mo = video hrs/mo × questions/hr = ' + fmtNum(d.quiz.baseVideoHoursPerMonth) + ' × ' + fmtNum(d.quiz.quizQuestionsPerHour) + ' = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth) + '. Total questions = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth) + ' × ' + d.quiz.termMonths + ' = ' + fmtNum(d.quiz.quizQueriesTotalPerMonth * d.quiz.termMonths) + '.');
         html += step('workings', 'Token inputs: ' + INPUT_LABELS.quizTokensIn + ': ' + fmtNum(d.quiz.tokensIn) + ', ' + INPUT_LABELS.quizTokensOut + ': ' + fmtNum(d.quiz.tokensOut) + '. Costs from ' + INPUT_LABELS.costGeminiIn + ' and ' + INPUT_LABELS.costGeminiOut + '.');
         html += step('formula', 'Cost = ' + fmtINR(d.quiz.amount) + '.');
         html += '</div>';

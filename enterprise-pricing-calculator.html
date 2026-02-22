@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="app-version" content="1.0.13">
+    <meta name="app-version" content="1.0.15">
     <title>Spark Enterprise Pricing Calculator</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,10 +12,14 @@
     <script src="js/layout.js"></script>
     <script src="js/components/tooltip.js" defer></script>
     <script src="js/components/enterprise-calculator-breakdown.js" defer></script>
+    <script src="js/components/enterprise-calculator-compute.js" defer></script>
     <script src="js/components/enterprise-calculator.js" defer></script>
     <link rel="stylesheet" href="css/components/tooltip.css">
     <link rel="stylesheet" href="css/components/range-slider.css">
     <link rel="stylesheet" href="css/components/enterprise-calculator.css">
+    <link rel="stylesheet" href="css/components/enterprise-calculator-inputs.css">
+    <link rel="stylesheet" href="css/components/enterprise-calculator-results.css">
+    <link rel="stylesheet" href="css/components/enterprise-calculator-breakdown.css">
     <link rel="stylesheet" href="css/components/version-banner.css">
     <script src="js/version-check.js"></script>
 </head>
@@ -186,42 +190,56 @@
 
                         <div class="ec-field-row ec-field-row--two-col">
                             <div class="ec-field-label-wrap">
-                                <label for="ec-video-hours-sd-vanilla" class="ec-label">SD video hours / month</label>
+                                <label for="ec-num-videos-vanilla" class="ec-label">Videos / month</label>
                                 <span class="tooltip-container" data-tooltip>
-                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About SD video hours">?</button>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About number of videos per month">?</button>
                                     <div class="tooltip">
-                                        <span class="tooltip-title">SD video processing hours</span>
-                                        <span class="tooltip-content">How many hours of standard-quality video (720p or lower) the platform processes each month - converting speech to text, adding chapters, generating notes, and extracting slides. New content is typically uploaded month after month.<br><br>Example: 40 hrs = about 40 one-hour training videos (or equivalent) processed each month.</span>
+                                        <span class="tooltip-title">Monthly video upload rate</span>
+                                        <span class="tooltip-content">How many new videos are added to the platform each month. Spark automatically detects new recordings in Team/Zoom cloud and nudges the L&D admin to convert them into courses. SD and HD hours are derived from this count, avg video length, and HD %.<br><br>Example: 40 = about 40 new training videos added each month.</span>
                                     </div>
                                 </span>
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-video-hours-sd-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="SD video hours per month Vanilla">
+                                <input id="ec-num-videos-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Vanilla">
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-video-hours-sd-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="SD video hours per month Premium">
+                                <input id="ec-num-videos-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Premium">
                             </div>
-                            <span class="ec-unit ec-unit--below">hrs / month</span>
+                            <span class="ec-unit ec-unit--below">videos / month</span>
                         </div>
 
-                        <div class="ec-field-row ec-field-row--two-col">
+                        <div class="ec-field-row ec-field-row--span">
                             <div class="ec-field-label-wrap">
-                                <label for="ec-video-hours-hd-vanilla" class="ec-label">HD video hours / month</label>
+                                <label for="ec-avg-video-length" class="ec-label">Avg video length</label>
                                 <span class="tooltip-container" data-tooltip>
-                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD video hours">?</button>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About avg video length">?</button>
                                     <div class="tooltip">
-                                        <span class="tooltip-title">HD video processing hours</span>
-                                        <span class="tooltip-content">How many hours of high-definition video (1080p or higher) are processed per month. HD costs more to process than standard video - the Technical Assumptions section has a multiplier that converts HD hours to an equivalent cost.<br><br>Example: 10 hrs HD at 5x multiplier = roughly the same processing cost as 50 hrs of standard video.</span>
+                                        <span class="tooltip-title">Average length per video</span>
+                                        <span class="tooltip-content">Typical length of each new video in hours. Used with Videos / month to derive total SD and HD hours for processing costs.<br><br>Example: 1 = each video is about 1 hour long. 0.5 = 30-minute videos.</span>
                                     </div>
                                 </span>
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-video-hours-hd-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="HD video hours per month Vanilla">
+                                <input id="ec-avg-video-length" type="number" min="0" step="0.1" class="ec-input cursor-text" aria-label="Average video length in hours">
+                            </div>
+                            <span class="ec-unit ec-unit--below">hrs</span>
+                        </div>
+
+                        <div class="ec-field-row ec-field-row--span">
+                            <div class="ec-field-label-wrap">
+                                <label for="ec-hd-pct" class="ec-label">HD % (of videos)</label>
+                                <span class="tooltip-container" data-tooltip>
+                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD percentage">?</button>
+                                    <div class="tooltip">
+                                        <span class="tooltip-title">SD vs HD video ratio</span>
+                                        <span class="tooltip-content">Percentage of new videos that are high-definition (1080p or higher). The rest are SD (720p or lower). <br><br>Example: 10 = 10% HD, 90% SD. Most training content is SD.</span>
+                                    </div>
+                                </span>
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-video-hours-hd-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="HD video hours per month Premium">
+                                <input id="ec-hd-pct" type="number" min="0" max="100" step="1" class="ec-input cursor-text" aria-label="Percentage of videos that are HD quality">
                             </div>
-                            <span class="ec-unit ec-unit--below">hrs / month</span>
+                            <span class="ec-unit ec-unit--below">%</span>
                         </div>
 
                         <div class="ec-field-row ec-field-row--two-col">
@@ -285,42 +303,22 @@
 
                         <div class="ec-field-row ec-field-row--two-col">
                             <div class="ec-field-label-wrap">
-                                <label for="ec-num-videos-vanilla" class="ec-label">Videos / month</label>
-                                <span class="tooltip-container" data-tooltip>
-                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About number of videos per month">?</button>
-                                    <div class="tooltip">
-                                        <span class="tooltip-title">Monthly video upload rate</span>
-                                        <span class="tooltip-content">How many new videos are added to the platform each month. Customers typically keep uploading content month after month. <br><br> Or rather Spark automatically detects new recordings in Team/Zoom cloud and nudges the L&D admin to convert them into courses.<br><br>Example: 40 = about 40 new training videos are added to the platform each month.</span>
-                                    </div>
-                                </span>
-                            </div>
-                            <div class="ec-input-wrap">
-                                <input id="ec-num-videos-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Vanilla">
-                            </div>
-                            <div class="ec-input-wrap">
-                                <input id="ec-num-videos-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Premium">
-                            </div>
-                            <span class="ec-unit ec-unit--below">videos / month</span>
-                        </div>
-
-                        <div class="ec-field-row ec-field-row--two-col">
-                            <div class="ec-field-label-wrap">
-                                <label for="ec-quiz-queries-vanilla" class="ec-label">Quiz questions / video</label>
+                                <label for="ec-quiz-queries-vanilla" class="ec-label">Quiz questions / hour of video</label>
                                 <span class="tooltip-container" data-tooltip>
                                     <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
                                     <div class="tooltip">
                                         <span class="tooltip-title">Quiz generation (Gemini)</span>
-                                        <span class="tooltip-content">How many quiz questions are generated per video when it is first added. Total per month = this value × number of new videos per month. Applies to both tiers.<br><br>Example: 8 questions × 40 new videos = 320 quiz questions generated per month.</span>
+                                        <span class="tooltip-content">How many quiz questions are generated per hour of video processed. Enter the rate per hour (e.g. 8 = 8 questions per hour of video).</span>
                                     </div>
                                 </span>
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-quiz-queries-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video Vanilla">
+                                <input id="ec-quiz-queries-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per hour Vanilla">
                             </div>
                             <div class="ec-input-wrap">
-                                <input id="ec-quiz-queries-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per video Premium">
+                                <input id="ec-quiz-queries-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per hour Premium">
                             </div>
-                            <span class="ec-unit ec-unit--below">questions / video</span>
+                            <span class="ec-unit ec-unit--below">questions / hour</span>
                         </div>
                     </div>
 
@@ -819,17 +817,33 @@
                     <!-- Min cost markup -->
                     <div class="ec-field-row">
                         <div class="ec-field-label-wrap">
-                            <label for="ec-min-margin" class="ec-label">Min. cost markup for Spark</label>
+                            <label for="ec-min-margin-vanilla" class="ec-label">Min. cost markup for Spark - Vanilla</label>
                             <span class="tooltip-container" data-tooltip>
-                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About min cost markup">?</button>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About min cost markup Vanilla">?</button>
                                 <div class="tooltip">
-                                    <span class="tooltip-title">Minimum cost markup target</span>
-                                    <span class="tooltip-content">Target minimum Spark net as a % of total costs. A 90% markup means Spark's net equals 0.9× its costs. Base prices for Vanilla and Premium are auto-set to achieve this markup. Vanilla base price is computed from costs; Premium is set to 50% higher than Vanilla.</span>
+                                    <span class="tooltip-title">Minimum cost markup target (Vanilla)</span>
+                                    <span class="tooltip-content">Target minimum Spark net as a % of total costs for Vanilla tier. A 90% markup means Spark's net equals 0.9× its costs. Use Reset to auto-set base price from this target.</span>
                                 </div>
                             </span>
                         </div>
                         <div class="ec-input-with-unit">
-                            <input id="ec-min-margin" type="number" min="0" step="1" class="ec-input ec-input--readonly" aria-label="Min cost markup for Spark" readonly>
+                            <input id="ec-min-margin-vanilla" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Min cost markup for Spark Vanilla">
+                            <span class="ec-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-min-margin-premium" class="ec-label">Min. cost markup for Spark - Premium</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About min cost markup Premium">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Minimum cost markup target (Premium)</span>
+                                    <span class="tooltip-content">Target minimum Spark net as a % of total costs for Premium tier. A 90% markup means Spark's net equals 0.9× its costs. Use Reset to auto-set base price from this target.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-min-margin-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Min cost markup for Spark Premium">
                             <span class="ec-unit">%</span>
                         </div>
                     </div>
@@ -936,7 +950,10 @@
                                 <tbody>
                                     <tr class="ec-results-grid-row">
                                         <td class="ec-result-label">Cost markup %</td>
-                                        <td id="ec-summary-margin-pct" class="ec-result-value ec-result-value--margin-pct" colspan="4">0%</td>
+                                        <td id="ec-summary-margin-pct-v-inr" class="ec-result-value ec-result-value--margin-pct ec-result-inr">0%</td>
+                                        <td id="ec-summary-margin-pct-v-usd" class="ec-result-value ec-result-value--margin-pct">0%</td>
+                                        <td id="ec-summary-margin-pct-p-inr" class="ec-result-value ec-result-value--margin-pct ec-result-inr">0%</td>
+                                        <td id="ec-summary-margin-pct-p-usd" class="ec-result-value ec-result-value--margin-pct">0%</td>
                                     </tr>
                                     <tr class="ec-results-grid-row">
                                         <td class="ec-result-label">Spark net</td>
@@ -1070,59 +1087,75 @@
                             <div class="ec-result-table">
                                 <div class="ec-result-row ec-result-row--header">
                                     <span class="ec-result-label"></span>
-                                    <div class="ec-result-dual">
-                                        <span class="ec-result-currency-label">INR</span>
-                                        <span class="ec-result-currency-label">USD</span>
+                                    <div class="ec-result-quad">
+                                        <span class="ec-result-currency-label ec-result-inr">Vanilla INR</span>
+                                        <span class="ec-result-currency-label">Vanilla USD</span>
+                                        <span class="ec-result-currency-label ec-result-inr">Premium INR</span>
+                                        <span class="ec-result-currency-label">Premium USD</span>
                                     </div>
                                 </div>
                             <div class="space-y-2 ec-result-table-body">
                                 <div class="ec-result-row ec-result-row--cost">
                                     <span class="ec-result-label">AssemblyAI (transcription)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-assemblyai-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-cost-out-assemblyai-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-assemblyai-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-assemblyai-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-assemblyai-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-assemblyai-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
-                                    <span class="ec-result-label">AWS S3 storage (<span id="ec-cost-out-storage-gb">0</span> GB)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-s3-storage-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-cost-out-s3-storage-usd" class="ec-result-value-secondary">$0</span>
+                                    <span class="ec-result-label">AWS S3 storage (<span id="ec-cost-out-storage-gb-v">0</span> / <span id="ec-cost-out-storage-gb-p">0</span> GB)</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-s3-storage-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-s3-storage-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-s3-storage-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-s3-storage-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
                                     <span class="ec-result-label">AWS S3 streaming</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-s3-streaming-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-cost-out-s3-streaming-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-s3-streaming-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-s3-streaming-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-s3-streaming-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-s3-streaming-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
                                     <span class="ec-result-label">AWS Batch (compute)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-batch-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-cost-out-batch-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-batch-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-batch-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-batch-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-batch-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
                                     <span class="ec-result-label">Gemini API (pipeline + tutor + quiz)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-gemini-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-cost-out-gemini-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-gemini-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-gemini-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-gemini-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-gemini-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--cost">
                                     <span class="ec-result-label">OpenAI API (embeddings)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-openai-inr" class="ec-result-value ec-result-value--cost">₹0</span>
-                                        <span id="ec-cost-out-openai-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-openai-v-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-openai-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-openai-p-inr" class="ec-result-value ec-result-value--cost ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-openai-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                                 <div class="ec-result-row ec-result-row--highlight ec-result-row--cost-total">
                                     <span class="ec-result-label ec-result-label--strong">Total cost (contract term)</span>
-                                    <div class="ec-result-dual">
-                                        <span id="ec-cost-out-total-inr" class="ec-result-value ec-result-value--cost-total">₹0</span>
-                                        <span id="ec-cost-out-total-usd" class="ec-result-value-secondary">$0</span>
+                                    <div class="ec-result-quad">
+                                        <span id="ec-cost-out-total-v-inr" class="ec-result-value ec-result-value--cost-total ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-total-v-usd" class="ec-result-value-secondary">$0</span>
+                                        <span id="ec-cost-out-total-p-inr" class="ec-result-value ec-result-value--cost-total ec-result-inr">₹0</span>
+                                        <span id="ec-cost-out-total-p-usd" class="ec-result-value-secondary">$0</span>
                                     </div>
                                 </div>
                             </div>
@@ -1251,6 +1284,19 @@
 
     </div>
 </main>
+
+<!-- Reset All confirmation modal -->
+<div id="ec-reset-modal" class="ec-modal hidden" role="dialog" aria-modal="true" aria-labelledby="ec-reset-modal-title" aria-describedby="ec-reset-modal-desc">
+    <div class="ec-modal-backdrop" id="ec-reset-modal-backdrop"></div>
+    <div class="ec-modal-dialog">
+        <h2 id="ec-reset-modal-title" class="ec-modal-title">Reset all inputs?</h2>
+        <p id="ec-reset-modal-desc" class="ec-modal-desc">All inputs will be restored to their default values. Base prices will be set to the minimum required.</p>
+        <div class="ec-modal-actions">
+            <button type="button" id="ec-reset-modal-cancel" class="ec-btn-secondary cursor-pointer">Cancel</button>
+            <button type="button" id="ec-reset-modal-confirm" class="ec-btn-primary cursor-pointer">Reset All</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

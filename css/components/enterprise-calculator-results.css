@@ -1,0 +1,404 @@
+/* Enterprise Pricing Calculator - Results, error state, Fix it */
+
+/* ── Results error state (Stripe-style) ── */
+.ec-results-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 16px 20px;
+}
+
+.ec-results-error-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #991b1b;
+    margin: 0 0 10px 0;
+}
+
+.ec-results-error-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 0.875rem;
+    color: #b91c1c;
+    line-height: 1.6;
+}
+
+.ec-results-error-list li {
+    margin-bottom: 4px;
+}
+
+.ec-results-error-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* Fix it button - per-error action */
+.ec-results-error-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.ec-results-error-item:last-child {
+    margin-bottom: 0;
+}
+
+.ec-results-error-item .ec-results-error-item-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.ec-btn-fix {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #4f46e5;
+    background: #fff;
+    border: 1px solid #c7d2fe;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
+}
+
+.ec-btn-fix:hover {
+    background: #eef2ff;
+    border-color: #a5b4fc;
+    color: #4338ca;
+}
+
+.ec-btn-fix:active {
+    transform: scale(0.98);
+}
+
+/* Input highlight animation - Stripe-style focal ring */
+@keyframes ec-input-highlight {
+    0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+    }
+}
+
+.ec-input.ec-input--highlight {
+    animation: ec-input-highlight 1.2s ease-out forwards;
+}
+
+/* ── Results ── */
+.ec-result-block {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-result-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.ec-result-block-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+}
+
+.ec-result-block-note {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.6875rem;
+    color: #94a3b8;
+}
+
+.ec-result-block-subtitle {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.ec-year-by-year {
+    margin-top: 0;
+}
+
+.ec-year-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.ec-year-section-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 10px 0;
+}
+
+.ec-year-section-note {
+    font-weight: 400;
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.ec-year-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-year-section-header .ec-result-currency-label {
+    font-size: 0.625rem;
+}
+
+.ec-year-section-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 4px;
+}
+
+.ec-result-row--setup-fee {
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 8px;
+    margin-top: 4px;
+}
+
+.ec-result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.ec-result-row--divider {
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 8px;
+    margin-top: 4px;
+}
+
+.ec-result-row--highlight {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 4px -10px;
+}
+
+.ec-result-row--cost {
+    padding: 3px 0;
+}
+
+.ec-result-row--cost-total {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 8px;
+    margin-top: 4px;
+}
+
+.ec-result-row--margin {
+    background: #f0fdf4;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 4px -10px;
+}
+
+.ec-result-row--margin .ec-result-dual .ec-result-value,
+.ec-result-row--margin .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--margin .ec-result-quad .ec-result-value,
+.ec-result-row--margin .ec-result-quad .ec-result-value-secondary,
+#ec-summary-spark-internal .ec-result-dual .ec-result-value,
+#ec-summary-spark-internal .ec-result-dual .ec-result-value-secondary,
+#ec-summary-spark-internal .ec-result-quad .ec-result-value,
+#ec-summary-spark-internal .ec-result-quad .ec-result-value-secondary {
+    color: #1e293b;
+}
+
+.ec-result-label {
+    font-size: 0.8125rem;
+    color: #64748b;
+    flex: 1;
+    min-width: 0;
+}
+
+.ec-result-label--strong {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.ec-result-dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+    min-width: 140px;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.ec-result-quad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px 16px;
+    min-width: 260px;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.ec-result-dual .ec-result-value,
+.ec-result-dual .ec-result-value-secondary,
+.ec-result-quad .ec-result-value,
+.ec-result-quad .ec-result-value-secondary {
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.ec-result-currency-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ec-result-row--header {
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-result-row--header .ec-result-dual,
+.ec-result-row--header .ec-result-quad {
+    padding-bottom: 0;
+}
+
+.ec-summary-row--header .ec-result-quad .ec-result-currency-label {
+    font-size: 0.625rem;
+}
+
+.ec-summary-row--header {
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-summary-row--header .ec-result-currency-label {
+    font-size: 0.625rem;
+}
+
+.ec-result-table-body {
+    margin-top: 4px;
+}
+
+.ec-result-value {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #1e293b;
+    text-align: right;
+}
+
+.ec-result-value--primary {
+    font-size: 1rem;
+}
+
+.ec-result-value--secondary {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #1e293b;
+}
+
+.ec-summary-row--primary .ec-result-dual .ec-result-value,
+.ec-summary-row--primary .ec-result-dual .ec-result-value-secondary,
+.ec-summary-row--primary .ec-result-quad .ec-result-value,
+.ec-summary-row--primary .ec-result-quad .ec-result-value-secondary,
+.ec-result-row--highlight .ec-result-dual .ec-result-value,
+.ec-result-row--highlight .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--highlight .ec-result-quad .ec-result-value,
+.ec-result-row--highlight .ec-result-quad .ec-result-value-secondary {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.ec-result-row--cost-total .ec-result-dual .ec-result-value,
+.ec-result-row--cost-total .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--cost-total .ec-result-quad .ec-result-value,
+.ec-result-row--cost-total .ec-result-quad .ec-result-value-secondary,
+.ec-result-row--margin .ec-result-dual .ec-result-value,
+.ec-result-row--margin .ec-result-dual .ec-result-value-secondary,
+.ec-result-row--margin .ec-result-quad .ec-result-value,
+.ec-result-row--margin .ec-result-quad .ec-result-value-secondary,
+.ec-detail-row--subtotal .ec-detail-amount .ec-result-value,
+.ec-detail-row--subtotal .ec-detail-amount .ec-result-value-secondary,
+.ec-detail-row--total .ec-detail-amount .ec-result-value,
+.ec-detail-row--total .ec-detail-amount .ec-result-value-secondary {
+    font-weight: 600;
+}
+
+.ec-result-value--cost {
+    color: #1e293b;
+}
+
+.ec-result-value--cost-total {
+    font-size: 0.9375rem;
+    color: #1e293b;
+}
+
+
+.ec-result-value--margin {
+    font-size: 1rem;
+    color: #16a34a;
+}
+
+.ec-result-value--margin-pct {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.ec-result-value--discount {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #16a34a;
+}
+
+/* ── Discount breakdown ── */
+.ec-discount-breakdown {
+    font-size: 0.75rem;
+    color: #64748b;
+    background: #f0fdf4;
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-top: 2px;
+}
+
+/* ── Tier badge ── */
+.ec-tier-badge {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ec-tier-badge--vanilla {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.ec-tier-badge--premium {
+    background: #ede9fe;
+    color: #5b21b6;
+}
+
