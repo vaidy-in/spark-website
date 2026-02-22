@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="app-version" content="1.0.15">
+    <meta name="app-version" content="1.0.16">
     <title>Spark Enterprise Pricing Calculator</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -308,7 +308,7 @@
                                     <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About quiz generation">?</button>
                                     <div class="tooltip">
                                         <span class="tooltip-title">Quiz generation (Gemini)</span>
-                                        <span class="tooltip-content">How many quiz questions are generated per hour of video processed. Enter the rate per hour (e.g. 8 = 8 questions per hour of video).</span>
+                                        <span class="tooltip-content">How many quiz questions are generated per hour of video processed. Enter the number of questions per hour (e.g. 8 = 8 questions per hour of video).</span>
                                     </div>
                                 </span>
                             </div>
@@ -1275,7 +1275,38 @@
                 </div>
                 <div id="ec-detailed-breakdown-body" class="ec-card-body ec-accordion-body ec-accordion--collapsed" aria-hidden="true">
                     <div id="ec-detailed-breakdown-content">
-                        <!-- Injected by JS -->
+                        <nav id="ec-breakdown-toc" class="ec-breakdown-toc" aria-label="Breakdown contents">
+                            <p class="ec-breakdown-toc-title">On this page</p>
+                            <ol class="ec-breakdown-toc-list">
+                                <li><a class="ec-breakdown-toc-link" href="#ec-breakdown-video">Video-based costs</a></li>
+                                <li><a class="ec-breakdown-toc-link" href="#ec-breakdown-student">Student-based costs</a></li>
+                                <li><a class="ec-breakdown-toc-link" href="#ec-breakdown-total">Total & multiplier</a></li>
+                                <li><a class="ec-breakdown-toc-link" href="#ec-breakdown-cost-seat">Cost per seat per month</a></li>
+                                <li><a class="ec-breakdown-toc-link" href="#ec-breakdown-min-base">Minimum base price</a></li>
+                            </ol>
+                        </nav>
+                        <template id="ec-breakdown-table-template">
+                            <table class="ec-breakdown-table" role="presentation">
+                                <colgroup>
+                                    <col class="ec-col-label">
+                                    <col class="ec-col-v-inr">
+                                    <col class="ec-col-v-usd">
+                                    <col class="ec-col-p-inr">
+                                    <col class="ec-col-p-usd">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th class="ec-result-currency-label ec-result-inr">Vanilla INR</th>
+                                        <th class="ec-result-currency-label">Vanilla USD</th>
+                                        <th class="ec-result-currency-label ec-result-inr">Premium INR</th>
+                                        <th class="ec-result-currency-label">Premium USD</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </template>
+                        <div id="ec-breakdown-blocks"></div>
                     </div>
                 </div>
             </div>

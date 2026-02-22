@@ -133,38 +133,12 @@ html {
     margin-bottom: 12px;
 }
 
-.ec-detail-row {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px 24px;
-    padding: 12px 0;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.ec-detail-row:last-child {
-    border-bottom: none;
-}
-
-.ec-detail-row--subtotal,
-.ec-detail-row--total {
-    border-top: 1px solid #e2e8f0;
-    padding-top: 12px;
-    margin-top: 4px;
-}
-
-.ec-detail-label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #1e293b;
-    grid-column: 1;
-}
 
 .ec-detail-workings,
 .ec-detail-assumption,
 .ec-detail-formula {
     font-size: 0.8125rem;
     color: #64748b;
-    grid-column: 1;
     line-height: 1.5;
 }
 
@@ -184,44 +158,149 @@ html {
     font-style: italic;
 }
 
-.ec-detail-expand-btn {
-    font-size: 0.75rem;
+/* ── Dual-tier layout: table for column alignment ── */
+.ec-breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ec-breakdown-table th,
+.ec-breakdown-table td {
+    padding: 6px 12px 6px 0;
+    text-align: right;
+    vertical-align: top;
+}
+
+.ec-breakdown-table th:first-child,
+.ec-breakdown-table td:first-child {
+    text-align: left;
+    padding-right: 16px;
+}
+
+.ec-col-label {
+    width: 40%;
+}
+
+.ec-col-v-inr,
+.ec-col-p-inr {
+    width: 100px;
+}
+
+.ec-col-v-usd,
+.ec-col-p-usd {
+    width: 80px;
+}
+
+.ec-breakdown-table thead th {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ec-breakdown-table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ec-breakdown-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.ec-breakdown-table .ec-detail-label-cell {
+    vertical-align: top;
+}
+
+.ec-breakdown-table .ec-detail-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.ec-breakdown-table .ec-detail-show-derivation {
+    font-size: 0.8125rem;
     font-weight: 500;
-    color: #4f46e5;
+    color: #64748b;
     background: transparent;
     border: none;
-    padding: 4px 0;
-    grid-column: 1;
+    padding: 0;
+    margin-top: 4px;
+    cursor: pointer;
+    text-align: left;
     transition: color 150ms ease;
 }
 
-.ec-detail-expand-btn:hover {
-    color: #4338ca;
+.ec-breakdown-table .ec-detail-show-derivation:hover {
+    color: #4f46e5;
 }
 
-.ec-detail-triangle {
-    font-size: 0.8125rem;
-    color: #64748b;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-top: 6px;
-    grid-column: 1 / -1;
-    line-height: 1.5;
+.ec-breakdown-table .ec-result-value,
+.ec-breakdown-table .ec-result-value-secondary {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #1e293b;
 }
 
-.ec-detail-amount {
+.ec-breakdown-table .ec-result-value--cost-total {
+    font-weight: 600;
+}
+
+.ec-breakdown-table .ec-result-label--strong {
+    font-weight: 600;
+}
+
+.ec-breakdown-table tbody tr.ec-detail-row--subtotal td,
+.ec-breakdown-table tbody tr.ec-detail-row--total td {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 12px;
+}
+
+.ec-detail-workings-cell {
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ec-detail-workings-panel {
+    padding: 12px 0 12px 0;
+}
+
+.ec-detail-workings-panel--collapsed {
+    display: none;
+}
+
+.ec-detail-tier-switcher {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-    grid-column: 2;
-    grid-row: 1 / -1;
-    align-self: start;
+    gap: 4px;
+    margin-bottom: 10px;
 }
 
-.ec-detail-amount .ec-result-value-secondary {
+.ec-detail-tier-pill {
     font-size: 0.8125rem;
+    font-weight: 500;
+    color: #64748b;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+
+.ec-detail-tier-pill:hover {
+    color: #475569;
+    background: #e2e8f0;
+}
+
+.ec-detail-tier-pill--active {
+    color: #4f46e5;
+    background: #eef2ff;
+    border-color: #c7d2fe;
+}
+
+.ec-detail-workings--vanilla.hidden,
+.ec-detail-workings--premium.hidden {
+    display: none;
 }
 
