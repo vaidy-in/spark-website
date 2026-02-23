@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.18';
+    window.APP_VERSION = '1.0.20';
 
     const LOG = '[ec]';
 
@@ -87,6 +87,7 @@
         { id: 'ec-streaming-hrs-premium', label: 'Avg streaming per seat / month (Premium)', min: 0 },
         { id: 'ec-tutor-queries-vanilla', label: 'AI Tutor queries / seat / month (Vanilla)', min: 0 },
         { id: 'ec-tutor-queries-premium', label: 'AI Tutor queries / seat / month (Premium)', min: 0 },
+        { id: 'ec-day0-videos', label: 'Day 0 library (videos)', min: 0 },
         { id: 'ec-num-videos-vanilla', label: 'Number of videos per month (Vanilla)', min: 0 },
         { id: 'ec-num-videos-premium', label: 'Number of videos per month (Premium)', min: 0 },
         { id: 'ec-quiz-queries-vanilla', label: 'Quiz questions per hour (Vanilla)', min: 0 },
@@ -181,9 +182,12 @@
 
     function validateBasePrices() {
         const errs = [];
-        const { inpVanilla, inpPremium } = readInputs();
+        const { inpVanilla, inpPremium, day0Inp } = readInputs();
         const costsVanilla = computeCosts(inpVanilla);
         const costsPremium = computeCosts(inpPremium);
+        const day0Costs = window.EC_COMPUTE.computeDay0Costs(day0Inp);
+        mergeDay0IntoCosts(costsVanilla, day0Costs);
+        mergeDay0IntoCosts(costsPremium, day0Costs);
         const volDisc = getVolumeDiscount(inpVanilla);
         const termDisc = getTermDiscount(inpVanilla);
         const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inpVanilla.earlyDisc);
@@ -280,11 +284,14 @@
     }
 
     function updateBasePricesFromMinMargin() {
-        const { inpVanilla, inpPremium } = readInputs();
+        const { inpVanilla, inpPremium, day0Inp } = readInputs();
         if (inpVanilla.seats < 1 || inpVanilla.term < 1) return;
 
         const costsVanilla = computeCosts(inpVanilla);
         const costsPremium = computeCosts(inpPremium);
+        const day0Costs = window.EC_COMPUTE.computeDay0Costs(day0Inp);
+        mergeDay0IntoCosts(costsVanilla, day0Costs);
+        mergeDay0IntoCosts(costsPremium, day0Costs);
         const volDisc = getVolumeDiscount(inpVanilla);
         const termDisc = getTermDiscount(inpVanilla);
         const combinedDiscountFactor = getCombinedDiscountFactor(volDisc, termDisc, inpVanilla.earlyDisc);
@@ -424,6 +431,7 @@
 
         const derivedVanilla = deriveVideoHours(num('ec-num-videos-vanilla'));
         const derivedPremium = deriveVideoHours(num('ec-num-videos-premium'));
+        const derivedDay0 = deriveVideoHours(Math.max(0, num('ec-day0-videos')));
 
         const inpVanilla = Object.assign({}, shared, derivedVanilla, {
             tier: 'vanilla',
@@ -447,7 +455,13 @@
             basePricePerSeatINR: num('ec-base-price-premium'),
         });
 
-        return { inpVanilla, inpPremium };
+        const day0Inp = Object.assign({}, shared, {
+            day0VideoHoursSD: derivedDay0.videoHoursSDPerMonth,
+            day0VideoHoursHD: derivedDay0.videoHoursHDPerMonth,
+            quizQuestionsPerHour: Math.max(num('ec-quiz-queries-vanilla'), num('ec-quiz-queries-premium')),
+        });
+
+        return { inpVanilla, inpPremium, day0Inp };
     }
 
     // ─────────────────────────────────────────────
@@ -456,6 +470,18 @@
 
     function computeCosts(inp) {
         return window.EC_COMPUTE.computeCosts(inp);
+    }
+
+    function mergeDay0IntoCosts(costs, day0Costs) {
+        if (!day0Costs || day0Costs.total <= 0) return;
+        costs.assemblyAI += day0Costs.assemblyAI;
+        costs.batch += day0Costs.batch;
+        costs.s3Storage += day0Costs.s3Storage;
+        costs.gemini += day0Costs.gemini;
+        costs.openAI += day0Costs.openAI;
+        costs.total += day0Costs.total;
+        costs.storageGB += day0Costs.storageGB || 0;
+        costs.day0Costs = day0Costs;
     }
 
     function computePricing(inp, costs) {
@@ -710,6 +736,7 @@
         'ec-gb-per-video-hr': '0.75',
         'ec-streaming-hrs-vanilla': '2',
         'ec-streaming-hrs-premium': '2',
+        'ec-day0-videos': '10',
         'ec-num-videos-vanilla': '40',
         'ec-num-videos-premium': '40',
         'ec-tutor-queries-vanilla': '0',
@@ -764,7 +791,8 @@
     const SECTION_KEYS = {
         deal: ['ec-seats', 'ec-setup-fee', '_term'],
         'revenue-share': ['ec-rev-share-y1', 'ec-rev-share-y2', 'ec-rev-share-y3', 'ec-rev-share-y4', 'ec-rev-share-y5'],
-            usage: ['ec-num-videos-vanilla', 'ec-num-videos-premium', 'ec-avg-video-length', 'ec-hd-pct', 'ec-streaming-hrs-vanilla', 'ec-streaming-hrs-premium', 'ec-tutor-queries-vanilla', 'ec-tutor-queries-premium', 'ec-quiz-queries-vanilla', 'ec-quiz-queries-premium', '_tutorVanilla'],
+        'usage-plan': ['ec-num-videos-vanilla', 'ec-num-videos-premium', 'ec-streaming-hrs-vanilla', 'ec-streaming-hrs-premium', 'ec-tutor-queries-vanilla', 'ec-tutor-queries-premium', 'ec-quiz-queries-vanilla', 'ec-quiz-queries-premium', '_tutorVanilla'],
+        'usage-common': ['ec-day0-videos', 'ec-avg-video-length', 'ec-hd-pct'],
         pricing: ['ec-base-price-vanilla', 'ec-base-price-premium', 'ec-vol-disc-1', 'ec-vol-disc-2', 'ec-vol-disc-3', 'ec-vol-disc-4', 'ec-vol-disc-5', 'ec-vol-disc-6', 'ec-vol-disc-7', 'ec-term-disc-1', 'ec-term-disc-3', 'ec-term-disc-6', 'ec-term-disc-12', 'ec-early-disc'],
         technical: ['ec-hd-sd-factor', 'ec-gb-per-video-hr', 'ec-embedding-tokens', 'ec-batch-hrs-per-video-hr', 'ec-tutor-tokens-in', 'ec-tutor-tokens-out', 'ec-quiz-tokens-in', 'ec-quiz-tokens-out', 'ec-pipeline-tokens-in', 'ec-pipeline-tokens-out'],
         costs: ['ec-cost-assemblyai', 'ec-cost-s3-storage', 'ec-cost-s3-transfer', 'ec-cost-batch', 'ec-cost-gemini-in', 'ec-cost-gemini-out', 'ec-cost-openai-embedding', 'ec-cost-multiplier', 'ec-min-margin-vanilla', 'ec-min-margin-premium']
@@ -772,7 +800,8 @@
 
     const DEFAULTS_DEAL = pickFromDefaults(SECTION_KEYS.deal);
     const DEFAULTS_REVENUE_SHARE = pickFromDefaults(SECTION_KEYS['revenue-share']);
-    const DEFAULTS_USAGE = pickFromDefaults(SECTION_KEYS.usage);
+    const DEFAULTS_USAGE_PLAN = pickFromDefaults(SECTION_KEYS['usage-plan']);
+    const DEFAULTS_USAGE_COMMON = pickFromDefaults(SECTION_KEYS['usage-common']);
     const DEFAULTS_PRICING = pickFromDefaults(SECTION_KEYS.pricing);
     const DEFAULTS_TECHNICAL = pickFromDefaults(SECTION_KEYS.technical);
     const DEFAULTS_COSTS = pickFromDefaults(SECTION_KEYS.costs);
@@ -787,7 +816,8 @@
         const sectionDefaults = {
             deal: DEFAULTS_DEAL,
             'revenue-share': DEFAULTS_REVENUE_SHARE,
-            usage: DEFAULTS_USAGE,
+            'usage-plan': DEFAULTS_USAGE_PLAN,
+            'usage-common': DEFAULTS_USAGE_COMMON,
             pricing: DEFAULTS_PRICING,
             technical: DEFAULTS_TECHNICAL,
             costs: DEFAULTS_COSTS
@@ -823,7 +853,8 @@
 
     const SECTION_CONFIG = [
         { key: 'deal', btnId: 'ec-btn-expand-deal', bodyId: 'ec-deal-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: true },
-        { key: 'usage', btnId: 'ec-btn-expand-usage', bodyId: 'ec-usage-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: false },
+        { key: 'usage-plan', btnId: 'ec-btn-expand-usage-plan', bodyId: 'ec-usage-plan-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: false },
+        { key: 'usage-common', btnId: 'ec-btn-expand-usage-common', bodyId: 'ec-usage-common-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: false },
         { key: 'pricing', btnId: 'ec-btn-expand-pricing', bodyId: 'ec-pricing-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: false },
         { key: 'revenue-share', btnId: 'ec-btn-expand-revenue-share', bodyId: 'ec-revenue-share-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: false },
         { key: 'technical', btnId: 'ec-btn-expand-technical', bodyId: 'ec-technical-body', bodyClass: 'ec-accordion--collapsed', defaultExpanded: false },
@@ -852,6 +883,11 @@
             const raw = localStorage.getItem(SECTIONS_STORAGE_KEY);
             const state = raw ? JSON.parse(raw) : null;
             if (!state || typeof state !== 'object') return;
+            // Backward compat: old "usage" key maps to both usage-plan and usage-common
+            if (state.usage !== undefined && state['usage-plan'] === undefined) {
+                state['usage-plan'] = state.usage;
+                state['usage-common'] = state.usage;
+            }
             SECTION_CONFIG.forEach(function (cfg) {
                 const btn = document.getElementById(cfg.btnId);
                 const body = document.getElementById(cfg.bodyId);
@@ -883,7 +919,7 @@
             'ec-rev-share-y1', 'ec-rev-share-y2', 'ec-rev-share-y3', 'ec-rev-share-y4', 'ec-rev-share-y5',
             'ec-avg-video-length', 'ec-hd-pct',
             'ec-hd-sd-factor', 'ec-gb-per-video-hr',
-            'ec-streaming-hrs-vanilla', 'ec-streaming-hrs-premium', 'ec-num-videos-vanilla', 'ec-num-videos-premium',
+            'ec-streaming-hrs-vanilla', 'ec-streaming-hrs-premium', 'ec-day0-videos', 'ec-num-videos-vanilla', 'ec-num-videos-premium',
             'ec-tutor-queries-vanilla', 'ec-tutor-queries-premium', 'ec-quiz-queries-vanilla', 'ec-quiz-queries-premium',
             'ec-batch-hrs-per-video-hr',
             'ec-tutor-tokens-in', 'ec-tutor-tokens-out',
@@ -911,6 +947,10 @@
     }
 
     function applyImportedValues(data, options) {
+        // Backward compat: old JSON/localStorage without Day 0 library - default to 0 (before DEFAULTS merge)
+        if (data['ec-day0-videos'] === undefined) {
+            data['ec-day0-videos'] = '0';
+        }
         // Merge defaults for any missing keys (e.g. new fields not in old localStorage)
         for (const k in DEFAULTS) {
             if (k.startsWith('_')) continue;
@@ -986,9 +1026,12 @@
             return;
         }
         clearInputInvalidState();
-        const { inpVanilla, inpPremium } = readInputs();
+        const { inpVanilla, inpPremium, day0Inp } = readInputs();
         const costsVanilla = computeCosts(inpVanilla);
         const costsPremium = computeCosts(inpPremium);
+        const day0Costs = window.EC_COMPUTE.computeDay0Costs(day0Inp);
+        mergeDay0IntoCosts(costsVanilla, day0Costs);
+        mergeDay0IntoCosts(costsPremium, day0Costs);
         const pricingVanilla = computePricing(inpVanilla, costsVanilla);
         const pricingPremium = computePricing(inpPremium, costsPremium);
         const fx = inpVanilla.fxRate;
@@ -1083,9 +1126,12 @@
         const validation = validateInputs();
 
         /* Always compute costs and update detailed breakdown - cost derivation is independent of base-price validation */
-        const { inpVanilla, inpPremium } = readInputs();
+        const { inpVanilla, inpPremium, day0Inp } = readInputs();
         const costsVanilla = computeCosts(inpVanilla);
         const costsPremium = computeCosts(inpPremium);
+        const day0Costs = window.EC_COMPUTE.computeDay0Costs(day0Inp);
+        mergeDay0IntoCosts(costsVanilla, day0Costs);
+        mergeDay0IntoCosts(costsPremium, day0Costs);
 
         if (!validation.valid) {
             renderError(validation.errors);
@@ -1176,8 +1222,10 @@
         if (btnResetDeal) btnResetDeal.addEventListener('click', () => resetBySection('deal'));
         const btnResetRevenueShare = document.getElementById('ec-btn-reset-revenue-share');
         if (btnResetRevenueShare) btnResetRevenueShare.addEventListener('click', () => resetBySection('revenue-share'));
-        const btnResetUsage = document.getElementById('ec-btn-reset-usage');
-        if (btnResetUsage) btnResetUsage.addEventListener('click', () => resetBySection('usage'));
+        const btnResetUsagePlan = document.getElementById('ec-btn-reset-usage-plan');
+        if (btnResetUsagePlan) btnResetUsagePlan.addEventListener('click', () => resetBySection('usage-plan'));
+        const btnResetUsageCommon = document.getElementById('ec-btn-reset-usage-common');
+        if (btnResetUsageCommon) btnResetUsageCommon.addEventListener('click', () => resetBySection('usage-common'));
         const btnResetPricing = document.getElementById('ec-btn-reset-pricing');
         if (btnResetPricing) btnResetPricing.addEventListener('click', () => resetBySection('pricing'));
         const btnResetTechnical = document.getElementById('ec-btn-reset-technical');
@@ -1223,7 +1271,8 @@
         }
         setupCollapsible('ec-btn-expand-deal', 'ec-deal-body');
         setupCollapsible('ec-btn-expand-revenue-share', 'ec-revenue-share-body');
-        setupCollapsible('ec-btn-expand-usage', 'ec-usage-body');
+        setupCollapsible('ec-btn-expand-usage-plan', 'ec-usage-plan-body');
+        setupCollapsible('ec-btn-expand-usage-common', 'ec-usage-common-body');
         setupCollapsible('ec-btn-expand-pricing', 'ec-pricing-body');
         setupCollapsible('ec-btn-expand-technical', 'ec-technical-body');
         setupCollapsible('ec-btn-expand-costs', 'ec-costs-body');

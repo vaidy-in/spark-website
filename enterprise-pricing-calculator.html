@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="app-version" content="1.0.18">
+    <meta name="app-version" content="1.0.20">
     <title>Spark Enterprise Pricing Calculator</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -169,20 +169,20 @@
                 </div>
             </section>
 
-            <!-- ── Section: Usage Inputs ── -->
-            <section class="ec-card ec-card--collapsible" id="ec-section-usage">
+            <!-- ── Section: Plan-based usage inputs ── -->
+            <section class="ec-card ec-card--collapsible" id="ec-section-usage-plan">
                 <div class="ec-card-header ec-card-header--collapsible">
-                    <button id="ec-btn-expand-usage" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-usage-body">
+                    <button id="ec-btn-expand-usage-plan" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-usage-plan-body">
                         <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
                     </button>
                     <span class="material-symbols-rounded ec-card-icon">data_usage</span>
-                    <h2 class="ec-card-title">Usage Inputs</h2>
-                    <button id="ec-btn-reset-usage" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Usage to defaults">
+                    <h2 class="ec-card-title">Plan-based usage inputs</h2>
+                    <button id="ec-btn-reset-usage-plan" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Plan-based usage to defaults">
                         <span class="material-symbols-rounded text-[14px]">restart_alt</span>
                         Reset
                     </button>
                 </div>
-                <div id="ec-usage-body" class="ec-card-body ec-accordion-body space-y-5 ec-accordion--collapsed" aria-hidden="true">
+                <div id="ec-usage-plan-body" class="ec-card-body ec-accordion-body space-y-5 ec-accordion--collapsed" aria-hidden="true">
 
                     <div class="ec-inputs-two-col">
                         <div class="ec-inputs-two-col-header">
@@ -209,40 +209,6 @@
                                 <input id="ec-num-videos-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Number of videos per month Premium">
                             </div>
                             <span class="ec-unit ec-unit--below">videos / month</span>
-                        </div>
-
-                        <div class="ec-field-row ec-field-row--span">
-                            <div class="ec-field-label-wrap">
-                                <label for="ec-avg-video-length" class="ec-label">Avg video length</label>
-                                <span class="tooltip-container" data-tooltip>
-                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About avg video length">?</button>
-                                    <div class="tooltip">
-                                        <span class="tooltip-title">Average length per video</span>
-                                        <span class="tooltip-content">Typical length of each new video in hours. Used with Videos / month to derive total SD and HD hours for processing costs.<br><br>Example: 1 = each video is about 1 hour long. 0.5 = 30-minute videos.</span>
-                                    </div>
-                                </span>
-                            </div>
-                            <div class="ec-input-wrap">
-                                <input id="ec-avg-video-length" type="number" min="0" step="0.1" class="ec-input cursor-text" aria-label="Average video length in hours">
-                            </div>
-                            <span class="ec-unit ec-unit--below">hrs</span>
-                        </div>
-
-                        <div class="ec-field-row ec-field-row--span">
-                            <div class="ec-field-label-wrap">
-                                <label for="ec-hd-pct" class="ec-label">HD % (of videos)</label>
-                                <span class="tooltip-container" data-tooltip>
-                                    <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD percentage">?</button>
-                                    <div class="tooltip">
-                                        <span class="tooltip-title">SD vs HD video ratio</span>
-                                        <span class="tooltip-content">Percentage of new videos that are high-definition (1080p or higher). The rest are SD (720p or lower). <br><br>Example: 10 = 10% HD, 90% SD. Most training content is SD.</span>
-                                    </div>
-                                </span>
-                            </div>
-                            <div class="ec-input-wrap">
-                                <input id="ec-hd-pct" type="number" min="0" max="100" step="1" class="ec-input cursor-text" aria-label="Percentage of videos that are HD quality">
-                            </div>
-                            <span class="ec-unit ec-unit--below">%</span>
                         </div>
 
                         <div class="ec-field-row ec-field-row--two-col">
@@ -322,6 +288,75 @@
                                 <input id="ec-quiz-queries-premium" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Quiz questions per hour Premium">
                             </div>
                             <span class="ec-unit ec-unit--below">questions / hour</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── Section: Common usage inputs ── -->
+            <section class="ec-card ec-card--collapsible" id="ec-section-usage-common">
+                <div class="ec-card-header ec-card-header--collapsible">
+                    <button id="ec-btn-expand-usage-common" type="button" class="ec-card-expand-btn cursor-pointer" aria-expanded="false" aria-controls="ec-usage-common-body">
+                        <span class="material-symbols-rounded ec-card-expand-icon">expand_more</span>
+                    </button>
+                    <span class="material-symbols-rounded ec-card-icon">layers</span>
+                    <h2 class="ec-card-title">Common usage inputs</h2>
+                    <button id="ec-btn-reset-usage-common" type="button" class="ec-btn-reset-section cursor-pointer" aria-label="Reset Common usage to defaults">
+                        <span class="material-symbols-rounded text-[14px]">restart_alt</span>
+                        Reset
+                    </button>
+                </div>
+                <div id="ec-usage-common-body" class="ec-card-body ec-accordion-body space-y-5 ec-accordion--collapsed" aria-hidden="true">
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-day0-videos" class="ec-label">Day 0 library (videos)</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About Day 0 library">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Existing library at onboarding</span>
+                                    <span class="tooltip-content">Number of existing videos the enterprise will import and process during onboarding (Day 0). These are one-time processing costs - transcription, batch, pipeline, quiz, embeddings, storage for the contract term. Uses same avg video length and HD % as monthly videos.<br><br>Example: 50 = customer has 50 legacy training videos to import at go-live.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-day0-videos" type="number" min="0" step="1" class="ec-input cursor-text" aria-label="Day 0 library videos">
+                            <span class="ec-unit">videos</span>
+                        </div>
+                    </div>
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-avg-video-length" class="ec-label">Avg video length</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About avg video length">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">Average length per video</span>
+                                    <span class="tooltip-content">Typical length of each new video in hours. Used with Videos / month and Day 0 library to derive total SD and HD hours for processing costs.<br><br>Example: 1 = each video is about 1 hour long. 0.5 = 30-minute videos.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-avg-video-length" type="number" min="0" step="0.1" class="ec-input cursor-text" aria-label="Average video length in hours">
+                            <span class="ec-unit">hrs</span>
+                        </div>
+                    </div>
+
+                    <div class="ec-field-row">
+                        <div class="ec-field-label-wrap">
+                            <label for="ec-hd-pct" class="ec-label">HD % (of videos)</label>
+                            <span class="tooltip-container" data-tooltip>
+                                <button type="button" class="tooltip-trigger ec-help-btn cursor-pointer" aria-label="About HD percentage">?</button>
+                                <div class="tooltip">
+                                    <span class="tooltip-title">SD vs HD video ratio</span>
+                                    <span class="tooltip-content">Percentage of new videos that are high-definition (1080p or higher). The rest are SD (720p or lower). <br><br>Example: 10 = 10% HD, 90% SD. Most training content is SD.</span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ec-input-with-unit">
+                            <input id="ec-hd-pct" type="number" min="0" max="100" step="1" class="ec-input cursor-text" aria-label="Percentage of videos that are HD quality">
+                            <span class="ec-unit">%</span>
                         </div>
                     </div>
 

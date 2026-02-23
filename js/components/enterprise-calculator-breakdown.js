@@ -25,6 +25,7 @@
         streamingHrsPerSeat: 'Avg streaming per seat / month',
         tutorQueriesPerSeat: 'AI Tutor queries / seat / month',
         numVideosPerMonth: 'Number of videos per month',
+        day0Videos: 'Day 0 library (videos)',
         quizQuestionsPerHour: 'Quiz questions per hour',
         pipelineTokensIn: 'Pipeline: input tokens / video hr',
         pipelineTokensOut: 'Pipeline: output tokens / video hr',
@@ -167,6 +168,15 @@
         addStep(container, 'workings', 'Inputs: video hrs/mo = SD + HD = ' + fmtNum(d.embeddings.baseVideoHoursPerMonth) + ', ' + INPUT_LABELS.embeddingTokensPerVideoHr + ': ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ', ' + INPUT_LABELS.term + ': ' + d.embeddings.termMonths + ' mo, ' + INPUT_LABELS.costOpenAIEmbedding + ': ₹' + fmtNum(d.embeddings.costPer1MTokens) + ' / 1M tokens.');
         addStep(container, 'workings', 'Tokens/mo = video hrs/mo × tokens/hr = ' + fmtNum(d.embeddings.baseVideoHoursPerMonth) + ' × ' + fmtNum(d.embeddings.embeddingTokensPerVideoHr) + ' = ' + fmtNum(d.embeddings.embeddingTokensPerMonth) + '. Total tokens = ' + fmtNum(d.embeddings.embeddingTokensPerMonth) + ' × ' + d.embeddings.termMonths + ' = ' + fmtNum(d.embeddings.embeddingTokensPerMonth * d.embeddings.termMonths) + '.');
         addStep(container, 'formula', 'Cost = total tokens / 1M × cost per 1M = ' + fmtINR(d.embeddings.amount) + '.');
+    }
+
+    function buildDay0Workings(container, day0, fx) {
+        if (!day0 || !day0.detail) return;
+        const d = day0.detail;
+        addStep(container, 'workings', 'One-time import at onboarding. Uses same avg video length and HD % as monthly videos.');
+        addStep(container, 'workings', 'Inputs: ' + INPUT_LABELS.day0Videos + ' → SD hrs: ' + fmtNum(d.day0VideoHoursSD) + ', HD hrs: ' + fmtNum(d.day0VideoHoursHD) + ', total: ' + fmtNum(d.baseDay0VideoHours) + ' hrs. ' + INPUT_LABELS.term + ': ' + d.termMonths + ' mo.');
+        addStep(container, 'workings', 'Transcription: ' + fmtNum(d.baseDay0VideoHours) + ' × cost/hr. Batch: SD + HD vCPU-hrs. Pipeline + Quiz: Gemini tokens. Embeddings: OpenAI. Storage: GB × term × cost/GB.');
+        addStep(container, 'formula', 'Total (× ' + INPUT_LABELS.costMultiplier + ') = ' + fmtINR(day0.total) + '.');
     }
 
     function buildTutorWorkings(container, inp, d, fx) {
@@ -365,6 +375,12 @@
             createCostRow(tbody, 'Embeddings (OpenAI)', costsVanilla.openAI, costsPremium.openAI, fx,
                 function (c) { buildEmbeddingsWorkings(c, inpVanilla, dV, fx); },
                 function (c) { buildEmbeddingsWorkings(c, inpPremium, dP, fx); });
+            if (costsVanilla.day0Costs && costsVanilla.day0Costs.total > 0) {
+                const day0Total = costsVanilla.day0Costs.total;
+                createCostRow(tbody, 'Day 0 library import', day0Total, day0Total, fx,
+                    function (c) { buildDay0Workings(c, costsVanilla.day0Costs, fx); },
+                    function (c) { buildDay0Workings(c, costsPremium.day0Costs, fx); });
+            }
             tbody.appendChild(createDataRow('Video-based subtotal', videoSubtotalV, videoSubtotalP, fx, 'ec-detail-row--subtotal', true));
         });
 

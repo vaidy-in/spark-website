@@ -177,6 +177,68 @@
         return costs;
     }
 
+    function computeDay0Costs(day0Inp) {
+        const termMonths = day0Inp.term;
+        const day0VideoHoursSD = day0Inp.day0VideoHoursSD;
+        const day0VideoHoursHD = day0Inp.day0VideoHoursHD;
+        const baseDay0VideoHours = day0VideoHoursSD + day0VideoHoursHD;
+        if (baseDay0VideoHours <= 0) {
+            return { total: 0, assemblyAI: 0, batch: 0, s3Storage: 0, gemini: 0, openAI: 0, storageGB: 0, detail: null };
+        }
+
+        const assemblyAI = baseDay0VideoHours * day0Inp.costAssemblyAI;
+
+        const batchHrsSD = day0VideoHoursSD * day0Inp.batchHrsPerVideoHr;
+        const batchHrsHD = day0VideoHoursHD * day0Inp.hdSdFactor * day0Inp.batchHrsPerVideoHr;
+        const batch = (batchHrsSD + batchHrsHD) * day0Inp.costBatch;
+
+        const geminiPipeline = (baseDay0VideoHours * day0Inp.pipelineTokensIn / 1e6) * day0Inp.costGeminiIn
+            + (baseDay0VideoHours * day0Inp.pipelineTokensOut / 1e6) * day0Inp.costGeminiOut;
+
+        const quizQueriesTotal = baseDay0VideoHours * day0Inp.quizQuestionsPerHour;
+        const geminiQuiz = (quizQueriesTotal * day0Inp.quizTokensIn / 1e6) * day0Inp.costGeminiIn
+            + (quizQueriesTotal * day0Inp.quizTokensOut / 1e6) * day0Inp.costGeminiOut;
+
+        const embeddingTokensTotal = day0Inp.embeddingTokensPerVideoHr * baseDay0VideoHours;
+        const openAI = (embeddingTokensTotal / 1e6) * day0Inp.costOpenAIEmbedding;
+
+        const day0GB_SD = day0VideoHoursSD * day0Inp.gbPerVideoHr;
+        const day0GB_HD = day0VideoHoursHD * day0Inp.gbPerVideoHr * day0Inp.hdSdFactor;
+        const day0StorageGB = day0GB_SD + day0GB_HD;
+        const s3StorageCost = day0StorageGB * termMonths * day0Inp.costS3Storage;
+
+        const gemini = geminiPipeline + geminiQuiz;
+
+        const rawTotal = assemblyAI + batch + s3StorageCost + gemini + openAI;
+        const total = rawTotal * day0Inp.costMultiplier;
+
+        const detail = {
+            day0VideoHoursSD,
+            day0VideoHoursHD,
+            baseDay0VideoHours,
+            termMonths,
+            assemblyAI,
+            batch,
+            s3Storage: s3StorageCost,
+            pipeline: geminiPipeline,
+            quiz: geminiQuiz,
+            openAI,
+            costMultiplier: day0Inp.costMultiplier,
+            totalPreMultiplier: rawTotal,
+        };
+
+        return {
+            total,
+            assemblyAI: assemblyAI * day0Inp.costMultiplier,
+            batch: batch * day0Inp.costMultiplier,
+            s3Storage: s3StorageCost * day0Inp.costMultiplier,
+            gemini: gemini * day0Inp.costMultiplier,
+            openAI: openAI * day0Inp.costMultiplier,
+            storageGB: day0StorageGB,
+            detail,
+        };
+    }
+
     function computePricing(inp, costs) {
         const termMonths = inp.term;
         const costPerSeatPerMonth = costs.total / (inp.seats * termMonths);
@@ -243,6 +305,7 @@
 
     window.EC_COMPUTE = {
         computeCosts: computeCosts,
+        computeDay0Costs: computeDay0Costs,
         computePricing: computePricing,
         getVolumeDiscount: getVolumeDiscount,
         getTermDiscount: getTermDiscount,
