@@ -1,0 +1,165 @@
+/* Enterprise Calculator FAQ section - Stripe-like, restrained */
+
+.ec-faq-wrapper {
+    margin-top: 3rem;
+}
+
+.ec-faq {
+    width: 100%;
+}
+
+.ec-faq-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+}
+
+.ec-faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ec-faq-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.ec-faq-item:hover {
+    border-color: #cbd5e1;
+}
+
+.ec-faq-item.accordion-item-open {
+    border-color: #cbd5e1;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.ec-faq-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem;
+    text-align: left;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease-out;
+}
+
+.ec-faq-trigger:hover {
+    background-color: rgba(248, 250, 252, 0.8);
+}
+
+.ec-faq-trigger:focus {
+    outline: none;
+}
+
+.ec-faq-trigger:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+
+.ec-faq-trigger-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.ec-faq-icon {
+    font-size: 1.25rem;
+    color: #6366f1;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    transition: color 0.15s ease-out, transform 0.15s ease-out;
+}
+
+.ec-faq-item:hover .ec-faq-icon {
+    color: #4f46e5;
+}
+
+.ec-faq-item.accordion-item-open .ec-faq-icon {
+    color: #4f46e5;
+}
+
+.ec-faq-question {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.ec-faq-chevron {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    flex-shrink: 0;
+    transition: transform 0.3s ease-out, color 0.15s ease-out;
+}
+
+.ec-faq-item:hover .ec-faq-chevron {
+    color: #64748b;
+}
+
+/* Grid animation inherited from accordion.css via [data-accordion-content] */
+
+.ec-faq-answer {
+    padding: 0 1.25rem 1.25rem 3.75rem;
+}
+
+.ec-faq-answer p,
+.ec-faq-answer ul,
+.ec-faq-answer ol {
+    font-size: 1rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 0.75rem 0;
+}
+
+.ec-faq-answer ul,
+.ec-faq-answer ol {
+    padding-left: 1.5rem;
+    list-style-position: outside;
+}
+
+.ec-faq-answer ul {
+    list-style-type: disc;
+}
+
+.ec-faq-answer ol {
+    list-style-type: decimal;
+}
+
+.ec-faq-answer ul ul {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    padding-left: 1.25rem;
+    list-style-type: circle;
+}
+
+.ec-faq-answer p:last-child,
+.ec-faq-answer ul:last-child,
+.ec-faq-answer ol:last-child {
+    margin-bottom: 0;
+}
+
+.ec-faq-answer li {
+    margin-bottom: 0.25rem;
+}
+
+.ec-faq-answer li:last-child {
+    margin-bottom: 0;
+}
+
+.ec-faq-answer strong {
+    font-weight: 600;
+    color: #334155;
+}

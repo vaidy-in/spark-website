@@ -1,0 +1,127 @@
+<section id="ec-faq" class="ec-faq scroll-mt-24" aria-labelledby="ec-faq-title">
+    <h2 id="ec-faq-title" class="ec-faq-title">
+        <span class="inline-flex items-center gap-2">
+            <span class="material-symbols-rounded text-brand-600">help</span>
+            <span>Frequently asked questions</span>
+        </span>
+    </h2>
+    <div data-accordion id="ec-faq-accordion" class="ec-faq-accordion">
+        <div data-accordion-item class="ec-faq-item">
+            <button
+                data-accordion-toggle
+                id="ec-faq-1"
+                class="ec-faq-trigger cursor-pointer"
+                aria-expanded="false"
+                aria-controls="ec-faq-content-1">
+                <div class="ec-faq-trigger-inner">
+                    <span class="material-symbols-rounded ec-faq-icon">badge</span>
+                    <h3 class="ec-faq-question">What is a seat?</h3>
+                </div>
+                <span class="material-symbols-rounded ec-faq-chevron" data-accordion-chevron>expand_more</span>
+            </button>
+            <div
+                data-accordion-content
+                id="ec-faq-content-1"
+                class="ec-faq-content hidden"
+                aria-labelledby="ec-faq-1">
+                <div class="ec-faq-answer">
+                    <p>A <strong>seat</strong> is an individual learner account with its own ongoing experience in the platform, not just a one-time login.</p>
+                    <p>Each seat gets a personal account, persistent AI Tutor context, quiz and progress history, and access to targeted courses.</p>
+                    <p>Beyond the per-seat licence, the only other fee is an optional one-time setup fee in some enterprise deals. <strong>There are no separate metered charges passed to the customer for GB, tokens, or videos.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div data-accordion-item class="ec-faq-item">
+            <button
+                data-accordion-toggle
+                id="ec-faq-2"
+                class="ec-faq-trigger cursor-pointer"
+                aria-expanded="false"
+                aria-controls="ec-faq-content-2">
+                <div class="ec-faq-trigger-inner">
+                    <span class="material-symbols-rounded ec-faq-icon">groups</span>
+                    <h3 class="ec-faq-question">How many seats should a 600-employee company buy?</h3>
+                </div>
+                <span class="material-symbols-rounded ec-faq-chevron" data-accordion-chevron>expand_more</span>
+            </button>
+            <div
+                data-accordion-content
+                id="ec-faq-content-2"
+                class="ec-faq-content hidden"
+                aria-labelledby="ec-faq-2">
+                <div class="ec-faq-answer">
+                    <p>For a 600-employee company, it depends on scope:</p>
+                    <p><strong>Broad internal learning</strong> (e.g. all managers or knowledge workers): start with seats roughly equal to your target population (typically 300-600 seats in Year 1).</p>
+                    <p><strong>Tightly scoped rollout</strong> (e.g. only L&amp;D plus a few pilot cohorts): 25-150 seats with a clear path to scale up as you expand programs.</p>
+                    <p>Seats are reassignable when people leave or move roles, and we charge on <strong>concurrent active learner accounts</strong>, not every person who has ever worked at the company.</p>
+                    <p>We typically map the organization into three groups - all count as seats:</p>
+                    <ol>
+                        <li><strong>Creators / admins (L&amp;D, SMEs):</strong> Connect Zoom/Teams, pick which sessions become courses, structure programs, see analytics.</li>
+                        <li><strong>Learners (the broader workforce):</strong> View Spark-converted content, take quizzes, ask the AI Tutor questions, build a personal learning history.</li>
+                        <li><strong>Sponsors / leaders:</strong> HRBPs, functional leaders who may not be daily users, but need access to certain dashboards and courses.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div data-accordion-item class="ec-faq-item">
+            <button
+                data-accordion-toggle
+                id="ec-faq-3"
+                class="ec-faq-trigger cursor-pointer"
+                aria-expanded="false"
+                aria-controls="ec-faq-content-3">
+                <div class="ec-faq-trigger-inner">
+                    <span class="material-symbols-rounded ec-faq-icon">insights</span>
+                    <h3 class="ec-faq-question">Why use seats instead of per-GB or per-token pricing?</h3>
+                </div>
+                <span class="material-symbols-rounded ec-faq-chevron" data-accordion-chevron>expand_more</span>
+            </button>
+            <div
+                data-accordion-content
+                id="ec-faq-content-3"
+                class="ec-faq-content hidden"
+                aria-labelledby="ec-faq-3">
+                <div class="ec-faq-answer">
+                    <p>We use per-seat pricing because it matches how value is delivered, how the category buys, and it keeps procurement simple - while our internal model already accounts for variable usage and underlying infra costs.</p>
+                    <p><strong>Matches how value is delivered.</strong> The product does not just "store videos." It builds an individualized learning graph per person over time: which courses they have completed, how they perform on assessments, what they ask the AI, where they are stuck. That is the level at which managers and HR care about outcomes.</p>
+                    <p><strong>Standard in the LMS and LXP category.</strong> Most modern learning platforms (LMS, LXP, LinkedIn Learning for Business) price on some version of "₹X-₹Y per learner/seat/user per year" rather than per video or per GB. Some offer variants like "per active user" or separate creator vs learner seats, but they are all user-based licensing models.</p>
+                    <p><strong>Keeps procurement simple.</strong> "We plan to support 400 learners this year at ₹X per seat per month" is much easier to reason about than "we will charge you for storage + streaming + tokens + quiz generations." Under the hood, our cost model cares about AWS, Gemini, OpenAI, etc., but that complexity is our problem, not the customer's.</p>
+                    <p><strong>Bakes in light vs heavy usage.</strong> Our internal cost model already assumes many learners will be light users and a smaller group will be heavy users; the mix is what we design margin around. We do not need to meter every action at the commercial level to be safe on costs.</p>
+                    <p>We are not claiming "every single employee will be in the platform every day." We are saying: <strong>for each employee who has a seat, Spark + Athiya can build a durable, personalized learning experience</strong> - and that is what we are pricing. If we later see clear patterns where it helps to separate creator/admin seats from viewer/learner seats, we can explore that. For the initial offer, we recommend a single, predictable per-seat model plus optional setup, which is familiar to enterprise L&amp;D buyers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div data-accordion-item class="ec-faq-item">
+            <button
+                data-accordion-toggle
+                id="ec-faq-4"
+                class="ec-faq-trigger cursor-pointer"
+                aria-expanded="false"
+                aria-controls="ec-faq-content-4">
+                <div class="ec-faq-trigger-inner">
+                    <span class="material-symbols-rounded ec-faq-icon">storefront</span>
+                    <h3 class="ec-faq-question">Examples of seat-based pricing in the market</h3>
+                </div>
+                <span class="material-symbols-rounded ec-faq-chevron" data-accordion-chevron>expand_more</span>
+            </button>
+            <div
+                data-accordion-content
+                id="ec-faq-content-4"
+                class="ec-faq-content hidden"
+                aria-labelledby="ec-faq-4">
+                <div class="ec-faq-answer">
+                    <p>Many leading learning platforms use per-user / per-seat pricing:</p>
+                    <ul>
+                        <li><strong>TalentLMS</strong> and similar LMSs: pay-per-learner / pay-per-seat models.</li>
+                        <li><strong>Sana, 360Learning, iSpring Learn:</strong> all price on a per-user basis (sometimes "per active user").</li>
+                        <li><strong>LinkedIn Learning for Business:</strong> plans are based on number of learners, not per-video or per-GB usage.</li>
+                    </ul>
+                    <p>These show that <strong>"per learner / per seat / per user" is the dominant pattern</strong> for enterprise learning tools today. The Athiya + Spark model is deliberately consistent with that.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

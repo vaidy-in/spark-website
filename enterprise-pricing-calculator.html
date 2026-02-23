@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="app-version" content="1.0.17">
+    <meta name="app-version" content="1.0.18">
     <title>Spark Enterprise Pricing Calculator</title>
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,6 +13,7 @@
     <script src="js/components/tooltip.js" defer></script>
     <script src="js/components/enterprise-calculator-breakdown.js" defer></script>
     <script src="js/components/enterprise-calculator-compute.js" defer></script>
+    <script src="js/components/accordion.js" defer></script>
     <script src="js/components/enterprise-calculator.js" defer></script>
     <link rel="stylesheet" href="css/components/tooltip.css">
     <link rel="stylesheet" href="css/components/range-slider.css">
@@ -20,6 +21,8 @@
     <link rel="stylesheet" href="css/components/enterprise-calculator-inputs.css">
     <link rel="stylesheet" href="css/components/enterprise-calculator-results.css">
     <link rel="stylesheet" href="css/components/enterprise-calculator-breakdown.css">
+    <link rel="stylesheet" href="css/components/accordion.css">
+    <link rel="stylesheet" href="css/components/enterprise-calculator-faq.css">
     <link rel="stylesheet" href="css/components/version-banner.css">
     <script src="js/version-check.js"></script>
 </head>
@@ -1312,6 +1315,11 @@
             </div>
         </div>
     </section>
+
+    <!-- FAQ -->
+    <div id="ec-faq-wrapper" class="ec-faq-wrapper">
+        <div id="ec-faq-root"></div>
+    </div>
 
     </div>
 </main>

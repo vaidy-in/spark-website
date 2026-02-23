@@ -16,7 +16,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.17';
+    window.APP_VERSION = '1.0.18';
 
     const LOG = '[ec]';
 
@@ -1319,6 +1319,33 @@
 
         // Initial calculation: validate and compute (do not auto-set base prices - allows validation errors to show)
         recalculate();
+
+        // Load FAQ snippet (async, non-blocking)
+        loadEcFaqSnippet();
     });
+
+    async function loadEcFaqSnippet() {
+        const root = document.getElementById('ec-faq-root');
+        if (!root) return;
+
+        const basePath = typeof getBasePath === 'function' ? getBasePath() : '';
+        const snippetPath = `${basePath}/snippets/enterprise-calculator-faq.html`;
+
+        try {
+            const res = await fetch(snippetPath);
+            if (!res.ok) throw new Error('FAQ snippet fetch failed: ' + res.status);
+            const html = await res.text();
+            root.innerHTML = html;
+
+            const accordions = Array.from(root.querySelectorAll('[data-accordion]'));
+            if (typeof initAccordion === 'function') {
+                accordions.forEach(initAccordion);
+            }
+            console.log(LOG, 'FAQ snippet loaded', { accordionCount: accordions.length });
+        } catch (e) {
+            console.error(LOG, 'FAQ snippet load failed', e);
+            root.innerHTML = '';
+        }
+    }
 
 })();
