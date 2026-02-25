@@ -9,7 +9,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.20';
+    window.APP_VERSION = '1.0.21';
 
     const LOG_PREFIX = '[spark-marketing][pricing]';
 

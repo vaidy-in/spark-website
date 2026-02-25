@@ -152,9 +152,13 @@
     }
 
     function buildPipelineWorkings(container, inp, d, fx) {
+        const totalTokensIn = d.pipeline.totalVideoHours * d.pipeline.tokensIn;
+        const totalTokensOut = d.pipeline.totalVideoHours * d.pipeline.tokensOut;
+        const costInPart = (totalTokensIn / 1e6) * d.pipeline.costIn;
+        const costOutPart = (totalTokensOut / 1e6) * d.pipeline.costOut;
         addStep(container, 'workings', 'Inputs: total video hrs = ' + fmtNum(d.pipeline.totalVideoHours) + ' (from SD + HD × term). ' + INPUT_LABELS.pipelineTokensIn + ': ' + fmtNum(d.pipeline.tokensIn) + ', ' + INPUT_LABELS.pipelineTokensOut + ': ' + fmtNum(d.pipeline.tokensOut) + '. ' + INPUT_LABELS.costGeminiIn + ': ₹' + fmtNum(d.pipeline.costIn) + ' / 1M, ' + INPUT_LABELS.costGeminiOut + ': ₹' + fmtNum(d.pipeline.costOut) + ' / 1M.');
-        addStep(container, 'workings', 'Tokens = video hrs × (in + out) = ' + fmtNum(d.pipeline.totalVideoHours) + ' × (' + fmtNum(d.pipeline.tokensIn) + ' + ' + fmtNum(d.pipeline.tokensOut) + ') = ' + fmtNum(d.pipeline.totalVideoHours * (d.pipeline.tokensIn + d.pipeline.tokensOut)) + ' tokens.');
-        addStep(container, 'formula', 'Cost = (tokens in / 1M × cost in) + (tokens out / 1M × cost out) = ' + fmtINR(d.pipeline.amount) + '.');
+        addStep(container, 'workings', 'Tokens in = video hrs × in/video hr = ' + fmtNum(d.pipeline.totalVideoHours) + ' × ' + fmtNum(d.pipeline.tokensIn) + ' = ' + fmtNum(totalTokensIn) + '. Tokens out = video hrs × out/video hr = ' + fmtNum(d.pipeline.totalVideoHours) + ' × ' + fmtNum(d.pipeline.tokensOut) + ' = ' + fmtNum(totalTokensOut) + '.');
+        addStep(container, 'formula', 'Cost = (tokens in / 1M × cost in) + (tokens out / 1M × cost out) = (' + fmtNum(totalTokensIn / 1e6) + ' × ' + fmtNum(d.pipeline.costIn) + ') + (' + fmtNum(totalTokensOut / 1e6) + ' × ' + fmtNum(d.pipeline.costOut) + ') = ' + fmtINR(costInPart) + ' + ' + fmtINR(costOutPart) + ' = ' + fmtINR(d.pipeline.amount) + '.');
     }
 
     function buildQuizWorkings(container, inp, d, fx) {
