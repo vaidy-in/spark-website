@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Bump marketing app version in version.json and both HTML pages.
- * Usage: node scripts/bump-marketing-version.js [version]
+ * Bump marketing app version in version.json and dependent HTML/JS.
+ * Usage: node marketing/js/bump-marketing-version.js [version]
  *   - With version: sets to that value (e.g. 1.0.1)
  *   - Without: bumps patch (1.0.0 -> 1.0.1)
  */
@@ -9,15 +9,15 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
-const VERSION_JSON = path.join(ROOT, 'marketing', 'version.json');
+const MARKETING_ROOT = path.resolve(__dirname, '..');
+const VERSION_JSON = path.join(MARKETING_ROOT, 'version.json');
 const HTML_FILES = [
-  path.join(ROOT, 'marketing', 'enterprise-pricing-calculator.html'),
-  path.join(ROOT, 'marketing', 'pricing.html'),
+  path.join(MARKETING_ROOT, 'enterprise-pricing-calculator.html'),
+  path.join(MARKETING_ROOT, 'pricing.html'),
 ];
 const JS_FILES = [
-  path.join(ROOT, 'marketing', 'js', 'components', 'enterprise-calculator.js'),
-  path.join(ROOT, 'marketing', 'js', 'components', 'pricing.js'),
+  path.join(MARKETING_ROOT, 'js', 'components', 'enterprise-calculator.js'),
+  path.join(MARKETING_ROOT, 'js', 'components', 'pricing.js'),
 ];
 
 function getCurrentVersion() {

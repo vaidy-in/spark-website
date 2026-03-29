@@ -24,7 +24,13 @@ function getBasePath() {
     // - "/about/..."             → first === "about"        → no base prefix
     // - "/for-teachers/..."      → first === "for-teachers" → no base prefix
     // - "/about.html" etc        → first endsWith ".html"   → no base prefix
-    if (first === 'product' || first === 'about' || first === 'for-teachers' || first.endsWith('.html')) {
+    if (
+        first === 'product' ||
+        first === 'about' ||
+        first === 'for-teachers' ||
+        first === 'blog' ||
+        first.endsWith('.html')
+    ) {
         return '';
     }
 
@@ -166,7 +172,15 @@ function createHeader() {
     const currentPath = window.location.pathname || '/';
 
     const navItems = navLinks.map(link => {
-        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+        let isActive =
+            currentPath === link.href ||
+            (link.href !== '/' && currentPath.startsWith(link.href));
+        if (link.name === 'Blog') {
+            isActive =
+                currentPath.endsWith('/blog.html') ||
+                currentPath.endsWith('blog.html') ||
+                /\/blog\/[^/]+\.html$/.test(currentPath);
+        }
 
         if (link.name === 'Product') {
             const dropdownItems = productSubpages.map(sub => {
@@ -286,6 +300,16 @@ function createHeader() {
                     }
                     if (link.name === 'For Instructors') {
                         return getMobileNavSectionHtml(link, forTeachersSubpages, currentPath);
+                    }
+                    if (link.name === 'Blog') {
+                        const blogActive =
+                            currentPath.endsWith('/blog.html') ||
+                            currentPath.endsWith('blog.html') ||
+                            /\/blog\/[^/]+\.html$/.test(currentPath);
+                        const blogNavClass = blogActive
+                            ? 'block px-3 py-2 rounded-md text-base font-medium text-brand-600 bg-slate-50 cursor-pointer'
+                            : 'block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 cursor-pointer';
+                        return `<a href="${link.href}" class="${blogNavClass}">${link.name}</a>`;
                     }
                     return `<a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 cursor-pointer">${link.name}</a>`;
                 }).join('')}
