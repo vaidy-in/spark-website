@@ -4,7 +4,7 @@
   "description": "Static marketing site + blog (GitHub Pages). Subtree root: run npm ci && npm run build:marketing:site locally or in CI.",
   "scripts": {
     "build:marketing:css": "tailwindcss -i ./css/input.css -o ./css/tailwind.css --minify",
-    "build:marketing:site": "npm run build:marketing:css && node scripts/build-whitepaper.js && node scripts/generate-blog-pages.js"
+    "build:marketing:site": "npm run build:marketing:css && node scripts/generate-blog-pages.js"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.18",
