@@ -1,0 +1,174 @@
+/* Whitepaper layout: sticky TOC (desktop) + article column */
+
+.whitepaper-layout {
+    display: grid;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .whitepaper-layout {
+        grid-template-columns: minmax(0, 14.5rem) minmax(0, 1fr);
+        gap: 3rem;
+        align-items: start;
+    }
+}
+
+.whitepaper-toc-aside {
+    min-width: 0;
+}
+
+@media (min-width: 1024px) {
+    .whitepaper-toc-aside {
+        position: sticky;
+        top: 6rem;
+        max-height: calc(100vh - 7rem);
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 0.5rem;
+        margin-right: -0.25rem;
+        border-right: 1px solid var(--blog-slate-200, #e2e8f0);
+        scrollbar-width: thin;
+        scrollbar-color: var(--blog-scrollbar-thumb, #cbd5e1) transparent;
+    }
+
+    .whitepaper-toc-aside:hover {
+        scrollbar-color: var(--blog-scrollbar-thumb, #cbd5e1) var(--blog-scrollbar-track, #f1f5f9);
+    }
+}
+
+/* Notion / docs-style label: sentence case, quiet */
+/* Extra scroll range so late TOC entries can sit near the middle of the column, not pinned to the bottom edge. */
+@media (min-width: 1024px) {
+    nav.whitepaper-toc--desktop {
+        padding-bottom: min(42vh, 16rem);
+    }
+}
+
+.whitepaper-toc-title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--blog-slate-500, #64748b);
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--blog-slate-100, #f1f5f9);
+}
+
+.whitepaper-toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Subsections: indent + lighter type only (no vertical rail). */
+.whitepaper-toc-list--nested {
+    margin-top: 0.12rem;
+    margin-bottom: 0.35rem;
+    margin-left: 0;
+    padding-left: 0.875rem;
+    border-left: none;
+}
+
+.whitepaper-toc-item {
+    margin-bottom: 0.1rem;
+}
+
+.whitepaper-toc-item--h2 {
+    margin-bottom: 0.15rem;
+}
+
+.whitepaper-toc-item--h2 > .whitepaper-toc-link {
+    font-weight: 500;
+}
+
+.whitepaper-toc-item--h3 {
+    margin-bottom: 0.05rem;
+}
+
+.whitepaper-toc-link {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--blog-slate-600, #475569);
+    text-decoration: none;
+    border-radius: 0.25rem;
+    padding: 0.35rem 0.5rem 0.35rem 0.5rem;
+    margin-left: 0;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    transition:
+        color 0.12s ease,
+        border-color 0.12s ease,
+        background-color 0.12s ease;
+}
+
+.whitepaper-toc-link:hover {
+    color: var(--blog-slate-900, #0f172a);
+    background-color: rgba(248, 250, 252, 0.9);
+}
+
+/* Active section (scroll sync): left accent + stronger type (H2 and H3). */
+.whitepaper-toc-link--active {
+    color: var(--blog-slate-900, #0f172a);
+    font-weight: 600;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: var(--blog-indigo-600, #4f46e5);
+    background-color: rgba(239, 246, 255, 0.55);
+}
+
+.whitepaper-toc-item--h3 .whitepaper-toc-link {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--blog-slate-500, #64748b);
+    padding-top: 0.22rem;
+    padding-bottom: 0.22rem;
+    padding-left: 0.4rem;
+}
+
+.whitepaper-toc-item--h3 .whitepaper-toc-link:hover {
+    color: var(--blog-slate-800, #1e293b);
+}
+
+.whitepaper-toc-item--h3 .whitepaper-toc-link.whitepaper-toc-link--active {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blog-slate-900, #0f172a);
+}
+
+/* Mobile disclosure */
+.whitepaper-toc-mobile summary.whitepaper-toc-mobile-summary {
+    list-style: none;
+}
+
+.whitepaper-toc-mobile summary.whitepaper-toc-mobile-summary::-webkit-details-marker {
+    display: none;
+}
+
+.whitepaper-toc--mobile .whitepaper-toc-title {
+    display: none;
+}
+
+.whitepaper-toc--mobile .whitepaper-toc-link {
+    padding-left: 0.5rem;
+    margin-left: 0;
+}
+
+.whitepaper-toc--mobile .whitepaper-toc-list--nested {
+    padding-left: 0.75rem;
+}
+
+.whitepaper-toc--mobile .whitepaper-toc-item--h3 .whitepaper-toc-link {
+    padding-left: 0.35rem;
+}
+
+.whitepaper-article-column {
+    min-width: 0;
+}
+
+/* Offset anchor scroll for fixed header */
+.whitepaper-body h2,
+.whitepaper-body h3 {
+    scroll-margin-top: 5.75rem;
+}

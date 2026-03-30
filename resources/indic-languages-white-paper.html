@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spoken by Billions, heard by few – Indic languages &amp; AI</title>
+    <meta name="description" content="A deep dive into the real challenges of building AI for Indic languages, and what Spark is doing about it. Research, citations, and quality gates for ASR and LLMs.">
+    <link rel="stylesheet" href="../css/tailwind.css">
+    <link rel="stylesheet" href="../css/components/blog.css">
+    <link rel="stylesheet" href="../css/components/whitepaper.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
+    <script src="../js/layout.js"></script>
+    <script src="../js/whitepaper-toc.js" defer></script>
+</head>
+<body class="preload-hidden bg-white text-slate-900 antialiased pt-16">
+
+<main class="pt-20 pb-24 whitepaper-main" data-container-width="7xl">
+    <div class="whitepaper-layout">
+        <aside class="whitepaper-toc-aside" aria-label="Document outline">
+            <nav class="whitepaper-toc whitepaper-toc--desktop hidden lg:block" data-whitepaper-toc="desktop" aria-label="On this page">
+    <p class="whitepaper-toc-title">On this page</p>
+    <ul class="whitepaper-toc-list"><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#tldr">TL;DR</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#by-the-numbers">By the Numbers</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#key-findings">Key Findings</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#context">Context</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-india-paradox-and-the-feedback-that-started-everything">The India Paradox - and the feedback that started everything</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-language-landscape">The Language Landscape</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-structural-divide-indias-four-language-families">The Structural Divide: India's Four Language Families</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-three-quality-gates">The Three Quality Gates</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#gate-1-the-ai-mishears-more">Gate 1: The AI Mishears More</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#why-the-wer-gap-exists">Why the WER gap exists</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#model-choice-matters-enormously-on-real-world-indic-audio">Model choice matters enormously on real-world Indic audio</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#the-no-single-winner-problem">The &quot;no single winner&quot; problem</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#the-zoom-specific-challenge-who-is-speaking">The Zoom-specific challenge: who is speaking?</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#gate-2-the-ai-writes-like-a-textbook">Gate 2: The AI Writes Like a Textbook</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#technically-correct-but-wrong">Technically correct. But wrong.</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#why-it-happens-six-root-causes">Why it happens: six root causes</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#how-formal-register-bias-varies-by-language-family">How formal register bias varies by language family</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#gate-3-does-it-sound-like-this-instructor">Gate 3: Does It Sound Like This Instructor?</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#instructor-voice-preservation">Instructor voice preservation</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#student-vocabulary-calibration">Student vocabulary calibration</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-sovereign-vs-global-paradigm">The Sovereign vs. Global Paradigm</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#what-were-building-gate-by-gate">What We're Building: Gate by Gate</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#solving-for-gate-1-transcription-accuracy">Solving for Gate 1: Transcription Accuracy</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#solving-for-gate-2-natural-course-content">Solving for Gate 2: Natural Course Content</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#solving-for-gate-3-sounding-like-this-instructor">Solving for Gate 3: Sounding Like This Instructor</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#at-the-search-and-retrieval-layer">At the Search and Retrieval Layer</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-economics-of-indic-ai">The Economics of Indic AI</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#token-fertility">Token Fertility</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#the-reasoning-tax">The &quot;Reasoning Tax&quot;</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-definitive-12-language-cheat-sheet">The Definitive 12-Language Cheat Sheet</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#also-worth-evaluating-vendor-reported-data-only">Also worth evaluating (vendor-reported data only)</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-international-picture">The International Picture</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#where-this-is-all-heading">Where This Is All Heading</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#where-we-are">Where We Are</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#citations">Citations</a></li></ul>
+</nav>
+        </aside>
+        <div class="whitepaper-article-column">
+            <p class="text-base font-semibold tracking-[0.18em] uppercase text-brand-600 mb-3">Whitepaper</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 leading-tight">
+                Spoken by Billions, heard by few
+            </h1>
+            <p class="text-lg text-slate-600 leading-relaxed mb-6 max-w-3xl">
+                A deep dive into the real challenges of building AI for Indic languages, and what we are doing about it at Spark.
+            </p>
+            <details class="whitepaper-toc-mobile lg:hidden mb-10 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+    <summary class="whitepaper-toc-mobile-summary text-base font-medium text-slate-900 cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 rounded-lg py-2">On this page</summary>
+    <nav class="whitepaper-toc whitepaper-toc--mobile mt-3 pb-1" data-whitepaper-toc="mobile" aria-label="On this page"><ul class="whitepaper-toc-list whitepaper-toc-list--mobile"><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#tldr">TL;DR</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#by-the-numbers">By the Numbers</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#key-findings">Key Findings</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#context">Context</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-india-paradox-and-the-feedback-that-started-everything">The India Paradox - and the feedback that started everything</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-language-landscape">The Language Landscape</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-structural-divide-indias-four-language-families">The Structural Divide: India's Four Language Families</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-three-quality-gates">The Three Quality Gates</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#gate-1-the-ai-mishears-more">Gate 1: The AI Mishears More</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#why-the-wer-gap-exists">Why the WER gap exists</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#model-choice-matters-enormously-on-real-world-indic-audio">Model choice matters enormously on real-world Indic audio</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#the-no-single-winner-problem">The &quot;no single winner&quot; problem</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#the-zoom-specific-challenge-who-is-speaking">The Zoom-specific challenge: who is speaking?</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#gate-2-the-ai-writes-like-a-textbook">Gate 2: The AI Writes Like a Textbook</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#technically-correct-but-wrong">Technically correct. But wrong.</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#why-it-happens-six-root-causes">Why it happens: six root causes</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#how-formal-register-bias-varies-by-language-family">How formal register bias varies by language family</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#gate-3-does-it-sound-like-this-instructor">Gate 3: Does It Sound Like This Instructor?</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#instructor-voice-preservation">Instructor voice preservation</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#student-vocabulary-calibration">Student vocabulary calibration</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-sovereign-vs-global-paradigm">The Sovereign vs. Global Paradigm</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#what-were-building-gate-by-gate">What We're Building: Gate by Gate</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#solving-for-gate-1-transcription-accuracy">Solving for Gate 1: Transcription Accuracy</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#solving-for-gate-2-natural-course-content">Solving for Gate 2: Natural Course Content</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#solving-for-gate-3-sounding-like-this-instructor">Solving for Gate 3: Sounding Like This Instructor</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#at-the-search-and-retrieval-layer">At the Search and Retrieval Layer</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-economics-of-indic-ai">The Economics of Indic AI</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#token-fertility">Token Fertility</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#the-reasoning-tax">The &quot;Reasoning Tax&quot;</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-definitive-12-language-cheat-sheet">The Definitive 12-Language Cheat Sheet</a><ul class="whitepaper-toc-list whitepaper-toc-list--nested"><li class="whitepaper-toc-item whitepaper-toc-item--h3"><a class="whitepaper-toc-link" href="#also-worth-evaluating-vendor-reported-data-only">Also worth evaluating (vendor-reported data only)</a></li></ul></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#the-international-picture">The International Picture</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#where-this-is-all-heading">Where This Is All Heading</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#where-we-are">Where We Are</a></li><li class="whitepaper-toc-item whitepaper-toc-item--h2"><a class="whitepaper-toc-link" href="#citations">Citations</a></li></ul></nav>
+</details>
+            <div class="prose prose-lg max-w-none blog-post-content text-slate-700 whitepaper-body">
+                <p><strong>A Note on the Data and Benchmarks:</strong> 
+The AI landscape evolves rapidly. The benchmarks, vendor recommendations, and performance metrics in this white paper reflect our research and testing as of March 2026. Because ASR and LLM performance varies significantly based on audio quality, regional dialects, and specific use cases, the findings here are intended as a structural guide. They do not replace the need to evaluate these models on your own real-world audio and learners.</p>
+<hr />
+<h2 id="tldr">TL;DR</h2>
+<h3 id="by-the-numbers">By the Numbers</h3>
+<ul>
+<li><strong>13,000+ words</strong> of research supported by <strong>64 technical citations</strong>.</li>
+<li><strong>0.22% vs 41.7%:</strong> The gap between Hindi and English web data representation, despite Hindi having 600M+ native speakers.</li>
+<li><strong>6x to 9x:</strong> How much more often AI mishears Tamil or Odia compared to English.</li>
+<li><strong>125% WER:</strong> The error rate hit by popular default models on real-world Indic audio, leading to active hallucination.</li>
+<li><strong>3x to 5x:</strong> The "Indic Tax" - the increased cost of processing Dravidian languages on global models.</li>
+</ul>
+<h3 id="key-findings">Key Findings</h3>
+<ul>
+<li>Some of the world's most widely spoken languages are dramatically underrepresented in AI training data. The gap between where Hindi and Tamil sit versus English is not a small one - and it is the structural root cause of almost every AI problem this white paper covers.</li>
+<li>India's 22 scheduled languages span four distinct families - Indo-Aryan, Dravidian, Tibeto-Burman, and Austroasiatic - each with its own word structures, sound systems, and grammar patterns. Treating them all as "Indic" masks differences that matter deeply when building AI for them.</li>
+<li>Every language Spark supports must clear three quality hurdles before we are comfortable shipping it - and each one turned out to be harder than we expected:<ul>
+<li><strong>Transcription accuracy:</strong> Indic language error rates are dramatically higher than English - and the gap is much larger than most people expect. No single provider wins across all languages; per-language routing is essential.</li>
+<li><strong>Content naturalness:</strong> Even with a perfect transcript, LLMs default to a formal, archaic register for Indic languages - grammatically correct, but lifeless. Output sounds like a government circular, not a teacher. The reasons are structural and go deeper than a simple prompt fix.</li>
+<li><strong>Instructor voice:</strong> Even genuinely colloquial output can fail if it does not sound like <em>this specific instructor</em> talking to <em>these specific students</em>.</li>
+</ul>
+</li>
+<li>Choosing between global frontier models and India-first sovereign models is as much an economic decision as a quality one. The cost dynamics for Indic languages on global models are surprising - and strongly favor a hybrid architecture.</li>
+<li>The ecosystem is improving fast, with serious investment from government (IndiaAI Mission), academia (AI4Bharat at IIT Madras), and startups (Sarvam AI). But the structural data gap is years away from fully closing - especially for conversational, spoken-register data.</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Spark is an AI platform that turns recorded teaching sessions into structured courses - chapters, study notes, quiz questions - automatically. The idea is simple: an instructor records a Zoom session, uploads it, and gets a fully structured course out the other end. As my team and I started building support for Indic language instructors, we ran headfirst into a set of problems that went far deeper than we expected. </p>
+<p>This white paper is my attempt to document them honestly - the research, the failure modes, and what we are trying to do about it as a team. It serves a dual purpose: as a contribution back to the Indian startup ecosystem, and as a <strong>foundational knowledge base</strong> that we now use internally to guide Spark’s own AI systems.</p>
+<h2 id="the-india-paradox-and-the-feedback-that-started-everything">The India Paradox - and the feedback that started everything</h2>
+<p>Here is a number that was a bit shocking when I first saw it:</p>
+<p>Hindi has approximately 600 million native speakers. By most counts, it is one of the top three most spoken languages on earth. Tamil has somewhere between 77 and 90 million speakers, spread across India, Sri Lanka, Malaysia, Singapore, and diaspora communities worldwide <a href="https://www.ethnologue.com/insights/most-spoken-languages/" target="_blank" rel="noopener noreferrer">64</a>.</p>
+<p>And yet, according to Common Crawl - the largest public web archive, which forms the backbone of training data for nearly every major AI model - Hindi accounts for just <strong>0.22%</strong> of all web content. Tamil accounts for <strong>0.049%</strong>. English, by contrast, accounts for <strong>41.7%</strong> <a href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages.html" target="_blank" rel="noopener noreferrer">19</a>.</p>
+<p>This is not a small gap. It is a structural chasm. And it has direct, concrete consequences for anyone trying to build AI products that serve Hindi or Tamil speakers.</p>
+<p>I learned this the hard way.</p>
+<p>A few weeks ago, we rolled out a first version of Hindi language support in Spark. An instructor uploaded their Hindi teaching video. Out came a beautifully structured course. Technically, it worked.</p>
+<p>My Hindi isn’t great, but I still noticed certain abnormalities in the output. </p>
+<p>To confirm my suspicion, we showed it to a fluent Hindi speaker.</p>
+<p>Their feedback was immediate: "It's weird. Archaic. Like someone wrote it with a dictionary. It doesn't sound like a teacher - it sounds like a government circular."</p>
+<p>That sent me down a research rabbit hole that took about a week to work through. This white paper is what I found.</p>
+<p>One of my most engaged readers, Manish, recently told me: "I find the build-in-public stuff most useful - what challenge are you working on and how you are solving it." So here it is, Manish. All of it 🙂</p>
+<p><em>A note on scope: this white paper covers two AI layers we are building at Spark - ASR (transcription, which converts spoken audio into text) and language models (which generate the course content as text output). Modern language models like GPT-5.4 and Gemini 3.1 Pro are multimodal and can both process and generate images, audio, and video; in Spark's pipeline, we are specifically using their text generation capabilities to produce study notes, chapter summaries, and quiz questions. TTS (voice output) is a third layer with its own set of challenges; it is outside the scope of this white paper.</em></p>
+<hr />
+<h2 id="the-language-landscape">The Language Landscape</h2>
+<p>India officially recognizes <strong>22 scheduled languages</strong>. For product builders, the key point is that speaker scale, digital data availability, and benchmark coverage are all uneven across these 22.</p>
+<p>That creates a practical split:</p>
+<ul>
+<li>Some high-demand languages have relatively better tooling and benchmark visibility (for example: Hindi, Bengali, Marathi, Tamil, Telugu, Kannada, Malayalam, Gujarati, Punjabi, Odia, Urdu).</li>
+<li>Other scheduled languages are critically important but still have thinner standardized benchmark coverage and often need heavier custom evaluation (for example: Assamese, Maithili, Santali, Kashmiri, Sindhi, Dogri, Bodo, and others).</li>
+</ul>
+<p>So this white paper focuses on the first group for concrete comparisons. For the second group, we use an API-first baseline only as a starting point, then run native-speaker pilot testing on real user audio before making any production-quality claims or rollout decisions.</p>
+<p><strong>Concrete examples from a builder lens:</strong></p>
+<ul>
+<li>If you launch in <strong>Hindi</strong>, you can start with stronger published transcription-accuracy benchmarks and API options, then optimize for classroom code-mixing and voice style.</li>
+<li>If you launch in <strong>Bodo</strong> or <strong>Dogri</strong>, the core workflow is often reversed: run your own eval set early, test with native speakers quickly, and avoid assuming benchmark parity with Hindi.</li>
+</ul>
+<h2 id="the-structural-divide-indias-four-language-families">The Structural Divide: India's Four Language Families</h2>
+<p>The Indian subcontinent brings together languages from several distinct families. When building AI for these languages, it is tempting to treat them all as "Indic" - but this masks important structural differences. Each family has its own sound systems, word structures, and grammar patterns. These differences shape how hard AI is to build for each language in ways that go well beyond speaker count or web presence.</p>
+<p>The 22 scheduled languages span four families <a href="https://en.wikipedia.org/wiki/Languages_of_India" target="_blank" rel="noopener noreferrer">32</a>:</p>
+<div class="blog-longform-table-wrap"><table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Scheduled languages</th>
+<th>Approx. speaker share</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Indo-Aryan</strong></td>
+<td>Assamese, Bengali, Dogri, Gujarati, Hindi, Kashmiri*, Konkani, Maithili, Marathi, Nepali, Odia, Punjabi, Sanskrit†, Sindhi, Urdu</td>
+<td>~78%</td>
+</tr>
+<tr>
+<td><strong>Dravidian</strong></td>
+<td>Kannada, Malayalam, Tamil, Telugu</td>
+<td>~20%</td>
+</tr>
+<tr>
+<td><strong>Tibeto-Burman</strong></td>
+<td>Bodo, Manipuri (Meitei)</td>
+<td>&lt; 1%</td>
+</tr>
+<tr>
+<td><strong>Austroasiatic (Munda)</strong></td>
+<td>Santali</td>
+<td>&lt; 1%</td>
+</tr>
+</tbody></table></div>
+<p><em>* Kashmiri is technically Dardic, a branch within the broader Indo-Iranian family, though commonly grouped with Indo-Aryan in practical contexts.</em>
+<em>† Sanskrit is a classical language, not a spoken native language today.</em></p>
+<p><strong>Indo-Aryan</strong> is the largest family by speaker volume, covering 15 of the 22 scheduled languages. These languages have moderately complex word structures - but significantly less so than Dravidian. A more notable challenge here is dialect compression: "Hindi" alone spans Bhojpuri, Awadhi, Braj, Haryanvi, and more - varieties that are structurally distinct from each other and from the generic standard register that AI systems default to.</p>
+<p><strong>Dravidian</strong> covers 4 scheduled languages with very large collective speaker bases. These languages build words by chaining suffix after suffix onto a root - a single word can carry the meaning of an entire English phrase. Tamil, in particular, has one of the sharpest formal-versus-spoken divides of any living language. These structural properties have direct consequences for how AI handles both transcription and content generation.</p>
+<p><strong>Tibeto-Burman</strong> covers 2 scheduled languages (Bodo and Manipuri/Meitei), representing the Northeast and Himalayan belt. These languages build words through suffix-chaining <a href="https://en.wikipedia.org/wiki/Mizo_grammar" target="_blank" rel="noopener noreferrer">33</a><a href="https://aclanthology.org/2026.sigtyp-main.5/" target="_blank" rel="noopener noreferrer">34</a> and use tonal patterns to distinguish meaning, with significant internal diversity even within the family. They have the thinnest AI tooling coverage of any family in this white paper.</p>
+<p><strong>Austroasiatic (Munda)</strong> is represented by a single scheduled language - Santali - which belongs to a completely different family from the other three <a href="https://en.wikipedia.org/wiki/Languages_of_India" target="_blank" rel="noopener noreferrer">32</a>. It is critically important for its speaker communities but has very thin AI coverage.</p>
+<p><strong>Why this white paper focuses on Indo-Aryan and Dravidian:</strong> Spark's first wave of Indic teaching content skews toward languages with the largest classroom and creator volume - which today is still mostly Indo-Aryan and Dravidian. If you are building for Bodo, Meitei, Santali, or other lower-resource languages, treat everything in this white paper as a starting point: the same structural challenges apply, often more severely, and there is no substitute for native-speaker testing on your own recordings.</p>
+<hr />
+<h2 id="the-three-quality-gates">The Three Quality Gates</h2>
+<p>Every language Spark adds must pass three quality gates before the team is comfortable shipping it.</p>
+<p><strong>Gate 1: Transcription quality (ASR)</strong></p>
+<p>Spark processes video recordings. The first thing that happens is the audio gets transcribed into text. We measure transcription accuracy using something called Word Error Rate, or WER - it counts the proportion of words that are wrong, whether misheard, skipped, or hallucinated (inserted words that were never spoken). A WER above 100% is possible when a model adds so many hallucinated words that the errors outnumber the actual words in the recording.</p>
+<p>A WER of 5% means the AI gets 95 out of every 100 words right - excellent. A WER of 30% means roughly 1 in 3 words is wrong - which, for educational content, can be catastrophic. If the AI mishears "mitochondria" as "mitikondria" the meaning is still recoverable; if it mishears "stoichiometry" as "stoic metry" and that flows into the language model, you get course content about the wrong concept entirely.</p>
+<p><strong>Gate 2: Course content generation quality (language model)</strong></p>
+<p>Even if we get a perfect transcript, the language model can still produce text output that feels completely unnatural to a native speaker. Technically correct. But wrong in a way that is hard to describe until you see it - and then immediately obvious.</p>
+<p><strong>Gate 3: Does it sound like this instructor, talking to these students?</strong></p>
+<p>Gate 2 asks whether the output sounds natural to <em>any</em> fluent native speaker. Gate 3 goes further: does it sound like <em>this specific instructor</em>, talking to <em>this specific audience</em>?</p>
+<p>You can pass Gate 2 - produce genuinely natural, colloquial Hindi - and still fail Gate 3. Here are two examples of such failures:</p>
+<ul>
+<li>A Mumbai business coach who naturally mixes 40% English into their Hindi gets output that sounds like a different, generically "casual" Hindi teacher. The AI smoothed out their personal voice.</li>
+<li>A Class 10 biology teacher gets content using university-level vocabulary that their students have never encountered. The AI defaulted to "educated adult" register rather than the curriculum register the students are used to.</li>
+</ul>
+<p>In both cases the language passes a native speaker test. But the instructor would immediately notice it doesn't sound like them, and the students would find it slightly off.</p>
+<hr />
+<h2 id="gate-1-the-ai-mishears-more">Gate 1: The AI Mishears More</h2>
+<p>I defined Gate 1 above - as transcription accuracy - the first non-negotiable quality bar in Spark's pipeline.</p>
+<p>Now let's move from definition to reality: why this gate is disproportionately hard for Indian languages, and what breaks first in real classroom audio.</p>
+<p>The tables below compare Word Error Rate across two groups: well-resourced languages as a baseline, and all 12 Indic languages with published benchmark data.</p>
+<p><strong>Comparison baseline - well-resourced languages</strong> <a href="https://www.assemblyai.com/docs/benchmarks" target="_blank" rel="noopener noreferrer">24</a></p>
+<div class="blog-longform-table-wrap"><table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Best WER</th>
+<th>Best provider</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>English</td>
+<td>~4%</td>
+<td>Google STT / Whisper</td>
+</tr>
+<tr>
+<td>Spanish, French, German</td>
+<td>~5-8%</td>
+<td>Google STT / Whisper</td>
+</tr>
+<tr>
+<td>Japanese, Korean</td>
+<td>~6-9%</td>
+<td>Google STT / Whisper</td>
+</tr>
+</tbody></table></div>
+<p><strong>Indic languages - all 12 with published benchmark data</strong></p>
+<div class="blog-longform-table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Language</th>
+<th>Best WER</th>
+<th>Best provider</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Hindi</td>
+<td>16.2%</td>
+<td>Google STT <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bengali</td>
+<td>~20.1%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Marathi</td>
+<td>~18.2%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Gujarati</td>
+<td>~22.8%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Urdu ⚠️</td>
+<td>~19.4%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Punjabi</td>
+<td>~20.5%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Kannada</td>
+<td>~18.3%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Tamil</td>
+<td>~25.3%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Telugu</td>
+<td>33.2%</td>
+<td>Google STT <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Malayalam</td>
+<td>~32.3%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Odia</td>
+<td>35.1%</td>
+<td>Azure Speech (with diarization) <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Sanskrit ⚠️</td>
+<td>~48.0%</td>
+<td>IndicWhisper <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a></td>
+</tr>
+</tbody></table></div>
+<ul>
+<li>⚠️ Urdu: WER doesn't capture script complexity (right-to-left Nastaliq). </li>
+<li>⚠️ Sanskrit: classical written language, not a practical spoken teaching target.</li>
+</ul>
+<p>To put this in perspective: </p>
+<ul>
+<li>For English, the AI mishears about 1 in 25 words (4% WER).</li>
+<li>For Tamil, it mishears about 1 in 4 words (25.3% WER) - that's <strong>6x worse</strong>.</li>
+<li>For Odia, closer to 1 in 3 words (35.1% WER) - that's <strong>almost 9x worse than English</strong>.</li>
+</ul>
+<p>A few things to note when interpreting these tables:</p>
+<ul>
+<li><strong>Two data sources for Indic languages:</strong> The Farmer.Chat study <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a> covers Hindi, Telugu, and Odia from real noisy field recordings. The AI4Bharat Vistaar benchmark <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">2</a> covers the remaining 9 Indic languages from a standardised test set - which likely <em>understates</em> real-world difficulty.</li>
+<li><strong>Coverage gap:</strong> India has 22 scheduled languages. The 12 above are the only ones with published <em>standardised benchmark WER data</em>. For the other 10 (including Assamese, Maithili, Santali, Kashmiri, and Nepali) - ASR models do exist (AI4Bharat's IndicConformer and Bhashini cover all 22 scheduled languages), but their performance has not been formally measured in a standardised benchmark. In practice, that means you cannot know their real-world accuracy until you test them yourself.</li>
+<li><strong>Other Indic datasets and benchmarks are excluded from this WER table:</strong> Beyond Farmer.Chat and Vistaar, there are other Indic speech datasets and related benchmarks (Vaani, FLEURS, BhasaAnuvaad/Indic-Spontaneous-Synth, IndicSUPERB, Lahaja, Svarah, Bhashini ULCA corpora), but as of early 2026 there is no published, cross-provider WER leaderboard for Indic languages comparable to what I use here. Where they report metrics, they focus on other tasks (AST, accent robustness, keyword spotting) or English, so I exclude them from this WER table.</li>
+<li><strong>Two outliers in the Indic table:</strong> Urdu's WER looks competitive, but its right-to-left Nastaliq script introduces rendering and tokenization challenges not captured by WER alone. Sanskrit's 48% reflects that it is a classical written language rarely spoken in everyday contexts - not a practical target for teaching video transcription.</li>
+<li><strong>Why the first table includes multiple non-Indic languages:</strong> English alone would be too easy to dismiss ("of course AI is better at English"). Including Spanish, French, German, Japanese, and Korean makes the contrast harder to ignore.</li>
+</ul>
+<h3 id="why-the-wer-gap-exists">Why the WER gap exists</h3>
+<p>The main driver is straightforward: <strong>training data imbalance</strong>.</p>
+<p>If you look back at the WER tables, the gap between English (~4% WER) and Indic languages (16%–48% WER) is not primarily a model architecture problem. It is mostly a reflection of what these models have been trained on.</p>
+<p>ASR systems learn from paired audio + text. For English, there are decades of large-scale transcription data: podcasts, audiobooks, call centres, meetings, lectures, and videos. Thousands of hours across a wide range of accents, microphones, and background conditions.</p>
+<p>Hindi – the most widely spoken Indic language – has substantially less publicly available transcription data than English. Tamil, Telugu, and other Indic languages have even less. What does exist is often narrower in scope: more scripted or formal speech, cleaner audio, and more limited accent and dialect variation.</p>
+<p>In that context, the outcome is predictable. A model trained on something like 10,000 hours of diverse English audio will outperform a model trained on a few hundred hours of relatively clean, formal Hindi audio – not because Hindi ASR is intrinsically harder, but because the training material is both smaller and less diverse.</p>
+<p>On top of quantity, there are quality and coverage gaps:</p>
+<ul>
+<li><p>Labels for Indic datasets can be noisier or inconsistent.  </p>
+</li>
+<li><p>Indic speakers tend to mix English and local languages mid-sentence (code-switching), but most training data doesn't include enough of this. </p>
+<ul>
+<li>For example, a Hindi teacher might say: "Toh aaj hum cover karenge photosynthesis ka process, jo aapke boards ke liye bahut hi important topic hai." - seamlessly blending Hindi and English technical terms mid-sentence.</li>
+</ul>
+</li>
+<li><p>The writing systems themselves are trickier. India's 12 major languages use roughly 10 different scripts - because two pairs of languages share a script, while the remaining eight each have their own:</p>
+<ul>
+<li>Hindi and Marathi: Devanagari (shared)</li>
+<li>Bengali and Assamese: Bengali/Bangla script (shared, with minor differences)</li>
+<li>Punjabi: Gurmukhi</li>
+<li>Urdu: right-to-left Nastaliq</li>
+<li>Tamil, Telugu, Kannada, Malayalam, Gujarati, and Odia: each has its own distinct script</li>
+</ul>
+<p>They are different writing systems, each with 100-400+ characters including diacritics and conjunct consonants. The ASR decoder must learn to map sounds to the correct characters in the correct script, a harder task when training data is thin.</p>
+<p>A compounding problem: many Indian users type in Roman script informally (typing "kal aana" rather than "कल आना"). Training data contains both native-script and romanized versions of the same words. Models exposed to this mix can produce inconsistent script output - sometimes romanized when native script is expected.</p>
+</li>
+</ul>
+<h3 id="model-choice-matters-enormously-on-real-world-indic-audio">Model choice matters enormously on real-world Indic audio</h3>
+<p>These numbers represent the <em>best available</em> model for each language. What happens when you use a different - even popular - model on the same recordings?</p>
+<p>The Farmer.Chat study tested 10 ASR models on the same real-world noisy Hindi and Odia recordings. The gap between the best and a commonly used default is striking:</p>
+<ul>
+<li><strong>Hindi</strong>: Google STT achieves 16.2% WER. Whisper - the most widely used default ASR model - achieves <strong>46.8%</strong> on the exact same recordings <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a>.</li>
+<li><strong>Odia</strong>: Azure Speech (with speaker diarization) achieves 35.1%. Whisper on the same recordings hits <strong>125.6% WER</strong> - more hallucinated words than real words <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a>.</li>
+</ul>
+<p>A 125% WER means the model hallucinated more words than it actually heard - the transcription is not just inaccurate but actively fabricating content. For Spark, where course content flows directly from the transcript, this is a non-starter.</p>
+<p><em>A note on why we use Whisper as the comparison baseline here: Whisper is not the strongest English ASR model available today. As of early 2026, models like NVIDIA Parakeet and Cohere Transcribe outperform it on English benchmarks in the <a href="https://huggingface.co/spaces/hf-audio/open_asr_leaderboard" target="_blank" rel="noopener noreferrer">Hugging Face Open ASR Leaderboard</a>. We use Whisper as the comparison point specifically because it remains the most widely reached-for default when developers first add speech recognition to a product - and because the Farmer.Chat study <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a> benchmarked it directly.</em></p>
+<p>Lesson: for Indic languages, the default model is often the wrong model. Provider selection matters as much as language support.</p>
+<h3 id="the-no-single-winner-problem">The "no single winner" problem</h3>
+<p>There is no single transcription provider that wins across all Indic languages. The Farmer.Chat results already show this pattern clearly: one provider can lead in one language pair, while a different provider leads in another on the same kind of noisy, multi-speaker audio <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a>.</p>
+<p>For product teams, the principle is simple:</p>
+<ul>
+<li><strong>Per-language specialist routing</strong> beats one-size-fits-all in most production setups.</li>
+<li><strong>Pan-Indic coverage leaders</strong> are useful defaults when explicit routing is not available, but "best average coverage" is still not "best for every language."</li>
+</ul>
+<p>For the concrete model and API choices by language, see <strong>The Definitive 12-Language Cheat Sheet</strong> below.</p>
+<h3 id="the-zoom-specific-challenge-who-is-speaking">The Zoom-specific challenge: who is speaking?</h3>
+<p>One more complication specific to Spark's use case: Zoom recordings are rarely monologues. A 90-minute session typically has a Q&amp;A section with 3-5 participants, each with their own accent, dialect, and language mixing ratio.</p>
+<p>Determining who said what - "speaker diarization" - is already a hard problem in English. In Indic languages with code-mixing, it is significantly harder. If Q&amp;A sections are misattributed or garbled in the transcript, the course content generation can pick up student questions as if they were instructor teaching - and generate completely wrong study notes.</p>
+<hr />
+<h2 id="gate-2-the-ai-writes-like-a-textbook">Gate 2: The AI Writes Like a Textbook</h2>
+<h3 id="technically-correct-but-wrong">Technically correct. But wrong.</h3>
+<p>Recall the Hindi course output I mentioned earlier - the one that sounded like a government notification rather than a teacher. </p>
+<p>The course output itself was not incorrect. It covered the right topics in the right order. The study notes had the right facts.</p>
+<p>But it felt like reading a government notification. Every sentence was grammatically impeccable, perfectly formal and.. completely lifeless. The kind of Hindi you'd hear on Doordarshan in 1988, not the kind you'd hear a passionate teacher use in a classroom in 2026.</p>
+<p>The technical term for what was happening is "formal register bias." But understanding why this happens - and why it is not a simple bug to fix - requires understanding where LLMs learn their language.</p>
+<h3 id="why-it-happens-six-root-causes">Why it happens: six root causes</h3>
+<p><strong>1. Training data skew</strong></p>
+<p>Modern frontier models are multimodal, so they learn from more than just text. But language behavior is still shaped heavily by their text data and text-centric alignment pipelines. The more high-quality language data a model sees in a language, the better it gets. And quality matters as much as quantity - or more.</p>
+<p>For Hindi, the text that ends up in LLM training datasets is heavily skewed toward formal sources: government documents, legal records, news articles, Wikipedia entries, textbook content, and exam preparation material. This is not an accident - these are the texts that are easiest to scrape cleanly from the web.</p>
+<p>IndicCorp v2, one of the most commonly used Indic language training datasets, covers 20.9 billion tokens across 24 languages and is built almost entirely from news, Wikipedia, and OSCAR web crawls <a href="https://www.emergentmind.com/topics/indic-language-models-ilms" target="_blank" rel="noopener noreferrer">5</a>.</p>
+<p>What is not in these datasets: WhatsApp conversations, YouTube comments, Instagram captions, the way people actually text each other, or the casual way teachers talk in class. This content is abundant on the internet - but it is hard to scrape cleanly, often in inconsistent scripts, and gets filtered out as "low quality noise" during data preparation.</p>
+<p>The result: when you ask an LLM to write in Hindi, its mental template is "newspaper column meets exam preparation guide" - not "engaged teacher explaining a concept."</p>
+<p><strong>2. Diglossia: two languages in one name</strong></p>
+<p>Tamil provides the clearest illustration of a problem that exists across Indic languages to varying degrees: diglossia.</p>
+<p>Tamil has two distinct varieties. The "high" variety (called Senthamizh or Literary Tamil) is used in formal writing, textbooks, legal documents, official speeches, and news broadcasts. The "low" variety (Spoken Tamil) is what people actually use in everyday conversation - regionally varied, heavily contracted, code-mixed, with different verb endings, different pronouns, and a completely different feel.</p>
+<p>These are not just "formal" vs "casual" in the way English has those registers. The IruMozhi project - a Tamil NLP research initiative - explicitly documented that internet training data "heavily overrepresents Literary Tamil," while the vast majority of Tamil speakers prefer and use Colloquial Tamil in their daily lives <a href="https://aclanthology.org/2024.findings-naacl.195.pdf" target="_blank" rel="noopener noreferrer">6</a>. To a native Tamil speaker, LLM output in Literary Tamil sounds like someone speaking in Shakespearean English - technically correct, but strikingly strange.</p>
+<p>The same pattern exists in Hindi (formal Shuddh Hindi vs everyday Hinglish), Bengali, Kannada, Telugu, and Malayalam. Every Indic language has some version of this spoken-written gap, and training data disproportionately represents the written, formal variety.</p>
+<p><strong>3. Morphological safety</strong></p>
+<p>To understand this one, it helps to know two terms:</p>
+<ul>
+<li><strong>Agglutinative</strong> languages build words by stacking distinct suffixes onto a root - each suffix carries one specific meaning, and you can take the word apart like Lego blocks. Tamil is the clearest example: the single word <em>வருகிறேன்</em> (varukiṟēṉ) means "I am coming" - root + tense suffix + person/number suffix, each doing a separate job.</li>
+<li><strong>Fusional</strong> languages instead blend grammatical information into word endings - a single ending simultaneously encodes multiple meanings that cannot be separated. In Hindi, the word <em>गया</em> (gayā) means "went" - but its ending encodes past tense, masculine gender, and singular number all at once as one indivisible unit. Change one element and the whole ending shifts: <em>गई</em> (gaī) is past + feminine + singular. Unlike agglutinative stacking, there are no Lego blocks to pull apart <a href="https://aclanthology.org/2024.lrec-main.764" target="_blank" rel="noopener noreferrer">36</a>.</li>
+</ul>
+<p>Both are harder for AI than English, which expresses most of this through separate words ("I", "am", "going"). But agglutination creates a far larger vocabulary explosion - Tamil can theoretically produce thousands of surface forms from a single root <a href="https://aclanthology.org/2023.sigmorphon-1.3.pdf" target="_blank" rel="noopener noreferrer">37</a> - which is why the problem is most acute in Dravidian languages.</p>
+<p>To be clear, neither fusion nor agglutination is unique to Indic languages. German is fusional; Finnish and Hungarian are strongly agglutinative - Finnish alone has 15 grammatical cases all formed by stacking suffixes. </p>
+<p>What makes Dravidian languages specifically hard for AI is not the mechanism itself, but three problems hitting simultaneously: extreme agglutination scale, near-zero training data, and severe diglossia. </p>
+<p>German's fusion is handled well by modern AI because the training data is abundant. Finnish's agglutination is manageable because Finnish is an EU language with strong digital representation. </p>
+<p>Tamil has all three problems at once, with no equivalent data cushion.</p>
+<p>Informal spoken Tamil breaks and contracts these suffix chains; formal Tamil preserves them carefully. For a model trying to produce correct output, it is safer to stick to formal morphological rules. The "penalty" for being too formal is that the output sounds stiff. The penalty for attempting informal contractions and getting them wrong is that the output sounds broken. Training and human feedback in RLHF both push models toward "better too formal than wrong" <a href="https://dev.to/daud_ibrahim_9887/building-an-llm-from-scratch-for-indic-languages-what-no-one-tells-you-about-the-hard-parts-1e85" target="_blank" rel="noopener noreferrer">7</a>.</p>
+<p><strong>4. Cultural prestige bias</strong></p>
+<p>In many Indian language communities, there is a long tradition of valuing "pure" or "literary" forms of the language and treating heavily code-mixed or colloquial speech as somehow less correct. Tamil has the concept of "Senthamizh" (pure Tamil). Hindi has the formal-versus-colloquial tension between Shuddh Hindi and Hinglish.</p>
+<p>This cultural prestige shows up in RLHF annotation: human annotators tend to reward outputs that look like "proper language" and penalize heavily code-mixed or slangy outputs - especially in professional contexts. The Telegraph India described it plainly: even ChatGPT-style tools "feel clunky or overly formal in Hindi or Bengali" <a href="https://www.telegraphindia.com/opinion/when-ai-is-anglophone-can-chatgpt-generate-arguments-in-hindi-or-bengali-with-the-same-clarity-prnt/cid/2109430" target="_blank" rel="noopener noreferrer">8</a>.</p>
+<p>The model has been explicitly rewarded for producing formal language. And so it does.</p>
+<p><strong>5. Dialect compression (standardization bias)</strong></p>
+<p>"Hindi" is not one language. A teacher from rural Bihar speaks Bhojpuri-inflected Hindi. A teacher from Delhi speaks urban Hinglish. A teacher from Lucknow speaks the Awadhi-influenced Hindi of that region. When an LLM produces "Hindi," it defaults to a generic standard register (Khari Boli) that feels somewhat foreign to all of them.</p>
+<p>The same is true for Tamil (Chennai Tamil vs Coimbatore Tamil vs Sri Lankan Tamil), Bengali (Kolkata Bengali vs East Bengali/Bangladeshi Bengali), and every other major Indic language. The language name in a prompt is a blunt instrument. Specifying the regional variety makes a meaningful difference - and in many cases, the model does respond to that specificity.</p>
+<p><strong>6. Code-mixing underperformance</strong></p>
+<p>Even when the transcript is accurate, LLMs struggle with code-mixed input and output. A 2025 benchmark called CodeMixBench found that state-of-the-art LLMs "consistently underperform" on code-mixed tasks involving Indic languages <a href="https://arxiv.org/pdf/2507.18791" target="_blank" rel="noopener noreferrer">4</a> - the switch between languages within a sentence trips up generation just as it trips up transcription.</p>
+<p><strong>7. Script fragmentation</strong></p>
+<p>As introduced in Gate 1, India's major languages each use a different script. This creates LLM output challenges distinct from the register and morphology problems above.</p>
+<p>Tokenization cost varies by script: Devanagari tokenizes reasonably efficiently - roughly one syllable per one or two tokens. Tamil and Malayalam use conjunct characters (composite glyphs representing consonant clusters) that standard tokenizers often break into multiple tokens, inflating cost further. This is part of why Malayalam sits at the extreme end of the token fertility problem described in the economics section below.</p>
+<p>Cross-script confusion is a quality failure that benchmarks rarely capture. LLMs sometimes produce Devanagari characters when writing Punjabi (Gurmukhi script) because the scripts look visually similar. When writing Assamese (Bengali script), models may produce Bengali-specific word forms rather than Assamese-specific ones - the scripts are shared but the languages are not identical.</p>
+<p>Finally, inconsistent script choice in output: asked to write colloquial Tamil, should the model use Tamil script or Roman transliteration (Tanglish)? LLMs are inconsistent on this, and may produce a response mixing both scripts in the same paragraph - technically readable but disorienting for the reader.</p>
+<h3 id="how-formal-register-bias-varies-by-language-family">How formal register bias varies by language family</h3>
+<p>The seven root causes above apply across these language families - but with different severity and character. Builders targeting languages from different families will hit different combinations of these problems:</p>
+<div class="blog-longform-table-wrap"><table>
+<thead>
+<tr>
+<th>Root cause</th>
+<th>Indo-Aryan (Hindi, Bengali, Marathi...)</th>
+<th>Dravidian (Tamil, Telugu, Kannada, Malayalam)</th>
+<th>Tibeto-Burman (Bodo, Meitei, Mizo...)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Training data skew</strong></td>
+<td><strong>Moderate</strong> - formal sources (news, Wikipedia, government) dominate; colloquial data filtered out</td>
+<td><strong>High</strong> - web presence even thinner; formal sources overwhelm the little colloquial data that exists</td>
+<td><strong>Severe</strong> - very little data of any kind; almost entirely formal or governmental</td>
+</tr>
+<tr>
+<td><strong>Diglossia</strong></td>
+<td><strong>Moderate</strong> - Shuddh Hindi vs Hinglish; Sadhu Bhasha vs Chalit Bhasha in Bengali</td>
+<td><strong>Severe</strong> - Literary vs Spoken Tamil is one of the sharpest documented cases in any modern language; similar gaps in Malayalam, Kannada, Telugu</td>
+<td><strong>Mild to Moderate</strong> - social and dialectal variation documented (Meitei/Manipuri) <a href="http://lisindia.ciil.org/Mani/Mani_vari.html" target="_blank" rel="noopener noreferrer">35</a>; formal-literary diglossia in the Tamil sense not confirmed in research</td>
+</tr>
+<tr>
+<td><strong>Morphological safety</strong></td>
+<td><strong>Mild to Moderate</strong> - primarily fusional with some agglutination; less complex than Dravidian <a href="https://aclanthology.org/2024.lrec-main.764" target="_blank" rel="noopener noreferrer">36</a></td>
+<td><strong>Severe</strong> - strongly agglutinative (Tamil, Telugu, Kannada, Malayalam); formal morphological rules far "safer" for models to default to</td>
+<td><strong>Moderate</strong> - agglutinative features confirmed in Mizo, Meitei, and Bodo <a href="https://en.wikipedia.org/wiki/Mizo_grammar" target="_blank" rel="noopener noreferrer">33</a><a href="https://aclanthology.org/2026.sigtyp-main.5/" target="_blank" rel="noopener noreferrer">34</a>; paradigms less complex than Dravidian</td>
+</tr>
+<tr>
+<td><strong>Cultural prestige bias</strong></td>
+<td><strong>High</strong> - Sanskrit purity norms (Shuddh Hindi); formal register consistently rewarded in annotation</td>
+<td><strong>High</strong> - Senthamizh ("pure Tamil") movement; similar prestige dynamics in Kannada and Telugu</td>
+<td><strong>Low</strong> - limited RLHF annotation data for these languages; prestige dynamics poorly documented</td>
+</tr>
+<tr>
+<td><strong>Dialect compression</strong></td>
+<td><strong>Severe</strong> - Hindi alone spans Bhojpuri, Awadhi, Braj, Haryanvi and more; LLMs default to generic Khari Boli</td>
+<td><strong>Moderate</strong> - clear regional varieties (Chennai vs Coimbatore Tamil; Telangana vs Andhra Telugu) but fewer than in Hindi</td>
+<td><strong>High</strong> - Bodo, Meitei, Mizo, and Kokborok are distinct languages often grouped together; each has internal variation with no dedicated LLM support</td>
+</tr>
+<tr>
+<td><strong>Code-mixing underperformance</strong></td>
+<td><strong>High</strong> - Hinglish (Hindi+English) is among the world's most common code-mixed varieties; Benglish, Marathi+English widespread</td>
+<td><strong>High</strong> - Tanglish, Kanglish, Tenglish prevalent in urban and educational settings</td>
+<td><strong>Moderate</strong> - mixing with Hindi and regional languages (e.g. Mizo+Hindi) is common but has limited NLP documentation</td>
+</tr>
+<tr>
+<td><strong>Script fragmentation</strong></td>
+<td><strong>Moderate</strong> - Devanagari is shared across Hindi, Marathi, and Sanskrit; tokenization manageable; romanization (Hinglish typed in Roman) creates output inconsistency</td>
+<td><strong>High</strong> - each Dravidian language has its own distinct script; Tamil and Malayalam conjunct characters inflate token counts; cross-script slippage in LLM output documented</td>
+<td><strong>Moderate to High</strong> - Meitei/Manipuri uses both Bengali script and its own traditional Meitei Mayek script; limited LLM support for either</td>
+</tr>
+</tbody></table></div>
+<p><em>Note: "Low" ratings for Tibeto-Burman often reflect limited research coverage rather than absence of the problem. Santali (Austroasiatic/Munda) is omitted from this table: LLM-quality research for it is too thin to characterize reliably across these dimensions. Severity ratings represent the author's synthesis across multiple sources; individual citations are provided for specific claims in the body text above.</em></p>
+<p>The underlying drivers are consistent across all families - training data that skews formal, benchmarks built on written text, human feedback that rewarded "correct and polite." The severity and character of each driver varies significantly by family.</p>
+<hr />
+<h2 id="gate-3-does-it-sound-like-this-instructor">Gate 3: Does It Sound Like This Instructor?</h2>
+<p>Even if we solve the formal-register bias problem - even if the output is genuinely colloquial and natural-sounding - there is still a subtler question: does it sound like <em>this instructor</em>, talking to <em>these students</em>?</p>
+<h3 id="instructor-voice-preservation">Instructor voice preservation</h3>
+<p>Every instructor has a personal linguistic fingerprint. A business coach from Mumbai might naturally use about 40% English words embedded in Hindi sentences, with specific phrases they return to repeatedly. A Tamil mathematics teacher from Chennai has a particular blend of spoken Tamil with English mathematical terms and specific ways of building up to an explanation.</p>
+<p>When Spark generates course content from their recordings, does the output preserve that fingerprint? Or does it flatten everything into a generic "colloquial Hindi" or "colloquial Tamil"?</p>
+<p>Right now, it flattens. The model has no mechanism to infer and preserve an individual instructor's code-mixing ratio, vocabulary preferences, or rhetorical style. Two instructors who teach the same topic in Hindi - one with heavy English code-mixing, one without - would get nearly identical output from the current system.</p>
+<h3 id="student-vocabulary-calibration">Student vocabulary calibration</h3>
+<p>The content that works for a Class 10 student learning biology is different from what works for an engineering graduate revisiting the same topic - even in the same language. A Class 10 student using NCERT textbooks has been exposed to specific vocabulary conventions that an AI generating "biology content in Hindi" would not automatically know to follow.</p>
+<p>Indian curricula (NCERT for Class 10, for instance) use specific term conventions that differ from international textbooks. When the AI generates content in a slightly different vocabulary register, it creates a subtle but real disconnect for students who are used to their curriculum's language.</p>
+<hr />
+<h2 id="the-sovereign-vs-global-paradigm">The Sovereign vs. Global Paradigm</h2>
+<p>As I dug deeper into the research, a clear pattern emerged across the data: the 2026 AI landscape for Indian languages is defined by a fundamental battle between <strong>Sovereign AI and Global AI</strong>. This is my synthesis of how that dynamic plays out for product builders.</p>
+<p>Global frontier models (like GPT-5.4 and Gemini 3.1 Pro) bring massive reasoning capabilities to the table. But because they are trained primarily on Western datasets, they suffer from high "token fertility" (they break Indian words into too many pieces, driving up costs) and formal register bias.</p>
+<p>On the other side are Sovereign models (like Sarvam-105B) built specifically for the Indian linguistic ecosystem. These models excel at "cultural groundedness" - they understand code-switching, regional idioms, and proper colloquial tone, while maintaining low token fertility through custom tokenizers.</p>
+<p>The trade-off is that Sovereign models are not always frontier leaders on broad, global benchmarks: in public comparisons they can lag top global models on hard reasoning, coding tasks, and some multimodal capabilities. Operationally, the open ecosystem can also be less mature in places (tooling compatibility, deployment paths, and benchmark coverage), so teams often get the best production outcome from a hybrid stack - global models for heavy reasoning, Sovereign models for high-volume Indic-language generation.</p>
+<hr />
+<h2 id="what-were-building-gate-by-gate">What We're Building: Gate by Gate</h2>
+<p>None of the problems above have clean, complete solutions. The structural data gap is real and will take years to fully close. What we can do is build intelligently around current limitations - and be precise about which problem each mitigation actually addresses.</p>
+<p>The sections below mirror the three gates. For each gate, we cover what we are doing, which specific sub-problem from that gate each approach targets, and what it still does not fix.</p>
+<p>*For a quick per-language reference on ASR routing and LLM model selection across the top 12 Indian languages, jump straight to <strong><a href="#the-definitive-12-language-cheat-sheet">The Definitive 12-Language Cheat Sheet</a></strong>. The sections below explain the reasoning and the root-cause logic behind those recommendations.*</p>
+<hr />
+<h3 id="solving-for-gate-1-transcription-accuracy">Solving for Gate 1: Transcription Accuracy</h3>
+<p>Gate 1 established that Indic language WER is 4-9x worse than English, driven by training data imbalance, multiple writing systems, code-switching complexity, and multi-speaker recording challenges specific to Zoom sessions. Here is how we address each.</p>
+<p><strong>1. Language detection and provider routing - the "no single winner" problem</strong></p>
+<p>Since no single ASR provider wins across all Indic languages, the right approach is to detect the language at ingestion and route to the best hosted API for that language. For builders looking for product-grade APIs without running their own inference stack, here is how we think about the ecosystem in 2026:</p>
+<ul>
+<li><strong>Google Cloud STT:</strong> The overall accuracy leader for standard Hindi (16.2% WER) and Telugu (33.2% WER) <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a>. Handles clean audio well; can stumble on rural dialects or heavy code-mixing.</li>
+<li><strong>Azure Speech:</strong> The strongest option for multi-speaker recordings with speaker diarization, specifically outperforming others for Odia (35.1% WER vs. Google's ~70%) <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">1</a>. Does not support Punjabi STT.</li>
+<li><strong>Sarvam (Saaras V3):</strong> The practical default for pan-Indic coverage. Covers all 22 scheduled languages with a hosted API and handles code-mixed speech (Hinglish, Kanglish, Tanglish) natively, avoiding the hallucinations common in Western models on low-resource Indic audio <a href="https://www.business-standard.com/technology/tech-news/saaras-v3-beats-gemini-gpt-4o-on-indian-speech-benchmarks-says-sarvam-ai-126021200384_1.html" target="_blank" rel="noopener noreferrer">3</a>.</li>
+<li><strong>Bhashini:</strong> India's government-built platform, offering free ASR APIs across all 22 scheduled languages using AI4Bharat's IndicConformer models under the hood <a href="https://dibd-bhashini.gitbook.io/bhashini-apis/available-models-for-usage" target="_blank" rel="noopener noreferrer">18</a>. The best fallback for low-resource languages like Assamese, Sindhi, or Bodo.</li>
+</ul>
+<p><em>What about Vaani?</em> Project Vaani (IISc / ARTPARK, backed by Google) is an open dataset and a set of open Hugging Face models, not a drop-in public API. Invaluable for teams that can self-host or fine-tune - but for direct integration, Spark prioritizes the hosted APIs above.</p>
+<p>This ecosystem fragmentation makes automatic language identification at the ingestion stage - before transcription begins - an absolute necessity.</p>
+<p><strong>2. Audio preprocessing - the data quality problem</strong></p>
+<p>Before transcription begins, audio quality directly affects WER. Noise reduction, speaker separation, and format normalization are the first line of defense against the training data quality gap described in Gate 1. Sarvam's Saaras V3 is explicitly optimized for real-world Indian audio conditions - background noise, low-quality microphones, and telephony-grade input <a href="https://www.sarvam.ai/blogs/asr" target="_blank" rel="noopener noreferrer">22</a>.</p>
+<p><strong>3. Speaker diarization for multi-speaker recordings - the Zoom Q&amp;A misattribution problem</strong></p>
+<p>Gate 1 identified a failure mode specific to Spark's use case: in a 90-minute Zoom session with Q&amp;A, student questions misattributed as instructor speech generate completely wrong study notes. Addressing this requires an explicit diarization step before the transcript flows into course generation.</p>
+<p>Azure Speech Service's real-time diarization assigns speaker identifiers to each spoken segment <a href="https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-stt-diarization" target="_blank" rel="noopener noreferrer">43</a>, enabling the pipeline to separate instructor content from student questions before either reaches the LLM. One viable approach: configure the course generation pipeline to treat diarized segments differently - instructor segments generate course content; Q&amp;A segments are preserved as context, flagged, and not used as the primary content source.</p>
+<p>The honest caveat: speaker diarization for code-mixed Indic multi-speaker audio is an active research problem. The DISPLACE challenge <a href="https://arxiv.org/html/2406.09494v1" target="_blank" rel="noopener noreferrer">44</a> - the primary benchmark for multilingual speaker diarization in Indian languages, covering 158 hours across 5 Indian languages in code-mixed, multi-speaker conversational audio - confirms that identifying speaker switches in sessions where participants naturally code-mix is significantly harder than monolingual diarization. For Tamil specifically, the SiTa dataset <a href="https://aclanthology.org/2025.chipsal-1.8/" target="_blank" rel="noopener noreferrer">45</a> is among the first real-world conversational diarization resources for South Asian languages. Azure's diarization is a viable starting point for this problem; the downstream LLM prompt must be designed to be robust to minor misattributions, because perfect speaker separation on code-mixed Indic audio does not exist yet.</p>
+<p><strong>4. Script normalization - the Roman vs. native script inconsistency problem</strong></p>
+<p>After ASR produces a transcript, it may contain inconsistent script choices - some words in native script, others romanized (typing "kal aana" rather than "कल आना"), or both within a single sentence. A 2024 EMNLP paper <a href="https://aclanthology.org/2024.emnlp-main.607" target="_blank" rel="noopener noreferrer">46</a> found that normalization routines in major ASR models including Whisper, Meta MMS, and Seamless are "fundamentally flawed when applied to Indic scripts" - artificially masking transcript errors and producing unreliable output for downstream tasks.</p>
+<p>The recommended mitigation is to run script normalization using the Indic NLP Library <a href="https://indic-nlp-library.readthedocs.io/en/latest/indicnlp.normalize.html" target="_blank" rel="noopener noreferrer">47</a> before the transcript feeds to the LLM. This standardizes inconsistent romanization to native script for the target language, reduces the LLM's burden of interpreting mixed-script input, and improves the consistency of course content output.</p>
+<p><strong>5. Code-switching configuration - the mid-sentence language switch problem</strong></p>
+<p>When a Hindi teacher says "aaj hum cover karenge photosynthesis ka process," most ASR APIs face a choice: treat the whole sentence as Hindi, or switch to English mid-sentence for the English words. Google STT's <code>alternativeLanguageCodes</code> supports multi-language detection; Sarvam handles code-mixing natively without any toggle.</p>
+<p>In practice, turning on language switching can help with English technical terms but sometimes causes over-switching, producing a fragmented transcript. For Spark's use case, this is less critical than it sounds: the transcript feeds into an LLM that generates the final course content, and a well-crafted prompt can instruct the LLM to normalize the output into a consistent script and register regardless of transcript inconsistencies. Getting the transcript broadly accurate matters more than getting the script choice perfect at the ASR layer <a href="https://www.isca-archive.org/interspeech_2023/verma23_interspeech.pdf" target="_blank" rel="noopener noreferrer">12</a>.</p>
+<p><strong>6. Domain vocabulary tuning - the educational term misrecognition problem</strong></p>
+<p>Subject-specific terms are the most likely to be misrecognized and the most damaging when wrong. A misheard chemical compound or historical figure name at the transcript stage cascades into completely wrong course content downstream. Google STT and Azure Speech both support custom phrase boosting, which reduces domain-critical errors without requiring full model fine-tuning.</p>
+<p><strong>7. Post-ASR correction (optional)</strong></p>
+<p>Running a second-pass correction model on the raw transcript before the LLM can improve accuracy. EACL 2026 work <a href="https://aclanthology.org/2026.eacl-short.45/" target="_blank" rel="noopener noreferrer">11</a> shows that fine-tuned smaller models consistently outperform large frontier models for this task in Hindi, and that mid-sized general LLMs can actually degrade quality rather than improve it.</p>
+<p>The reason to avoid this approach: it introduces a second model into the pipeline, meaning two failure modes instead of one. Unless fine-tuned specifically for your audio domain, a correction model risks smoothing over errors in ways that reduce overall accuracy.</p>
+<p><strong>What Gate 1 solutions do not fix</strong></p>
+<p>The structural WER floor is set by training data quantity - not provider selection or pipeline engineering. For low-resource languages where Bhashini and Sarvam are the best available options, WER of 25-35% is the current ceiling regardless of routing intelligence. Speaker diarization for code-mixed multi-speaker Indic audio remains an active research problem <a href="https://arxiv.org/html/2406.09494v1" target="_blank" rel="noopener noreferrer">44</a>; Azure's diarization is a viable starting point, not a research-grade speaker separation solution. Self-hosting ASR models or building custom Indic speech training datasets would improve results, but both represent significant infrastructure investments beyond the scope of API-first routing.</p>
+<hr />
+<h3 id="solving-for-gate-2-natural-course-content">Solving for Gate 2: Natural Course Content</h3>
+<p>Gate 2 identified seven root causes behind formal register bias: training data skew, diglossia, morphological safety, cultural prestige bias, dialect compression, code-mixing underperformance, and script fragmentation. No single intervention covers all seven. The goal is to stack mitigations that address as many as possible, while being honest about what remains structurally hard.</p>
+<p><strong>1. Model selection - addressing training data skew and morphological safety (Root Causes 1 and 3)</strong></p>
+<p>The single most impactful decision in building for Indic languages is model choice.</p>
+<p><em>Root Cause 1 - training data skew:</em> Sovereign models like Sarvam-105B were pre-trained on data specifically curated for Indian linguistic contexts, directly reducing the formal-source bias baked into global models by their predominantly formal text corpora.</p>
+<p><em>Root Cause 3 - morphological safety:</em> Models default to formal morphological forms because informal contractions carry higher generation risk when training data for informal forms is thin. Sovereign models have been exposed to substantially more informal, spoken-register Indic text, making informal forms less penalized internally. At the prompting layer, structured prompting with negative constraints - explicitly suppressing formal register tokens - consistently produces 12-18 percentage point improvements in grammatical naturalness for morphologically complex languages <a href="https://aclanthology.org/2026.loreslm-1.5/" target="_blank" rel="noopener noreferrer">48</a>.</p>
+<p>Here is how we think about the model ecosystem:</p>
+<ul>
+<li><strong>Sarvam-105B</strong> <a href="https://docs.sarvam.ai/api-reference-docs/getting-started/models/sarvam-105b" target="_blank" rel="noopener noreferrer">26</a>: Our go-to for cultural naturalness and colloquial output - recommended for Hindi, Marathi, Tamil, Gujarati, Kannada, Odia, Punjabi, Assamese, and Bengali. As a sovereign model built specifically for Indian linguistic contexts, it handles code-switching and regional idioms without sounding like machine translation. When the primary goal is output that sounds like a real teacher talking to real students, Sarvam-105B is where we start.</li>
+<li><strong>Gemini 3.1 Pro</strong> <a href="https://aclanthology.org/2025.naacl-long.507.pdf" target="_blank" rel="noopener noreferrer">61</a><a href="https://thottingal.in/blog/2026/02/27/malayalam-tokenizer-llm/" target="_blank" rel="noopener noreferrer">62</a>: Our recommendation when the task demands reasoning, technical precision, or long-context understanding - specifically for Hindi (reasoning tasks), Marathi (technical and legal content), Telugu, Gujarati, Urdu, and Malayalam. Notably, Malayalam is the one language where we lead with a global model: its extreme morphological complexity means reasoning quality matters more than cultural groundedness for structured course content.</li>
+<li><strong>Qwen 3.5 (235B):</strong> The open-weight leader for Bengali, Assamese, Urdu, Punjabi, and Odia. Outperforms Llama-based models on long-form generation and formal reasoning for these languages, and its open-weight nature makes it worth evaluating if cost or self-hosting matters to your team <a href="https://www.siliconflow.com/articles/en/best-open-source-llm-for-bengali" target="_blank" rel="noopener noreferrer">31</a>.</li>
+</ul>
+<p>A practical two-step architecture: use Gemini 3.1 Pro or Qwen 3.5 for course structure reasoning internally in English, then use Sarvam-105B for generating the final learner-facing text in the Indic language. This separates the reasoning problem (where global models excel) from the cultural generation problem (where sovereign or highly-tuned models win) - and avoids the "reasoning tax" on high-token Indic text described in the economics section.</p>
+<p><strong>2. Register-explicit prompting - addressing diglossia and cultural prestige bias (Root Causes 2 and 4)</strong></p>
+<p>The single most accessible improvement is telling the model explicitly what register you want - and what you don't want. This pulls the output away from the formal default that diglossia and prestige bias both push toward.</p>
+<p>For example, a prompt for Hindi generation might look like this:</p>
+<p><em>"Explain this in very casual spoken Hindi, like the Dhruv Rathee channel - short sentences, conversational, some natural English words. Not like a textbook. Not very Sanskrit."</em></p>
+<p>Worth noting: referencing a specific channel is a soft hint, not a hard constraint. The model will only truly reflect that creator's style if it was trained on substantial amounts of their transcripts. Descriptive language ("short sentences, conversational, some English") works more reliably than channel references alone.</p>
+<p>Similarly, a prompt for Tamil generation might look like this:</p>
+<p><em>"Explain this in spoken Chennai Tamil, friendly and informal, like talking to young professional friends. Mix in some English naturally. Avoid literary or old-fashioned Tamil."</em></p>
+<p><strong>3. Dialect and region specification - addressing dialect compression (Root Cause 5)</strong></p>
+<p>"Hindi" is too blunt an instruction. Explicitly naming the regional variety in the system prompt produces measurably different output. The INDIC-DIALECT benchmark <a href="https://arxiv.org/abs/2601.10388" target="_blank" rel="noopener noreferrer">49</a> - covering 11 dialects across Hindi and Odia - showed that frontier models like GPT-4o and Gemini 2.5 perform poorly at dialect classification without explicit guidance, with F1 scores as low as 19.6% without fine-tuning. Specifying "Bhojpuri-influenced conversational Hindi, not standard Khari Boli" for a Bihar-based instructor produces noticeably more appropriate output than specifying only "Hindi."</p>
+<p>This works better for languages with more dialect-specific training data. For lower-resource languages like Odia or Assamese, explicit dialect specification has diminishing returns when the model has seen almost no dialect-specific text to begin with.</p>
+<p><strong>4. Code-mixed model routing and prompting - addressing code-mixing underperformance (Root Cause 6)</strong></p>
+<p>CodeMixBench's finding <a href="https://arxiv.org/pdf/2507.18791" target="_blank" rel="noopener noreferrer">4</a> that frontier LLMs consistently underperform on code-mixed Indic tasks is partly a model-selection problem with a practical solution. A 2025 survey of code-switching NLP <a href="https://arxiv.org/html/2510.07037v3" target="_blank" rel="noopener noreferrer">50</a> found that multilingual NLU models suffer up to a 15% drop in semantic accuracy on code-mixed data. Sarvam's models are explicitly trained on code-mixed Indic text in native script, romanized, and code-mixed forms - and Sarvam-M's latest release showed an 86% improvement on romanized Indian language tasks specifically <a href="https://www.sarvam.ai/blogs/sarvam-m" target="_blank" rel="noopener noreferrer">51</a>. For instructors whose natural register is heavily code-mixed - a Mumbai business coach mixing 40% English into Hindi, or a Bengaluru engineer using Kanglish throughout - routing to Sarvam for the generation step produces substantially better output than routing to a global frontier model.</p>
+<p>At the prompting level, explicitly specifying a target code-mix ratio ("Include approximately 30% English words naturally embedded in Hindi sentences, as a Hinglish speaker would naturally speak") nudges generation toward the right density.</p>
+<p><strong>5. Script output specification and normalization - addressing script fragmentation (Root Cause 7)</strong></p>
+<p>Cross-script confusion (a model producing Devanagari characters when writing Punjabi) and inconsistent script choice (mixing Tamil script with Tanglish in the same paragraph) can both be partially mitigated at the prompt level by explicitly specifying the output script: "Respond entirely in Tamil script (Unicode). Do not use Roman transliteration." For languages prone to cross-script slippage - particularly Punjabi (Gurmukhi vs. Devanagari lookalikes) and Assamese (Bengali script being replaced with Bengali word forms) - adding a negative constraint reduces slippage significantly. Structured prompting research on Tulu, a low-resource Dravidian language with similar challenges, showed that negative constraints consistently produced 12-18 percentage point improvements in grammatical accuracy and reduced vocabulary contamination from 80% to 5% <a href="https://aclanthology.org/2026.loreslm-1.5/" target="_blank" rel="noopener noreferrer">48</a>.</p>
+<p>For post-generation cleanup, the Indic NLP Library <a href="https://indic-nlp-library.readthedocs.io/en/latest/indicnlp.normalize.html" target="_blank" rel="noopener noreferrer">47</a> provides script-specific normalizers that catch common mixed-script outputs before they reach the learner.</p>
+<p>Script output specification is a prompt-level mitigation, not a model-level fix. The TransliCo research <a href="https://aclanthology.org/2024.acl-long.136" target="_blank" rel="noopener noreferrer">52</a> demonstrated that cross-script representations in multilingual models occupy fundamentally different subspaces - fully solving this requires training-level interventions, not just prompting.</p>
+<p><strong>6. Few-shot style exemplars - addressing formal register bias across multiple root causes</strong></p>
+<p>Providing 3-10 example sentences in the exact register you want at inference time is one of the most cost-effective improvements available. A 2025 NAACL paper, PromptRefine <a href="https://aclanthology.org/2025.naacl-long.17/" target="_blank" rel="noopener noreferrer">13</a>, showed that the choice of which examples to include matters enormously - and crucially, that examples do not need to be in the target low-resource language itself. PromptRefine retrieves examples from related higher-resource Indic languages using cross-lingual embeddings, significantly outperforming random or naive same-language selection. For Spark, this means a Tamil generation task can benefit from well-chosen Kannada or Telugu examples if Tamil examples are scarce - reducing the cold-start problem for lower-resource Indic languages.</p>
+<p><strong>How do we know it is working? The quality evaluation challenge</strong></p>
+<p>Standard automated metrics - BLEU scores, ROUGE scores, perplexity - were calibrated on formal written text and do not capture what we care about at Spark: does this feel natural to a native speaker? The PARIKSHA study <a href="https://www.aclanthology.org/2024.emnlp-main.451/" target="_blank" rel="noopener noreferrer">53</a> - the most comprehensive evaluation of LLM judgment on Indic languages to date, with 90,000 human evaluations and 30,000 LLM-based evaluations across 10 Indic languages - found that GPT-4o and Llama-3 70B perform best as evaluators for most Indic languages, but human-LLM agreement drops specifically for Bengali and Odia. Self-bias in GPT-based evaluators is documented.</p>
+<p>Recommended approaches for evaluation:</p>
+<ul>
+<li><strong>Rubric-driven frontier judges:</strong> Rather than hosting custom evaluator models, we use frontier models (like GPT-5.4 or Gemini 3.1 Pro) as automated judges via API. The key is not asking a generic "is this good?" but providing a strict, multi-dimensional rubric tailored to Gates 2 and 3. The judge scores the output 1-5 on highly specific criteria: "Spoken vs Formal Register," "Code-mix naturalness," and "Vocabulary calibration."</li>
+<li><strong>Human-in-the-loop (HITL) calibration:</strong> Native speaker spot-checking is not just for catching errors; it is the ground truth used to calibrate the LLM judge. If the automated judge rates a Tamil output 5/5 for naturalness, but our human instructor rates it 2/5 (because it used Literary Tamil), we use that delta to refine the judge's grading rubric. This creates a continuous feedback loop that makes the automated evaluation more accurate over time.</li>
+</ul>
+<p><strong>What Gate 2 solutions do not fix</strong></p>
+<p><em>Cultural prestige bias (Root Cause 4):</em> Baked into RLHF annotation norms. Prompting can partially override it, but the model's reward signal continues to push toward formal output. Sovereign models trained with Indian annotators reduce this pressure but do not eliminate it entirely.</p>
+<p><em>Morphological safety at depth (Root Cause 3):</em> Fundamentally a training data problem. Structured prompting with negative constraints helps at the margins <a href="https://aclanthology.org/2026.loreslm-1.5/" target="_blank" rel="noopener noreferrer">48</a>, but substantially solving it requires models trained on more informal, spoken-register data - which is exactly the data hardest to collect and curate.</p>
+<p><em>Dialect compression for lower-resource languages (Root Cause 5):</em> Explicit dialect prompting has limited effect when the model has seen almost no dialect-specific training text. For languages like Odia or Assamese, even precise regional specification produces minimal differentiation today.</p>
+<p><em>Script fragmentation at model depth (Root Cause 7):</em> Prompt-level and post-processing fixes handle the most common cases, but models with poor Indic script coverage will still produce cross-script errors under adversarial conditions. Training-level solutions like TransliCo <a href="https://aclanthology.org/2024.acl-long.136" target="_blank" rel="noopener noreferrer">52</a> are required for a complete fix.</p>
+<hr />
+<h3 id="solving-for-gate-3-sounding-like-this-instructor">Solving for Gate 3: Sounding Like This Instructor</h3>
+<p>Gate 3 identified two distinct problems: instructor voice preservation (a specific instructor's code-mix ratio, vocabulary choices, and rhetorical patterns) and student vocabulary calibration (Class 10 NCERT vocabulary vs. university register). These are subtler than Gates 1 and 2, and the honest answer upfront is that complete instructor voice preservation at scale is still an open research problem.</p>
+<p>What is well-established - and what we are building toward - is that fidelity exists on a spectrum. Even the lower levels of that spectrum produce meaningfully better output than the current default of complete voice flattening.</p>
+<p><strong>Level 1 - Audience context specification (lowest investment, immediate improvement)</strong></p>
+<p>Specifying grade level, exam board, curriculum, and subject in the system prompt directly addresses the student vocabulary calibration problem. "Generate content appropriate for Class 10 CBSE biology students, using vocabulary consistent with NCERT textbooks, avoiding university-level terminology" produces measurably better curriculum-aligned output than a generic "biology content in Hindi" instruction.</p>
+<p>The COGENT framework <a href="https://anthology.aclweb.org/2025.bea-1.10/" target="_blank" rel="noopener noreferrer">56</a> demonstrated that curriculum-oriented content generation - simultaneously specifying concepts, learning objectives, and readability targets - produces grade-appropriate content comparable to human references for STEM subjects. The EduAdapt benchmark <a href="https://aclanthology.org/2025.emnlp-main.1736/" target="_blank" rel="noopener noreferrer">57</a> - 48,000 grade-labeled QA pairs across nine science subjects from Grades 1-12 - found that even large models struggle specifically with early-grade content (Grades 1-5), where defaulting to sophisticated vocabulary is the most common failure mode. That is precisely the student calibration failure described in Gate 3 above.</p>
+<p><strong>Level 2 - Style profiling from the instructor's own transcript (medium investment, no fine-tuning)</strong></p>
+<p>Rather than asking instructors to manually describe their style - an unreliable and high-friction process - style signals can be extracted directly from their transcript: English word ratio, average sentence length, vocabulary level measured against a corpus, and recurring signature phrases. These feed into a style brief in the system prompt: "This instructor uses approximately 35% English words naturally embedded in Hindi. Average sentence length is 11 words. Common signature phrases include: 'think about it this way,' 'remember this for your exam.'"</p>
+<p>Research on style-conditioned generation via parameter-efficient fine-tuning <a href="https://arxiv.org/abs/2409.04574" target="_blank" rel="noopener noreferrer">58</a> establishes that author-specific style signals - even lightweight ones - produce meaningful lexical and syntactic alignment with the target author. The documented limitation: informal conversational style is harder to capture than formal style. A 2025 study on LLM style imitation across 400+ real-world authors <a href="https://arxiv.org/abs/2509.14543" target="_blank" rel="noopener noreferrer">60</a> found that while LLMs approximate style well in structured formats like news and email, they show fundamental gaps in informal, conversational registers - blogs and forums - which is exactly where a teaching transcript lives.</p>
+<p><strong>Level 3 - Few-shot anchoring from the instructor's own approved content (medium investment, no fine-tuning)</strong></p>
+<p>Providing 5-10 representative sentences from the instructor's own previously approved course output as style exemplars in the system prompt significantly outperforms description-only approaches. TinyStyler <a href="https://arxiv.org/abs/2406.15586" target="_blank" rel="noopener noreferrer">59</a> demonstrated that even a lightweight 800M-parameter model, given pre-trained authorship embeddings from a small sample of author-specific text, outperforms GPT-4 on authorship style transfer tasks. For Spark's pipeline: once an instructor's first course is approved - either by the instructor directly or via native speaker review - those approved sentences become a style anchor library for all subsequent courses from the same instructor. No fine-tuning required; this is purely inference-time style conditioning, extending the cross-lingual exemplar approach of PromptRefine <a href="https://aclanthology.org/2025.naacl-long.17/" target="_blank" rel="noopener noreferrer">13</a> to instructor-specific style.</p>
+<p><strong>Level 4 - Fine-tuning on instructor corpus (high investment, research-grade fidelity)</strong></p>
+<p>Parameter-efficient fine-tuning using LoRA on 1,000-50,000 tokens of instructor-specific content produces substantially better style fidelity than any prompt-based approach - and begins to capture the informal, conversational register that prompting alone cannot <a href="https://arxiv.org/abs/2409.04574" target="_blank" rel="noopener noreferrer">58</a>. This is the path toward true instructor voice preservation: each instructor gets a dedicated LoRA adapter, or a slot in a multi-instructor merged model.</p>
+<p>The constraint is data curation: fine-tuning requires enough approved, high-quality instructor output to train on, and serving complexity increases. This approach becomes practical as instructor content accumulates on the platform.</p>
+<p><strong>How do we know Gate 3 is working? The evaluation problem sharpens</strong></p>
+<p>The quality evaluation challenge from Gate 2 becomes harder at Gate 3. Automated metrics cannot measure whether output sounds like a specific person - that requires the instructor themselves, or a trained proxy who knows their style closely. There is no published benchmark for instructor voice fidelity in Indic educational contexts. The only reliable signal today is instructor feedback on generated courses - which is why early adopter relationships with real instructors testing real content are irreplaceable at this stage.</p>
+<p>The student interaction layer makes this particularly acute. When a student asks our AI tutor a question in Hindi mid-session, the tutor generates a response in seconds - with no review loop. The voice fidelity of that response is what the student actually experiences. Getting it right requires a tighter feedback loop than anything that currently exists.</p>
+<p><strong>What Gate 3 solutions do not fix</strong></p>
+<p>At Levels 1-3, a documented limitation in LLM style imitation research <a href="https://arxiv.org/abs/2509.14543" target="_blank" rel="noopener noreferrer">60</a> holds: LLMs have significant gaps in capturing nuanced, informal, conversational style from prompts alone. An instructor's personality - their sense of humor, the way they build to a reveal, their specific analogies - is not fully transferable at inference time. Level 4 closes much of this gap but does not fully close it. Gate 3 is an asymptote, not a solved problem.</p>
+<p>Building custom Indic language training datasets and instructor-level fine-tuning would both produce better long-term results - both become more viable as the platform matures and instructor content accumulates.</p>
+<hr />
+<h3 id="at-the-search-and-retrieval-layer">At the Search and Retrieval Layer</h3>
+<p>Modern retrieval systems use different matching strategies - keyword-based approaches like BM25, vector search (semantic retrieval), or a combination of both (hybrid search). This section is specifically about the vector search component: a user's query gets converted into a vector, and the most relevant content is retrieved by measuring similarity in that vector space. The quality of that retrieval depends entirely on the embedding model used - and this is where standard setups quietly break down for Indic languages.</p>
+<p><strong>The problem with English-first embeddings</strong></p>
+<p>Teams building English-first RAG systems typically reach for one of a handful of common defaults: OpenAI's text-embedding-3-small or text-embedding-3-large (via API), open-source models like BGE-M3 or multilingual-E5, or Cohere Embed <a href="https://deploybase.ai/articles/best-embedding-models-2025-2026-what-changed" target="_blank" rel="noopener noreferrer">38</a>. These models share a common characteristic: they were all optimized primarily for English and Western European languages.</p>
+<p>For a code-mixed query like "cell membrane ka kya function hai", an English-first embedding does not capture the semantic meaning as accurately as it would for a pure English query. The retrieved chunks may be less relevant, and whatever sits on top of that retrieval will be grounded in the wrong context as a result.</p>
+<p><strong>The practical options</strong></p>
+<ul>
+<li><strong>Gemini Embedding 001:</strong> A proper API swap - no self-hosting required. Google's multilingual training covers 100+ languages and is meaningfully better than English-first models for Indic and code-mixed text <a href="https://ai.google.dev/gemini-api/docs/models/gemini-embedding-001" target="_blank" rel="noopener noreferrer">39</a>. For teams already on OpenAI embeddings, this is the lowest-effort upgrade path.</li>
+<li><strong>Cohere Embed v4:</strong> Another API option worth evaluating, particularly if you need cross-lingual retrieval - a Hindi query retrieving Tamil documents, for example. Cohere explicitly supports eight Indic languages (Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Tamil, and Telugu) in a unified multilingual space.</li>
+<li><strong>LaBSE (Language-agnostic BERT Sentence Embeddings):</strong> An open-source model trained on 109 languages, specifically strong on Indic and code-mixed text. It enables cross-lingual retrieval - a Tamil query can retrieve Hindi documents and vice versa. LaBSE can be self-hosted or deployed as a managed endpoint via Azure AI Foundry <a href="https://ai.azure.com/catalog/models/setu4993-labse" target="_blank" rel="noopener noreferrer">42</a>. BGE-M3 <a href="https://huggingface.co/BAAI/bge-m3" target="_blank" rel="noopener noreferrer">41</a> is a newer self-hosted alternative that adds hybrid retrieval (dense + sparse) to similar multilingual coverage. The IndicRAGSuite project <a href="https://sanjaysakhinala.pages.dev/blog/multilingual-rag-systems" target="_blank" rel="noopener noreferrer">15</a> provides 26 million evaluation tuples across 19 Indian languages if you want to benchmark retrieval quality for your specific content.</li>
+</ul>
+<p>The same guidance applies regardless of the embedding model you choose: the per-language variation here is low. Unlike ASR or LLM choice - where the right answer differs by language - the embedding upgrade benefits all Indic languages equally.</p>
+<hr />
+<h2 id="the-economics-of-indic-ai">The Economics of Indic AI</h2>
+<p>Choosing the right model in 2026 is as much an economic decision as it is a technical one. The "Tokenizer Economy" has become a central focus for developers, as Western models charge significantly more for the same Indic text than they do for English.</p>
+<h3 id="token-fertility">Token Fertility</h3>
+<p>Because global frontier models were trained on Western-heavy datasets, their tokenizers are primarily English-centric. This creates a massive inefficiency called "token fertility." When global models process Dravidian languages (like Tamil or Malayalam), they often break a single word into 6 to 8.5 tokens <a href="https://www.two.ai/blog/understanding-sutra-s-multilingual-tokenizer" target="_blank" rel="noopener noreferrer">9</a>. Recent morphological tokenizers have proven that this can be brought down to under 2 tokens per word <a href="https://arxiv.org/pdf/2603.05883" target="_blank" rel="noopener noreferrer">10</a>. </p>
+<p>This means that a paragraph in Tamil could be <strong>3x to 5x more expensive</strong> to generate than the exact same paragraph in English. </p>
+<p>Sovereign models (like Sarvam-105B) solve this by using custom tokenizers optimized for Indic scripts, bringing the token fertility down to roughly ~2 tokens per word - near parity with English. For high-volume enterprise applications, this cost advantage is profound.</p>
+<h3 id="the-reasoning-tax">The "Reasoning Tax"</h3>
+<p>A new development in 2026 is the use of "thinking" or reasoning tokens in models like Gemini 3.1 Pro and Qwen 3.5. While these tokens significantly improve performance in complex logic tasks (which is exactly why we might use them at Spark for course structure reasoning), they act as a multiplier on the total token count.</p>
+<p>This introduces a "reasoning tax" that can increase the effective cost of a model by <strong>3x to 9x</strong> <a href="https://www.aimagicx.com/blog/llm-api-pricing-comparison-2026" target="_blank" rel="noopener noreferrer">63</a>. For Indic languages - where the base token count is already 3x higher on global models - adding a 3x-9x reasoning multiplier makes them entirely cost-prohibitive for standard conversational UX. </p>
+<p>This economic reality strongly favors the two-step architecture we are exploring as a team: use the global reasoning models on the English logic layer, and use sovereign models for the high-volume Indic text generation layer.</p>
+<hr />
+<h2 id="the-definitive-12-language-cheat-sheet">The Definitive 12-Language Cheat Sheet</h2>
+<p>For builders looking for a quick reference on how to route the top 12 Indian languages, here is my 2026 summary matrix (synthesized from the research behind this white paper). </p>
+<p><em>For the complete breakdown of every language (including specific ASR models, LLM nuances, caveats, and deep-dive notes),</em> <a href="https://docs.google.com/document/d/17K_K1t0NOYA8gxaZIChQrOT7dSE0niPSGmUxuRIxRsc/edit" target="_blank" rel="noopener noreferrer"><strong>please see this document</strong></a></p>
+<div class="blog-longform-table-wrap"><table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Primary Challenge</th>
+<th>ASR: First Choice</th>
+<th>ASR: Fallback Notes</th>
+<th>LLM</th>
+<th>LLM: Prompt Flags</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Hindi</strong></td>
+<td>Huge dialect variance</td>
+<td>Google Cloud STT</td>
+<td>Sarvam or Vaani* for rural / code-mixed audio</td>
+<td>Sarvam-105B (colloquial) or Gemini 3.1 Pro (reasoning)</td>
+<td>Specify dialect variant (Bhojpuri / Awadhi / Haryanvi / Khari Boli). Set Hinglish code-mix ratio for urban instructors.</td>
+</tr>
+<tr>
+<td><strong>Bengali</strong></td>
+<td>Formal vs. Spoken divergence</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure† or Google Chirp 3‡ for formal / broadcast audio</td>
+<td>Qwen 3.5 (reasoning) or Sarvam (creative)</td>
+<td>Specify Chalit (spoken) not Sadhu Bhasha. Set Benglish code-mix ratio for urban instructors.</td>
+</tr>
+<tr>
+<td><strong>Marathi</strong></td>
+<td>Technical / Legal precision</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure† for multi-speaker / telephonic; Google Chirp 3‡ for single-speaker formal audio</td>
+<td>Sarvam-105B (idioms) or Gemini 3.1 Pro (technical)</td>
+<td>Specify spoken vs. formal register. Script (Devanagari) is stable - no script flag needed.</td>
+</tr>
+<tr>
+<td><strong>Telugu</strong></td>
+<td>High agglutination</td>
+<td>Google Cloud STT</td>
+<td>Gemini 2.5 Pro (Audio) for long-context arc understanding - not an accuracy replacement</td>
+<td>Sarvam-105B (cultural resonance) or Gemini 3.1 Pro (academic)</td>
+<td>Add negative constraint for formal morphological forms. Route to Sarvam for Tenglish output.</td>
+</tr>
+<tr>
+<td><strong>Tamil</strong></td>
+<td>Diglossia (Literary vs. Spoken)</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure† for long multi-speaker sessions; Google Chirp 3‡ for single-speaker formal audio</td>
+<td>Sarvam-105B (colloquial) or Gemini 3.1 Pro (reasoning)</td>
+<td>Specify spoken Chennai Tamil; suppress Senthamizh (Literary Tamil). Set Tanglish code-mix ratio.</td>
+</tr>
+<tr>
+<td><strong>Gujarati</strong></td>
+<td>Gujarati-English code-mixing</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure† or Google Chirp 3‡ for formal audio; Bhashini as free fallback</td>
+<td>Sarvam (cultural resonance) or Gemini 3.1 Pro (structured data)</td>
+<td>Set Gujarati-English code-mix ratio. Script (Gujarati) is stable - no script flag needed.</td>
+</tr>
+<tr>
+<td><strong>Urdu</strong></td>
+<td>Perso-Arabic Nastaliq script</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure Speech for enterprise / diarization settings</td>
+<td>Gemini 3.1 Pro (reasoning) or Qwen 3.5 (efficiency)</td>
+<td><strong>Script critical:</strong> specify Nastaliq (Perso-Arabic) script output explicitly - Devanagari slippage is common.</td>
+</tr>
+<tr>
+<td><strong>Kannada</strong></td>
+<td>Bengaluru "Kanglish"</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure† or Google Chirp 3‡; Bhashini / AI4Bharat for self-hosted fine-tuning</td>
+<td>Sarvam-105B (groundedness) or Gemini 3.1 Pro (reasoning)</td>
+<td>Specify Bengaluru / Mysuru / Coastal dialect. Set Kanglish code-mix ratio.</td>
+</tr>
+<tr>
+<td><strong>Odia</strong></td>
+<td>Low resource, phonetic quirks</td>
+<td>Azure Speech (Diarization)</td>
+<td>Sarvam for ground-level regional dialects</td>
+<td>Sarvam-105B (reliable output) or Qwen 3.5 (efficiency)</td>
+<td>Dialect prompting has limited effect (low-resource). Specify spoken vs. formal register only.</td>
+</tr>
+<tr>
+<td><strong>Malayalam</strong></td>
+<td>Extreme morphological complexity + token cost</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Azure† for enterprise / diarization; Google Chirp 3‡ as alternative</td>
+<td>Gemini 3.1 Pro (reasoning - global models lead here)</td>
+<td>Specify Malayalam Unicode output; suppress romanization. Complex conjuncts inflate token count.</td>
+</tr>
+<tr>
+<td><strong>Punjabi</strong></td>
+<td>Code-mixing + cross-script risk</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Google Chirp 3‡ only - Azure does not support Punjabi STT</td>
+<td>Qwen 3.5 (open-weight leader) or Sarvam (idiomatic)</td>
+<td><strong>Script critical:</strong> specify Gurmukhi script output - Devanagari lookalike slippage is well-documented <a href="https://aclanthology.org/2024.acl-long.136" target="_blank" rel="noopener noreferrer">52</a>.</td>
+</tr>
+<tr>
+<td><strong>Assamese</strong></td>
+<td>Bengali-script interference</td>
+<td>Sarvam (Saaras V3)</td>
+<td>Google Chirp 3‡ or AI4Bharat (self-host) for fine-tuning</td>
+<td>Qwen 3.5 (formal reasoning) or Sarvam (authentic phrasing)</td>
+<td><strong>Script critical:</strong> specify Assamese word forms not Bengali - Bengali form substitution is the most common LLM failure mode for this language.</td>
+</tr>
+</tbody></table></div>
+<p><em>* Vaani is open-source data/models for self-hosting and benchmarking, not a hosted commercial API.</em></p>
+<p><em>† Azure: outperformed older Google STT across 6 of 7 Indic languages in the Vistaar benchmark (AI4Bharat, 2023) on clean audio. Has speaker diarization advantage for multi-speaker recordings. Does not support Punjabi STT.</em></p>
+<p><em>‡ Google Chirp 3 (October 2025): Confirmed support for all 8 languages listed above. No independent Indic-language benchmark exists for Chirp 3 yet - the Vistaar data pre-dates it. Worth testing alongside Azure, particularly where diarization is not needed. Our expectation is that Chirp 3 is meaningfully better than the 2023 Google STT benchmarked in Vistaar, but this has not been independently verified.</em></p>
+<h3 id="also-worth-evaluating-vendor-reported-data-only">Also worth evaluating (vendor-reported data only)</h3>
+<p>The following providers did not make it into the main routing table because their performance claims are not yet backed by independent benchmarks. We have not verified them ourselves on real classroom audio. That said, they are worth evaluating on your own recordings - especially if the main four providers fall short for a specific use case:</p>
+<ul>
+<li><strong>Gnani AI</strong> - Focuses on telephonic audio and Kannada, with a specific optimization for Indian accents and call-center environments. Launched Vachana STT in late 2025 (trained on 1M hours under IndiaAI Mission). Claims 10-20% lower WER than leading providers on top Indic languages, but no independent benchmark confirms this. <a href="https://www.gnani.ai" target="_blank" rel="noopener noreferrer">Gnani.ai</a></li>
+<li><strong>Reverie Technologies</strong> - Focuses on code-mixed Indian language speech (Tanglish, Benglish, Punglish and similar variants) and numeric/entity recognition in BFSI contexts. Supports 11+ Indian languages with dialect-aware models. Performance data is from Reverie's own comparisons. <a href="https://reverieinc.com" target="_blank" rel="noopener noreferrer">Reverie</a></li>
+<li><strong>Soniox</strong> - A multilingual ASR provider claiming 10.9% WER on Kannada (vs Google's 56.6% and Azure's 58.8% on real-world YouTube audio in a 2025 study) - a striking figure if it holds on classroom audio. However, this benchmark was conducted by Soniox themselves, not a neutral third party. <a href="https://soniox.com" target="_blank" rel="noopener noreferrer">Soniox</a></li>
+</ul>
+<hr />
+<h2 id="the-international-picture">The International Picture</h2>
+<p>To understand how challenging the Indic language problem is, it helps to compare with the languages AI handles well.</p>
+<p>To make the comparison concrete, I picked six representative languages that collectively cover Western Europe and East Asia - the two non-English tiers where AI support is strongest: Spanish, French, German, Japanese, Korean, and Chinese. I deliberately left out Dutch, Italian, Portuguese, Polish, Swedish, and other major European languages - not because they are unimportant, but because they fall in the same 4-8% WER tier as Spanish, French, and German and would not change the argument. The same applies to Arabic and Turkish, which have larger data gaps than Western European languages but are still dramatically better resourced than Indic languages.</p>
+<p>German accounts for ~5.96% of all web content. Japanese accounts for ~5.77%. Spanish ~4.62% <a href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages.html" target="_blank" rel="noopener noreferrer">19</a>. Each of these is 20-100x more represented than the most common Indic languages.</p>
+<p>This translates directly to capability:</p>
+<ul>
+<li><strong>ASR</strong>: WER for Spanish, French, German, and Japanese on real-world audio is typically 5-8%. For Indic C-tier languages, it is 18-35% under controlled conditions and much higher in real-world conditions.</li>
+<li><strong>LLM output quality</strong>: A-tier languages get natural, varied output across the full spectrum - from formal to slangy, from technical to casual. They have enough training data representing every register. Indic languages default to formal register because that is almost all they have seen.</li>
+<li><strong>Tokenization</strong>: A-tier European and East Asian languages are handled reasonably efficiently by modern tokenizers. Standard Indic language tokenization costs roughly 2x more tokens per unit of meaning than English - and more for languages with complex morphology and worse tokenizer support.</li>
+</ul>
+<p>The practical implication for Spark: adding Spanish or French support is relatively straightforward. The ASR works well, the LLMs produce natural output, the tokenization costs are manageable. Adding Tamil or Kannada requires scaffolding at every layer of the stack - ASR routing, post-correction, model selection, register prompting, quality evaluation - and the results will still be imperfect.</p>
+<p><strong>A word on what I have consciously left out: African and other low-resource languages</strong></p>
+<p>The Indic language problem is real. But it is worth noting that it sits in the middle of a much larger global spectrum.</p>
+<p>Many African languages face a data representation crisis that makes even the hardest Indic languages look relatively well-resourced. Languages like Yoruba, Zulu, and Amharic have less than 0.01% web content presence. Without fine-tuning, Whisper produces 50-100%+ WER for many of them. With fine-tuning on limited datasets, a fine-tuned Whisper large gets Yoruba down to ~25% WER on benchmarks - but 62% on real-world audio, a gap even larger than what I see for Indic languages in the data <a href="https://aclanthology.org/2026.africanlp-main.19/" target="_blank" rel="noopener noreferrer">27</a>. There is active research (Meta's MMS model, the AfriSpeech dataset, ACL AfricaNLP workshops), but the ecosystem is significantly earlier stage.</p>
+<p>We are not building for African languages right now at Spark. But the team and I are aware that the challenge I am documenting for Indic languages is not the hardest version of this problem - just the version most relevant to Spark's current users.</p>
+<p>Brief note on Urdu: one of India's 22 scheduled languages, Urdu uses right-to-left Nastaliq script, which introduces a completely different class of technical challenges at the rendering and tokenization layer beyond everything discussed here. It is on the team's radar but a separate problem.</p>
+<hr />
+<h2 id="where-this-is-all-heading">Where This Is All Heading</h2>
+<p>The challenges above are real. But the ecosystem is improving - and faster than it has at any point in the past.</p>
+<p><strong>IndiaAI Mission</strong> is a government-backed initiative explicitly designed to build sovereign AI infrastructure in India. Sarvam's 105B and 30B models were trained under this mission, with compute support from Yotta and Nvidia <a href="https://www.opensourceforu.com/2026/03/sarvam-releases-30b-and-105b-llms-under-apache-2-0/" target="_blank" rel="noopener noreferrer">16</a>. The explicit goal is that India's AI capabilities should not be entirely dependent on foreign closed-source models. That is a meaningful shift.</p>
+<p><strong>AI4Bharat</strong> at IIT Madras has been building open-source ASR, NLP, LLM, and translation models for all 22 scheduled Indian languages for several years <a href="https://ai4bharat.iitm.ac.in" target="_blank" rel="noopener noreferrer">17</a>. Their Vistaar benchmark suite, IndicWhisper ASR models, and IndicTrans translation models are foundational pieces of the ecosystem.</p>
+<p><strong>Bhashini</strong>, India's government-built translation and speech platform, provides free APIs for ASR, TTS, and translation across all 22 scheduled languages - including Conformer-based ASR for the truly low-resource ones like Sindhi, Dogri, Santali, and Bodo <a href="https://dibd-bhashini.gitbook.io/bhashini-apis/available-models-for-usage" target="_blank" rel="noopener noreferrer">18</a>.</p>
+<p>The data gap that drives most of these problems is structural - it will not close in a year. But in 2-3 years, I expect B-tier and C-tier Indic languages to have significantly better ASR and LLM support than they do today. The formal-bias problem will persist longer, because it requires not just more data but specifically conversational, spoken-register data that is harder to collect and curate.</p>
+<p>Our architecture is built with this trajectory in mind: swappable ASR and LLM layers, not hard dependencies on specific providers. As better models arrive, the architecture is designed to take advantage of them.</p>
+<hr />
+<h2 id="where-we-are">Where We Are</h2>
+<p>Spark's Indic language support is at proof-of-concept stage. We started with Hindi - built an early POC, showed it to instructors, and watched carefully where it broke. That feedback loop is what drove the research behind this white paper. The problems we found were not quirks. They were structural, and they apply to every Indic language we want to support.</p>
+<p>The near-term goal covers the 12 languages in the cheat sheet above. The long-term goal is all 22 scheduled languages of India.</p>
+<p>The gate-by-gate solutions section is our roadmap - ASR routing, register-explicit prompting, model selection, speaker diarization, script normalization, per-language dialect specification, and the Gate 3 instructor voice spectrum. The research behind each of these is solid. We are publishing it openly because other builders in this space should not have to rediscover it from scratch.</p>
+<p>The architecture is built with the ecosystem's trajectory in mind: swappable ASR and LLM layers, not hard dependencies on any single provider. As better models arrive, the architecture is designed to take advantage of them.</p>
+<hr />
+<p>If you are building AI products for Indian language users - the research above is yours to use. The citations are all linked. Share what you learn. The ecosystem gets better faster when we build it together.</p>
+<hr />
+<h2 id="citations">Citations</h2>
+<p>[1] Benchmarking Automatic Speech Recognition for Indian Languages in Agricultural Contexts (Farmer.Chat) - <a href="https://arxiv.org/html/2602.03868v1" target="_blank" rel="noopener noreferrer">https://arxiv.org/html/2602.03868v1</a></p>
+<p>[2] AI4Bharat Vistaar Benchmark (Tamil 25.3%, Bengali 20.1%, Kannada 18.3%, Malayalam 32.3% WER) - <a href="https://github.com/AI4Bharat/vistaar" target="_blank" rel="noopener noreferrer">https://github.com/AI4Bharat/vistaar</a></p>
+<p>[3] Saaras V3 beats Gemini and GPT-4o on Indian speech benchmarks - <a href="https://www.business-standard.com/technology/tech-news/saaras-v3-beats-gemini-gpt-4o-on-indian-speech-benchmarks-says-sarvam-ai-126021200384_1.html" target="_blank" rel="noopener noreferrer">https://www.business-standard.com/technology/tech-news/saaras-v3-beats-gemini-gpt-4o-on-indian-speech-benchmarks-says-sarvam-ai-126021200384_1.html</a></p>
+<p>[4] CodeMixBench: Evaluating Code-Mixing Capabilities of LLMs - <a href="https://arxiv.org/pdf/2507.18791" target="_blank" rel="noopener noreferrer">https://arxiv.org/pdf/2507.18791</a></p>
+<p>[5] IndicCorp / Indic Language Models overview - <a href="https://www.emergentmind.com/topics/indic-language-models-ilms" target="_blank" rel="noopener noreferrer">https://www.emergentmind.com/topics/indic-language-models-ilms</a></p>
+<p>[6] IruMozhi project / diglossia in Tamil NLP (NAACL Findings 2024) - <a href="https://aclanthology.org/2024.findings-naacl.195.pdf" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2024.findings-naacl.195.pdf</a></p>
+<p>[7] Building an LLM from Scratch for Indic Languages - <a href="https://dev.to/daud_ibrahim_9887/building-an-llm-from-scratch-for-indic-languages-what-no-one-tells-you-about-the-hard-parts-1e85" target="_blank" rel="noopener noreferrer">https://dev.to/daud_ibrahim_9887/building-an-llm-from-scratch-for-indic-languages-what-no-one-tells-you-about-the-hard-parts-1e85</a></p>
+<p>[8] When AI is Anglophone - Telegraph India - <a href="https://www.telegraphindia.com/opinion/when-ai-is-anglophone-can-chatgpt-generate-arguments-in-hindi-or-bengali-with-the-same-clarity-prnt/cid/2109430" target="_blank" rel="noopener noreferrer">https://www.telegraphindia.com/opinion/when-ai-is-anglophone-can-chatgpt-generate-arguments-in-hindi-or-bengali-with-the-same-clarity-prnt/cid/2109430</a></p>
+<p>[9] Understanding SUTRA's Multilingual Tokenizer (Two.ai, 2024) - <a href="https://www.two.ai/blog/understanding-sutra-s-multilingual-tokenizer" target="_blank" rel="noopener noreferrer">https://www.two.ai/blog/understanding-sutra-s-multilingual-tokenizer</a></p>
+<p>[10] Tokenization efficiency for Indic languages - <a href="https://arxiv.org/pdf/2603.05883" target="_blank" rel="noopener noreferrer">https://arxiv.org/pdf/2603.05883</a></p>
+<p>[11] Post-ASR Correction in Hindi (EACL 2026) - <a href="https://aclanthology.org/2026.eacl-short.45/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2026.eacl-short.45/</a></p>
+<p>[12] Script normalisation for code-mixed ASR (ISCA Interspeech 2023) - <a href="https://www.isca-archive.org/interspeech_2023/verma23_interspeech.pdf" target="_blank" rel="noopener noreferrer">https://www.isca-archive.org/interspeech_2023/verma23_interspeech.pdf</a></p>
+<p>[13] PromptRefine: Few-Shot Performance on Low-Resource Indic Languages (NAACL 2025) - <a href="https://aclanthology.org/2025.naacl-long.17/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2025.naacl-long.17/</a></p>
+<p>[14] Few-Shot Controllable Style Transfer for Low-Resource Languages (Google Research / ACL) - <a href="https://arxiv.org/abs/2110.07385" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2110.07385</a></p>
+<p>[15] IndicRAG: Breaking Language Barriers in Document QA - <a href="https://sanjaysakhinala.pages.dev/blog/multilingual-rag-systems" target="_blank" rel="noopener noreferrer">https://sanjaysakhinala.pages.dev/blog/multilingual-rag-systems</a></p>
+<p>[16] Sarvam releases 30B and 105B LLMs under Apache 2.0 (IndiaAI Mission) - <a href="https://www.opensourceforu.com/2026/03/sarvam-releases-30b-and-105b-llms-under-apache-2-0/" target="_blank" rel="noopener noreferrer">https://www.opensourceforu.com/2026/03/sarvam-releases-30b-and-105b-llms-under-apache-2-0/</a></p>
+<p>[17] AI4Bharat - IIT Madras initiative for Indian language AI - <a href="https://ai4bharat.iitm.ac.in" target="_blank" rel="noopener noreferrer">https://ai4bharat.iitm.ac.in</a></p>
+<p>[18] Bhashini - India's government translation and speech platform - <a href="https://dibd-bhashini.gitbook.io/bhashini-apis/available-models-for-usage" target="_blank" rel="noopener noreferrer">https://dibd-bhashini.gitbook.io/bhashini-apis/available-models-for-usage</a></p>
+<p>[19] Common Crawl language distribution statistics (March 2026) - <a href="https://commoncrawl.github.io/cc-crawl-statistics/plots/languages.html" target="_blank" rel="noopener noreferrer">https://commoncrawl.github.io/cc-crawl-statistics/plots/languages.html</a></p>
+<p>[20] Sarvam-105B model card - <a href="https://huggingface.co/sarvamai/sarvam-105b" target="_blank" rel="noopener noreferrer">https://huggingface.co/sarvamai/sarvam-105b</a></p>
+<p>[21] Sarvam API pricing - <a href="https://www.sarvam.ai/api-pricing" target="_blank" rel="noopener noreferrer">https://www.sarvam.ai/api-pricing</a></p>
+<p>[22] Sarvam Saaras V3 blog - <a href="https://www.sarvam.ai/blogs/asr" target="_blank" rel="noopener noreferrer">https://www.sarvam.ai/blogs/asr</a></p>
+<p>[23] Comparative ASR study on Dravidian languages (Feb 2025, ASMP Journal) - <a href="https://asmp-eurasipjournals.springeropen.com/articles/10.1186/s13636-025-00395-5" target="_blank" rel="noopener noreferrer">https://asmp-eurasipjournals.springeropen.com/articles/10.1186/s13636-025-00395-5</a></p>
+<p>[24] AssemblyAI ASR benchmarks - <a href="https://www.assemblyai.com/docs/benchmarks" target="_blank" rel="noopener noreferrer">https://www.assemblyai.com/docs/benchmarks</a></p>
+<p>[25] Breaking language barriers 2.0 - Hindi ASR (Collabora) - <a href="https://www.collabora.com/news-and-blog/news-and-events/breaking-language-barriers-20-moving-closer-production-ready-hindi-asr.html" target="_blank" rel="noopener noreferrer">https://www.collabora.com/news-and-blog/news-and-events/breaking-language-barriers-20-moving-closer-production-ready-hindi-asr.html</a></p>
+<p>[26] Sarvam-105B model overview and Indian language benchmarks (Sarvam API docs) - <a href="https://docs.sarvam.ai/api-reference-docs/getting-started/models/sarvam-105b" target="_blank" rel="noopener noreferrer">https://docs.sarvam.ai/api-reference-docs/getting-started/models/sarvam-105b</a></p>
+<p>[27] Full Fine-Tuning vs. Parameter-Efficient Adaptation for Low-Resource African ASR (ACL AfricaNLP 2026) - <a href="https://aclanthology.org/2026.africanlp-main.19/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2026.africanlp-main.19/</a></p>
+<p>[28] Global AI models struggles with Indian languages and dialects: Report - Business Standard - <a href="https://www.business-standard.com/technology/tech-news/global-ai-models-struggles-with-indian-languages-and-dialects-report-126021600237_1.html" target="_blank" rel="noopener noreferrer">https://www.business-standard.com/technology/tech-news/global-ai-models-struggles-with-indian-languages-and-dialects-report-126021600237_1.html</a></p>
+<p>[29] Best Kannada ASR Tools for Indian Languages in 2026 - Gnani AI - <a href="https://www.Gnani" target="_blank" rel="noopener noreferrer">https://www.Gnani</a> AI/resources/blogs/best-kannada-asr-tools-for-indian-languages-in-2026</p>
+<p>[30] Deepgram vs Reverie: Comparison of Multilingual Accuracy in 2026 - Reverieinc - <a href="https://reverieinc.com/blog/deepgram-vs-reverie-speech-to-text-accuracy/" target="_blank" rel="noopener noreferrer">https://reverieinc.com/blog/deepgram-vs-reverie-speech-to-text-accuracy/</a></p>
+<p>[31] Ultimate Guide - Best Open Source LLM for Bengali in 2026 - SiliconFlow - <a href="https://www.siliconflow.com/articles/en/best-open-source-llm-for-bengali" target="_blank" rel="noopener noreferrer">https://www.siliconflow.com/articles/en/best-open-source-llm-for-bengali</a></p>
+<p>[32] Languages of India - Wikipedia (language family distribution and speaker shares) - <a href="https://en.wikipedia.org/wiki/Languages_of_India" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Languages_of_India</a></p>
+<p>[33] Mizo grammar - Wikipedia (agglutinative morphology in Mizo) - <a href="https://en.wikipedia.org/wiki/Mizo_grammar" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Mizo_grammar</a></p>
+<p>[34] Beyond Multilinguality: Typological Limitations in Multilingual Models for Meitei Language (ACL SIGTYP 2026) - <a href="https://aclanthology.org/2026.sigtyp-main.5/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2026.sigtyp-main.5/</a></p>
+<p>[35] Manipuri Language Variation - Central Institute of Indian Languages (CIIL) - <a href="http://lisindia.ciil.org/Mani/Mani_vari.html" target="_blank" rel="noopener noreferrer">http://lisindia.ciil.org/Mani/Mani_vari.html</a></p>
+<p>[36] Improving Bengali and Hindi Large Language Models (LREC 2024) - <a href="https://aclanthology.org/2024.lrec-main.764" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2024.lrec-main.764</a></p>
+<p>[37] Morphological Inflection in the Low-Resource Setting (SIGMORPHON 2023) - <a href="https://aclanthology.org/2023.sigmorphon-1.3.pdf" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2023.sigmorphon-1.3.pdf</a></p>
+<p>[38] Best Embedding Models 2025-2026: What Changed - <a href="https://deploybase.ai/articles/best-embedding-models-2025-2026-what-changed" target="_blank" rel="noopener noreferrer">https://deploybase.ai/articles/best-embedding-models-2025-2026-what-changed</a></p>
+<p>[39] Gemini Embedding 001 - Google AI for Developers - <a href="https://ai.google.dev/gemini-api/docs/models/gemini-embedding-001" target="_blank" rel="noopener noreferrer">https://ai.google.dev/gemini-api/docs/models/gemini-embedding-001</a></p>
+<p>[41] BAAI/bge-m3 multilingual embedding model - Hugging Face - <a href="https://huggingface.co/BAAI/bge-m3" target="_blank" rel="noopener noreferrer">https://huggingface.co/BAAI/bge-m3</a></p>
+<p>[42] LaBSE managed endpoint - Azure AI Foundry Models - <a href="https://ai.azure.com/catalog/models/setu4993-labse" target="_blank" rel="noopener noreferrer">https://ai.azure.com/catalog/models/setu4993-labse</a></p>
+<p>[43] Azure Speech Service - Real-time Diarization (Microsoft Learn) - <a href="https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-stt-diarization" target="_blank" rel="noopener noreferrer">https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-stt-diarization</a></p>
+<p>[44] The Second DISPLACE Challenge: DIarization of SPeaker and LAnguage in Conversational Environments - <a href="https://arxiv.org/html/2406.09494v1" target="_blank" rel="noopener noreferrer">https://arxiv.org/html/2406.09494v1</a></p>
+<p>[45] SiTa: Sinhala and Tamil Speaker Diarization Dataset in the Wild (ACL CHIPSAL 2025) - <a href="https://aclanthology.org/2025.chipsal-1.8/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2025.chipsal-1.8/</a></p>
+<p>[46] What is lost in Normalization? Exploring Pitfalls in Multilingual ASR Model Evaluations (EMNLP 2024) - <a href="https://aclanthology.org/2024.emnlp-main.607" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2024.emnlp-main.607</a></p>
+<p>[47] Indic NLP Library - Script Normalization Utilities - <a href="https://indic-nlp-library.readthedocs.io/en/latest/indicnlp.normalize.html" target="_blank" rel="noopener noreferrer">https://indic-nlp-library.readthedocs.io/en/latest/indicnlp.normalize.html</a></p>
+<p>[48] Making Large Language Models Speak Tulu: Structured Prompting for an Extremely Low-Resource Language (ACL LoResLM 2026) - <a href="https://aclanthology.org/2026.loreslm-1.5/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2026.loreslm-1.5/</a></p>
+<p>[49] INDIC DIALECT: A Multi Task Benchmark to Evaluate and Translate in Indian Language Dialects - <a href="https://arxiv.org/abs/2601.10388" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2601.10388</a></p>
+<p>[50] Beyond Monolingual Assumptions: A Survey of Code-Switched NLP in the Era of Large Language Models (2025) - <a href="https://arxiv.org/html/2510.07037v3" target="_blank" rel="noopener noreferrer">https://arxiv.org/html/2510.07037v3</a></p>
+<p>[51] Sarvam-M: Open Source Hybrid Indic LLM (Sarvam AI, 2025) - <a href="https://www.sarvam.ai/blogs/sarvam-m" target="_blank" rel="noopener noreferrer">https://www.sarvam.ai/blogs/sarvam-m</a></p>
+<p>[52] TransliCo: A Contrastive Learning Framework to Address the Script Barrier in Multilingual Pretrained Language Models (ACL 2024) - <a href="https://aclanthology.org/2024.acl-long.136" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2024.acl-long.136</a></p>
+<p>[53] PARIKSHA: A Large-Scale Investigation of Human-LLM Evaluator Agreement on Multilingual and Multi-Cultural Data (EMNLP 2024) - <a href="https://www.aclanthology.org/2024.emnlp-main.451/" target="_blank" rel="noopener noreferrer">https://www.aclanthology.org/2024.emnlp-main.451/</a></p>
+<p>[56] COGENT: A Curriculum-oriented Framework for Generating Grade-appropriate Educational Content (BEA 2025) - <a href="https://anthology.aclweb.org/2025.bea-1.10/" target="_blank" rel="noopener noreferrer">https://anthology.aclweb.org/2025.bea-1.10/</a></p>
+<p>[57] EduAdapt: A Question Answer Benchmark Dataset for Evaluating Grade-Level Adaptability in LLMs (EMNLP 2025) - <a href="https://aclanthology.org/2025.emnlp-main.1736/" target="_blank" rel="noopener noreferrer">https://aclanthology.org/2025.emnlp-main.1736/</a></p>
+<p>[58] Customizing Large Language Model Generation Style using Parameter-Efficient Finetuning (2024) - <a href="https://arxiv.org/abs/2409.04574" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2409.04574</a></p>
+<p>[59] TinyStyler: Efficient Few-Shot Text Style Transfer with Authorship Embeddings (2024) - <a href="https://arxiv.org/abs/2406.15586" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2406.15586</a></p>
+<p>[60] Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate the Implicit Writing Styles of Everyday Authors (2025) - <a href="https://arxiv.org/abs/2509.14543" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2509.14543</a></p>
+<p>[61] MILU: A Multi-task Indic Language Understanding Benchmark (2025) - <a href="https://research.ibm.com/publications/milu-a-multi-task-indic-language-understanding-benchmark" target="_blank" rel="noopener noreferrer">https://research.ibm.com/publications/milu-a-multi-task-indic-language-understanding-benchmark</a></p>
+<p>[62] The Broken Token: Tokenization for Malayalam Language Models (2026) - <a href="https://thottingal.in/blog/2026/02/27/malayalam-tokenizer-llm/" target="_blank" rel="noopener noreferrer">https://thottingal.in/blog/2026/02/27/malayalam-tokenizer-llm/</a></p>
+<p>[63] LLM API Pricing in 2026: The Complete Cost Comparison (AI Magicx) - <a href="https://www.aimagicx.com/blog/llm-api-pricing-comparison-2026" target="_blank" rel="noopener noreferrer">https://www.aimagicx.com/blog/llm-api-pricing-comparison-2026</a></p>
+<p>[64] Ethnologue: The most spoken languages worldwide - <a href="https://www.ethnologue.com/insights/most-spoken-languages/" target="_blank" rel="noopener noreferrer">https://www.ethnologue.com/insights/most-spoken-languages/</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

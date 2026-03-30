@@ -29,6 +29,7 @@ function getBasePath() {
         first === 'about' ||
         first === 'for-teachers' ||
         first === 'blog' ||
+        first === 'resources' ||
         first.endsWith('.html')
     ) {
         return '';
@@ -92,10 +93,6 @@ function ensureMaterialSymbols() {
 // Navigation Links
 const navLinks = [
     {
-        name: 'Home',
-        href: BASE_PATH ? `${BASE_PATH}/` : '/'
-    },
-    {
         name: 'Product',
         href: `${BASE_PATH}/product/`
     },
@@ -109,12 +106,16 @@ const navLinks = [
         href: `${BASE_PATH}/pricing.html`
     },
     {
-        name: 'About',
+        name: 'Company',
         href: `${BASE_PATH}/about/why-spark.html`
     },
     {
         name: 'Blog',
         href: `${BASE_PATH}/blog.html`
+    },
+    {
+        name: 'Resources',
+        href: `${BASE_PATH}/resources/index.html`
     },
 ];
 
@@ -124,8 +125,9 @@ const productSubpages = [
     { name: 'Features', href: `${BASE_PATH}/product/features.html` },
     { name: 'Monetization', href: `${BASE_PATH}/product/monetization.html` },
     { name: 'Reporting', href: `${BASE_PATH}/product/reporting.html` },
-    { name: 'Hallucinations & safety', href: `${BASE_PATH}/product/hallucinations.html` },
+    { name: 'AI accuracy & safety', href: `${BASE_PATH}/product/hallucinations.html` },
     { name: 'Content ownership', href: `${BASE_PATH}/product/content-ownership.html` },
+    { name: 'Language support', href: `${BASE_PATH}/product/language-support.html` },
 ];
 
 // About sub-pages for dropdown navigation
@@ -181,12 +183,21 @@ function createHeader() {
                 currentPath.endsWith('blog.html') ||
                 /\/blog\/[^/]+\.html$/.test(currentPath);
         }
+        if (link.name === 'Resources') {
+            isActive =
+                currentPath.includes('/resources/') ||
+                currentPath.endsWith('/resources') ||
+                currentPath.endsWith('resources/index.html');
+        }
+        if (link.name === 'Company') {
+            isActive = currentPath.includes('/about/');
+        }
 
         if (link.name === 'Product') {
             const dropdownItems = productSubpages.map(sub => {
                 const subActive = currentPath === sub.href;
                 return `
-                    <a href="${sub.href}" class="block px-4 py-2 text-sm ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'}">
+                    <a href="${sub.href}" class="block px-4 py-2 text-base ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'} cursor-pointer">
                         ${sub.name}
                     </a>
                 `;
@@ -194,7 +205,7 @@ function createHeader() {
 
             return `
                 <div class="relative group">
-                    <a href="${link.href}" class="flex items-center gap-1 text-sm font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600">
+                    <a href="${link.href}" class="flex items-center gap-1 text-base font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600 cursor-pointer">
                         <span>${link.name}</span>
                         <span class="material-symbols-rounded text-[16px] leading-none">expand_more</span>
                     </a>
@@ -205,11 +216,11 @@ function createHeader() {
             `;
         }
 
-        if (link.name === 'About') {
+        if (link.name === 'Company') {
             const dropdownItems = aboutSubpages.map(sub => {
                 const subActive = currentPath === sub.href;
                 return `
-                    <a href="${sub.href}" class="block px-4 py-2 text-sm ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'}">
+                    <a href="${sub.href}" class="block px-4 py-2 text-base ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'} cursor-pointer">
                         ${sub.name}
                     </a>
                 `;
@@ -217,7 +228,7 @@ function createHeader() {
 
             return `
                 <div class="relative group">
-                    <a href="${link.href}" class="flex items-center gap-1 text-sm font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600">
+                    <a href="${link.href}" class="flex items-center gap-1 text-base font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600 cursor-pointer">
                         <span>${link.name}</span>
                         <span class="material-symbols-rounded text-[16px] leading-none">expand_more</span>
                     </a>
@@ -232,7 +243,7 @@ function createHeader() {
             const dropdownItems = forTeachersSubpages.map(sub => {
                 const subActive = currentPath === sub.href;
                 return `
-                    <a href="${sub.href}" class="block px-4 py-2 text-sm ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'}">
+                    <a href="${sub.href}" class="block px-4 py-2 text-base ${subActive ? 'text-brand-600 bg-slate-50' : 'text-slate-600 hover:text-brand-600 hover:bg-slate-50'} cursor-pointer">
                         ${sub.name}
                     </a>
                 `;
@@ -240,7 +251,7 @@ function createHeader() {
 
             return `
                 <div class="relative group">
-                    <a href="${link.href}" class="flex items-center gap-1 text-sm font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600">
+                    <a href="${link.href}" class="flex items-center gap-1 text-base font-medium transition-colors ${isActive ? 'text-brand-600' : 'text-slate-600'} hover:text-brand-600 cursor-pointer">
                         <span>${link.name}</span>
                         <span class="material-symbols-rounded text-[16px] leading-none">expand_more</span>
                     </a>
@@ -251,7 +262,7 @@ function createHeader() {
             `;
         }
 
-        return `<a href="${link.href}" class="text-sm font-medium transition-colors hover:text-brand-600 ${isActive ? 'text-brand-600' : 'text-slate-600'}">${link.name}</a>`;
+        return `<a href="${link.href}" class="text-base font-medium transition-colors hover:text-brand-600 ${isActive ? 'text-brand-600' : 'text-slate-600'} cursor-pointer">${link.name}</a>`;
     }).join('');
 
     header.innerHTML = `
@@ -276,7 +287,7 @@ function createHeader() {
 
                 <!-- CTA -->
                 <div class="flex items-center space-x-4">
-                    <button data-open-waitlist class="hidden md:inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all cursor-pointer">
+                    <button data-open-waitlist class="hidden md:inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all cursor-pointer">
                         Join Waitlist
                     </button>
                     <!-- Mobile menu button placeholder (simple implementation) -->
@@ -295,7 +306,7 @@ function createHeader() {
                     if (link.name === 'Product') {
                         return getMobileNavSectionHtml(link, productSubpages, currentPath);
                     }
-                    if (link.name === 'About') {
+                    if (link.name === 'Company') {
                         return getMobileNavSectionHtml(link, aboutSubpages, currentPath);
                     }
                     if (link.name === 'For Instructors') {
@@ -310,6 +321,16 @@ function createHeader() {
                             ? 'block px-3 py-2 rounded-md text-base font-medium text-brand-600 bg-slate-50 cursor-pointer'
                             : 'block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 cursor-pointer';
                         return `<a href="${link.href}" class="${blogNavClass}">${link.name}</a>`;
+                    }
+                    if (link.name === 'Resources') {
+                        const resourcesActive =
+                            currentPath.includes('/resources/') ||
+                            currentPath.endsWith('/resources') ||
+                            currentPath.endsWith('resources/index.html');
+                        const resNavClass = resourcesActive
+                            ? 'block px-3 py-2 rounded-md text-base font-medium text-brand-600 bg-slate-50 cursor-pointer'
+                            : 'block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 cursor-pointer';
+                        return `<a href="${link.href}" class="${resNavClass}">${link.name}</a>`;
                     }
                     return `<a href="${link.href}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 cursor-pointer">${link.name}</a>`;
                 }).join('')}
@@ -348,9 +369,11 @@ function createFooter() {
                 <div>
                     <h3 class="text-sm font-semibold text-slate-900 tracking-wider uppercase mb-4">Product</h3>
                     <ul class="space-y-3">
-                        <li><a href="${BASE_PATH}/product/" class="text-sm text-slate-500 hover:text-brand-600 cursor-pointer">Overview</a></li>
-                        <li><a href="${BASE_PATH}/product/features.html" class="text-sm text-slate-500 hover:text-brand-600 cursor-pointer">Features</a></li>
-                        <li><a href="${BASE_PATH}/pricing.html" class="text-sm text-slate-500 hover:text-brand-600 cursor-pointer">Pricing</a></li>
+                        <li><a href="${BASE_PATH}/product/" class="text-base text-slate-500 hover:text-brand-600 cursor-pointer">Overview</a></li>
+                        <li><a href="${BASE_PATH}/product/features.html" class="text-base text-slate-500 hover:text-brand-600 cursor-pointer">Features</a></li>
+                        <li><a href="${BASE_PATH}/product/language-support.html" class="text-base text-slate-500 hover:text-brand-600 cursor-pointer">Language support</a></li>
+                        <li><a href="${BASE_PATH}/resources/index.html" class="text-base text-slate-500 hover:text-brand-600 cursor-pointer">Resources</a></li>
+                        <li><a href="${BASE_PATH}/pricing.html" class="text-base text-slate-500 hover:text-brand-600 cursor-pointer">Pricing</a></li>
                     </ul>
                 </div>
 
@@ -407,11 +430,16 @@ function wrapMainContent() {
     const main = document.querySelector('main');
     if (!main) return;
 
-    // Check if container already exists (backward compatibility)
-    const existingContainer = main.querySelector('[class*="max-w-"]');
-    if (existingContainer) {
-        console.log('[spark-marketing] container already exists, skipping wrap');
-        return;
+    // Skip wrap only when the first element child is already a width-constrained container
+    // (e.g. product/content-ownership.html). Do not match deeper nodes: subtitle lines often
+    // use max-w-2xl / max-w-3xl and must not disable the outer max-w-5xl wrapper.
+    const firstEl = main.firstElementChild;
+    if (firstEl && firstEl.nodeType === 1) {
+        const cls = firstEl.getAttribute('class') || '';
+        if (cls.includes('max-w-')) {
+            console.log('[spark-marketing] container already exists on first child, skipping wrap');
+            return;
+        }
     }
 
     // Get container width from data attribute, default to '5xl'

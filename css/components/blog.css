@@ -330,3 +330,36 @@ aside:hover #blog-sidebar-posts::-webkit-scrollbar-thumb:hover,
 #blog-sidebar-posts:hover::-webkit-scrollbar-thumb:hover {
     background: var(--blog-scrollbar-thumb-hover);
 }
+
+/* Wide markdown tables (whitepapers, long-form) */
+.blog-post-content .blog-longform-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.blog-post-content .blog-longform-table-wrap table {
+    width: 100%;
+    min-width: 36rem;
+    border-collapse: collapse;
+    font-size: 1em;
+}
+
+.blog-post-content .blog-longform-table-wrap th,
+.blog-post-content .blog-longform-table-wrap td {
+    border: 1px solid var(--blog-slate-200);
+    padding: 0.5em 0.75em;
+    text-align: left;
+    vertical-align: top;
+}
+
+.blog-post-content .blog-longform-table-wrap th {
+    background-color: var(--blog-slate-50);
+    font-weight: 600;
+    color: var(--blog-slate-900);
+}
+
+.blog-post-content .blog-longform-table-wrap tr:nth-child(even) td {
+    background-color: rgba(248, 250, 252, 0.6);
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark – Language support</title>
+    <meta name="description" content="How Spark approaches Indic and multilingual teaching: transcription, natural course text, and instructor voice. Link to our full research whitepaper.">
+    <link rel="stylesheet" href="../css/tailwind.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
+    <script src="../js/layout.js"></script>
+</head>
+<body class="preload-hidden bg-white text-slate-900 antialiased pt-16">
+
+<main class="pt-20 pb-24" data-container-width="5xl">
+    <section class="mb-16">
+        <p class="text-base font-semibold tracking-[0.18em] uppercase text-brand-600 mb-3">Language support</p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
+            Teaching in Indic languages should sound like you, not like a textbook.
+        </h1>
+        <p class="text-lg text-slate-600 leading-relaxed">
+            Spark turns recordings into structured courses. When the teaching is in Hindi, Tamil, or other Indic languages, that pipeline has to clear a higher bar than English-only content. We care about accuracy, how natural the study text feels, and whether it still sounds like the same instructor.
+        </p>
+    </section>
+
+    <section class="mb-16">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4">Three quality gates</h2>
+        <p class="text-base text-slate-600 leading-relaxed mb-6">
+            Before we are comfortable shipping support for a language, we work through three gates: transcription quality (how faithfully speech becomes text), course content quality (notes and quizzes that read well in that language), and instructor voice (output that fits how you actually teach). Each gate turned out harder than we expected for Indic languages, for structural reasons in data and models, not because teachers are doing anything wrong.
+        </p>
+        <ul class="list-disc pl-6 space-y-3 text-base text-slate-600 leading-relaxed">
+            <li><strong class="text-slate-900">Transcription:</strong> error rates and provider quality vary a lot by language. We route and evaluate per language instead of assuming one global ASR is best everywhere.</li>
+            <li><strong class="text-slate-900">Naturalness:</strong> large models often default to stiff, formal register in Indic languages. Getting classroom-appropriate tone is a product and research problem, not a one-line prompt fix.</li>
+            <li><strong class="text-slate-900">Instructor voice:</strong> even good generic prose can miss the way you explain to your students. We treat that as a first-class problem alongside correctness.</li>
+        </ul>
+    </section>
+
+    <section class="mb-16 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-3">Read the full whitepaper</h2>
+        <p class="text-base text-slate-600 leading-relaxed mb-6">
+            We published a long-form paper on the Indic language landscape, benchmarks, cost dynamics, and how we think about architecture. It is written for fellow builders and for anyone who wants to understand why multilingual AI is still hard in practice.
+        </p>
+        <a href="../resources/indic-languages-white-paper.html" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-brand-600 text-white text-base font-semibold hover:bg-brand-700 shadow-sm hover:shadow transition-all cursor-pointer">
+            <span class="material-symbols-rounded text-[1.25rem] leading-none" aria-hidden="true">menu_book</span>
+            Spoken by Billions, heard by few
+        </a>
+    </section>
+
+    <p class="text-base text-slate-600 leading-relaxed">
+        For the rest of how Spark handles accuracy and safety across languages, see
+        <a href="hallucinations.html" class="text-brand-600 underline hover:text-brand-700 cursor-pointer">AI accuracy &amp; safety</a>.
+    </p>
+</main>
+
+</body>
+</html>
