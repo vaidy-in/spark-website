@@ -139,7 +139,15 @@ function buildWhitepaperDocument({
     articleHtml,
     /** Wider than default articles so TOC + column fit */
     containerWidth = '7xl',
+    /** JSON string for inline citation hover previews (see whitepaper-citations.js) */
+    citeDataJson = null,
 }) {
+    const citeScripts =
+        citeDataJson != null && citeDataJson !== ''
+            ? `
+<script type="application/json" id="whitepaper-cite-data">${citeDataJson}</script>
+<script src="../js/whitepaper-citations.js" defer></script>`
+            : '';
     const tocDesktop = buildTocNav(tocEntries, 'desktop');
     const tocMobile = buildTocNav(tocEntries, 'mobile');
 
@@ -180,7 +188,7 @@ function buildWhitepaperDocument({
         </div>
     </div>
 </main>
-
+${citeScripts}
 </body>
 </html>
 `;

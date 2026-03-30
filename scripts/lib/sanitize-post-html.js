@@ -13,7 +13,7 @@ const SANITIZE_OPTIONS = {
         'abbr', 'kbd', 'cite', 'q', 'ins', 'u', 's',
     ],
     allowedAttributes: {
-        a: ['href', 'target', 'rel', 'title'],
+        a: ['href', 'target', 'rel', 'title', 'data-cite-id'],
         img: ['src', 'alt', 'title', 'class'],
         h2: ['id', 'class'],
         h3: ['id', 'class'],

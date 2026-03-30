@@ -60,9 +60,68 @@ function stripHeroDuplicate(md) {
     return md;
 }
 
-/** Whitepaper uses [[64]](url) style citation links; normalize to standard markdown. */
+/** Whitepaper uses [[64]](url) style citation links; normalize to standard markdown links. */
 function normalizeCitationBrackets(md) {
-    return md.replace(/\[\[(\d+)\]\]/g, '[$1]');
+    return md.replace(/\[\[(\d+)\]\]\(([^)]+)\)/g, '[$1]($2)');
+}
+
+/**
+ * Parse ## Citations block: lines like `[n] Title - https://...`
+ * @returns {Record<string, { title: string, url: string }>}
+ */
+function parseCitationsMap(md) {
+    const m = md.match(/^## Citations\s*$/m);
+    if (!m || m.index == null) return {};
+    const start = m.index + m[0].length;
+    const rest = md.slice(start);
+    const map = {};
+    for (const line of rest.split('\n')) {
+        const trimmed = line.trim();
+        if (/^##\s+\S/.test(trimmed)) break;
+        if (!/^\[\d+\]/.test(trimmed)) continue;
+        const numM = trimmed.match(/^\[(\d+)\]\s+(.+)$/);
+        if (!numM) continue;
+        const urlM = numM[2].match(/\s+-\s+(https?:\/\/\S+)\s*$/);
+        if (!urlM) continue;
+        const num = numM[1];
+        const title = numM[2].slice(0, urlM.index).trim();
+        const url = urlM[1];
+        map[num] = { title, url };
+    }
+    return map;
+}
+
+function normalizeUrlForCiteCompare(u) {
+    try {
+        let s = new URL(String(u).trim()).href;
+        if (s.endsWith('/')) s = s.slice(0, -1);
+        return s.toLowerCase();
+    } catch {
+        return String(u)
+            .trim()
+            .replace(/\/$/, '')
+            .toLowerCase();
+    }
+}
+
+/**
+ * Turn marked output `<a href="url">64</a>` into `[64]` cite links when url matches bibliography.
+ */
+function decorateInlineCitationLinks(html, citeMap) {
+    return html.replace(/<a\s+([^>]*)>(\d+)<\/a>/gi, (full, attrs, num) => {
+        const hrefMatch = /\bhref\s*=\s*"([^"]+)"/i.exec(attrs);
+        if (!hrefMatch) return full;
+        const href = hrefMatch[1];
+        if (!/^https?:\/\//i.test(href)) return full;
+        const entry = citeMap[num];
+        if (!entry) return full;
+        if (normalizeUrlForCiteCompare(entry.url) !== normalizeUrlForCiteCompare(href)) {
+            return full;
+        }
+        const hrefEsc = escapeHtml(href);
+        const numEsc = escapeHtml(num);
+        return `<a class="whitepaper-cite-ref" data-cite-id="${numEsc}" href="${hrefEsc}" target="_blank" rel="noopener noreferrer">[${numEsc}]</a>`;
+    });
 }
 
 function wrapTables(html) {
@@ -95,14 +154,18 @@ async function main() {
     md = stripLeadingH1(md);
     md = stripHeroDuplicate(md);
     md = normalizeCitationBrackets(md);
+    const citeMap = parseCitationsMap(md);
 
     marked.use({ gfm: true });
     let rawHtml = marked.parse(md);
     const { html: withIds, tocEntries } = injectHeadingIdsAndCollectToc(rawHtml);
     rawHtml = withIds;
     rawHtml = wrapTables(rawHtml);
+    rawHtml = decorateInlineCitationLinks(rawHtml, citeMap);
     rawHtml = addExternalLinkSafety(rawHtml);
     const safe = cleanPostHtml(rawHtml);
+
+    const citeDataJson = JSON.stringify(citeMap);
 
     const doc = buildWhitepaperDocument({
         pageTitle: PAGE_TITLE,
@@ -115,6 +178,7 @@ async function main() {
         tocEntries,
         articleHtml: safe,
         containerWidth: '7xl',
+        citeDataJson,
     });
 
     fs.mkdirSync(path.dirname(OUT_HTML), { recursive: true });
