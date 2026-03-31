@@ -5,6 +5,24 @@
     gap: 2rem;
 }
 
+/*
+ * Sticky TOC: any ancestor with non-visible overflow between here and the scrollport
+ * breaks position:sticky (Chrome is strict about this). Layout.js wraps main children in #top.
+ */
+main.whitepaper-main,
+main.whitepaper-main #top,
+.whitepaper-layout,
+.whitepaper-article-column {
+    overflow-x: visible;
+    overflow-y: visible;
+}
+
+@media (max-width: 1023px) {
+    .whitepaper-layout {
+        align-items: start;
+    }
+}
+
 @media (min-width: 1024px) {
     .whitepaper-layout {
         grid-template-columns: minmax(0, 14.5rem) minmax(0, 1fr);
@@ -137,13 +155,47 @@
     color: var(--blog-slate-900, #0f172a);
 }
 
-/* Mobile disclosure */
+/*
+ * Mobile TOC: sticky lives on a plain wrapper, not on <details>.
+ * Chrome often mishandles sticky on <details> (and non-visible overflow on ancestors).
+ */
+@media (max-width: 1023px) {
+    .whitepaper-toc-mobile-sticky {
+        position: sticky;
+        top: 4.25rem;
+        z-index: 40;
+        box-shadow: 0 1px 0 rgb(15 23 42 / 0.06);
+        overflow: visible;
+    }
+
+    .whitepaper-toc-mobile {
+        overflow: visible;
+    }
+
+    .whitepaper-toc-mobile[open] nav.whitepaper-toc--mobile {
+        max-height: min(70vh, 28rem);
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+}
+
 .whitepaper-toc-mobile summary.whitepaper-toc-mobile-summary {
     list-style: none;
 }
 
 .whitepaper-toc-mobile summary.whitepaper-toc-mobile-summary::-webkit-details-marker {
     display: none;
+}
+
+.whitepaper-toc-mobile-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.whitepaper-toc-mobile[open] .whitepaper-toc-mobile-chevron {
+    transform: rotate(180deg);
 }
 
 .whitepaper-toc--mobile .whitepaper-toc-title {
@@ -173,54 +225,133 @@
     scroll-margin-top: 5.75rem;
 }
 
-/* Inline citations: [n] style, not default prose link underline */
-.whitepaper-body a.whitepaper-cite-ref {
+/* Inline citations: [n] as button (source opens from panel) */
+.whitepaper-body button.whitepaper-cite-ref {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
     text-decoration: none;
     color: var(--blog-indigo-600, #4f46e5);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    vertical-align: baseline;
 }
 
-.whitepaper-body a.whitepaper-cite-ref:hover,
-.whitepaper-body a.whitepaper-cite-ref:focus-visible {
+.whitepaper-body button.whitepaper-cite-ref:hover,
+.whitepaper-body button.whitepaper-cite-ref:focus-visible {
     text-decoration: underline;
     color: var(--blog-indigo-700, #4338ca);
 }
 
 .whitepaper-cite-tooltip {
+    --whitepaper-cite-tip-left: 0px;
+    --whitepaper-cite-tip-top: 0px;
     position: fixed;
+    left: var(--whitepaper-cite-tip-left);
+    top: var(--whitepaper-cite-tip-top);
     z-index: 80;
-    max-width: min(22rem, calc(100vw - 1.5rem));
-    padding: 0.65rem 0.85rem;
-    border-radius: 0.375rem;
-    border: 1px solid var(--blog-slate-200, #e2e8f0);
+    max-width: min(20rem, calc(100vw - 1.5rem));
+    box-sizing: border-box;
+    padding: 0.875rem 1rem 0.9375rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(51 65 85 / 0.85);
     background: var(--blog-slate-900, #0f172a);
-    color: #f8fafc;
+    color: #f1f5f9;
     font-size: 0.8125rem;
-    line-height: 1.45;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
     box-shadow:
-        0 10px 15px -3px rgb(0 0 0 / 0.12),
-        0 4px 6px -4px rgb(0 0 0 / 0.08);
-    pointer-events: none;
+        0 12px 24px -8px rgb(0 0 0 / 0.35),
+        0 4px 8px -4px rgb(0 0 0 / 0.2);
+    pointer-events: auto;
+}
+
+@media (max-width: 1023px) {
+    .whitepaper-cite-tooltip.whitepaper-cite-tooltip--center-x {
+        width: calc(100vw - 1.5rem) !important;
+        max-width: calc(100vw - 1.5rem) !important;
+        left: 0.75rem !important;
+    }
+}
+
+.whitepaper-cite-tooltip-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
 }
 
 .whitepaper-cite-tooltip-line {
     display: block;
+    flex: 1;
+    min-width: 0;
 }
 
 .whitepaper-cite-tooltip-num {
     color: #a5b4fc;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .whitepaper-cite-tooltip-title {
     font-weight: 500;
+    color: #f8fafc;
 }
 
 .whitepaper-cite-tooltip-host {
     display: block;
-    margin-top: 0.35rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgb(51 65 85 / 0.65);
     font-size: 0.75rem;
+    line-height: 1.35;
     color: var(--blog-slate-400, #94a3b8);
     word-break: break-all;
+}
+
+.whitepaper-cite-tooltip-link {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: -0.2rem -0.15rem -0.2rem 0;
+    padding: 0.2rem;
+    color: #c7d2fe;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition:
+        color 0.12s ease,
+        background-color 0.12s ease;
+}
+
+.whitepaper-cite-tooltip-link:hover {
+    color: #eef2ff;
+    background-color: rgb(255 255 255 / 0.06);
+    text-decoration: none;
+}
+
+.whitepaper-cite-tooltip-link:focus-visible {
+    outline: none;
+    color: #fff;
+    background-color: rgb(255 255 255 / 0.08);
+    box-shadow: 0 0 0 2px var(--blog-slate-900, #0f172a), 0 0 0 4px #818cf8;
+}
+
+.whitepaper-cite-tooltip-ext-icon {
+    font-size: 1rem;
+    line-height: 1;
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 20;
+    opacity: 0.88;
+}
+
+.whitepaper-cite-tooltip-link:hover .whitepaper-cite-tooltip-ext-icon,
+.whitepaper-cite-tooltip-link:focus-visible .whitepaper-cite-tooltip-ext-icon {
+    opacity: 1;
 }

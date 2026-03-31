@@ -139,6 +139,10 @@
                 return;
             }
             const id = hash.slice(1);
+            const mobileToc = a.closest('details.whitepaper-toc-mobile');
+            if (mobileToc) {
+                mobileToc.open = false;
+            }
             window.requestAnimationFrame(() => {
                 lastId = id;
                 setActive(id, { fromClick: true });

@@ -1,7 +1,15 @@
 /**
- * Hover preview for inline citation links on the whitepaper (data from #whitepaper-cite-data).
+ * Citation buttons: hover preview (fine pointer), click to pin, source link inside panel.
+ * Position via CSS custom properties; styles in whitepaper.css.
  */
 (function () {
+    var DEBUG = false;
+    function log() {
+        if (DEBUG && typeof console !== 'undefined' && console.log) {
+            console.log.apply(console, ['[whitepaper-cite]'].concat([].slice.call(arguments)));
+        }
+    }
+
     function escapeHtml(s) {
         return String(s)
             .replace(/&/g, '&amp;')
@@ -17,74 +25,265 @@
         }
     }
 
-    function init() {
-        const dataEl = document.getElementById('whitepaper-cite-data');
-        if (!dataEl) return;
+    function prefersFinePointerHover() {
+        return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    }
 
-        let map;
-        try {
-            map = JSON.parse(dataEl.textContent || '{}');
-        } catch {
+    function prefersViewportCenteredCiteTip() {
+        return window.matchMedia('(max-width: 1023px)').matches;
+    }
+
+    function init() {
+        var dataEl = document.getElementById('whitepaper-cite-data');
+        if (!dataEl) {
+            log('no cite data element');
             return;
         }
 
-        const tip = document.createElement('div');
+        var map;
+        try {
+            map = JSON.parse(dataEl.textContent || '{}');
+        } catch {
+            log('cite JSON parse failed');
+            return;
+        }
+
+        var tip = document.createElement('div');
         tip.id = 'whitepaper-cite-tooltip';
         tip.className = 'whitepaper-cite-tooltip';
-        tip.setAttribute('role', 'tooltip');
+        tip.setAttribute('role', 'dialog');
+        tip.setAttribute('aria-modal', 'false');
         tip.hidden = true;
         document.body.appendChild(tip);
 
-        let hideTimer;
+        var hideTimer = null;
+        var pinnedTrigger = null;
+        var lastFocusTrigger = null;
+
+        function clearHideTimer() {
+            if (hideTimer !== null) {
+                window.clearTimeout(hideTimer);
+                hideTimer = null;
+            }
+        }
+
+        function scheduleEphemeralHide() {
+            clearHideTimer();
+            hideTimer = window.setTimeout(function () {
+                hideTimer = null;
+                if (pinnedTrigger) {
+                    return;
+                }
+                hidePanel();
+            }, 180);
+        }
+
+        function setExpandedFor(trigger, expanded) {
+            document.querySelectorAll('button.whitepaper-cite-ref[data-cite-id]').forEach(function (b) {
+                b.setAttribute('aria-expanded', b === trigger && expanded ? 'true' : 'false');
+            });
+        }
 
         function positionTip(anchor) {
-            const r = anchor.getBoundingClientRect();
-            const margin = 6;
-            tip.style.left = `${Math.round(r.left)}px`;
-            let top = r.bottom + margin;
+            var r = anchor.getBoundingClientRect();
+            var margin = 8;
+            var pad = 12;
+            var centerX = prefersViewportCenteredCiteTip();
+            tip.classList.toggle('whitepaper-cite-tooltip--center-x', centerX);
             tip.hidden = false;
-            const th = tip.offsetHeight || 0;
-            if (top + th > window.innerHeight - 8 && r.top > th + margin) {
+            tip.style.visibility = 'hidden';
+            
+            // Force layout so offsetWidth/Height are accurate
+            void tip.offsetWidth; 
+
+            var th = tip.offsetHeight || 120;
+            var tw = tip.offsetWidth || 280;
+            var vw = window.innerWidth;
+            var vh = window.innerHeight;
+            var left;
+            if (centerX) {
+                // On mobile, we force the width in CSS to vw - 1.5rem
+                // but we still calculate left to be safe.
+                left = (vw - tw) / 2;
+                if (left < pad) {
+                    left = pad;
+                }
+            } else {
+                left = r.left;
+                if (left + tw > vw - pad) {
+                    left = vw - tw - pad;
+                }
+                if (left < pad) {
+                    left = pad;
+                }
+            }
+            var top = r.bottom + margin;
+            if (top + th > vh - pad && r.top > th + margin) {
                 top = r.top - th - margin;
             }
-            tip.style.top = `${Math.round(Math.max(8, top))}px`;
+            tip.style.setProperty('--whitepaper-cite-tip-left', String(Math.round(left)) + 'px');
+            tip.style.setProperty('--whitepaper-cite-tip-top', String(Math.round(Math.max(8, top))) + 'px');
+            tip.style.visibility = '';
         }
 
-        function scheduleHide() {
-            hideTimer = window.setTimeout(function () {
-                tip.hidden = true;
-            }, 150);
+        function fillTipContent(id, entry) {
+            var host = hostname(entry.url);
+            var safeUrl = escapeHtml(entry.url);
+            var safeTitle = escapeHtml(entry.title);
+            var safeHost = escapeHtml(host);
+            var safeId = escapeHtml(id);
+            tip.innerHTML =
+                '<div class="whitepaper-cite-tooltip-head">' +
+                '<span class="whitepaper-cite-tooltip-line"><strong class="whitepaper-cite-tooltip-num">[' +
+                safeId +
+                ']</strong> <span class="whitepaper-cite-tooltip-title">' +
+                safeTitle +
+                '</span></span>' +
+                '<a class="whitepaper-cite-tooltip-link" href="' +
+                safeUrl +
+                '" target="_blank" rel="noopener noreferrer" aria-label="Open citation source in new tab">' +
+                '<span class="material-symbols-rounded whitepaper-cite-tooltip-ext-icon" aria-hidden="true">open_in_new</span>' +
+                '</a>' +
+                '</div>' +
+                (host ? '<span class="whitepaper-cite-tooltip-host">' + safeHost + '</span>' : '');
         }
 
-        document.querySelectorAll('a.whitepaper-cite-ref[data-cite-id]').forEach(function (a) {
-            a.addEventListener('mouseenter', function () {
-                window.clearTimeout(hideTimer);
-                const id = a.getAttribute('data-cite-id');
-                const entry = map[id];
-                if (!entry) return;
-                const host = hostname(entry.url);
-                tip.innerHTML =
-                    '<span class="whitepaper-cite-tooltip-line"><strong class="whitepaper-cite-tooltip-num">[' +
-                    escapeHtml(id) +
-                    ']</strong> ' +
-                    '<span class="whitepaper-cite-tooltip-title">' +
-                    escapeHtml(entry.title) +
-                    '</span></span>' +
-                    (host
-                        ? '<span class="whitepaper-cite-tooltip-host">' + escapeHtml(host) + '</span>'
-                        : '');
-                positionTip(a);
+        function showPanel(trigger, options) {
+            var opts = options || {};
+            var id = trigger.getAttribute('data-cite-id');
+            var entry = map[id];
+            if (!entry) {
+                log('no entry for id', id);
+                return;
+            }
+            lastFocusTrigger = trigger;
+            fillTipContent(id, entry);
+            positionTip(trigger);
+            tip.hidden = false;
+            setExpandedFor(trigger, true);
+            log('show', id, opts);
+            if (opts.focusLink) {
+                window.requestAnimationFrame(function () {
+                    var link = tip.querySelector('a.whitepaper-cite-tooltip-link');
+                    if (link) {
+                        link.focus();
+                    }
+                });
+            }
+        }
+
+        function hidePanel() {
+            clearHideTimer();
+            tip.hidden = true;
+            pinnedTrigger = null;
+            setExpandedFor(null, false);
+            log('hide');
+        }
+
+        var triggers = document.querySelectorAll('button.whitepaper-cite-ref[data-cite-id]');
+        triggers.forEach(function (btn) {
+            btn.setAttribute('aria-controls', 'whitepaper-cite-tooltip');
+            btn.addEventListener('mouseenter', function () {
+                if (!prefersFinePointerHover()) {
+                    return;
+                }
+                clearHideTimer();
+                if (pinnedTrigger) {
+                    return;
+                }
+                showPanel(btn, { ephemeral: true });
             });
 
-            a.addEventListener('mouseleave', scheduleHide);
+            btn.addEventListener('mouseleave', function () {
+                if (!prefersFinePointerHover()) {
+                    return;
+                }
+                if (pinnedTrigger) {
+                    return;
+                }
+                scheduleEphemeralHide();
+            });
+
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                clearHideTimer();
+                if (pinnedTrigger === btn && !tip.hidden) {
+                    hidePanel();
+                    log('click toggle off');
+                    return;
+                }
+                pinnedTrigger = btn;
+                var fromKeyboard = e.detail === 0;
+                showPanel(btn, { focusLink: fromKeyboard });
+                log('click pin', fromKeyboard ? 'keyboard' : 'pointer');
+            });
+        });
+
+        tip.addEventListener('mouseenter', function () {
+            clearHideTimer();
+        });
+        tip.addEventListener('mouseleave', function () {
+            if (pinnedTrigger) {
+                return;
+            }
+            scheduleEphemeralHide();
+        });
+
+        document.addEventListener(
+            'pointerdown',
+            function (e) {
+                if (tip.hidden) {
+                    return;
+                }
+                if (tip.contains(e.target)) {
+                    return;
+                }
+                if (e.target.closest && e.target.closest('button.whitepaper-cite-ref')) {
+                    return;
+                }
+                hidePanel();
+            },
+            true,
+        );
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape' || tip.hidden) {
+                return;
+            }
+            hidePanel();
+            if (lastFocusTrigger && typeof lastFocusTrigger.focus === 'function') {
+                lastFocusTrigger.focus();
+            }
         });
 
         window.addEventListener(
             'scroll',
             function () {
-                if (!tip.hidden) tip.hidden = true;
+                if (tip.hidden) {
+                    return;
+                }
+                if (pinnedTrigger) {
+                    positionTip(pinnedTrigger);
+                    return;
+                }
+                hidePanel();
             },
             true,
+        );
+
+        window.addEventListener(
+            'resize',
+            function () {
+                if (tip.hidden) {
+                    return;
+                }
+                var anchor = pinnedTrigger || lastFocusTrigger;
+                if (anchor) {
+                    positionTip(anchor);
+                }
+            },
+            { passive: true },
         );
     }
 
