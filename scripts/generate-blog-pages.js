@@ -400,7 +400,7 @@ function mobilePostCard(post, slug, isActive, fromBlogSubdirectory) {
         : 'border-slate-200';
     const href = postListHref(slug, fromBlogSubdirectory);
     return `
-                    <div class="bg-white rounded-lg border ${ring} p-4 hover:shadow-md transition-shadow">
+                    <div class="bg-white rounded-lg border ${ring} p-4 hover:shadow-md transition-shadow" data-blog-slug="${escapeHtml(slug)}">
                         <a href="${escapeHtml(href)}" class="block cursor-pointer">
                             <div class="text-base text-slate-500 mb-2">
                                 <div class="flex flex-wrap items-center gap-2">
@@ -436,7 +436,7 @@ function desktopSidebarItem(post, slug, isActive, fromBlogSubdirectory) {
         : 'pb-6 border-b border-slate-200 last:border-0 last:pb-0';
     const href = postListHref(slug, fromBlogSubdirectory);
     return `
-                        <div class="${borderClass}">
+                        <div class="${borderClass}" data-blog-slug="${escapeHtml(slug)}">
                             <a href="${escapeHtml(href)}" class="block cursor-pointer">
                                 <div class="text-base text-slate-500 mb-2">
                                     <div class="flex flex-wrap items-center gap-2">
@@ -499,12 +499,36 @@ function buildBlogMainHtml(posts, slugByIndex, focusIndex, fromBlogSubdirectory)
                     </div>
                 </div>
 
-                <div class="lg:hidden mb-12" id="blog-mobile-selected-post">
-                    ${articleShell}
+                <div class="lg:hidden mb-12 relative" id="blog-mobile-article-column">
+                    <div
+                        id="blog-article-loading-mobile"
+                        class="blog-article-loading"
+                        data-visible="false"
+                        aria-hidden="true"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <div class="blog-article-loading__spinner" aria-hidden="true"></div>
+                        <p class="blog-article-loading__text">Loading article…</p>
+                    </div>
+                    <div id="blog-mobile-selected-post">
+                        ${articleShell}
+                    </div>
                 </div>
 
                 <div class="grid lg:grid-cols-3 gap-12">
-                    <div class="hidden lg:block lg:col-span-2">
+                    <div class="hidden lg:block lg:col-span-2 relative" id="blog-article-column-desktop">
+                        <div
+                            id="blog-article-loading-desktop"
+                            class="blog-article-loading"
+                            data-visible="false"
+                            aria-hidden="true"
+                            role="status"
+                            aria-live="polite"
+                        >
+                            <div class="blog-article-loading__spinner" aria-hidden="true"></div>
+                            <p class="blog-article-loading__text">Loading article…</p>
+                        </div>
                         <article id="blog-latest-post" class="bg-white rounded-xl border border-slate-200 overflow-hidden">
                             ${bodyInner}
                         </article>
@@ -595,6 +619,7 @@ function buildPostPageHtml({
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
     <script src="../js/layout.js"></script>
     <script src="../js/blog-mobile-scroll.js"></script>
+    <script src="../js/blog-spa-nav.js"></script>
 </head>
 <body class="preload-hidden bg-white text-slate-900 antialiased pt-16">
 
