@@ -7,7 +7,7 @@
 
 (function () {
     'use strict';
-    window.APP_VERSION = '1.0.30';
+    window.APP_VERSION = '1.0.31';
 
     const LOG_PREFIX = '[spark-marketing][pricing]';
 
@@ -18,6 +18,7 @@
         'pricing-faq-sections-0.html',
         'pricing-faq-sections-1.html',
         'pricing-faq-sections-2.html',
+        'pricing-faq-lite-live.html',
         'pricing-faq-sections-3.html'
     ];
 
