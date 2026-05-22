@@ -175,6 +175,15 @@
         const existingErr = steps ? steps.querySelector('.waitlist-error') : null;
         if (existingErr) existingErr.remove();
 
+        const liteInterest = (typeof window.sparkPricingGetLiteInterest === 'function')
+            ? window.sparkPricingGetLiteInterest()
+            : false;
+        let additionalInfo = formData.additional_info || null;
+        if (liteInterest) {
+            const liteNote = 'Also interested in Spark Lite: Yes';
+            additionalInfo = additionalInfo ? (additionalInfo + '\n' + liteNote) : liteNote;
+        }
+
         const payload = {
             email: email,
             role: formData.role || null,
@@ -183,7 +192,9 @@
             subscriber_range: formData.subscriber_range || null,
             youtube_channel_url: formData.youtube_channel_url || null,
             course_type: formData.course_type || null,
-            additional_info: formData.additional_info || null
+            additional_info: additionalInfo,
+            interested_in_spark_lite: liteInterest || false,
+            source_page: document.body.getAttribute('data-page') || null
         };
 
         try {
