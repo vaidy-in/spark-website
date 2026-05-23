@@ -120,6 +120,7 @@
         const faqBillingWrapper = document.getElementById('pricing-faq-billing-wrapper');
         const faqWrapper = document.getElementById('pricing-faq-wrapper');
         const ctaSpark = document.getElementById('pricing-cta-spark');
+        const sparkTabLead = document.getElementById('pricing-spark-tab-lead');
 
         if (!tabSpark || !tabLive || !panelSpark || !panelLive) return;
 
@@ -148,6 +149,10 @@
             if (faqBillingWrapper) faqBillingWrapper.classList.toggle('hidden', !isSpark);
             if (faqWrapper) faqWrapper.classList.toggle('hidden', !isSpark);
             if (ctaSpark) ctaSpark.classList.toggle('hidden', !isSpark);
+            if (sparkTabLead) {
+                sparkTabLead.classList.toggle('hidden', !isSpark);
+                sparkTabLead.setAttribute('aria-hidden', String(!isSpark));
+            }
 
             const showPanel = isSpark ? panelSpark : panelLive;
             const hidePanel = isSpark ? panelLive : panelSpark;
