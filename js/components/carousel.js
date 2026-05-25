@@ -165,15 +165,21 @@ function initCarousel(carouselRoot) {
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
+        let bestIdx = -1;
+        let bestRatio = 0;
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const idx = slides.indexOf(entry.target);
-          if (idx >= 0) {
-            setActiveIndex(idx, 'intersection');
+          if (idx >= 0 && entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio;
+            bestIdx = idx;
           }
         });
+        if (bestIdx >= 0) {
+          setActiveIndex(bestIdx, 'intersection');
+        }
       },
-      { root: track, threshold: 0.6 }
+      { root: track, threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
 
     slides.forEach((slide) => observer.observe(slide));

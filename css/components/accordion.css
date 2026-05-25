@@ -5,6 +5,10 @@
   overflow: hidden;
 }
 
+[data-accordion-content].hidden {
+  display: none;
+}
+
 [data-accordion-content].accordion-content-open {
   grid-template-rows: minmax(0, 1fr);
 }
