@@ -400,7 +400,7 @@ function createFooter() {
                 <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div class="text-center md:text-left">
                         <p class="text-base text-slate-400">
-                            &copy; ${new Date().getFullYear()} Spark. All rights reserved.
+                            &copy; ${new Date().getFullYear()} TriaLabs LLP. All rights reserved.
                         </p>
                     </div>
                     <div class="text-center md:text-right">
