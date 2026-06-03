@@ -1325,3 +1325,92 @@
     align-items: start;
   }
 }
+
+/* From Performance to Therapeutic Practice (Chandraprakash / prod 172608) */
+.course-landing-page--therapeutic {
+  --cl-bg: #1a1410;
+  --cl-bg-deep: #120e0b;
+  --cl-bg-cream: #f7f2eb;
+  --cl-cream: #f0e8dc;
+  --cl-cream-muted: #b8aea0;
+  --cl-ink: #1f1812;
+  --cl-ink-soft: #5c5248;
+  --cl-cyan: #7d9b6a;
+  --cl-cyan-soft: rgba(125, 155, 106, 0.14);
+  --cl-cyan-ink: #3f5234;
+  --cl-gold: #c4774a;
+  --cl-gold-soft: rgba(196, 119, 74, 0.16);
+  --cl-gold-hover: #b0683f;
+}
+
+.course-landing-page--therapeutic .course-landing-hero__bg-image {
+  background-image: url("../../images/courses/from-performance-to-therapeutic/thumbnail.jpg");
+}
+
+.course-landing-page--therapeutic .course-landing-bento__tile--visual {
+  background-image: url("../../images/courses/from-performance-to-therapeutic/visuals/therapeutic-inquiry.jpg");
+}
+
+.course-landing-visual-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .course-landing-visual-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .course-landing-visual-grid {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(11rem, auto));
+  }
+
+  .course-landing-visual-card--hero {
+    grid-row: span 2;
+  }
+}
+
+.course-landing-visual-card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--cl-border-dark);
+  min-height: 11rem;
+}
+
+.course-landing-visual-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  min-height: 11rem;
+}
+
+.course-landing-visual-card__caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1rem 1.125rem;
+  background: linear-gradient(180deg, transparent, rgba(18, 14, 11, 0.92));
+}
+
+.course-landing-visual-card__caption h3 {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--cl-cream);
+  margin-bottom: 0.25rem;
+}
+
+.course-landing-visual-card__caption p {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--cl-cream-muted);
+}
+
+.course-landing-page--therapeutic .course-landing-instructor-photo {
+  object-position: center 20%;
+}
