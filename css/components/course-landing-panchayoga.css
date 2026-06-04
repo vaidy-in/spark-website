@@ -1,0 +1,263 @@
+/* Yogapreneurship — Pancha Yoga premium theme (sparktutor.ai course landing) */
+
+.course-landing-page--panchayoga {
+  --cl-bg: #141c28;
+  --cl-bg-deep: #0d1219;
+  --cl-bg-cream: #f6f1e8;
+  --cl-cream: #f0ebe3;
+  --cl-cream-muted: #a8a093;
+  --cl-ink: #1a2332;
+  --cl-ink-soft: #4a5568;
+  --cl-cyan: #3d7a6e;
+  --cl-cyan-soft: rgba(61, 122, 110, 0.14);
+  --cl-cyan-ink: #2a554c;
+  --cl-gold: #c9a227;
+  --cl-gold-soft: rgba(201, 162, 39, 0.18);
+  --cl-gold-hover: #b8921f;
+  --cl-accent: #c45c26;
+  --cl-accent-soft: rgba(196, 92, 38, 0.12);
+  --cl-border-dark: rgba(240, 235, 227, 0.1);
+  --cl-border-light: rgba(26, 35, 50, 0.08);
+}
+
+.course-landing-page--panchayoga .course-landing-hero__bg-image {
+  background-image: url("../../images/courses/yogapreneurship/thumbnail.jpg");
+}
+
+.course-landing-page--panchayoga .course-landing-eyebrow {
+  color: var(--cl-gold);
+}
+
+.course-landing-page--panchayoga .course-landing-cta {
+  background: linear-gradient(135deg, var(--cl-gold) 0%, #d4b04a 100%);
+  color: var(--cl-ink);
+}
+
+.course-landing-page--panchayoga .course-landing-cta:hover {
+  background: var(--cl-gold-hover);
+  color: var(--cl-ink);
+}
+
+.course-landing-page--panchayoga .course-landing-cta-secondary {
+  border-color: var(--cl-cream-muted);
+  color: var(--cl-cream);
+}
+
+.course-landing-page--panchayoga .course-landing-cta-secondary:hover {
+  border-color: var(--cl-gold);
+  color: var(--cl-gold);
+}
+
+.course-landing-page--panchayoga .course-landing-trust-pill__dot {
+  background: var(--cl-accent);
+}
+
+/* Program map — 11 session cards */
+.course-landing-program-map {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .course-landing-program-map {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .course-landing-program-map {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.course-landing-program-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.125rem;
+  border-radius: 0.875rem;
+  border: 1px solid var(--cl-border-dark);
+  background: rgba(255, 255, 255, 0.04);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.course-landing-program-card:hover,
+.course-landing-program-card:focus-visible {
+  border-color: var(--cl-gold);
+  background: var(--cl-gold-soft);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.course-landing-program-card__num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cl-gold);
+}
+
+.course-landing-program-card__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--cl-cream);
+}
+
+.course-landing-program-card__meta {
+  font-size: 0.8125rem;
+  color: var(--cl-cream-muted);
+}
+
+/* Session curriculum drill-down */
+.course-landing-session-item .course-landing-module-num {
+  background: var(--cl-accent-soft);
+  color: var(--cl-accent);
+  border: 1px solid rgba(196, 92, 38, 0.25);
+}
+
+.course-landing-section--cream .course-landing-session-item .course-landing-module-num {
+  background: var(--cl-gold-soft);
+  color: var(--cl-cyan-ink);
+  border-color: rgba(201, 162, 39, 0.35);
+}
+
+.course-landing-session-module-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cl-ink-soft);
+  margin: 0.75rem 0 0.5rem;
+}
+
+.course-landing-chapter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.course-landing-chapter-item {
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--cl-ink);
+}
+
+.course-landing-chapter-num {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--cl-cyan-ink);
+  min-width: 2rem;
+}
+
+.course-landing-chapter-title {
+  flex: 1;
+}
+
+/* Mega-course stats bar */
+.course-landing-mega-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.course-landing-mega-stat {
+  font-size: 0.9375rem;
+  color: var(--cl-cream-muted);
+}
+
+.course-landing-mega-stat strong {
+  color: var(--cl-cream);
+  font-weight: 700;
+}
+
+/* Pricing TBD */
+.course-landing-pricing-tbd {
+  max-width: 28rem;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--cl-border-dark);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.course-landing-pricing-tbd__label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cl-gold);
+  margin-bottom: 0.75rem;
+}
+
+.course-landing-pricing-tbd__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--cl-cream);
+  margin-bottom: 0.75rem;
+}
+
+.course-landing-pricing-tbd__text {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--cl-cream-muted);
+}
+
+.course-landing-page--panchayoga .course-landing-instructor-photo {
+  object-position: center 15%;
+}
+
+.course-landing-instructor-grid {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .course-landing-instructor-grid {
+    grid-template-columns: minmax(0, 20rem) 1fr;
+  }
+}
+
+.course-landing-page--panchayoga .course-landing-learn-card {
+  border: 1px solid var(--cl-border-dark);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1rem;
+  padding: 1.25rem 1.375rem;
+}
+
+.course-landing-page--panchayoga .course-landing-learn-card__title {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--cl-cream);
+  margin-bottom: 0.5rem;
+}
+
+.course-landing-page--panchayoga .course-landing-learn-card__text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--cl-cream-muted);
+}
+
+.course-landing-slide-carousel-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cl-gold);
+  margin-bottom: 0.75rem;
+}
