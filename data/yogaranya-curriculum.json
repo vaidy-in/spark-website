@@ -1,0 +1,1060 @@
+{
+  "courseTitle": "Yogaranya Video Workshops",
+  "courseSubtitle": "Health-focused workshops from Yogaranya teachers",
+  "instructor": "Ramya Siddamsetty",
+  "organization": "Yogaranya",
+  "sessions": [
+    {
+      "number": 1,
+      "videoId": "168624",
+      "shortTitle": "Understanding Scoliosis",
+      "videoTitle": "[Biology][Orthopedics] Understanding Scoliosis: Types, Cobb Angle Stages, Symptoms, and Yoga-based Management",
+      "durationLabel": "~30 min",
+      "durationSeconds": 1814.366,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Understanding Scoliosis: Definition, Types, and Initial Assessment",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Defining Scoliosis and Identifying Thoracic vs. Lumbar Curvature"
+            },
+            {
+              "number": "1.2",
+              "title": "Classifying Scoliosis by Cause: Idiopathic, Degenerative, and Congenital"
+            },
+            {
+              "number": "1.3",
+              "title": "Measuring Scoliosis Severity Using the Cobb Angle Scale"
+            },
+            {
+              "number": "1.4",
+              "title": "Understanding Muscular Imbalance: Shortened vs. Lengthened Sides in Scoliosis"
+            },
+            {
+              "number": "1.5",
+              "title": "Medical Interventions: Physiotherapy, Bracing, and Spinal Fusion Surgery"
+            }
+          ]
+        },
+        {
+          "title": "Yoga-Based Management for Scoliosis: Principles and Practice",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Yoga Management: Stretching the Concave Side and Strengthening the Convex Side"
+            },
+            {
+              "number": "2.2",
+              "title": "Recommended Yoga Poses for Scoliosis Correction and Spinal Mobility"
+            },
+            {
+              "number": "2.3",
+              "title": "Essential Precautions: Avoiding Twists and Focusing on Alignment"
+            },
+            {
+              "number": "2.4",
+              "title": "Identifying Concave and Convex Sides of the Spine & Corrective Yoga Postures"
+            }
+          ]
+        },
+        {
+          "title": "Advanced Diagnosis, Treatment Context, and Real-World Application",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Scoliosis Diagnosis, Cobb Angle Stages, and Medical Treatment Thresholds"
+            },
+            {
+              "number": "3.2",
+              "title": "Real-Life Scoliosis Recovery Stories and Yoga's Efficacy"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 11,
+      "thumbnailPath": null,
+      "sampleSlides": [
+        "../images/courses/yogaranya-video-workshops/slides/session-01/slide-01.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-01/slide-02.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-01/slide-03.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-01/slide-04.jpg"
+      ]
+    },
+    {
+      "number": 2,
+      "videoId": "169672",
+      "shortTitle": "Diabetes Mellitus Overview",
+      "videoTitle": "[Biology][Endocrinology] Comprehensive Overview of Diabetes Mellitus – Types, Mechanisms, Symptoms, Diagnosis, and Management",
+      "durationLabel": "~53 min",
+      "durationSeconds": 3190.231,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Understanding Diabetes: Definitions, Physiology, and Core Mechanisms",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Defining Diabetes Mellitus: Glucose Utilization and Hyperglycemia"
+            },
+            {
+              "number": "1.2",
+              "title": "The Role of the Pancreas: Insulin and Glucagon Regulation"
+            },
+            {
+              "number": "1.3",
+              "title": "The Insulin Lock and Key Mechanism: How Glucose Enters Cells"
+            },
+            {
+              "number": "1.4",
+              "title": "Physiological Dysfunctions: Insufficient Insulin vs. Cellular Resistance"
+            }
+          ]
+        },
+        {
+          "title": "Classification and Etiology of Diabetes Mellitus",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Major Types of Diabetes: Type 1, Type 2, and Gestational"
+            },
+            {
+              "number": "2.2",
+              "title": "Type 1 vs. Type 2 Diabetes: Onset, Etiology, and Treatment"
+            },
+            {
+              "number": "2.3",
+              "title": "Causes of Diabetes: Genetic Predisposition and Lifestyle Factors"
+            }
+          ]
+        },
+        {
+          "title": "Recognizing Symptoms and Diagnosing Diabetes",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Understanding Symptoms: Cellular Starvation, Weight Loss, and Polyphagia"
+            },
+            {
+              "number": "3.2",
+              "title": "Explaining Polyuria, Glycosuria, and Polydipsia"
+            },
+            {
+              "number": "3.3",
+              "title": "Evaluating Diagnostic Tests: Fasting Blood Sugar and HbA1c"
+            },
+            {
+              "number": "3.4",
+              "title": "Diagnostic Thresholds: Defining Normal, Pre-diabetic, and Diabetic Ranges"
+            }
+          ]
+        },
+        {
+          "title": "Pharmacological Management and Insulin Therapy",
+          "chapters": [
+            {
+              "number": "4.1",
+              "title": "Common Medications: Metformin, Sulphonylureas, and GLP-1 Agonists"
+            },
+            {
+              "number": "4.2",
+              "title": "Understanding Insulin Therapy: Misconceptions and Supportive Care"
+            }
+          ]
+        },
+        {
+          "title": "Diabetic Complications: Impact on Organs and Systems",
+          "chapters": [
+            {
+              "number": "5.1",
+              "title": "Impact on the Body: Damage to Blood Vessels and Nerve Signals"
+            },
+            {
+              "number": "5.2",
+              "title": "Diabetic Angiopathy: How High Blood Sugar Damages Blood Vessels"
+            },
+            {
+              "number": "5.3",
+              "title": "Diabetic Neuropathy: Understanding Nerve Damage from High Glucose"
+            },
+            {
+              "number": "5.4",
+              "title": "Diabetic Nephropathy: Kidney Damage and Filtration Unit Failure"
+            },
+            {
+              "number": "5.5",
+              "title": "Diabetic Retinopathy: Retinal Damage, Blurry Vision, and Blindness"
+            },
+            {
+              "number": "5.6",
+              "title": "Skin Complications: Impaired Healing and Increased Infection Risk"
+            },
+            {
+              "number": "5.7",
+              "title": "Cardiovascular Risks and Joint Stiffness in Diabetes"
+            },
+            {
+              "number": "5.8",
+              "title": "The Importance of Diabetic Foot Care: Preventing Ulcers and Gangrene"
+            }
+          ]
+        },
+        {
+          "title": "Lifestyle Management, Exercise, and Prevention Strategies",
+          "chapters": [
+            {
+              "number": "6.1",
+              "title": "Management Guidelines: Diet, Routine, and Safety Precautions"
+            },
+            {
+              "number": "6.2",
+              "title": "The Magic Key of Exercise: Boosting Insulin Sensitivity and Glucose Uptake"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 23,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 3,
+      "videoId": "159349",
+      "shortTitle": "Gut Health and Ayurvedic Healing",
+      "videoTitle": "[Yoga][Digestive Health] Understanding Gut Health, Chronic Conditions, Emotional Interference, and Ayurvedic Healing Practices",
+      "durationLabel": "~35 min",
+      "durationSeconds": 2114.679,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Foundations of Gut Health and Chronic Conditions",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Defining Digestive Health and Chronic Lifestyle Conditions vs. Diseases"
+            },
+            {
+              "number": "1.2",
+              "title": "Why Chronic Digestive Issues are Common: Mismatch Between Food Intake and Physical Activity"
+            },
+            {
+              "number": "1.3",
+              "title": "The Gut as the Command Center: How Digestive Health Affects Hormones, Immunity, and Mental Health"
+            }
+          ]
+        },
+        {
+          "title": "The Mind-Body Connection: Stress, Emotions, and Digestive Fire (Agni)",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Digestion, Emotions, and Agni: Understanding the Fire Element that Supports Digestive Health"
+            },
+            {
+              "number": "2.2",
+              "title": "How Stress Hormone Cortisol Triggers Flight or Fight Mode and Shuts Down Digestion"
+            },
+            {
+              "number": "2.3",
+              "title": "Understanding Disturbed Agni: The Vessel Analogy for Emotional Interference and Gut Overloading"
+            },
+            {
+              "number": "2.4",
+              "title": "Why Kids Have Stronger Digestion: Agni Strength and Lifestyle Changes from Childhood to Adulthood"
+            }
+          ]
+        },
+        {
+          "title": "Holistic Healing Practices: Yoga, Diet, and Lifestyle",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Why Extreme Diets Fail: Prioritizing Movement and Sleep Over Strict Fasting for Gut Healing"
+            },
+            {
+              "number": "3.2",
+              "title": "Specific Yoga Practices for Gut Health: Kriyas, Asanas (Inversions), and Pranayama for Nervous System Balance"
+            },
+            {
+              "number": "3.3",
+              "title": "The Power of Mindful Eating: Listening to Your Body's Fullness Signals and Consistency Over Intensity"
+            },
+            {
+              "number": "3.4",
+              "title": "Ayurvedic Diet Principles: Eating the Largest Meal at Lunch and Balancing the Six Tastes"
+            },
+            {
+              "number": "3.5",
+              "title": "Three Major Takeaways for Gut Healing: Movement, Kriyas, and Mindful Eating"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 12,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 4,
+      "videoId": "159025",
+      "shortTitle": "Varicose Veins and Yoga Therapy",
+      "videoTitle": "[Health][Vascular Health] Varicose Veins: Definition, Grades, Causes, Symptoms, Allopathy Treatment, and Yoga Therapy",
+      "durationLabel": "~25 min",
+      "durationSeconds": 1504.69,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Understanding Varicose Veins: Definition, Anatomy, and Progression",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "What are Varicose Veins? Visual differences between a healthy vein and a varicose vein"
+            },
+            {
+              "number": "1.2",
+              "title": "Anatomical differences between Veins and Arteries (Depth, Pressure, Function)"
+            },
+            {
+              "number": "1.3",
+              "title": "How Varicose Veins Develop: The role of valve dysfunction and blood accumulation"
+            },
+            {
+              "number": "1.4",
+              "title": "Grades of Varicose Veins: From Spider Veins (Grade 1) to Severe Ulcers (Final Stage)"
+            }
+          ]
+        },
+        {
+          "title": "Causes, Symptoms, and Conventional Treatment Options",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Main Causes and Risk Factors: Stationary position, genetics, pregnancy, and long flights"
+            },
+            {
+              "number": "2.2",
+              "title": "Signs vs. Symptoms of Varicose Veins: Swelling, skin color change, and dangerous itching"
+            },
+            {
+              "number": "2.3",
+              "title": "Allopathy Treatments for Varicose Veins: Compression socks, vein stripping, and laser ablation"
+            }
+          ]
+        },
+        {
+          "title": "Lifestyle Management and Vascular Mechanics",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Prevention and Maintenance Tools: Consistent exercise, avoiding stationary positions, and leg elevation"
+            },
+            {
+              "number": "3.2",
+              "title": "Why the Calf Muscle is called the Second Heart or Peripheral Heart"
+            }
+          ]
+        },
+        {
+          "title": "Therapeutic Yoga Applications and Posture Modification",
+          "chapters": [
+            {
+              "number": "4.1",
+              "title": "Role of Yoga for Varicose Veins: Discussion on beneficial postures and their mechanisms"
+            },
+            {
+              "number": "4.2",
+              "title": "Modifying Viparita Karani and Balancing Poses for Students in Pain"
+            },
+            {
+              "number": "4.3",
+              "title": "Yoga Postures to Avoid During Acute Varicose Vein Pain and Importance of Maintenance"
+            },
+            {
+              "number": "4.4",
+              "title": "Varicositis: Developing Varicose Veins due to Fever or Inflammation"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 13,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 5,
+      "videoId": "159018",
+      "shortTitle": "Dietary Strategies for Chronic Conditions",
+      "videoTitle": "[Nutrition][Clinical Nutrition] Dietary Strategies for Skin, Migraine, Cholesterol, IBS, Insulin Resistance, and Perimenopause",
+      "durationLabel": "~61 min",
+      "durationSeconds": 3654.4,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Foundational Principles and Managing Chronic Inflammation",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Holistic Nutritional Philosophy: 23 Years of Practice, Local Foods, and the Dietitian Detective Approach"
+            },
+            {
+              "number": "1.2",
+              "title": "Dietary Strategies for Psoriasis, Vitiligo, and Urticaria: Gut Cleansing, Eliminating Gluten and Dairy"
+            },
+            {
+              "number": "1.3",
+              "title": "Nutritional management of Migraine: Stabilizing blood sugar and identifying common food triggers like cheese, alcohol, and yeast"
+            },
+            {
+              "number": "1.4",
+              "title": "Holistic approach to Cholesterol management: Checking inflammatory markers, balancing fats (MUFA/PUFA), and avoiding refined sugar"
+            },
+            {
+              "number": "1.5",
+              "title": "The importance of Vegetable Intake: Achieving 300-500g daily for gut health and immunity"
+            },
+            {
+              "number": "1.6",
+              "title": "Guidance on Supplements: How to choose high-potency Omega 3 fatty acids (EPA/DHA)"
+            }
+          ]
+        },
+        {
+          "title": "Gut Health, Metabolic Syndrome, and Hormonal Balance",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Dietary factors and lifestyle changes for Acidity: Identifying gluten and lactose triggers and avoiding multitasking while eating"
+            },
+            {
+              "number": "2.2",
+              "title": "Inflammatory Bowel Disease (IBS) management: The connection between stress and gut health, and the benefits of Yoga and Fodmaps"
+            },
+            {
+              "number": "2.3",
+              "title": "The Role of Sleep Hygiene and Stress Management in Causing Insulin Resistance"
+            },
+            {
+              "number": "2.4",
+              "title": "Identifying Insulin Resistance: Symptoms like Post-Meal Cravings, Pigmentation, and Stubborn Belly Fat"
+            },
+            {
+              "number": "2.5",
+              "title": "Dietary and lifestyle strategies for Perimenopause: Managing rapid weight gain, anxiety, and memory issues using diet and HRT cake"
+            }
+          ]
+        },
+        {
+          "title": "Mastering Meal Planning, Portions, and Key Nutrients",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Principles of a Healthy Meal Plan: Optimal timing, the 1:2:1 ratio of grain, vegetables, and protein, and portion control"
+            },
+            {
+              "number": "3.2",
+              "title": "Foods that support Gut Health and Immunity: Homemade probiotics (buttermilk, dahi) and prebiotics (raw banana, onion, celery)"
+            },
+            {
+              "number": "3.3",
+              "title": "The importance of Hydration and Sunlight: How water intake affects hunger and the critical role of Vitamin D in managing joint pain"
+            },
+            {
+              "number": "3.4",
+              "title": "Guidance on Supplements: When supplements are necessary (situational use) and the best vegetarian sources of Vitamin B12"
+            },
+            {
+              "number": "3.5",
+              "title": "Mastering Portion Control: The Healthy Plate Method for Balanced Meals"
+            },
+            {
+              "number": "3.6",
+              "title": "Eating Smart During Festivals and Social Gatherings: Making Healthy Choices a Way of Life"
+            },
+            {
+              "number": "3.7",
+              "title": "Enjoying Traditional Indian Snacks (Chaat) and Treats Guilt-Free in a Balanced Diet"
+            },
+            {
+              "number": "3.8",
+              "title": "Calcium sources beyond Dairy and the Milk Debate: Getting calcium from sesame seeds, legumes, and green leafy vegetables"
+            },
+            {
+              "number": "3.9",
+              "title": "The crucial role of Protein in Diet: Focusing on absorption and utilizing diverse plant-based protein sources"
+            }
+          ]
+        },
+        {
+          "title": "Advanced Dietary Applications and Lifestyle Integration",
+          "chapters": [
+            {
+              "number": "4.1",
+              "title": "Dietary strategies for PCOS and reducing Belly Fat: The impact of removing gluten and dairy on inch loss and hormone health"
+            },
+            {
+              "number": "4.2",
+              "title": "Nutritional support for Athletes and Sports Recovery: Replacing fluids, electrolytes, and ensuring proper post-workout macro balance"
+            },
+            {
+              "number": "4.3",
+              "title": "Using Avocado Oil and Traditional Fats in Cooking: Moderation and Variety"
+            },
+            {
+              "number": "4.4",
+              "title": "Practical Meal Prepping Strategies for Busy Individuals Living Abroad"
+            },
+            {
+              "number": "4.5",
+              "title": "Strategies for Managing Screen Time and Digital Addiction in Children and Adults"
+            },
+            {
+              "number": "4.6",
+              "title": "The Role of Fruit-Based Smoothies and Green Juices in Managing PCOS and Insulin Resistance"
+            },
+            {
+              "number": "4.7",
+              "title": "Identifying Food Intolerances using Elimination Diets (JJ Virgin Strategy)"
+            },
+            {
+              "number": "4.8",
+              "title": "Dietary and Lifestyle Strategies to Prevent Premature Graying (Focus on Gut Health and Nutrient Absorption)"
+            },
+            {
+              "number": "4.9",
+              "title": "Maximizing Nutrient Absorption: The Importance of Deworming"
+            }
+          ]
+        },
+        {
+          "title": "Final Wellness Strategies and Safety Considerations",
+          "chapters": [
+            {
+              "number": "5.1",
+              "title": "Determining Optimal Hydration Levels Using Urine Color and Considering Individual Factors"
+            },
+            {
+              "number": "5.2",
+              "title": "Holistic Strategies for Managing Irregular Periods (Sleep, Stress Reduction, PCOS Diet, and Yoga)"
+            },
+            {
+              "number": "5.3",
+              "title": "Risks of Long-Term and Excessive Vitamin Supplementation"
+            },
+            {
+              "number": "5.4",
+              "title": "Optimizing Student Lunchboxes for Focus and Energy (Avoiding Post-Lunch Slump)"
+            },
+            {
+              "number": "5.5",
+              "title": "Combining Fruits with Meals and Healthy Snacking Recommendations"
+            },
+            {
+              "number": "5.6",
+              "title": "Safety and Individual Suitability of Herbal Teas (Including Green Tea and Ayurvedic Considerations)"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 35,
+      "thumbnailPath": null,
+      "sampleSlides": [
+        "../images/courses/yogaranya-video-workshops/slides/session-05/slide-01.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-05/slide-02.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-05/slide-03.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-05/slide-04.jpg"
+      ]
+    },
+    {
+      "number": 6,
+      "videoId": "159015",
+      "shortTitle": "Menopause: Stages and Management",
+      "videoTitle": "[Health][Women's Health] Menopause: Stages, Hormonal Changes, Symptoms, and Management (HRT & Yoga)",
+      "durationLabel": "~43 min",
+      "durationSeconds": 2594.309,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Foundations: Understanding Menopause, Hormones, and Stages",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Why Menopause is a Natural Transition, Not a Disease, and Why Awareness is Crucial"
+            },
+            {
+              "number": "1.2",
+              "title": "Functions of Estrogen, Progesterone, and Testosterone Beyond Reproduction"
+            },
+            {
+              "number": "1.3",
+              "title": "Defining Menopause: Stages, Hormonal Changes (Estrogen, Progesterone, FSH), and Follicular Depletion"
+            }
+          ]
+        },
+        {
+          "title": "Physiology, Symptoms, and Medical Management Strategies",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Managing Post-Menopause: Addressing Cardiovascular Disease, Osteoporosis, and Utilizing HRT and DEXA Scans"
+            },
+            {
+              "number": "2.2",
+              "title": "How the Hypothalamic-Pituitary-Ovarian Axis Regulates Hormones and Changes During Menopause"
+            },
+            {
+              "number": "2.3",
+              "title": "Body-Wide Symptoms of Menopause Due to Lack of Estrogen Supply"
+            },
+            {
+              "number": "2.4",
+              "title": "Hormone Replacement Therapy (HRT) and Lifestyle Changes for Symptom Management"
+            }
+          ]
+        },
+        {
+          "title": "Holistic Approaches: Integrating Yoga for Symptom Relief",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "The Role of Yoga in Managing Menopausal Symptoms and Hormonal Balance"
+            },
+            {
+              "number": "3.2",
+              "title": "Practical Tips for Designing Inclusive Yoga Classes for Students in Menopause"
+            }
+          ]
+        },
+        {
+          "title": "Contextualizing Menopause: Facts, Myths, and Personal Experiences",
+          "chapters": [
+            {
+              "number": "4.1",
+              "title": "Facts on Egg Reserves, Bone Density Loss, Muscle Mass Decline, and Male Andropause"
+            },
+            {
+              "number": "4.2",
+              "title": "Menopause Myth vs. Fact Quiz: Age, Pregnancy, Estrogen Production, and Sex Drive"
+            },
+            {
+              "number": "4.3",
+              "title": "Audience Sharing: Noticing Perimenopausal Symptoms, Cycle Changes, and Emotional Shifts"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 12,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 7,
+      "videoId": "159005",
+      "shortTitle": "Knee Joint Anatomy",
+      "videoTitle": "[Anatomy][Musculoskeletal System] Knee Joint Anatomy, Function, Ligaments, Tendons, and Meniscus Tear Management",
+      "durationLabel": "~39 min",
+      "durationSeconds": 2336.84,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Foundational Knee Anatomy and Biomechanics",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "The Knee Joint: Hinge Joint Function, Flexion, Extension, and Role in Shock Absorption"
+            },
+            {
+              "number": "1.2",
+              "title": "Identifying the Three Major Bones of the Knee Joint: Femur, Tibia (Shin Bone), and Patella (Kneecap)"
+            },
+            {
+              "number": "1.3",
+              "title": "Articular Cartilage vs. Meniscus: Understanding the Cushioning and Shock Absorption Components of the Knee"
+            },
+            {
+              "number": "1.4",
+              "title": "The Four Major Ligaments of the Knee: Anterior Cruciate (ACL), Posterior Cruciate (PCL), Medial Collateral (MCL), and Lateral Collateral (LCL)"
+            },
+            {
+              "number": "1.5",
+              "title": "Role of Tendons in the Knee: Connecting Muscles to Bone via the Quadriceps Tendon and Patellar Tendon"
+            },
+            {
+              "number": "1.6",
+              "title": "Quadriceps and Hamstrings: The Major Muscle Groups Responsible for Knee Flexion and Extension"
+            }
+          ]
+        },
+        {
+          "title": "Meniscus Tears: Pathology, Types, and Recovery Principles",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Understanding Meniscus Tears: Causes, Difficulty of Healing Due to Avascularity, and Surgical Intervention"
+            },
+            {
+              "number": "2.2",
+              "title": "Different Types of Meniscus Tears (Longitudinal, Horizontal, Bucket Handle) and the Goal of Strengthening Supporting Muscles"
+            },
+            {
+              "number": "2.3",
+              "title": "Meniscus Tear Recovery Variability: Posture Limitations and Individualized Assessment"
+            }
+          ]
+        },
+        {
+          "title": "Therapeutic Approaches and Joint Space Creation Techniques",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Safe Strengthening Exercises for Knee Issues: Chair Extensions, Squeezing Cushions, Modified Navasana, and Hamstring Bridges"
+            },
+            {
+              "number": "3.2",
+              "title": "The Medical Yoga Therapy Approach: Creating Space in the Knee Joint to Reduce Friction and Achieve Pain-Free Strengthening"
+            },
+            {
+              "number": "3.3",
+              "title": "Q&A: Strengthening Muscles After Meniscus Surgery and the Importance of Being Pain-Free Before Starting Exercises"
+            },
+            {
+              "number": "3.4",
+              "title": "Clarification on Creating Space in Joints: Using Decompression Techniques to Increase Gap Between Bones, similar to Spinal Discs"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 13,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 8,
+      "videoId": "159002",
+      "shortTitle": "Fibromyalgia and Yoga",
+      "videoTitle": "[Yoga][Yoga Therapy] Understanding Fibromyalgia: Symptoms, Causes, Diagnosis, and Management through Yoga",
+      "durationLabel": "~64 min",
+      "durationSeconds": 3852.829,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Defining Fibromyalgia: Symptoms, Causes, and Diagnostic Criteria",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "What is Fibromyalgia? Widespread Pain, Fatigue, and Cognitive Difficulties"
+            },
+            {
+              "number": "1.2",
+              "title": "Understanding Fibromyalgia Causes: Physical Trauma, Mental Stress, and Amplified Pain Sensations in the Brain"
+            },
+            {
+              "number": "1.3",
+              "title": "How to Diagnose Fibromyalgia: The Elimination Process and Three Key Diagnostic Criteria"
+            }
+          ]
+        },
+        {
+          "title": "Therapeutic Yoga and Comprehensive Management Strategies for Fibromyalgia",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Managing Fibromyalgia: Lifestyle Modification and Yoga as a Holistic Approach for Pain, Stress, and Sleep"
+            },
+            {
+              "number": "2.2",
+              "title": "Designing a Yoga Therapy Sequence for Fibromyalgia: Focus on Anxiety, Stress Management, and Modified Asanas"
+            },
+            {
+              "number": "2.3",
+              "title": "Genetic Factors, Gender Prevalence, and the Autoimmune Hypothesis of Fibromyalgia"
+            },
+            {
+              "number": "2.4",
+              "title": "The Link Between Fibromyalgia, Emotional Baggage, and Psychotherapy: Why Stress is a Major Trigger"
+            },
+            {
+              "number": "2.5",
+              "title": "Managing Physical Triggers and Precautions for Fibromyalgia Students in Yoga Practice"
+            },
+            {
+              "number": "2.6",
+              "title": "How to Differentiate Fibromyalgia Symptoms from Rheumatoid Arthritis (RA) and Other Conditions"
+            },
+            {
+              "number": "2.7",
+              "title": "Fibromyalgia Management: The Role of Acceptance, Lifestyle Changes, and Ayurvedic Treatment"
+            },
+            {
+              "number": "2.8",
+              "title": "Understanding Fibromyalgia Triggers: Stress, Cortisol Levels, and Hormonal Fluctuations"
+            }
+          ]
+        },
+        {
+          "title": "Professional Development: Advanced Teaching, Injuries, and Practice Expansion",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Teaching Methodology for Joint Injuries: Identifying Red Flags and When to Stop an Asana"
+            },
+            {
+              "number": "3.2",
+              "title": "Managing Chronic Pectoral and Deltoid Tightness for Advanced Backbends (Chakrasana, Kapotasana)"
+            },
+            {
+              "number": "3.3",
+              "title": "The Role of Natural Muscle Tone and Genetics in Determining Flexibility and Stiffness"
+            },
+            {
+              "number": "3.4",
+              "title": "Tips for Leading Corporate Yoga Sessions: Simple Asana, Pranayama, Kriyas, and Goal Visualization"
+            },
+            {
+              "number": "3.5",
+              "title": "Community Collaboration Video Project for Yoga Studio Anniversary"
+            },
+            {
+              "number": "3.6",
+              "title": "The Path of Meditation (Antaranga Sadhana): When and How to Guide Students Beyond Basic Visualization"
+            },
+            {
+              "number": "3.7",
+              "title": "Final Session Wrap-up and Inspiring Community Action"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 18,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 9,
+      "videoId": "159001",
+      "shortTitle": "Anatomical Terminology for Asanas",
+      "videoTitle": "[Anatomy][Joint Articulation] Standard Anatomical Terminology for Body Movements and Yoga Asanas (Flexion, Extension, Rotation)",
+      "durationLabel": "~69 min",
+      "durationSeconds": 4161.047,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Foundational Anatomical Position and Directional Terminology",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Why Understanding Joint Articulation and Movement Terminology is Crucial for Yoga Teachers"
+            },
+            {
+              "number": "1.2",
+              "title": "Defining the Anatomical Position: The Standard Reference for All Body Movements"
+            },
+            {
+              "number": "1.3",
+              "title": "Directional Terms: Anterior/Posterior (Front/Back) and Proximal/Distal (Closer/Away from Origin)"
+            },
+            {
+              "number": "1.4",
+              "title": "Directional Terms: Superior/Inferior, Deep/Superficial, and Medial/Lateral (Midline Reference)"
+            }
+          ]
+        },
+        {
+          "title": "Core Joint Articulations: Flexion, Extension, Rotation, and Circumduction",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Understanding Flexion and Extension: Decreasing and Increasing the Angle of a Joint"
+            },
+            {
+              "number": "2.2",
+              "title": "Dorsiflexion and Plantar Flexion: Specific Terms for Foot Movements"
+            },
+            {
+              "number": "2.3",
+              "title": "Abduction (Away) and Adduction (Towards): Movement Relative to the Body's Midline"
+            },
+            {
+              "number": "2.4",
+              "title": "Medial (Internal) and Lateral (External) Rotation of Limbs Explained with Yoga Examples"
+            },
+            {
+              "number": "2.5",
+              "title": "Anatomical Rotation vs. Muscular Engagement Cues in Poses like Ustrasana"
+            },
+            {
+              "number": "2.6",
+              "title": "Rotation (Twisting) of the Neck and Spine vs. Lateral Flexion (Side Bending)"
+            },
+            {
+              "number": "2.7",
+              "title": "Circumduction: The Combination of Four Movements (Flexion, Abduction, Extension, Adduction)"
+            }
+          ]
+        },
+        {
+          "title": "Specialized Movements: Foot, Forearm, Hand, and Scapular Actions",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "Inversion (Towards Midline) and Eversion (Away from Midline) of the Foot Sole"
+            },
+            {
+              "number": "3.2",
+              "title": "Pronation (Palm Down) and Supination (Palm Up): Forearm Rotation"
+            },
+            {
+              "number": "3.3",
+              "title": "Opposition and Reposition: Thumb Movement Towards and Away from Fingers"
+            },
+            {
+              "number": "3.4",
+              "title": "Protraction (Away) and Retraction (Towards): Scapular Movement in Yoga Postures"
+            },
+            {
+              "number": "3.5",
+              "title": "Elevation (Up) and Depression (Down): Vertical Scapular Movement"
+            }
+          ]
+        },
+        {
+          "title": "Applying Anatomical Terminology in Advanced Yoga Asana Analysis",
+          "chapters": [
+            {
+              "number": "4.1",
+              "title": "Practical Application of Anatomical Knowledge in Yoga Sequencing and Injury Management"
+            },
+            {
+              "number": "4.2",
+              "title": "Analyzing Internal and External Hip Rotation in Advanced Yoga Postures"
+            },
+            {
+              "number": "4.3",
+              "title": "Anatomical Breakdown of Hip Extension and Scapular Movements in Various Poses"
+            },
+            {
+              "number": "4.4",
+              "title": "Understanding Arm Rotation and Scapular Movement in Twists and Strength Poses"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 20,
+      "thumbnailPath": null,
+      "sampleSlides": []
+    },
+    {
+      "number": 10,
+      "videoId": "157565",
+      "shortTitle": "Fatty Liver Disease",
+      "videoTitle": "[Biology][Human Physiology/Pathology] Fatty Liver Disease: Anatomy, Function, Causes, Stages (NAFL, NASH), Diagnosis, and Management",
+      "durationLabel": "~69 min",
+      "durationSeconds": 4123.417,
+      "hasSlides": true,
+      "modules": [
+        {
+          "title": "Liver Anatomy and Core Physiological Functions",
+          "chapters": [
+            {
+              "number": "1.1",
+              "title": "Class Logistics, Technical Setup, and Scheduling Conflicts"
+            },
+            {
+              "number": "1.2",
+              "title": "Liver Gross Anatomy: Size, Location, Weight, and Major Lobes"
+            },
+            {
+              "number": "1.3",
+              "title": "Liver Microscopic Structure and Cellular Function: Lobules, Hepatocytes, Sinusoids, Kupffer Cells, and Bile Drainage"
+            },
+            {
+              "number": "1.4",
+              "title": "Understanding the Dual Blood Supply to the Liver: Portal Vein (Nutrient-Rich) and Hepatic Artery (Oxygen-Rich)"
+            },
+            {
+              "number": "1.5",
+              "title": "Liver's Role in Metabolism: Glycogenesis, Gluconeogenesis, Protein Breakdown (Albumin, Clotting Factors), and Lipid Processing (LDL, HDL)"
+            },
+            {
+              "number": "1.6",
+              "title": "Liver Detoxification (Phase 1 & Phase 2) and Storage of Glycogen, Vitamins, Minerals, and Hormone Regulation"
+            }
+          ]
+        },
+        {
+          "title": "Pathophysiology, Classification, and Diagnosis of Fatty Liver Disease",
+          "chapters": [
+            {
+              "number": "2.1",
+              "title": "Defining Fatty Liver Disease: Analogy, Threshold (5-10% Fat), and Primary Lifestyle Causes"
+            },
+            {
+              "number": "2.2",
+              "title": "Pathophysiology of Fatty Liver: Two Scenarios (Excess Fat Accumulation vs. Liver Cell Damage and Hypoxia)"
+            },
+            {
+              "number": "2.3",
+              "title": "Classifying Fatty Liver: Alcoholic Fatty Liver Disease (AFLD) vs. Non-Alcoholic Fatty Liver Disease (NAFLD), plus Genetic and Drug-Induced Types"
+            },
+            {
+              "number": "2.4",
+              "title": "Progression of NAFLD: Comparing NAFL (Steatosis) and NASH (Inflammation, Ballooning, Scarring) and the Risk of Cirrhosis"
+            },
+            {
+              "number": "2.5",
+              "title": "Diagnosis of Fatty Liver Disease: Using LFT Enzymes (ALT, AST) and Imaging (Ultrasound, Biopsy)"
+            },
+            {
+              "number": "2.6",
+              "title": "Key Risk Factors and Comorbidities for Fatty Liver Disease"
+            },
+            {
+              "number": "2.7",
+              "title": "Symptoms, Risk Factors, and Diagnosis of Fatty Liver: Elevated Liver Enzymes (ALT, AST) and Ultrasound Echo Pattern Analysis"
+            }
+          ]
+        },
+        {
+          "title": "Holistic Management, Case Studies, and Course Conclusion",
+          "chapters": [
+            {
+              "number": "3.1",
+              "title": "General Nutritional Guidelines for Fatty Liver Management: Good Fats, Vegetables, and Early Dinner Timing"
+            },
+            {
+              "number": "3.2",
+              "title": "Yogic Management for Fatty Liver: Kriyas (Mukhadauti, Agnisara, Nauli, Kapalbhati) to Improve Digestion and Pranayama for Stress Reduction"
+            },
+            {
+              "number": "3.3",
+              "title": "Case Study: Reversing Grade 2 Fatty Liver in a 57-Year-Old Patient through Customized Diet, Exercise, and Lifestyle Changes"
+            },
+            {
+              "number": "3.4",
+              "title": "Q&A Session: Reviewing Key Concepts of Liver Function, NASH vs NAFL Differentiation, and Yogic Management"
+            },
+            {
+              "number": "3.5",
+              "title": "Closing Remarks, Acknowledgments, and Administrative Announcements for Future Sessions"
+            }
+          ]
+        }
+      ],
+      "chapterCount": 18,
+      "thumbnailPath": null,
+      "sampleSlides": [
+        "../images/courses/yogaranya-video-workshops/slides/session-10/slide-01.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-10/slide-02.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-10/slide-03.jpg",
+        "../images/courses/yogaranya-video-workshops/slides/session-10/slide-04.jpg"
+      ]
+    }
+  ],
+  "totals": {
+    "sessions": 10,
+    "chapters": 175,
+    "hoursLabel": "~8 hr 12 min",
+    "totalSeconds": 29346.808,
+    "sessionsWithSlides": 10
+  }
+}
