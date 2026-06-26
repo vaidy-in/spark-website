@@ -13,6 +13,7 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
 const HTML_PATH = path.join(REPO_ROOT, 'marketing/resources/spark-thesis.html');
+const STRUCTURE_PATH = path.join(REPO_ROOT, 'docs/marketing/thesis/thesis-structure.json');
 const GOLDEN_MAIN = path.join(
     REPO_ROOT,
     'marketing/resources/.golden/spark-thesis.body-main.html',
@@ -25,6 +26,7 @@ const GOLDEN_CITE = path.join(
     REPO_ROOT,
     'marketing/resources/.golden/spark-thesis.cite-data.json',
 );
+const { validateTocNesting } = require('./lib/validate-thesis-structure');
 
 function normalize(html) {
     return html
@@ -75,6 +77,11 @@ function inventory(html) {
     };
 }
 
+function validateStructureToc() {
+    const structure = JSON.parse(fs.readFileSync(STRUCTURE_PATH, 'utf8'));
+    return validateTocNesting(structure);
+}
+
 function main() {
     const update = process.argv.includes('--update-golden');
     const html = fs.readFileSync(HTML_PATH, 'utf8');
@@ -85,6 +92,13 @@ function main() {
     const citeData = extractCiteData(html);
 
     if (update) {
+        const tocErrors = validateStructureToc();
+        if (tocErrors.length) {
+            tocErrors.forEach(function (msg) {
+                process.stderr.write('FAIL: thesis-structure.json — ' + msg + '\n');
+            });
+            process.exit(1);
+        }
         fs.writeFileSync(GOLDEN_MAIN, mainPart + '\n');
         fs.writeFileSync(GOLDEN_REFS, refsPart + '\n');
         fs.writeFileSync(GOLDEN_CITE, citeData + '\n');
@@ -102,6 +116,12 @@ function main() {
     const goldenCite = fs.readFileSync(GOLDEN_CITE, 'utf8').trim();
 
     let failed = false;
+
+    const tocErrors = validateStructureToc();
+    tocErrors.forEach(function (msg) {
+        failed = true;
+        process.stderr.write('FAIL: thesis-structure.json — ' + msg + '\n');
+    });
 
     if (normalize(mainPart) !== normalize(goldenMain)) {
         failed = true;
@@ -134,6 +154,7 @@ function main() {
     if (failed) {
         process.exit(1);
     }
+    process.stdout.write('Structure OK — TOC h3 nesting matches sections[]\n');
     process.stdout.write(
         'Parity OK — h2=' +
             inv.h2 +

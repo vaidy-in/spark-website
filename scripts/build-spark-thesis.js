@@ -31,6 +31,7 @@ const CITE_DATA_GOLDEN = path.join(
     REPO_ROOT,
     'marketing/resources/.golden/spark-thesis.cite-data.json',
 );
+const { validateTocNesting } = require('./lib/validate-thesis-structure');
 
 function readJson(p) {
     return JSON.parse(fs.readFileSync(p, 'utf8'));
@@ -45,8 +46,16 @@ function buildCiteDataScript(citeDataGolden) {
 }
 
 function main() {
-    const md = fs.readFileSync(MD_PATH, 'utf8');
     const structure = readJson(STRUCTURE_PATH);
+    const tocErrors = validateTocNesting(structure);
+    if (tocErrors.length) {
+        tocErrors.forEach(function (msg) {
+            process.stderr.write('thesis-structure.json: ' + msg + '\n');
+        });
+        process.exit(1);
+    }
+
+    const md = fs.readFileSync(MD_PATH, 'utf8');
     const citeMap = readJson(CITE_MAP_PATH);
     let template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
     const referencesHtml = fs.readFileSync(REFERENCES_GOLDEN, 'utf8');
