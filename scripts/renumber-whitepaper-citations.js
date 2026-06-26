@@ -35,8 +35,13 @@ function main() {
     );
 
     var citeHeadingIdx = html.indexOf('<h2 id="citations">');
+    var citeHeadingId = 'citations';
     if (citeHeadingIdx === -1) {
-        throw new Error('Could not find citations heading');
+        citeHeadingIdx = html.indexOf('<h2 id="references">');
+        citeHeadingId = 'references';
+    }
+    if (citeHeadingIdx === -1) {
+        throw new Error('Could not find citations or references heading');
     }
     var bodyForOrder = html.slice(0, citeHeadingIdx);
 
