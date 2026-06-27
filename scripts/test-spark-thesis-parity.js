@@ -141,7 +141,7 @@ function main() {
     }
 
     const inv = inventory(html);
-    const expected = { h2: 11, h3: 8, figures: 19, citeButtons: 35 };
+    const expected = { h2: 11, h3: 10, figures: 21, citeButtons: 35 };
     Object.keys(expected).forEach(function (key) {
         if (inv[key] !== expected[key]) {
             failed = true;
