@@ -296,6 +296,12 @@ function parseMarkdownToBody(md, structure, citeMap) {
             continue;
         }
 
+        if (trimmed.startsWith('<div ') || trimmed === '</div>') {
+            out.push(trimmed);
+            i++;
+            continue;
+        }
+
         if (trimmed.includes('<a href')) {
             out.push('<p>' + trimmed + '</p>');
             i++;
