@@ -336,7 +336,7 @@ function parseMarkdownToBody(md, structure, citeMap) {
             continue;
         }
 
-        if (trimmed.startsWith('### ') && /^### Why the world/i.test(trimmed)) {
+        if (trimmed.startsWith('### ') && /^### Why the mastery of the world/i.test(trimmed)) {
             i++;
             continue;
         }
@@ -468,7 +468,7 @@ function parseMarkdownToBody(md, structure, citeMap) {
 
         if (
             trimmed.startsWith('# The Respect Gap') ||
-            trimmed.startsWith('### Why the world') ||
+            trimmed.startsWith('### Why the mastery of the world') ||
             trimmed.startsWith('*A Spark vision') ||
             !trimmed
         ) {
