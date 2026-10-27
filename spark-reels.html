@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="js/layout.js"></script>
-    <script src="js/spark-reels-pricing.js?v=20261027i"></script>
+    <script src="js/spark-reels-pricing.js?v=20261027x"></script>
     <style>
         [hidden] { display: none !important; }
         .reels-choices { margin-top: 1.5rem; }
-        .reels-door, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-fold summary, .reels-cta { cursor: pointer; font-family: inherit; }
-        #reels-custom { cursor: text; }
+        .reels-door, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-fold summary, .reels-cta, .reels-cite, .reels-tick, .reels-range { cursor: pointer; font-family: inherit; }
         .reels-navbtn, .reels-fix { border-radius: 999px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font-weight: 700; font-size: 1rem; padding: 0.45rem 0.9rem; text-decoration: none; }
+        .reels-navbtn:disabled { opacity: 0.4; cursor: default; }
         .reels-navbtn-primary, .reels-cta-primary { background: #4f46e5; color: #fff; border-color: #4f46e5; }
         .reels-navbtn-primary:hover, .reels-cta-primary:hover { background: #4338ca; }
         .reels-door { display: block; width: 100%; text-align: left; background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.1rem 1.15rem; color: inherit; }
@@ -29,7 +29,7 @@
         .reels-shot { display: block; width: 100%; padding: 0; border: 0; background: none; border-radius: 12px; text-align: left; }
         .reels-shot img, .reels-lightbox img { width: 100%; height: auto; display: block; border-radius: 12px; }
         #choice, .reels-checkout-card, .reels-pace { background: transparent; }
-        .reels-pace { margin-top: 1rem; }
+        .reels-pace { margin: 0.65rem 0 0; font-size: 1.125rem; line-height: 1.4; font-weight: 600; color: #0f172a; }
         #choice { margin-top: 2rem; }
         .reels-fold { margin-top: 1.25rem; }
         .reels-fold summary { position: relative; padding: 1.15rem 4.5rem 1.15rem 0; list-style: none; }
@@ -47,6 +47,11 @@
         .reels-step-panel { margin-top: 1.25rem; }
         .reels-dots, .reels-navrow, .reels-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .reels-navrow { margin-top: 1.25rem; }
+        .reels-stage .reels-navrow { justify-content: center; }
+        .reels-preview { margin-top: 0.75rem; font-size: 1rem; line-height: 1.625; color: #334155; }
+        .reels-preview p { margin: 0; }
+        .reels-preview p + p { margin-top: 0.75rem; }
+        .reels-preview.is-clamped { max-height: calc(1.625em * 6 + 0.75rem); overflow: hidden; }
         .reels-actions { flex-direction: column; align-items: stretch; }
         .reels-dot { min-width: 2.5rem; border-radius: 999px; border: 1px solid #e2e8f0; background: #fff; color: #334155; font-weight: 700; font-size: 0.95rem; padding: 0.3rem 0.45rem; }
         .reels-dot[aria-pressed="true"] { background: #4f46e5; color: #fff; border-color: #4f46e5; }
@@ -77,7 +82,59 @@
         #plan-grid article[data-recommended="true"] { order: -1; }
         @keyframes reelsFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .reels-stage-anim { animation: reelsFadeIn 200ms cubic-bezier(0.22, 1, 0.36, 1); }
-        .reels-door:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-fold summary:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+        .reels-door:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-fold summary:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible, .reels-cite:focus-visible, .reels-tick:focus-visible, .reels-range:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+        .reels-step-why { margin-top: 0.85rem; }
+        .reels-excerpt { margin: 0; max-width: 40rem; }
+        .reels-excerpt p { margin: 0; font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #0f172a; }
+        .reels-excerpt p + p { margin-top: 0.75rem; }
+        .reels-mark { background: linear-gradient(#fde68a, #fde68a) left 88% / 100% 0.45em no-repeat; font-weight: 700; color: #0f172a; padding: 0.05em 0.25em; border-radius: 0.2rem; }
+        .reels-cite { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.55rem; color: #4338ca; font-size: 1rem; font-weight: 500; text-decoration: underline; text-underline-offset: 0.18rem; }
+        .reels-step-choice { margin-top: 1.25rem; margin-left: 0.25rem; padding: 0.15rem 0 0 1rem; border-left: 3px solid #c7d2fe; }
+        .reels-step-choice .reels-prompt { margin-top: 0; }
+        .reels-step-result { margin-top: 1.25rem; padding-top: 0.85rem; border-top: 1px solid #e2e8f0; }
+        .reels-step-note { margin: 0.45rem 0 0; font-size: 1rem; line-height: 1.45; color: #475569; }
+        .reels-months { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+        .reels-month { width: 4.6rem; height: 5.35rem; border: 1px solid #cbd5e1; border-radius: 0.4rem; background: #fff; display: flex; flex-direction: column; overflow: hidden; }
+        .reels-months[data-size="sm"] .reels-month { width: 2.85rem; height: 3.4rem; }
+        .reels-month-top { height: 1.2rem; background: #4f46e5; display: flex; align-items: center; justify-content: center; gap: 0.45rem; flex: none; }
+        .reels-months[data-size="sm"] .reels-month-top { height: 0.9rem; gap: 0.2rem; }
+        .reels-month-ring { width: 0.28rem; height: 0.28rem; border-radius: 999px; background: #e0e7ff; box-shadow: 0 1px 0 #312e81; flex: none; }
+        .reels-months[data-size="sm"] .reels-month-ring { width: 0.18rem; height: 0.18rem; }
+        .reels-month-n { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1; }
+        .reels-month-grid { flex: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 0.28rem 0.28rem 0.32rem; }
+        .reels-months[data-size="sm"] .reels-month-grid { gap: 1px; padding: 0.12rem; }
+        .reels-month-grid i { display: block; min-height: 0.32rem; border-radius: 1px; background: #cbd5e1; }
+        .reels-month-grid i.is-off { background: transparent; }
+        .reels-months[data-size="sm"] .reels-month-grid i { min-height: 0.14rem; }
+        .reels-signal { display: flex; align-items: center; gap: 0.5rem; margin: 0.75rem 0 0; font-size: 1.125rem; line-height: 1.4; font-weight: 600; }
+        .reels-signal::before { content: ""; width: 0.85rem; height: 0.85rem; border-radius: 999px; flex: none; }
+        .reels-signal[data-band="green"] { color: #166534; }
+        .reels-signal[data-band="green"]::before { background: #16a34a; }
+        .reels-signal[data-band="yellow"] { color: #92400e; }
+        .reels-signal[data-band="yellow"]::before { background: #f59e0b; }
+        .reels-signal[data-band="red"] { color: #991b1b; }
+        .reels-signal[data-band="red"]::before { background: #dc2626; }
+        .reels-g { width: 1.05rem; height: 1.05rem; flex: none; }
+        .reels-prompt { display: block; margin: 1.5rem 0 0; font-size: 1.125rem; line-height: 1.4; font-weight: 600; color: #0f172a; cursor: pointer; }
+        .reels-slider { margin-top: 0.85rem; }
+        .reels-range { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 1.75rem; margin: 0; background: transparent; }
+        .reels-range:active, .reels-range:active::-webkit-slider-thumb { cursor: grabbing; }
+        .reels-range::-webkit-slider-runnable-track { height: 0.45rem; border-radius: 999px; background: linear-gradient(to right, #4f46e5 var(--fill, 100%), #e2e8f0 var(--fill, 100%)); }
+        .reels-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 1.5rem; height: 1.5rem; margin-top: -0.525rem; border-radius: 999px; background: #fff; border: 3px solid #4f46e5; box-shadow: 0 1px 4px rgba(15, 23, 42, 0.28); cursor: grab; }
+        .reels-range::-moz-range-track { height: 0.45rem; border: 0; border-radius: 999px; background: #e2e8f0; }
+        .reels-range::-moz-range-progress { height: 0.45rem; border-radius: 999px; background: #4f46e5; }
+        .reels-range::-moz-range-thumb { width: 1.5rem; height: 1.5rem; border-radius: 999px; background: #fff; border: 3px solid #4f46e5; box-shadow: 0 1px 4px rgba(15, 23, 42, 0.28); cursor: grab; }
+        .reels-week-scale { position: relative; height: 1.75rem; margin: 0.15rem 0.75rem 0; }
+        .reels-tick { position: absolute; top: 0; min-width: 1.75rem; transform: translateX(-50%); background: none; border: 0; padding: 0.1rem 0; font-size: 1rem; font-weight: 700; color: #334155; }
+        .reels-tick[aria-current="true"] { color: #312e81; }
+        .reels-tick[data-week="0"] { left: 0%; }
+        .reels-tick[data-week="1"] { left: 14.286%; }
+        .reels-tick[data-week="2"] { left: 28.571%; }
+        .reels-tick[data-week="3"] { left: 42.857%; }
+        .reels-tick[data-week="4"] { left: 57.143%; }
+        .reels-tick[data-week="5"] { left: 71.429%; }
+        .reels-tick[data-week="6"] { left: 85.714%; }
+        .reels-tick[data-week="7"] { left: 100%; }
         .reels-linkrow { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.75rem; }
         @media (min-width: 768px) { .reels-steps { grid-template-columns: 1fr 1fr 1fr; } }
         @media (min-width: 1024px) {
@@ -110,7 +167,7 @@
             <button type="button" id="door-craft" class="reels-door" data-door="craft" aria-pressed="false">
                 <p class="reels-kicker">Under the hood</p>
                 <p class="text-xl font-bold text-slate-900 mt-1">2. See how a reel is made</p>
-                <p class="text-base text-slate-600 mt-2">Five craft jobs above the waterline, and about 300 checks beneath.</p>
+                <p class="text-base text-slate-600 mt-2">Every element inside a reel, the 11 steps (~300 checks) beneath the waterline, and the specialists replaced.</p>
             </button>
             <button type="button" id="door-plan" class="reels-door" data-door="plan" aria-pressed="false">
                 <p class="reels-kicker">One step at a time</p>
@@ -189,35 +246,65 @@
 
         <section id="prices" class="reels-anchor mt-8" hidden>
             <h2 class="text-3xl font-bold text-slate-900">Build your studio's plan</h2>
-            <p class="text-base text-slate-600 mt-1 max-w-3xl">One step at a time: monthly pace, then weekly workflow, then term.</p>
 
             <div id="wizard-panel-1" class="reels-step-panel">
-                <h3 class="text-2xl font-bold text-slate-900">Step 1 of 3: Choose your monthly pace</h3>
-                <p class="text-base text-slate-600 mt-1 mb-4 max-w-3xl">Serious students spend about 7 hours with your teaching before committing. Pick a pace that builds that library steadily.</p>
-                <div id="reels-controls" class="flex flex-wrap gap-2" role="group" aria-label="Reels per month"></div>
-                <label class="mt-4 flex flex-wrap items-center gap-3 text-base text-slate-700" for="reels-custom">
-                    Or type a number from 1 to 90
-                    <input id="reels-custom" class="w-24 rounded-lg border border-slate-300 px-3 py-2 text-base text-slate-900" type="number" inputmode="numeric" min="1" max="90" step="1">
-                </label>
-                <p id="reels-error" class="mt-2 text-base text-red-700" role="status"></p>
-                <p id="pace-line" class="reels-pace text-base text-slate-800"></p>
+                <p class="reels-kicker">1 of 3</p>
+                <div class="reels-step-why">
+                    <div class="reels-excerpt">
+                        <p>Google's Zero Moment of Truth study: buyers consult 10.4 sources and <mark class="reels-mark">spend hours researching before they decide</mark>.</p>
+                        <p>The rule of thumb built on that research: <mark class="reels-mark">about 7 hours with your content</mark>, across roughly 11 touchpoints, before a buyer commits.</p>
+                    </div>
+                    <a id="zmot-link" class="reels-cite" href="https://www.thinkwithgoogle.com/_qs/documents/673/2011-winning-zmot-ebook_research-studies.pdf" target="_blank" rel="noopener noreferrer">
+                        <svg class="reels-g" viewBox="0 0 48 48" aria-hidden="true">
+                            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
+                            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
+                            <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+                            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.3 4.2-4.1 5.6l6.2 5.2C39.2 37.1 44 31.6 44 24c0-1.3-.1-2.7-.4-3.5z"/>
+                        </svg>
+                        Winning the Zero Moment of Truth, Google / Shopper Sciences (2011)
+                    </a>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mt-6">Posts a week</h3>
+                <div class="reels-step-choice">
+                    <label id="posts-week-prompt" class="reels-prompt" for="posts-range">Select the number of posts you want each week.</label>
+                    <div class="reels-slider">
+                        <input id="posts-range" class="reels-range" type="range" min="0" max="7" step="1" value="0" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" aria-valuetext="Choose posts a week" aria-label="Posts a week">
+                        <div class="reels-week-scale">
+                            <button type="button" class="reels-tick" data-week="0" aria-current="true">0</button>
+                            <button type="button" class="reels-tick" data-week="1">1</button>
+                            <button type="button" class="reels-tick" data-week="2">2</button>
+                            <button type="button" class="reels-tick" data-week="3">3</button>
+                            <button type="button" class="reels-tick" data-week="4">4</button>
+                            <button type="button" class="reels-tick" data-week="5">5</button>
+                            <button type="button" class="reels-tick" data-week="6">6</button>
+                            <button type="button" class="reels-tick" data-week="7">7</button>
+                        </div>
+                    </div>
+                    <div class="reels-step-result">
+                        <div id="pace-months" class="reels-months" hidden aria-hidden="true"></div>
+                        <p id="pace-signal" class="reels-signal" hidden></p>
+                        <p class="reels-step-note">A reel is about 2 minutes. A carousel is about twice that. The calendars count the months to 7 hours of that teaching.</p>
+                    </div>
+                </div>
                 <div class="reels-navrow">
-                    <button type="button" class="reels-navbtn reels-navbtn-primary reels-step-next" data-goto-step="2">Next: Choose weekly workflow (Step 2) →</button>
+                    <button type="button" id="pace-next" class="reels-navbtn reels-navbtn-primary" data-goto-step="2" disabled>Next</button>
                 </div>
             </div>
 
             <div id="wizard-panel-2" class="reels-step-panel" hidden>
-                <h3 class="text-2xl font-bold text-slate-900">Step 2 of 3: Choose how much of the weekly workflow Spark handles</h3>
+                <p class="reels-kicker">2 of 3</p>
+                <h3 class="text-2xl font-bold text-slate-900">What Spark handles</h3>
                 <p class="text-base text-slate-600 mt-1 mb-4 max-w-3xl">Every column starts from classes you already taught and arrives on WhatsApp ready to approve.</p>
                 <div id="plan-grid"></div>
                 <div class="reels-navrow">
-                    <button type="button" class="reels-navbtn" data-goto-step="1">← Back to Step 1 (Pace)</button>
-                    <button type="button" class="reels-navbtn reels-navbtn-primary" data-goto-step="3">Next: Lock your term &amp; review summary (Step 3) →</button>
+                    <button type="button" class="reels-navbtn" data-goto-step="1">Back</button>
+                    <button type="button" class="reels-navbtn reels-navbtn-primary" data-goto-step="3">Next</button>
                 </div>
             </div>
 
             <div id="wizard-panel-3" class="reels-step-panel" hidden>
-                <h3 class="text-2xl font-bold text-slate-900">Step 3 of 3: Choose your term and lock your Founding Partner rate</h3>
+                <p class="reels-kicker">3 of 3</p>
+                <h3 class="text-2xl font-bold text-slate-900">Term</h3>
                 <p class="text-base text-slate-600 mt-1 mb-4 max-w-3xl">You pay the term upfront. A 12-month term stacks the 33.3% annual discount with the 25% Founding Partner discount - half the monthly price for the full year.</p>
                 <div id="duration-controls" class="flex flex-wrap gap-2" role="group" aria-label="Months paid upfront"></div>
 
@@ -248,7 +335,7 @@
                     </div>
                 </div>
                 <div class="reels-navrow">
-                    <button type="button" class="reels-navbtn" data-goto-step="2">← Back to Step 2 (Weekly workflow)</button>
+                    <button type="button" class="reels-navbtn" data-goto-step="2">Back</button>
                 </div>
             </div>
         </section>

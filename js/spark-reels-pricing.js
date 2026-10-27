@@ -4,27 +4,33 @@
   Founding partner pricing applies to 3, 6, and 12 month terms.
   Term and founding discounts stack by multiplication, not by adding percents.
   Included lecture hours = max(6, reels per month x videoHoursPerReelRatio).
-  The page opens in rupees, on 20 reels and 12 months, on the full column.
+  The page opens in rupees, with no posts chosen yet, on 12 months, on the full column.
   Page state lives in the URL hash. No browser storage.
   d= is the open section: story, craft, plan, faq, or founding. No d means the first screen.
   INR shows rupees only. USD shows dollars only, at fxRateInrPerUsd.
   Keep the rupee rates in step with docs/Vaidy/spark-reels-pricing-config.js.
 */
 (function (root) {
-  function slide(num, filter, group, title, image, alt, story, on, off, partial) {
+  function slide(num, filter, group, title, image, alt, story, on, off, partial, extra) {
     var row = {
       num: num, filter: filter, group: group, title: title,
       image: "images/spark-reels/" + image, alt: alt, story: story, on: on || ""
     };
     if (off) row.off = off;
     if (partial) row.partial = partial;
+    if (extra) {
+      row.items = extra.items;
+      row.roles = extra.roles;
+      row.discovery = extra.discovery;
+    }
     return row;
   }
 
   var cfg = {
     fxRateInrPerUsd: 93.4,
     defaultCurrency: "inr",
-    defaultReelsPerMonth: 20,
+    defaultReelsPerMonth: 0,
+    postsPerWeekMax: 7,
     defaultDurationMonths: 12,
     defaultTierId: "reel_cover_caption",
     foundingDiscountPct: 25,
@@ -33,12 +39,6 @@
     minLectureHours: 6,
     extraVideoHourInr: 500,
     whatsappPhone: "917899156587",
-    reelsPerMonthOptions: [
-      { reels: 12, label: "12", hint: "About 3 a week" },
-      { reels: 20, label: "20", hint: "About 5 a week" },
-      { reels: 28, label: "28", hint: "About 7 a week" },
-      { reels: 30, label: "30", hint: "A full month" }
-    ],
     durationMonthsOptions: [
       { months: 1, label: "1 month", termDiscountPct: 0, bestValue: false },
       { months: 3, label: "3 months", termDiscountPct: 15, bestValue: false },
@@ -78,19 +78,24 @@
       slide("10", "roadmap", "Roadmap & founding window", "Why the 25% Founding Partner price exists.", "founding-window.jpg", "Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as Quizzes and YouTube ship.", "The 25% Founding Partner discount is offered today because those upcoming formats are still being built. As each capability ships and the product matures, the founding discount steps down for newer cohorts. Paying for 12 months upfront stacks the 33.3% annual discount with the 25% founding discount, locking half the monthly price for a full year.", "Locked at best rate: 33.3% annual + 25% founding = 50% off the monthly price for all 12 months.", "Left out on 1 month: The 25% Founding Partner discount does not apply to a 1-month trial.", "Founding 25% applied for this term, but your rate renews after {months} months as the discount steps down.")
     ],
     craftSlides: [
-      slide("11", "how", "Above the waterline", "Five craft jobs in one reel.", "reel-above-waterline.jpg", "A vertical classroom reel surrounded by 5 numbered callouts: 1. Pre-roll hook, 2. Pause-protected clip, 3. 3-second grid cover, 4. Studio end card, 5. Teacher-voice SEO caption.", "A single post is five separate jobs: a Coming Up pre-roll hook where your face is clear, a teaching clip with real pauses kept in, a 3-second grid cover with a short scannable title, a clean studio end card, and a study-note SEO caption in your voice. Miss one and the post sits in drafts.", ""),
-      slide("12", "how", "Beneath the waterline", "Beneath the waterline: 300 checks replace a 5-person team.", "reel-under-waterline.jpg", "An iceberg pipeline from Teach once through Transcribe & clean, Chapter boundaries, Course map & notes, Pause judge, and Portrait frame & cover to Ready on WhatsApp.", "You teach once and upload the recording. Beneath the surface, Spark runs the work usually split across a transcriptionist, subject-matter assistant, instructional designer, video editor, and copywriter: time-coded transcription with Sanskrit and anatomy intact, maker-checker chapter boundaries that never cut mid-thought, a structured course map, an acoustic and LLM pause judge that protects pranayama holds and demonstrations while cutting dead air, and portrait face reframing with blur-focus depth.", ""),
-      slide("13", "how", "One-shot quality", "How a reel earns Recommended vs Okay.", "reel-grading-rubric.jpg", "Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired.", "Why 9 out of 10 reels work on the first shot: every candidate chapter must first pass 9 hard gates (at most 150 seconds after dead air, dead air at most 30%, traffic/background noise below 4/5, room echo contrast at least 19 dB, real teaching rather than class logistics or homework, stands alone for a stranger, one finishable idea, right audience, and delivery floor). Passing clips are then scored 0 to 100 across 7 weighted teaching axes (Interest match 3x, One claim 3x, Delivery 3x, Mastery signal 2x, Complete arc 2x, Said not performed 2x, Cold standalone 1x) plus a peer respect test, slide-opening check, and other-speaker check.", ""),
-      slide("14", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", ""),
-      slide("15", "how", "The cover", "How the cover and 3-second grid work.", "grid.jpg", "3 seconds. A nine-frame grid. One person leaves. Another stays and touches the grid.", "Reel + cover adds the grid cover. Reel alone does not include a cover or a caption. Titles stay short enough to scan in the grid. Templates and colour palettes rotate so the page stays consistent week to week. Blur-focus depth keeps the subject clear and the background quiet.", ""),
-      slide("16", "how", "The caption", "How the caption, Carousels, and Stories work.", "intent.jpg", "A path through a field toward one person. The line reads: who it is for, what it is for, and the promise.", "Only Reel + cover + caption includes the caption, Carousels, and Stories. The reel and the cover do not. The notes stay in the teacher's voice, Sanskrit and anatomical terms stay as taught, and the caption is written for people who care about the subject and do not follow you yet. Carousels and Stories are cut from the same lecture, for learners who read and swipe.", ""),
-      slide("17", "how", "Credits", "Credits, watermark, and lecture hours.", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "A thumbs-up spends a credit and removes the watermark. A rejected clip is retired and cannot be downloaded clean. The whole term is paid upfront.", "")
+      slide("11", "how", "Overview: Why manual fails", "Five craft jobs in every single reel - and all four discovery surfaces.", "reel-above-waterline.jpg", "A vertical classroom reel surrounded by 5 numbered callouts: 1. Pre-roll hook, 2. Pause-protected clip, 3. 3-second grid cover, 4. Studio end card, 5. Teacher-voice SEO caption.", "Doing this once is a project; doing it 5 to 7 times a week without dropping quality is why manual reel production breaks down. Every single post is five separate specialist jobs built around one goal: non-follower discovery without compromising your teaching.", "", "", "", { items: ["Four discovery surfaces in every post: (1) the cover image on the grid, (2) the 3-second pre-roll and teaching reel, (3) the on-screen title and synced captions inside the reel, and (4) the Instagram study-note caption and search tags.", "Every single reel goes through all five craft jobs and ~300 quality checks with zero compromise in quality."], roles: "Subject-matter expert, copywriter, video editor, visual designer, and SEO researcher", discovery: "Every surface - cover, reel, in-reel text, and caption - is engineered so serious students who do not follow you yet can discover and trust your teaching." }),
+      slide("12", "how", "Part 1 of 5: The Cover Image", "Four elements on every cover - fitted to both the 1:1 Home grid and 9:16 Reels grid.", "craft-cover-anatomy.jpg", "Anatomy of the cover image showing a 9:16 vertical cover with an inner 1:1 Home grid safe zone and 4 numbered callouts: 1. Series name, 2. Capped lesson title, 3. Target-viewer hook, 4. Speaker portrait with blur-focus depth.", "A human team cannot write a real cover by glancing at a 90-second clip. Before writing a single word on the cover, someone who understands the domain has to go through the entire 60 to 90 minute class recording to know how this lesson fits the whole lecture.", "", "", "", { items: ["Series name: names the overarching thread from the full class recording, not just the clip.", "Capped lesson title: short, concrete, and scannable in under 3 seconds.", "Target-viewer hook message: written to stop the exact student this lesson is meant for.", "Speaker portrait with blur-focus depth: clear subject separation with rotating studio colour palettes week to week.", "Dual-grid safe zones: most covers get cut off on the 1:1 Home profile grid even when they fit the 9:16 Reels tab. Spark locks every title, badge, and face inside the shared safe zone so nothing is ever cropped on either grid."], roles: "Domain expert (full-video review), senior copywriter (series, title, hook), and brand designer (portrait depth & dual-grid layout)", discovery: "Turns a 3-second profile visit into a coherent menu of lessons on both the Home grid and the Reels grid." }),
+      slide("13", "how", "Part 2 of 5: The 3-Second Pre-Roll", "Winning the 1-second scroll decision with the peak 3 seconds of the lesson.", "craft-preroll-hook.jpg", "Three-step diagram: 1. 1-second scroll test: Stay or swipe past, 2. Domain expert scans full reel for the peak 3-second insight, 3. Coming Up pre-roll + smooth transition into lesson.", "On a short-form feed like Instagram, viewers decide within 1 second whether to stay or scroll past. The 3-second Coming Up pre-roll is what earns that first second without turning a teacher into a loud performer.", "", "", "", { items: ["Domain-expert selection: only someone who understands the subject can scan the whole reel and spot the single most compelling 3-second teaching insight that fits cleanly.", "Clear speaker visibility: verifies the teacher's face is unobstructed and the audio lands cleanly in the opening second.", "Smooth transition: bridges from the 3-second pre-roll into the start of the full teaching arc."], roles: "Subject-matter expert (selects the peak 3-second insight) and video editor (cuts the pre-roll and transition)", discovery: "Stops non-followers in the first second with real teaching gravity, lifting watch-through and reach." }),
+      slide("14", "how", "Part 3 of 5: The Teaching Reel & In-Reel Text", "Feed-scroll safe framing, protected teaching pauses, and searchable in-reel text.", "craft-reel-framing.jpg", "Smartphone showing top and bottom feed safe zones so nothing is cut off while scrolling, with 4 callouts: 1. On-screen lesson title, 2. Speaker framed in safe zone, 3. Teaching pauses kept in, 4. Synced Sanskrit and anatomy captions.", "As people scroll through the Instagram feed, top and bottom UI overlays cut off ordinary videos. Every Spark reel is constructed inside a strict feed-safe viewport so the whole lesson is always visible while scrolling.", "", "", "", { items: ["Never cut off at the top or bottom: the on-screen title, speaker framing, and burned-in captions stay inside the feed-scroll safe zone.", "In-reel text built for discovery: the persistent lesson title and synced captions keep exact Sanskrit and anatomical terms readable on mute and indexable by Instagram search.", "Teaching-aware cut: keeps pranayama holds, chanting, and demonstrations intact while cutting dead air, false starts, and class logistics."], roles: "Senior video editor, visual layout specialist, audio engineer, and domain proofreader", discovery: "On-screen titles and captions drive silent-scroll retention and platform topic indexing, earning 1.5x repeat watches." }),
+      slide("15", "how", "Part 4 of 5: The Studio End Card", "A 'Check the caption' CTA and teacher attribution tailored to every faculty member.", "craft-end-card.jpg", "Studio end card diagram with Check the caption CTA button and 3 callouts: 1. Studio brand mark, 2. Check the caption CTA (drives to study notes), 3. Matched to the session's teacher (multi-faculty).", "When the teaching thought lands, the reel closes with a clean studio end card that points viewers straight to the written study note below.", "", "", "", { items: ["Explicit 'Check the caption' CTA: turns a passive viewer into a reader who spends another minute with your study notes.", "Multi-faculty aware: each video in a studio can feature a different teacher. The end card and framing adapt to the specific teacher on screen while holding one studio brand."], roles: "Brand designer and video editor", discovery: "Drives caption dwell time, Saves, and Shares - the strongest signals for non-follower reach." }),
+      slide("16", "how", "Part 5 of 5: The Instagram Caption", "Teacher-voice study notes and researched tags that power interest-media search.", "craft-caption-discovery.jpg", "Caption and search discovery diagram showing 1. Teacher-voice study note, 2. Researched search tags and hashtags, 3. Carousels and Stories from same class, pointing to 50%+ non-follower discovery.", "In interest-based media, the caption is not an afterthought - it is how strangers who care about your subject find you through search and topic graphs, even when they do not follow you yet.", "", "", "", { items: ["Concise domain copywriting: short, to the point, and written in the teacher's own voice with Sanskrit and anatomical accuracy intact.", "Researched tags and hashtags: every post includes researched domain keywords and hashtags that would take a human writer dedicated research time on every reel.", "Carousels and Stories (in Reel + cover + caption): cut from the same lecture for learners who prefer to read and swipe."], roles: "Domain subject-matter writer, senior copywriter, and SEO / tag researcher", discovery: "Makes every lesson searchable across Instagram interest media, driving over 50% of views from non-followers." }),
+      slide("17", "how", "Beneath the Waterline: Steps 1 to 4 of 11 (~110 of ~300 Checks)", "How a 90-minute class is understood before a single frame is cut.", "pipeline-steps-1-to-4.jpg", "2x2 grid of pipeline steps 1 to 4 (~110 checks): 1. Audio and speaker check (~15 checks, Audio ops), 2. Domain transcription (~35 checks, Transcriptionist), 3. Full-lecture course map (~35 checks, Instructional designer), 4. Standalone lesson pick (~25 checks, Domain expert).", "On the Spark homepage, turning a raw recording into a course takes 10+ specialist steps and 25 to 30 hours of human work per hour of video. For Spark Reels, Steps 1 to 4 run ~110 checks on the full lecture first:", "", "", "", { items: ["Step 1 - Audio & speaker diagnostics (~15 checks): verifies speaker-view framing, room echo contrast (19 dB+ floor), and background noise gates. Usually done by: Audio ops.", "Step 2 - Domain transcription & cleanup (~35 checks): word-level time-coded transcript preserving Sanskrit, pranayama counts, and anatomy. Usually done by: Transcriptionist & Content assistant.", "Step 3 - Full-lecture course map & chapters (~35 checks): maps modules and maker-checker chapter boundaries across the whole 60 to 90 minute class. Usually done by: Instructional designer & Subject-matter assistant.", "Step 4 - Standalone lesson selection (~25 checks): filters out class logistics, homework, and student-specific cues so each candidate stands alone for a stranger. Usually done by: Domain expert."], roles: "Audio ops, transcriptionist, instructional designer, and domain expert", discovery: "Ensures every clip carries a complete, accurate teaching arc grounded in the full lecture." }),
+      slide("18", "how", "Beneath the Waterline: Steps 5 to 8 of 11 (~105 of ~300 Checks)", "Teaching-aware editing, pre-roll extraction, feed-safe framing, and dual-grid covers.", "pipeline-steps-5-to-8.jpg", "2x2 grid of pipeline steps 5 to 8 (~105 checks): 5. Teaching pause judge (~30 checks, Senior editor), 6. 3-second pre-roll cut (~25 checks, Creative director), 7. Feed-safe reframe and captions (~30 checks, Visual specialist), 8. Dual-grid cover design (~20 checks, Copywriter and designer).", "Once a candidate lesson is chosen, Steps 5 to 8 run another ~105 checks to craft the video, the 3-second hook, the feed-safe layout, and the cover:", "", "", "", { items: ["Step 5 - Teaching pause judge (~30 checks): acoustic + LLM judge protects pranayama holds and demonstrations while removing dead air and false starts. Usually done by: Senior video editor & Domain teacher.", "Step 6 - 3-second pre-roll cut (~25 checks): scans the finished lesson for the peak 3-second insight with a clear speaker face and cuts the transition. Usually done by: Creative director & Video editor.", "Step 7 - Feed-safe reframe & in-reel captions (~30 checks): portrait speaker tracking, blur-focus depth, on-screen title, and synced captions locked inside top and bottom feed safe zones. Usually done by: Video editor & Visual specialist.", "Step 8 - Dual-grid cover design (~20 checks): writes series name, capped title, and hook from the full lecture and fits both the 1:1 Home grid and 9:16 Reels grid. Usually done by: Copywriter & Graphic designer."], roles: "Senior video editor, creative director, visual specialist, copywriter, and graphic designer", discovery: "Protects 1-second scroll stop, full feed visibility, and 3-second profile grid scanning on every post." }),
+      slide("19", "how", "Beneath the Waterline: Steps 9 to 11 of 11 (~85 Checks -> ~300 Total)", "Multi-faculty end card, SEO caption research, and the 300-check quality gate.", "pipeline-steps-9-to-11.jpg", "Pipeline steps 9 to 11 (~85 checks completing ~300 checks total): 9. Faculty end card and audio master (~20 checks, Brand designer), 10. Voice caption, tags and Carousels (~35 checks, Domain writer and SEO), 11. 9-gate rubric and WhatsApp (~30 checks, Quality evaluator), plus badge: ~300 checks = 25-30 hrs of specialist work replaced.", "Steps 9 to 11 complete the ~300 checks (110 + 105 + 85 = 300 checks), replacing ~25 to 30 hours of specialist work per lecture with a 3-minute approval on your phone:", "", "", "", { items: ["Step 9 - Multi-faculty end card & audio master (~20 checks): matches the teacher on screen, adds the 'Check the caption' CTA card, and levels studio/Zoom audio. Usually done by: Brand designer & Audio engineer.", "Step 10 - Teacher-voice caption, tags & Carousels (~35 checks): writes the concise study note, researches interest-media search tags and hashtags, and generates Carousels and Stories. Usually done by: Domain copywriter & SEO researcher.", "Step 11 - 9-gate rubric audit & WhatsApp delivery (~30 checks): grades every piece across 9 hard gates and 7 teaching axes so 9 of 10 arrive ready to post. Usually done by: Quality evaluator & Social media manager."], roles: "Brand designer, audio engineer, domain copywriter, SEO researcher, and quality evaluator", discovery: "Delivers all four discovery surfaces (cover, reel, in-reel text, and caption) on every single reel without compromise." }),
+      slide("20", "how", "One-shot quality", "How a reel earns Recommended vs Okay.", "reel-grading-rubric.jpg", "Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired.", "Why 9 out of 10 reels work on the first shot: every candidate chapter must first pass 9 hard gates (at most 150 seconds after dead air, dead air at most 30%, traffic/background noise below 4/5, room echo contrast at least 19 dB, real teaching rather than class logistics or homework, stands alone for a stranger, one finishable idea, right audience, and delivery floor). Passing clips are then scored 0 to 100 across 7 weighted teaching axes (Interest match 3x, One claim 3x, Delivery 3x, Mastery signal 2x, Complete arc 2x, Said not performed 2x, Cold standalone 1x) plus a peer respect test, slide-opening check, and other-speaker check.", ""),
+      slide("21", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", ""),
+      slide("22", "how", "Credits", "Credits, watermark, and lecture hours.", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "A thumbs-up spends a credit and removes the watermark. A rejected clip is retired and cannot be downloaded clean. The whole term is paid upfront.", "")
     ],
     faqSlides: [
-      slide("18", "faq", "FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
-      slide("19", "faq", "FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
-      slide("20", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
-      slide("21", "faq", "FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
+      slide("23", "faq", "FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
+      slide("24", "faq", "FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
+      slide("25", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
+      slide("26", "faq", "FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
     ]
   };
 
@@ -143,14 +148,24 @@
       if (cover) return pack("partial", "Partially unlocked: Includes jobs 1, 2, 3, and 4 (reel + grid cover), but leaves out job 5 (teacher-voice SEO caption, Carousels, and Stories).", full);
       return pack("partial", "Partially unlocked: Includes jobs 1, 2, and 4 (the reel only), and leaves out job 3 (grid cover) and job 5 (SEO caption, Carousels, and Stories).", full);
     }
-    if (slideRow.num === "12") return pack("included", "Included in every plan: Built over 5 years (~250 to 300 automated checks, with 3 to 4 days of engineering invested per check) so posting takes under 3 minutes on your phone.");
-    if (slideRow.num === "13") return pack("included", "Included in every plan: Clips scoring 70+ land in Recommended (sent first). Clips scoring 50 to 69 land in Okay (your backup library). Anything under 50 or failing a gate is retired before you ever see it.");
+    if (slideRow.num === "12") {
+      if (cover) return pack("included", "Included in your choice: Custom cover with series name, capped title, hook, and 1:1 + 9:16 safe-zone fit.");
+      return pack("missed", "Left out on Reel only: Select Reel + cover or Reel + cover + caption to include the grid cover.", [{ label: "Select Reel + cover", tierId: "reel_cover" }]);
+    }
+    if (slideRow.num === "13" || slideRow.num === "14" || slideRow.num === "15") return pack("included", "Included in every plan: Built into every Spark reel.");
+    if (slideRow.num === "16") {
+      if (caption) return pack("included", "Included in your choice: Teacher-voice study note, researched tags, and Carousels and Stories.");
+      return pack("missed", "Left out without Caption: Select Reel + cover + caption to include the SEO caption, tags, Carousels, and Stories.", full);
+    }
+    if (slideRow.num === "17" || slideRow.num === "18" || slideRow.num === "19") return pack("included", "Included in every plan: Built over 5 years (~250 to 300 automated checks, with 3 to 4 days of engineering invested per check) so posting takes under 3 minutes on your phone.");
+    if (slideRow.num === "20") return pack("included", "Included in every plan: Clips scoring 70+ land in Recommended (sent first). Clips scoring 50 to 69 land in Okay (your backup library). Anything under 50 or failing a gate is retired before you ever see it.");
+    if (slideRow.num !== "21") return { level: "included", reason: "", actions: [], pill: "" };
     if (caption && pace) return pack("included", "Included in your choice: All 9 layers of consistency hold across your page.");
     if (!cover) gaps.push("Layer 3 requires Cover");
     if (!caption) gaps.push("Layer 4 requires Caption");
-    if (!pace) gaps.push("Layer 1 requires 20+ reels/month over 6 to 12 months");
+    if (!pace) gaps.push("Layer 1 requires 5 posts a week for 6 to 12 months");
     if (!caption) actions.push(full[0]);
-    if (ctx.reels < 20) actions.push({ label: "Set 20 reels / month", reels: 20 });
+    if (ctx.reels < 20) actions.push({ label: "Set 5 posts a week", reels: 20 });
     if (ctx.months < 6) actions.push({ label: "Switch to 6 months", months: 6 });
     return pack("partial", "Partially unlocked: " + gaps.join("; ") + ".", actions);
   }
@@ -164,18 +179,18 @@
     var level = "included";
     var reason = slideRow.on;
     var actions = [];
-    if (n >= 15) return { level: "included", reason: "", actions: [], pill: "" };
+    if (n >= 22) return { level: "included", reason: "", actions: [], pill: "" };
     if (n >= 11) return tieCraft(slideRow, ctx);
     if (slideRow.num === "02" && !(reels >= 20 && months >= 3)) {
       level = "missed";
       reason = slideRow.off;
-      if (reels < 20) actions.push({ label: "Set 20 reels / month", reels: 20 });
+      if (reels < 20) actions.push({ label: "Set 5 posts a week", reels: 20 });
       if (months < 3) actions.push({ label: "Switch to 3 months", months: 3 });
     } else if (slideRow.num === "03" && !(months >= 6 && reels >= 20)) {
       level = "missed";
       reason = slideRow.off;
       if (months < 6) actions.push({ label: "Switch to 6 months", months: 6 });
-      if (reels < 20) actions.push({ label: "Set 20 reels / month", reels: 20 });
+      if (reels < 20) actions.push({ label: "Set 5 posts a week", reels: 20 });
     } else if (slideRow.num === "04" && months < 3) {
       level = "missed";
       reason = slideRow.off;
@@ -247,7 +262,7 @@
     var storySig = "";
     var craftSig = "";
     var faqDone = false;
-    if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.craftSlides.length !== 7 || cfg.allSlides.length !== 21) {
+    if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.craftSlides.length !== 12 || cfg.allSlides.length !== 26) {
       if (missing) missing.classList.remove("hidden");
       return;
     }
@@ -296,12 +311,7 @@
       if (!data) return;
       if (data.c === "inr" || data.c === "usd") state.currency = data.c;
       reels = parseInt(data.r, 10);
-      if (String(reels) === data.r && reels >= 1 && reels <= 90) {
-        state.reels = reels;
-        if (reels !== 12 && reels !== 20 && reels !== 28 && reels !== 30 && byId("reels-custom")) {
-          byId("reels-custom").value = String(reels);
-        }
-      }
+      if (String(reels) === data.r && reels >= 0 && reels <= 90) state.reels = reels === 0 ? 0 : snapWeekReels(reels);
       months = parseInt(data.m, 10);
       if (String(months) === data.m && monthOk[months]) state.months = months;
       if (tiers[data.t]) state.tierId = data.t;
@@ -374,17 +384,110 @@
       var node = byId(id);
       if (node) node.textContent = text;
     }
-    function paceSentence() {
-      var total = state.reels * state.months;
-      var minutes = Math.round(total * 2 * 1.5);
-      var watch = minutes < 60 ? "about " + minutes + " " + plural(minutes, "minute", "minutes") : "about " + hourPhrase(minutes / 60);
-      return total + " " + plural(total, "reel", "reels") + " over " + state.months + " " + plural(state.months, "month", "months") + " - " + watch + " of classroom teaching on your page. Each reel is about 2 minutes, and serious students often watch about 1.5 times.";
+    function weekFromReels(reels) {
+      var week = Number(reels) ? Math.round(Number(reels) / 4) : 0;
+      if (week > cfg.postsPerWeekMax) week = cfg.postsPerWeekMax;
+      return week < 1 && Number(reels) ? 1 : week;
+    }
+    function snapWeekReels(reels) { return weekFromReels(reels) * 4; }
+    function sevenHourPace(reels) {
+      var week = weekFromReels(reels), months, band, lead;
+      if (!week) return { week: 0, months: 0, band: "", text: "" };
+      months = Math.max(1, Math.round((7 * 60) / (week * 3.25) * 12 / 52));
+      band = week >= 7 ? "green" : week >= 4 ? "yellow" : "red";
+      lead = band === "green" ? "Recommended. " : band === "yellow" ? "Slower. " : "A long wait. ";
+      return { week: week, months: months, band: band, text: "About " + months + " " + plural(months, "month", "months") + " to 7 hours.", signal: lead + "About " + months + " " + plural(months, "month", "months") + " to 7 hours." };
+    }
+    function paintPace() {
+      var pace = sevenHourPace(state.reels);
+      var range = byId("posts-range");
+      var monthsBox = byId("pace-months");
+      var signal = byId("pace-signal");
+      var next = byId("pace-next");
+      var ticks = document.querySelectorAll(".reels-tick");
+      var pct = (pace.week / cfg.postsPerWeekMax) * 100;
+      var phrase = pace.week ? pace.week + " " + plural(pace.week, "post", "posts") + " a week" : "Choose posts a week";
+      var i, d, html, cells, offset;
+      if (monthsBox) {
+        html = "";
+        monthsBox.hidden = !pace.week;
+        for (i = 1; i <= pace.months; i++) {
+          offset = i % 7;
+          cells = "";
+          for (d = 0; d < 35; d++) cells += "<i" + (d < offset || d >= offset + 28 ? ' class="is-off"' : "") + "></i>";
+          html += '<span class="reels-month"><span class="reels-month-top"><span class="reels-month-ring"></span><span class="reels-month-n">' + i + '</span><span class="reels-month-ring"></span></span><span class="reels-month-grid">' + cells + "</span></span>";
+        }
+        if (pace.week) { monthsBox.innerHTML = html; monthsBox.setAttribute("data-size", pace.months > 8 ? "sm" : "lg"); }
+      }
+      if (signal) {
+        signal.hidden = !pace.week;
+        if (pace.week) signal.setAttribute("data-band", pace.band);
+        signal.textContent = pace.signal || "";
+      }
+      if (next) next.disabled = !pace.week;
+      if (range) {
+        range.value = String(pace.week);
+        range.style.setProperty("--fill", pct + "%");
+        range.setAttribute("aria-valuenow", String(pace.week));
+        range.setAttribute("aria-valuetext", phrase);
+      }
+      for (i = 0; i < ticks.length; i++) parseInt(ticks[i].getAttribute("data-week"), 10) === pace.week ? ticks[i].setAttribute("aria-current", "true") : ticks[i].removeAttribute("aria-current");
     }
     function shot(slideRow, index) {
       return '<button type="button" class="reels-shot" data-open-slide="' + index + '" aria-label="Open diagram ' + slideRow.num + ", " + esc(slideRow.title) + '"><img src="' + esc(slideRow.image) + '" width="1280" height="720" alt="' + esc(slideRow.alt) + '" loading="lazy"></button>';
     }
-    function stageBody(slideRow, index, navHtml) {
-      return '<div class="reels-stage reels-stage-anim"><div>' + shot(slideRow, index) + '</div><div><p class="reels-kicker">' + esc(slideRow.group) + '</p><h3 class="text-2xl font-bold text-slate-900 mt-1">' + esc(slideRow.title) + '</h3><p class="text-base text-slate-700 mt-3 leading-relaxed">' + esc(slideRow.story) + "</p>" + navHtml + "</div></div>";
+    function slideLead(num) {
+      var leads = {
+        "01": "A loud hook fades. A real class builds trust.",
+        "02": "Five to seven posts a week holds when the reel comes from class.",
+        "03": "A serious yes takes about 7 hours with your teaching.",
+        "04": "The page gives the first free steps before anyone writes to you.",
+        "05": "A profile visit is decided in about 3 seconds.",
+        "06": "The grid has to look deliberate, week after week.",
+        "07": "The caption reaches people who do not follow you yet.",
+        "08": "The same class also becomes Carousels and Stories.",
+        "09": "The same recording will power more formats as they ship.",
+        "10": "Twelve months locks half the monthly price for the year.",
+        "11": "Five specialist jobs, on every reel, or the post stays in drafts.",
+        "12": "The cover is written from the whole class, not from the clip.",
+        "13": "People decide to stay or leave in the first second.",
+        "14": "The lesson stays fully visible while someone scrolls the feed.",
+        "15": "The end card sends them to the caption.",
+        "16": "The caption is how strangers find the lesson.",
+        "17": "The full class is understood before a frame is cut.",
+        "18": "Then the cut, the hook, the frame, and the cover.",
+        "19": "About 300 checks replace a day of specialist work.",
+        "20": "Nine gates, then a score, before a reel is Recommended.",
+        "21": "A full week only holds if all nine layers stay."
+      };
+      return leads[num] || "";
+    }
+    function stageBody(slideRow, index, navHtml, moreId) {
+      var extra = "";
+      var i;
+      var preview = '<div class="reels-preview is-clamped" id="' + moreId + '-preview"><p>' + esc(slideRow.lead) + "</p><p>" + esc(slideRow.story) + "</p></div>";
+      if (slideRow.items && slideRow.items.length) {
+        extra += '<ul class="reels-benefits mt-3 space-y-2 text-base text-slate-700">';
+        for (i = 0; i < slideRow.items.length; i++) extra += "<li>" + esc(slideRow.items[i]) + "</li>";
+        extra += "</ul>";
+      }
+      if (slideRow.roles) extra += '<p class="mt-3 text-base text-slate-700"><span class="font-semibold text-slate-900">Specialists required every time:</span> ' + esc(slideRow.roles) + "</p>";
+      if (slideRow.discovery) extra += '<p class="mt-2 text-base text-slate-700"><span class="font-semibold text-slate-900">Discovery impact:</span> ' + esc(slideRow.discovery) + "</p>";
+      return '<div class="reels-stage reels-stage-anim"><div>' + shot(slideRow, index) + navHtml + '</div><div><p class="reels-kicker">' + esc(slideRow.group) + '</p><h3 class="text-2xl font-bold text-slate-900 mt-1">' + esc(slideRow.title) + "</h3>" + preview + '<div id="' + moreId + '-body" hidden>' + extra + '</div><p class="mt-3"><button type="button" class="reels-textlink" id="' + moreId + '" data-slide-more="1" data-preview="' + moreId + '-preview" aria-expanded="false" aria-controls="' + moreId + '-body">More</button></p></div></div>';
+    }
+    function settlePreview(moreId) {
+      var preview = byId(moreId + "-preview");
+      var body = byId(moreId + "-body");
+      var btn = byId(moreId);
+      var extra, overflow;
+      if (!preview || !btn || btn.getAttribute("aria-expanded") === "true") return;
+      if (!preview.getClientRects().length) return;
+      extra = body && body.textContent.replace(/\s/g, "").length > 0;
+      overflow = preview.scrollHeight > preview.clientHeight + 1;
+      if (!extra && !overflow) {
+        preview.classList.remove("is-clamped");
+        btn.parentElement.hidden = true;
+      }
     }
     function storyNav() {
       var html = '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="story-prev"' + (state.storyIndex === 0 ? " disabled" : "") + ">Previous slide</button>";
@@ -407,15 +510,12 @@
     }
     function renderControls() {
       var currencies = [{ attr: "inr" }, { attr: "usd" }];
-      var reels = [];
       var durations = [];
       var i;
-      for (i = 0; i < cfg.reelsPerMonthOptions.length; i++) reels.push({ attr: cfg.reelsPerMonthOptions[i].reels, opt: cfg.reelsPerMonthOptions[i] });
       for (i = 0; i < cfg.durationMonthsOptions.length; i++) durations.push({ attr: cfg.durationMonthsOptions[i].months, opt: cfg.durationMonthsOptions[i] });
       byId("currency-switch").innerHTML = renderButtons(currencies, "data-currency", "currency-", function (item) { return state.currency === item.attr; }, function (item) { return item.attr === "usd" ? "USD" : "INR"; });
-      byId("reels-controls").innerHTML = renderButtons(reels, "data-reels", "reels-opt-", function (item) { return state.reels === item.opt.reels; }, function (item) { return esc(item.opt.label) + ' <span class="reels-hint">(' + esc(item.opt.hint) + ")</span>"; });
       byId("duration-controls").innerHTML = renderButtons(durations, "data-months", "months-opt-", function (item) { return state.months === item.opt.months; }, function (item) { return esc(durationButtonLabel(item.opt)); });
-      byId("pace-line").textContent = paceSentence();
+      paintPace();
     }
     function renderModes() {
       var i;
@@ -433,7 +533,8 @@
     }
     function renderPlans() {
       var html = "";
-      var i, j, tier, q, selected, rate;
+      var i, j, tier, q, selected, rate, week;
+      week = weekFromReels(state.reels);
       for (i = 0; i < cfg.tiers.length; i++) {
         tier = cfg.tiers[i];
         q = quoteTier(tier, state.reels, state.months);
@@ -442,12 +543,12 @@
         html += '<article id="tier-' + esc(tier.id) + '" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '" class="rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
         html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Start here - Complete system" : "") + "</p>";
         html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>";
-        html += '<p class="mt-4 text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + '</p><p class="text-base text-slate-600">a reel</p>';
+        html += '<p class="mt-4 text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + '</p><p class="text-base text-slate-600">a post</p>';
         if (q.perReelInr < tier.basePerReelInr) html += '<p class="mt-2 text-base reels-was">' + esc(money(tier.basePerReelInr, true)) + " on a monthly plan</p>";
         html += '<p class="mt-4 text-base font-semibold text-brand-700">' + esc(rate.charAt(0).toUpperCase() + rate.slice(1)) + "</p>";
         html += '<p class="mt-3 text-base text-slate-900 font-semibold">' + esc(money(q.monthlyInr, false)) + " a month</p>";
         html += '<p class="mt-1 text-base text-slate-900 font-semibold">' + esc(money(q.upfrontInr, false)) + " upfront</p>";
-        html += '<p class="text-base text-slate-600">for ' + state.reels + " " + plural(state.reels, "reel", "reels") + " × " + state.months + " " + plural(state.months, "month", "months") + "</p>";
+        html += '<p class="text-base text-slate-600">for ' + week + " " + plural(week, "post", "posts") + " a week, " + state.months + " " + plural(state.months, "month", "months") + "</p>";
         html += '<p class="mt-4 text-base font-semibold text-slate-900">What you get</p><ul class="reels-benefits mt-2 space-y-2 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
         html += '</ul><p class="mt-4 text-base text-slate-700"><span class="font-semibold text-slate-900">Not included.</span> ' + esc(tier.notIncluded) + "</p>";
@@ -463,7 +564,8 @@
       storySig = String(state.storyIndex);
       row = cfg.storySlides[state.storyIndex];
       byId("story-step-meta").textContent = "Slide " + (state.storyIndex + 1) + " of 10";
-      byId("story-card-host").innerHTML = stageBody(row, state.storyIndex, storyNav());
+      row.lead = slideLead(row.num);
+      byId("story-card-host").innerHTML = stageBody(row, state.storyIndex, storyNav(), "story-more");
     }
     function renderCraft() {
       var row, shown, sig;
@@ -472,10 +574,9 @@
       if (sig === craftSig) return;
       craftSig = sig;
       row = cfg.craftSlides[state.craftIndex];
-      shown = { num: row.num, group: row.group, title: row.title, image: row.image, alt: row.alt, story: row.story };
-      if (row.num === "17") shown.story = hoursSentences() + " " + row.story;
+      shown = { num: row.num, group: row.group, title: row.title, image: row.image, alt: row.alt, story: row.story, items: row.items, roles: row.roles, discovery: row.discovery, lead: row.num === "22" ? hoursSentences() : slideLead(row.num) };
       byId("craft-step-meta").textContent = "Diagram " + (state.craftIndex + 1) + " of " + cfg.craftSlides.length;
-      byId("craft-stage").innerHTML = stageBody(shown, cfg.storySlides.length + state.craftIndex, craftNav());
+      byId("craft-stage").innerHTML = stageBody(shown, cfg.storySlides.length + state.craftIndex, craftNav(), "craft-more");
     }
     function renderFaq() {
       if (faqDone) return;
@@ -550,15 +651,16 @@
       for (i = 0; i < rows.length; i++) if (rows[i].level === "included") n += 1;
       return n + " of 5 core pillars included";
     }
+    function hoursLine() {
+      if (!state.reels) return "Included lecture time starts at 6 hours a month and rises with the number of posts.";
+      return "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
+    }
     function hoursSentences() {
-      var line = "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
-      return line + " Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
+      return hoursLine() + " Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
     }
     function renderHours() {
-      var line = "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
-      var extra = "Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
-      setText("included-hours", line);
-      setText("extra-hour", extra);
+      setText("included-hours", hoursLine());
+      setText("extra-hour", "Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.");
     }
     function renderFounding() {
       var tier = tierById("reel_cover_caption");
@@ -583,15 +685,15 @@
     function summaryRows() {
       var tier = tierById(state.tierId);
       var q = quoteTier(tier, state.reels, state.months);
-      var total = state.reels * state.months;
-      var watch = hourPhrase(Math.round(total * 2 * 1.5) / 60);
+      var week = weekFromReels(state.reels);
+      var pace = sevenHourPace(state.reels);
       return [
         ["Selected plan", tier.name],
-        ["Monthly pace", state.reels + " " + plural(state.reels, "reel", "reels") + " / month (" + total + " " + plural(total, "reel", "reels") + " over " + state.months + " " + plural(state.months, "month", "months") + ", ~" + watch + " of classroom teaching)"],
+        ["Posts a week", week ? week + " " + plural(week, "post", "posts") + " a week (" + pace.text.replace(/\.$/, "") + ")" : "Not chosen"],
         ["Commitment term", state.months + " " + plural(state.months, "month", "months") + " paid upfront"],
-        ["1-month list rate", money(tier.basePerReelInr, true) + " / reel"],
+        ["1-month list rate", money(tier.basePerReelInr, true) + " / post"],
         ["Discount applied", discountLabel(state.months)],
-        ["Your rate", money(q.perReelInr, true) + " / reel · " + money(q.monthlyInr, false) + " / month"],
+        ["Your rate", money(q.perReelInr, true) + " / post · " + money(q.monthlyInr, false) + " / month"],
         ["Total due upfront", money(q.upfrontInr, false)],
         ["Included lecture processing", hourPhrase(includedHours(state.reels)) + " / month (extra video " + money(cfg.extraVideoHourInr, true) + " / hour)"],
         ["Value pillars unlocked", pillarsLine()]
@@ -604,8 +706,8 @@
       nowRate = quoteTier(tierById(state.tierId), 1, state.months).perReelInr;
       nextRate = quoteTier(tierById("reel_cover_caption"), 1, 12).perReelInr;
       save = nowRate - nextRate;
-      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / reel, which is " + money(save, true) + " less per reel, and it covers all 5 pillars.";
-      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / reel, and it covers all 5 pillars, including early access.";
+      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, which is " + money(save, true) + " less per post, and it covers all 5 pillars.";
+      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, and it covers all 5 pillars, including early access.";
       box.innerHTML = '<p class="text-base text-slate-800 mb-3">' + esc(msg) + '</p><p><button type="button" class="reels-fix" data-fix="1" data-from="checkout" data-months="12" data-tier="reel_cover_caption">Switch to 12 months, Reel + cover + caption</button></p>';
     }
     function renderCheckout() {
@@ -620,13 +722,14 @@
       lines.push("Setup link: " + currentUrl());
       text = lines.join("\n");
       state.summaryText = text;
-      subject = "Spark Reels plan: " + tierById(state.tierId).name + ", " + state.reels + " " + plural(state.reels, "reel", "reels") + ", " + state.months + " " + plural(state.months, "month", "months");
+      subject = "Spark Reels plan: " + tierById(state.tierId).name + ", " + weekFromReels(state.reels) + " posts a week, " + state.months + " " + plural(state.months, "month", "months");
       byId("checkout-summary").innerHTML = html;
       byId("whatsapp-choice").href = "https://wa.me/" + cfg.whatsappPhone + "?text=" + encodeURIComponent(text);
       byId("email-choice").href = "mailto:support@sparktutor.ai?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text);
       renderNudge();
     }
     function render() {
+      if (!weekFromReels(state.reels) && state.wizardStep > 1) state.wizardStep = 1;
       syncHash();
       renderDoors();
       renderControls();
@@ -639,17 +742,13 @@
       renderHours();
       renderFounding();
       renderCheckout();
+      settlePreview("story-more");
+      settlePreview("craft-more");
       if (!byId("story-lightbox").hidden) paintLightbox();
     }
-    function setReels(n, fromCustom) {
-      var error = byId("reels-error");
-      if (!isFinite(n) || Math.floor(n) !== n || n < 1 || n > 90) {
-        error.textContent = "Use a whole number from 1 to 90.";
-        return;
-      }
-      error.textContent = "";
-      state.reels = n;
-      if (!fromCustom) byId("reels-custom").value = "";
+    function setReels(n) {
+      if (!isFinite(n) || Math.floor(n) !== n || n < 0 || n > 90) return;
+      state.reels = n === 0 ? 0 : snapWeekReels(n);
       render();
     }
     function openFold(id) {
@@ -663,7 +762,7 @@
       if (node) node.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     function gotoStep(n) {
-      if (n < 1 || n > 3) return;
+      if (n < 1 || n > 3 || (n > 1 && !weekFromReels(state.reels))) return;
       dbg("gotoStep:before", { from: state.wizardStep, to: n });
       state.wizardStep = n;
       render();
@@ -693,9 +792,7 @@
       }
       if (btn.hasAttribute("data-reels")) {
         patch.reels = parseInt(btn.getAttribute("data-reels"), 10);
-        state.reels = patch.reels;
-        byId("reels-custom").value = "";
-        byId("reels-error").textContent = "";
+        state.reels = snapWeekReels(patch.reels);
       }
       if (btn.hasAttribute("data-tier")) {
         patch.tierId = btn.getAttribute("data-tier");
@@ -734,7 +831,7 @@
       status.textContent = st.pill || "";
       status.className = "reels-status reels-status-" + tone(st.level);
       byId("lightbox-title").textContent = slideRow.title;
-      byId("lightbox-story").textContent = slideRow.story;
+      byId("lightbox-story").textContent = (slideRow.num === "22" ? hoursSentences() + " " : "") + slideRow.story + (slideRow.roles ? " Specialists required every time: " + slideRow.roles + "." : "") + (slideRow.discovery ? " Discovery impact: " + slideRow.discovery : "");
       byId("lightbox-reason").textContent = st.reason || "";
     }
     function openLightbox(index) {
@@ -800,15 +897,12 @@
       });
     }
     applyHash();
-    byId("reels-custom").addEventListener("input", function (e) {
-      var raw = e.target.value;
-      if (raw === "") { byId("reels-error").textContent = ""; return; }
-      if (!/^\d+$/.test(raw)) { byId("reels-error").textContent = "Use a whole number from 1 to 90."; return; }
-      setReels(parseInt(raw, 10), true);
+    byId("posts-range").addEventListener("input", function (e) {
+      setReels(parseInt(e.target.value, 10) * 4);
     });
     document.addEventListener("click", function (e) {
       var origin = e.target;
-      var btn, doorId;
+      var btn, doorId, panel, opening, preview;
       if (origin && origin.nodeType !== 1) origin = origin.parentElement;
       if (!origin || !origin.closest) return;
       if (origin.id === "story-lightbox") { closeLightbox(); return; }
@@ -849,6 +943,17 @@
       if (btn) { state.storyIndex = parseInt(btn.getAttribute("data-story-index"), 10); render(); return; }
       btn = origin.closest("[data-craft-index]");
       if (btn) { state.craftIndex = parseInt(btn.getAttribute("data-craft-index"), 10); render(); return; }
+      btn = origin.closest("[data-slide-more]");
+      if (btn) {
+        panel = byId(btn.getAttribute("aria-controls"));
+        preview = byId(btn.getAttribute("data-preview"));
+        opening = btn.getAttribute("aria-expanded") !== "true";
+        if (preview) preview.classList.toggle("is-clamped", !opening);
+        if (panel) panel.hidden = !opening;
+        btn.textContent = opening ? "Less" : "More";
+        btn.setAttribute("aria-expanded", opening ? "true" : "false");
+        return;
+      }
       if (origin.closest("#story-prev")) { moveStory(-1); return; }
       if (origin.closest("#story-next")) { moveStory(1); return; }
       if (origin.closest("#craft-prev")) { moveCraft(-1); return; }
@@ -863,13 +968,25 @@
       if (btn) { openFold(btn.getAttribute("data-open-fold")); return; }
       btn = origin.closest("button[data-currency]");
       if (btn) { state.currency = btn.getAttribute("data-currency") === "usd" ? "usd" : "inr"; render(); return; }
-      btn = origin.closest("#reels-controls button[data-reels]");
-      if (btn) { setReels(parseInt(btn.getAttribute("data-reels"), 10), false); return; }
+      btn = origin.closest(".reels-tick[data-week]");
+      if (btn) { setReels(parseInt(btn.getAttribute("data-week"), 10) * 4); return; }
       btn = origin.closest("#duration-controls button[data-months]");
       if (btn) { state.months = parseInt(btn.getAttribute("data-months"), 10); render(); return; }
     });
     document.addEventListener("keydown", function (e) {
       var dlg = byId("story-lightbox");
+      var stop = document.activeElement && document.activeElement.closest && document.activeElement.closest(".reels-tick");
+      var week, nextStop;
+      if (stop && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+        week = parseInt(stop.getAttribute("data-week"), 10) + (e.key === "ArrowRight" ? 1 : -1);
+        if (week >= 0 && week <= cfg.postsPerWeekMax) {
+          setReels(week * 4);
+          nextStop = document.querySelector('.reels-tick[data-week="' + week + '"]');
+          if (nextStop) nextStop.focus();
+        }
+        e.preventDefault();
+        return;
+      }
       if (!dlg || dlg.hidden) return;
       if (e.key === "Escape") { closeLightbox(); e.preventDefault(); }
       else if (e.key === "ArrowRight") { stepLightbox(1); e.preventDefault(); }
