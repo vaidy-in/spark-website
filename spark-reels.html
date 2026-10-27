@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Spark Reels</title>
+    <meta name="description" content="Classroom reels, posted for you, every week. Ten slides on why this is a 3 to 12 month game, with founding prices in rupees. A year is half the monthly price.">
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="js/layout.js"></script>
+    <script src="js/spark-reels-pricing.js?v=20261027b"></script>
+    <style>
+        .reels-jump { position: sticky; top: 4rem; z-index: 20; background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0.75rem 0; margin: 0 0 2rem; }
+        .reels-pills, .reels-filters, .reels-fixrow, .reels-coverage, .reels-lightbox-bar, .reels-lightbox-nav, .reels-actions { display: flex; flex-wrap: wrap; gap: 0.65rem 0.75rem; align-items: center; }
+        .reels-pills { justify-content: center; list-style: none; margin: 0; padding: 0; }
+        .reels-filters { margin: 1.25rem 0 1.5rem; }
+        .reels-pill, .reels-filter, .reels-fix, .reels-chip, .reels-navbtn, .reels-textlink, .reels-shot, .reels-slide, .reels-fold summary, .reels-cta, #email-choice, #whatsapp-choice, #copy-choice { cursor: pointer; }
+        .reels-pill, .reels-filter { display: inline-flex; align-items: center; padding: 0.45rem 0.95rem; border-radius: 999px; border: 1px solid #c7d2fe; background: #eef2ff; color: #4338ca; font-weight: 600; font-size: 1rem; text-decoration: underline; text-underline-offset: 3px; font-family: inherit; }
+        .reels-filter { text-decoration: none; }
+        .reels-pill:hover, .reels-filter:hover, .reels-fix:hover, .reels-cta-secondary:hover, .reels-cta-tertiary:hover { background: #e0e7ff; }
+        .reels-filter[aria-pressed="true"] { background: #4f46e5; color: #fff; border-color: #4f46e5; }
+        .reels-anchor, .reels-slide, .reels-fold { scroll-margin-top: 13rem; }
+        .reels-callout, .reels-tie-box, .reels-panel, .reels-cap, .reels-pace, .reels-checkout-card { border-radius: 16px; }
+        .reels-callout { background: #eef2ff; border: 1px solid #c7d2fe; padding: 1.5rem; }
+        .reels-kicker { font-weight: 600; color: #4338ca; margin-bottom: 0.35rem; }
+        .reels-story-grid, .reels-split, .reels-roadmap, .reels-checkout { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+        .reels-slide { border: 1px solid #e2e8f0; border-radius: 16px; padding: 1rem 1rem 1.1rem; background: #fff; display: flex; flex-direction: column; }
+        .reels-slide-top { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+        .reels-step, .reels-grouptag, .reels-status, .reels-chip, .reels-badge { font-size: 0.95rem; font-weight: 700; }
+        .reels-step { color: #312e81; }
+        .reels-grouptag { color: #475569; font-weight: 600; }
+        .reels-status, .reels-chip { display: inline-flex; align-items: center; border-radius: 999px; border: 0; font-family: inherit; }
+        .reels-status { margin-left: auto; padding: 0.2rem 0.7rem; }
+        .reels-status-in, .reels-chip-in { background: #e0e7ff; color: #3730a3; }
+        .reels-status-part, .reels-chip-part { background: #fef3c7; color: #334155; }
+        .reels-status-out, .reels-chip-out { background: #ffe4e6; color: #9f1239; }
+        .reels-shot { display: block; width: 100%; padding: 0; border: 0; background: none; border-radius: 12px; text-align: left; }
+        .reels-shot img, .reels-lightbox img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .reels-tie { margin-top: auto; padding-top: 0.9rem; }
+        .reels-tie-box, .reels-pace, .reels-panel, .reels-cap { background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.9rem 1rem; }
+        .reels-panel, .reels-cap { background: #fff; }
+        .reels-panel h3, .reels-cap h3 { margin: 0 0 0.5rem; }
+        .reels-fix, .reels-navbtn { border-radius: 999px; border: 1px solid #4f46e5; background: #fff; color: #3730a3; font-weight: 700; font-size: 1rem; padding: 0.4rem 0.85rem; font-family: inherit; }
+        .reels-navbtn { border-color: #cbd5e1; color: #1e293b; }
+        .reels-chip { min-width: 2.6rem; justify-content: center; padding: 0.35rem 0.55rem; }
+        .reels-coverage { margin: 1rem 0; }
+        .reels-choice { margin-top: 2.5rem; border: 1px solid #c7d2fe; border-left: 4px solid #4f46e5; background: #f8fafc; border-radius: 16px; padding: 1.25rem 1.5rem; }
+        .reels-start { box-shadow: 0 0 0 1px #4f46e5; }
+        .reels-was { text-decoration: line-through; color: #64748b; font-weight: 500; }
+        .reels-badge { display: inline-block; margin-left: 0.4rem; padding: 0.15rem 0.55rem; border-radius: 999px; background: #e0e7ff; color: #3730a3; }
+        .reels-hint { font-weight: 400; }
+        button[aria-pressed="true"] .reels-hint { color: #e0e7ff; }
+        .reels-fold { border-top: 1px solid #e2e8f0; }
+        .reels-fold summary { font-size: 1.125rem; font-weight: 600; padding: 1.15rem 0; list-style: none; }
+        .reels-fold summary::-webkit-details-marker { display: none; }
+        .reels-fold summary::after { content: "Open"; float: right; color: #4338ca; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+        .reels-fold[open] summary::after { content: "Close"; }
+        .reels-textlink { background: none; border: 0; padding: 0; color: #4338ca; font-weight: 600; font-size: 1rem; text-decoration: underline; text-underline-offset: 3px; font-family: inherit; }
+        .reels-benefits, .reels-miss, .reels-ol { list-style: disc; padding-left: 1.15rem; }
+        .reels-ol { list-style: decimal; }
+        .reels-gap { margin-bottom: 0.85rem; }
+        .reels-card-foot { margin-top: auto; padding-top: 1.25rem; }
+        .reels-eyebrow { min-height: 1.5rem; }
+        .reels-chosen { background: #eef2ff; }
+        .reels-flash { outline: 3px solid #4f46e5; outline-offset: 3px; }
+        .reels-cap + .reels-cap { margin-top: 0; }
+        .reels-lightbox[hidden] { display: none; }
+        .reels-lightbox { position: fixed; inset: 0; z-index: 80; background: rgba(15, 23, 42, 0.72); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .reels-lightbox-panel { width: min(1080px, 96vw); max-height: 92vh; overflow: auto; background: #fff; border-radius: 16px; padding: 1rem 1rem 1.15rem; }
+        .reels-lightbox-bar, .reels-lightbox-nav { justify-content: space-between; margin-bottom: 0.75rem; }
+        .reels-lightbox-nav { margin: 0.75rem 0 0; }
+        #lightbox-status { margin-left: 0.75rem; margin-right: auto; }
+        .reels-planbar { border: 1px solid #c7d2fe; background: #f8fafc; border-radius: 16px; padding: 0.9rem 1rem; margin: 1.25rem 0 0.25rem; }
+        .reels-planbar-controls { display: flex; flex-direction: column; gap: 0.75rem; margin: 0.75rem 0; }
+        .reels-planbar-group { display: flex; flex-wrap: wrap; gap: 0.5rem 0.65rem; align-items: center; }
+        .reels-planbar-btns { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+        .reels-checkout-card { border: 1px solid #c7d2fe; background: #fff; padding: 1.25rem 1.5rem; }
+        .reels-kv { display: grid; grid-template-columns: minmax(9rem, 38%) 1fr; gap: 0.35rem 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid #e2e8f0; }
+        .reels-kv p { margin: 0; }
+        .reels-actions { flex-direction: column; align-items: stretch; }
+        .reels-cta { display: flex; width: 100%; align-items: center; justify-content: center; border-radius: 12px; padding: 0.75rem 1rem; font-weight: 700; font-size: 1rem; text-align: center; text-decoration: none; font-family: inherit; }
+        .reels-cta-primary { background: #4f46e5; color: #fff; border: 1px solid #4f46e5; }
+        .reels-cta-primary:hover { background: #4338ca; }
+        .reels-cta-secondary { background: #fff; color: #3730a3; border: 1px solid #4f46e5; }
+        .reels-cta-tertiary { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; }
+        @media (min-width: 1024px) {
+            .reels-anchor, .reels-slide, .reels-fold { scroll-margin-top: 9rem; }
+            .reels-story-grid, .reels-split, .reels-roadmap, .reels-checkout { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+            .reels-planbar-controls { flex-direction: row; align-items: flex-start; gap: 1.25rem; }
+        }
+        @media (max-width: 1023px) {
+            #plan-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+            #plan-grid article[data-recommended="true"] { order: -1; }
+            .reels-status { margin-left: 0; }
+            .reels-pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding-bottom: 0.15rem; }
+            .reels-pill { white-space: nowrap; flex-shrink: 0; }
+        }
+    </style>
+</head>
+<body class="preload-hidden bg-white text-slate-900 antialiased pt-16" data-page="spark-reels" style="font-family: Inter, sans-serif;">
+
+<main class="pt-8 pb-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-3">Spark Reels</h1>
+            <p class="text-xl text-slate-600">Classroom reels, posted for you, every week.</p>
+            <p class="text-base text-slate-700 max-w-3xl mx-auto mt-4">A category of one: built from classes you already taught, for serious students who need hours of your teaching before they join.</p>
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <p id="currency-label" class="text-base font-semibold text-slate-900">Prices in</p>
+                <div id="currency-switch" class="flex flex-wrap gap-2" role="group" aria-labelledby="currency-label"></div>
+            </div>
+        </header>
+
+        <nav id="section-jumps" class="reels-jump" aria-label="On this page">
+            <ul class="reels-pills">
+                <li><a class="reels-pill" href="#story">1. The 10-slide story</a></li>
+                <li><a class="reels-pill" href="#how-it-works">2. How a reel is made</a></li>
+                <li><a class="reels-pill" href="#prices">3. Calculator &amp; plans</a></li>
+                <li><a class="reels-pill" href="#choice">4. What you get vs miss</a></li>
+                <li><a class="reels-pill" href="#roadmap">5. Roadmap &amp; founding price</a></li>
+                <li><a class="reels-pill" href="#faq">6. Visual FAQ</a></li>
+                <li><a class="reels-pill" href="#checkout">7. Lock your plan</a></li>
+            </ul>
+        </nav>
+
+        <section id="story" class="reels-anchor">
+            <h2 class="text-3xl font-bold text-slate-900 mb-3">The lens: why classroom reels are a 3 to 12 month game</h2>
+            <p class="text-base text-slate-700 max-w-3xl">Read in order from 01 to 10. Each slide shows whether it is included in the plan you set here. Open any picture to step through all 18 diagrams.</p>
+            <div id="story-plan-bar" class="reels-planbar" aria-label="Test a plan while you read">
+                <p class="text-base font-semibold text-slate-900">Test a plan while you read</p>
+                <div class="reels-planbar-controls">
+                    <div class="reels-planbar-group">
+                        <span id="story-col-label" class="text-base font-semibold text-slate-700">Column</span>
+                        <div id="story-tier" class="reels-planbar-btns" role="group" aria-labelledby="story-col-label"></div>
+                    </div>
+                    <div class="reels-planbar-group">
+                        <span id="story-term-label" class="text-base font-semibold text-slate-700">Term</span>
+                        <div id="story-term" class="reels-planbar-btns" role="group" aria-labelledby="story-term-label"></div>
+                    </div>
+                    <div class="reels-planbar-group">
+                        <span id="story-pace-label" class="text-base font-semibold text-slate-700">Reels/mo</span>
+                        <div id="story-pace" class="reels-planbar-btns" role="group" aria-labelledby="story-pace-label"></div>
+                    </div>
+                </div>
+                <p id="story-plan-summary" class="text-base font-semibold text-slate-900"></p>
+            </div>
+            <div id="story-filters" class="reels-filters" role="group" aria-label="Which slides to show">
+                <button type="button" class="reels-filter" data-filter="all" aria-pressed="true">All 10 slides</button>
+                <button type="button" class="reels-filter" data-filter="long" aria-pressed="false">The long game (01 - 04)</button>
+                <button type="button" class="reels-filter" data-filter="cover" aria-pressed="false">Cover &amp; caption (05 - 08)</button>
+                <button type="button" class="reels-filter" data-filter="roadmap" aria-pressed="false">What is coming &amp; founding price (09 - 10)</button>
+                <button type="button" class="reels-filter" data-filter="missed" aria-pressed="false">Missed on current choice (0)</button>
+                <a class="reels-pill" href="#prices">Jump to calculator</a>
+            </div>
+            <div id="story-grid" class="reels-story-grid"></div>
+        </section>
+
+        <section id="how-it-works" class="reels-anchor mt-16 border-t border-slate-200 pt-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-3">How a reel is made: above the waterline and 300 checks beneath</h2>
+            <p class="text-base text-slate-700 max-w-3xl mb-6">Diagrams 11 to 14. Open one to step through all 18. The folds under the grid are the same craft, in words.</p>
+            <div id="how-grid" class="reels-story-grid"></div>
+
+            <details id="reel" class="reels-fold mt-8">
+                <summary>How the reel is made: the 9 hard gates and 7 teaching axes in detail</summary>
+                <div class="pb-6">
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="11" aria-label="Open diagram 12, Beneath the waterline: 300 checks replace a 5-person team.">
+                            <img src="images/spark-reels/reel-under-waterline.jpg" width="1280" height="720" alt="An iceberg pipeline from Teach once through Transcribe &amp; clean, Chapter boundaries, Course map &amp; notes, Pause judge, and Portrait frame &amp; cover to Ready on WhatsApp." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="12" aria-label="Open diagram 13, How a reel earns Recommended vs Okay.">
+                            <img src="images/spark-reels/reel-grading-rubric.jpg" width="1280" height="720" alt="Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired." loading="lazy">
+                        </button>
+                    </div>
+                    <p class="text-base text-slate-700 mb-4">You teach once and upload the recording. Six stages run before a draft reaches WhatsApp.</p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">1. How the video is uploaded and processed</h3>
+                    <ol class="reels-ol space-y-3 text-base text-slate-700 mb-4">
+                        <li>Transcribe and clean: time-coded words with Sanskrit and anatomy intact.</li>
+                        <li>Chapter boundaries: a maker-checker pass that never cuts mid-thought.</li>
+                        <li>Course map and notes: a structured map of the class.</li>
+                        <li>Pause judge: an acoustic and LLM judge that protects pranayama holds and demonstrations and cuts dead air.</li>
+                        <li>Portrait frame and cover: face reframing with blur-focus depth.</li>
+                        <li>Ready on WhatsApp: a watermarked draft you can approve on your phone.</li>
+                    </ol>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">2. The 9 hard gates</h3>
+                    <p class="text-base text-slate-700 mb-2">Four measured audio and timing gates, then five teaching gates. Fail one and the clip is retired before you see it.</p>
+                    <ol class="reels-ol space-y-3 text-base text-slate-700 mb-4">
+                        <li>At most 150 seconds after dead air is removed.</li>
+                        <li>Dead air at most 30%.</li>
+                        <li>Traffic and background noise below 4/5.</li>
+                        <li>Room echo contrast at least 19 dB.</li>
+                        <li>Real teaching, not class logistics or homework.</li>
+                        <li>Stands alone for a stranger.</li>
+                        <li>One finishable idea.</li>
+                        <li>Right audience.</li>
+                        <li>Delivery floor.</li>
+                    </ol>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">3. The 7 weighted teaching axes</h3>
+                    <p class="text-base text-slate-700 mb-2">Passing clips score 0 to 100. Recommended is 70 or above. Okay is 50 to 69. Under 50 is retired.</p>
+                    <ol class="reels-ol space-y-3 text-base text-slate-700">
+                        <li>Interest match, weight 3.</li>
+                        <li>One claim, weight 3.</li>
+                        <li>Delivery, weight 3.</li>
+                        <li>Mastery signal, weight 2.</li>
+                        <li>Complete arc, weight 2.</li>
+                        <li>Said not performed, weight 2.</li>
+                        <li>Cold standalone, weight 1.</li>
+                    </ol>
+                    <p class="text-base text-slate-700 mt-4">A peer respect test, a slide-opening check, and an other-speaker check sit beside the axes. Deductions cover slides in the opening 5 seconds, other-speaker share, dead air, and length. Those scores are what separate Recommended (70+) from Okay (50 to 69) and Retired (under 50).</p>
+                </div>
+            </details>
+
+            <details id="cover" class="reels-fold">
+                <summary>How the cover and 3-second grid work</summary>
+                <div class="pb-6">
+                    <p class="text-base text-slate-700 mb-4">Reel + cover adds the grid cover. Reel alone does not include a cover or a caption.</p>
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="4" aria-label="Open diagram 05, Three seconds on the grid.">
+                            <img src="images/spark-reels/grid.jpg" width="1280" height="720" alt="3 seconds. A nine-frame grid. One person leaves. Another stays and touches the grid." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="5" aria-label="Open diagram 06, A brand is trust, built on purpose.">
+                            <img src="images/spark-reels/brand.jpg" width="1280" height="720" alt="A brick wall with a path rising through it. A brand is trust. Built on purpose. Not by accident." loading="lazy">
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-base text-slate-700">
+                        <li>Titles stay short enough to scan in the grid.</li>
+                        <li>Templates and colour palettes rotate so the page stays consistent week to week.</li>
+                        <li>Blur-focus depth keeps the subject clear and the background quiet.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details id="caption" class="reels-fold">
+                <summary>How the caption, Carousels, and Stories work</summary>
+                <div class="pb-6">
+                    <p class="text-base text-slate-700 mb-4">Only Reel + cover + caption includes the caption, Carousels, and Stories. The reel and the cover do not.</p>
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="6" aria-label="Open diagram 07, Interest media reaches non-followers.">
+                            <img src="images/spark-reels/interest.jpg" width="1280" height="720" alt="Social media reaches people who already follow you. Interest media reaches people who care, even if they do not follow you yet." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="7" aria-label="Open diagram 08, Do it with intent: Carousels and Stories.">
+                            <img src="images/spark-reels/intent.jpg" width="1280" height="720" alt="A path through a field toward one person. The line reads: who it is for, what it is for, and the promise." loading="lazy">
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-base text-slate-700">
+                        <li>The notes stay in the teacher's voice.</li>
+                        <li>Sanskrit and anatomical terms stay as taught.</li>
+                        <li>The caption is written for people who care about the subject and do not follow you yet.</li>
+                        <li>Carousels and Stories are cut from the same lecture, for learners who read and swipe.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details id="credits" class="reels-fold">
+                <summary>Credits, watermark, and lecture hours</summary>
+                <div class="pb-6 max-w-3xl">
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="16" aria-label="Open diagram 17, What if a clip has a student-specific modification or a verbal slip? How do credits work?">
+                            <img src="images/spark-reels/faq-accuracy-buffer.jpg" width="1280" height="720" alt="You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="10" aria-label="Open diagram 11, Five craft jobs in one reel.">
+                            <img src="images/spark-reels/reel-above-waterline.jpg" width="1280" height="720" alt="A vertical classroom reel surrounded by 5 numbered callouts: 1. Pre-roll hook, 2. Pause-protected clip, 3. 3-second grid cover, 4. Studio end card, 5. Teacher-voice SEO caption." loading="lazy">
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-base text-slate-700">
+                        <li id="credits-hours"></li>
+                        <li id="credits-extra"></li>
+                        <li>A thumbs-up spends a credit and removes the watermark.</li>
+                        <li>A rejected clip is retired and cannot be downloaded clean.</li>
+                        <li>The whole term is paid upfront.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <section id="prices" class="reels-anchor mt-16 border-t border-slate-200 pt-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2">Choose your term, monthly pace, and column.</h2>
+            <p class="text-base text-slate-600 mb-8 max-w-3xl">You pay that whole term upfront. A 12-month term is half the monthly price: the 33.3% annual discount and the 25% Founding Partner discount, stacked. Founding prices apply to 3, 6, and 12 month terms. One month is the full monthly price.</p>
+            <div class="mb-8">
+                <p id="duration-label" class="text-base font-semibold text-slate-900 mb-3">Months paid upfront</p>
+                <div id="duration-controls" class="flex flex-wrap gap-2" role="group" aria-labelledby="duration-label"></div>
+            </div>
+            <div class="mb-8">
+                <p id="reels-label" class="text-base font-semibold text-slate-900 mb-3">Reels per month</p>
+                <div id="reels-controls" class="flex flex-wrap gap-2" role="group" aria-labelledby="reels-label"></div>
+                <label class="mt-4 flex flex-wrap items-center gap-3 text-base text-slate-700" for="reels-custom">
+                    Or type a number from 1 to 90
+                    <input id="reels-custom" class="w-24 rounded-lg border border-slate-300 px-3 py-2 text-base text-slate-900 cursor-text" type="number" inputmode="numeric" min="1" max="90" step="1">
+                </label>
+                <p id="reels-error" class="mt-2 text-base text-red-700" role="status"></p>
+                <p id="pace-line" class="reels-pace text-base text-slate-800"></p>
+            </div>
+            <div id="plan-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
+            <p id="pricing-missing" class="hidden mt-6 text-base text-red-700">Pricing did not load. Reload the page.</p>
+        </section>
+
+        <section id="choice" class="reels-anchor reels-choice" aria-live="polite">
+            <p class="reels-kicker">Your choice</p>
+            <h2 class="text-3xl font-bold text-slate-900">What your choice gives you, and what you miss</h2>
+            <p id="choice-kicker" class="mt-3 text-xl font-bold text-slate-900"></p>
+            <p id="choice-price" class="mt-3 text-base font-semibold text-slate-900"></p>
+            <p id="choice-hours" class="mt-2 text-base text-slate-800"></p>
+            <div id="coverage-bar" class="reels-coverage" aria-label="Slides 01 to 10"></div>
+            <div class="reels-split">
+                <div class="reels-panel">
+                    <h3 class="text-2xl font-bold text-slate-900">What you get with this choice</h3>
+                    <ul id="choice-got" class="reels-miss text-base text-slate-800"></ul>
+                </div>
+                <div class="reels-panel">
+                    <h3 class="text-2xl font-bold text-slate-900">What you leave on the table</h3>
+                    <div id="choice-miss" class="text-base text-slate-800"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="reels-anchor mt-16 border-t border-slate-200 pt-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-3">What is coming, and why the founding price steps down</h2>
+            <p class="text-base text-slate-700 max-w-3xl mb-6">The same class recording is the source. These four are in build. The 25% Founding Partner discount is on the table while they are.</p>
+            <div class="reels-roadmap">
+                <button type="button" class="reels-shot" data-open-slide="8" aria-label="Open slide 09, One class. More formats next.">
+                    <img src="images/spark-reels/upcoming-formats.jpg" width="1280" height="720" alt="One open book fans out to Quizzes, YouTube, multi-platform, and email nurture. Early access on 12 months.">
+                </button>
+                <button type="button" class="reels-shot" data-open-slide="9" aria-label="Open slide 10, Why the 25% Founding Partner price exists.">
+                    <img src="images/spark-reels/founding-window.jpg" width="1280" height="720" alt="Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as new formats ship.">
+                </button>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 mt-8 mb-4">Four capabilities in build from the same lecture recording</h3>
+            <div class="reels-story-grid">
+                <article class="reels-cap">
+                    <h3 class="text-xl font-bold text-slate-900">1. Interactive Quizzes</h3>
+                    <p class="text-base text-slate-700">Short concept checks generated from the same lecture so serious students test their understanding.</p>
+                </article>
+                <article class="reels-cap">
+                    <h3 class="text-xl font-bold text-slate-900">2. YouTube Chapters &amp; Shorts</h3>
+                    <p class="text-base text-slate-700">Long-form chapter cuts and vertical Shorts from the same class map.</p>
+                </article>
+                <article class="reels-cap">
+                    <h3 class="text-xl font-bold text-slate-900">3. Multi-Platform Publishing</h3>
+                    <p class="text-base text-slate-700">Carry the same approved lesson beyond Instagram without a second workflow.</p>
+                </article>
+                <article class="reels-cap">
+                    <h3 class="text-xl font-bold text-slate-900">4. Student Email Nurture</h3>
+                    <p class="text-base text-slate-700">Turn unused lessons from your lecture archive into steady written notes for opted-in students.</p>
+                </article>
+            </div>
+            <div class="reels-callout mt-8">
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Why the 25% Founding Partner discount is on the table today</h3>
+                <p class="text-base text-slate-800">We offer the 25% Founding Partner discount on 3, 6, and 12 month terms today because these four capabilities are still being built. As each capability launches and the product matures, the Founding Partner discount steps down for future cohorts.</p>
+                <p id="roadmap-rate" class="text-base text-slate-800 mt-3"></p>
+            </div>
+        </section>
+
+        <section id="faq" class="reels-anchor mt-16 border-t border-slate-200 pt-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-3">Visual FAQ: every question from studio founders</h2>
+            <p class="text-base text-slate-700 max-w-3xl mb-6">Diagrams 15 to 18. The folds under them cover recording, lecture hours, and why the term is paid upfront.</p>
+            <div id="faq-grid" class="reels-story-grid"></div>
+
+            <details class="reels-fold mt-8">
+                <summary>What kind of class recordings produce the best reels, and how should we record?</summary>
+                <div class="pb-6 max-w-3xl text-base text-slate-700">
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="11" aria-label="Open diagram 12, Beneath the waterline: 300 checks replace a 5-person team.">
+                            <img src="images/spark-reels/reel-under-waterline.jpg" width="1280" height="720" alt="An iceberg pipeline from Teach once through Transcribe &amp; clean, Chapter boundaries, Course map &amp; notes, Pause judge, and Portrait frame &amp; cover to Ready on WhatsApp." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="12" aria-label="Open diagram 13, How a reel earns Recommended vs Okay.">
+                            <img src="images/spark-reels/reel-grading-rubric.jpg" width="1280" height="720" alt="Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired." loading="lazy">
+                        </button>
+                    </div>
+                    <p class="mb-3">Upload lecture-rich classes (philosophy, anatomy, pranayama theory, guided inquiry, Q&amp;A) where 10 to 15 minutes of teaching yields about 1 strong reel (4 to 6 reels per hour). Silent end-to-end asana or pranayama count-only practice does not contain standalone spoken lessons and burns your processing hours.</p>
+                    <p>Three simple recording habits that raise reel quality immediately: (1) Record Zoom in <strong>Speaker View</strong> rather than Gallery View, (2) pair a wireless lapel mic or voice amplifier to the laptop so audio stays crisp when you turn away, and (3) keep a calm, unblurred room background.</p>
+                </div>
+            </details>
+            <details class="reels-fold">
+                <summary>How do the included lecture hours and extra video top-ups work?</summary>
+                <div class="pb-6 max-w-3xl">
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="2" aria-label="Open diagram 03, About 7 hours before a serious yes.">
+                            <img src="images/spark-reels/hours.jpg" width="1280" height="720" alt="About 7 hours. Two reels a week takes 1 to 2 years to reach 90 reels. Seven a week reaches about 5 hours in 3 months and about 10 hours in 6 months." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="16" aria-label="Open diagram 17, What if a clip has a student-specific modification or a verbal slip? How do credits work?">
+                            <img src="images/spark-reels/faq-accuracy-buffer.jpg" width="1280" height="720" alt="You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used." loading="lazy">
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-base text-slate-700">
+                        <li id="included-hours"></li>
+                        <li id="extra-hour"></li>
+                        <li>Up to 4 to 5 videos can be in flight at a time, and unused approved or candidate clips from processed lectures stay in your library for future weeks.</li>
+                    </ul>
+                </div>
+            </details>
+            <details class="reels-fold">
+                <summary>Why is the whole term paid upfront, and why does the 25% Founding Partner discount step down?</summary>
+                <div class="pb-6 max-w-3xl text-base text-slate-700">
+                    <div class="reels-story-grid mb-4">
+                        <button type="button" class="reels-shot" data-open-slide="8" aria-label="Open diagram 09, One class. More formats next.">
+                            <img src="images/spark-reels/upcoming-formats.jpg" width="1280" height="720" alt="One open book fans out to Quizzes, YouTube, multi-platform, and email nurture. Built from the same recording. Early access on 12 months." loading="lazy">
+                        </button>
+                        <button type="button" class="reels-shot" data-open-slide="9" aria-label="Open diagram 10, Why the 25% Founding Partner price exists.">
+                            <img src="images/spark-reels/founding-window.jpg" width="1280" height="720" alt="Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as Quizzes and YouTube ship." loading="lazy">
+                        </button>
+                    </div>
+                    <p>Upfront commitment matches the 3-to-12-month horizon required for classroom content to compound into 5 to 10+ hours of student trust. The 25% Founding Partner discount is offered on 3, 6, and 12 month terms today because Interactive Quizzes, YouTube Chapters and Shorts, Multi-Platform Publishing, and Student Email Nurture are still in build. As those ship, the founding discount steps down for newer cohorts. Locking 12 months stacks the 33.3% annual discount with the 25% founding discount (50% off the monthly rate for the full year) and includes early access as each new format launches.</p>
+                </div>
+            </details>
+        </section>
+
+        <section id="checkout" class="reels-anchor mt-16 border-t border-slate-200 pt-10" aria-live="polite">
+            <p class="reels-kicker">Checkout your plan</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-3">Lock your plan</h2>
+            <p class="text-base text-slate-700 max-w-3xl mb-6">This summary follows the term, pace, and column on this page. Confirm it on WhatsApp or by email, or copy it.</p>
+            <div class="reels-checkout">
+                <div class="reels-checkout-card">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Your plan</h3>
+                    <div id="checkout-summary" class="text-base text-slate-800"></div>
+                </div>
+                <div class="reels-checkout-card">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Confirm this choice</h3>
+                    <div id="checkout-nudge"></div>
+                    <div class="reels-actions">
+                        <a id="whatsapp-choice" class="reels-cta reels-cta-primary" target="_blank" rel="noopener" href="https://wa.me/917899156587">Confirm on WhatsApp</a>
+                        <a id="email-choice" class="reels-cta reels-cta-secondary" href="mailto:support@sparktutor.ai?subject=Spark%20Reels%20plan">Confirm by Email</a>
+                        <button type="button" id="copy-choice" class="reels-cta reels-cta-tertiary">Copy plan summary</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<div id="story-lightbox" class="reels-lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="lightbox-title" hidden>
+    <div class="reels-lightbox-panel">
+        <div class="reels-lightbox-bar">
+            <p id="lightbox-step" class="text-base font-semibold text-slate-900"></p>
+            <span id="lightbox-status" class="reels-status"></span>
+            <button type="button" class="reels-navbtn" id="lightbox-close">Close</button>
+        </div>
+        <img id="lightbox-img" alt="" width="1280" height="720">
+        <p id="lightbox-title" class="text-xl font-bold text-slate-900 mt-4"></p>
+        <p id="lightbox-story" class="text-base text-slate-700 mt-2"></p>
+        <p id="lightbox-reason" class="text-base font-semibold text-slate-900 mt-2"></p>
+        <div class="reels-lightbox-nav">
+            <button type="button" class="reels-navbtn" id="lightbox-prev">Previous</button>
+            <button type="button" class="reels-navbtn" id="lightbox-next">Next</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    var missing = document.getElementById("pricing-missing");
+    if (!window.SPARK_REELS_PRICING || !window.SparkReelsPage) {
+        if (missing) missing.classList.remove("hidden");
+        return;
+    }
+    window.SparkReelsPage.mount();
+})();
+</script>
+</body>
+</html>
