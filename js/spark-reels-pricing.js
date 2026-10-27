@@ -6,6 +6,7 @@
   Included lecture hours = max(6, reels per month x videoHoursPerReelRatio).
   The page opens in rupees, on 20 reels and 12 months, on the full column.
   Page state lives in the URL hash. No browser storage.
+  d= is the open section: story, craft, plan, faq, or founding. No d means the first screen.
   INR shows rupees only. USD shows dollars only, at fxRateInrPerUsd.
   Keep the rupee rates in step with docs/Vaidy/spark-reels-pricing-config.js.
 */
@@ -83,10 +84,10 @@
       slide("14", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", "")
     ],
     faqSlides: [
-      slide("15", "faq", "Visual FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
-      slide("16", "faq", "Visual FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
-      slide("17", "faq", "Visual FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
-      slide("18", "faq", "Visual FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
+      slide("15", "faq", "FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
+      slide("16", "faq", "FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
+      slide("17", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
+      slide("18", "faq", "FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
     ]
   };
 
@@ -255,9 +256,7 @@
       storyIndex: 0,
       craftIndex: 0,
       wizardStep: 1,
-      storyMode: "single",
-      craftMode: "single",
-      wizardMode: "stepped",
+      door: "",
       lightbox: 0,
       summaryText: ""
     };
@@ -270,8 +269,13 @@
     }
     function readHash() {
       var raw = String(window.location.hash || "").replace(/^#/, "");
+      var bare = { story: "story", "how-it-works": "craft", prices: "plan", faq: "faq", roadmap: "founding" };
       var bits, i, pair, out;
-      if (raw.indexOf("=") === -1) return null;
+      if (!raw) return null;
+      if (raw.indexOf("=") === -1) {
+        if (!bare[raw]) return null;
+        return { d: bare[raw] };
+      }
       bits = raw.split("&");
       out = {};
       for (i = 0; i < bits.length; i++) {
@@ -284,6 +288,7 @@
       var data = readHash();
       var tiers = { reel_only: 1, reel_cover: 1, reel_cover_caption: 1 };
       var monthOk = { 1: 1, 3: 1, 6: 1, 12: 1 };
+      var doors = { story: 1, craft: 1, plan: 1, faq: 1, founding: 1 };
       var reels, months, story, step;
       if (!data) return;
       if (data.c === "inr" || data.c === "usd") state.currency = data.c;
@@ -301,10 +306,13 @@
       if (String(story) === data.s && story >= 1 && story <= 10) state.storyIndex = story - 1;
       step = parseInt(data.w, 10);
       if (String(step) === data.w && step >= 1 && step <= 3) state.wizardStep = step;
+      state.door = doors[data.d] ? data.d : "";
       dbg("applyHash:done", state);
     }
     function stateHash() {
-      return "#c=" + state.currency + "&r=" + state.reels + "&m=" + state.months + "&t=" + state.tierId + "&s=" + (state.storyIndex + 1) + "&w=" + state.wizardStep;
+      var hash = "#c=" + state.currency + "&r=" + state.reels + "&m=" + state.months + "&t=" + state.tierId + "&s=" + (state.storyIndex + 1) + "&w=" + state.wizardStep;
+      if (state.door) hash += "&d=" + state.door;
+      return hash;
     }
     function syncHash() {
       var next = stateHash();
@@ -353,11 +361,6 @@
       if (opt.months === 12) return "12 months - Best value 50% off";
       return opt.label;
     }
-    function termSub() {
-      if (state.months === 12) return "12 months · 50% off";
-      if (state.months === 1) return "1 month · full price";
-      return state.months + " months · " + offPct(state.months) + "% off";
-    }
     function buttonClass(on) {
       return on
         ? "px-4 py-2 rounded-full bg-brand-600 text-white text-base font-semibold cursor-pointer"
@@ -380,17 +383,11 @@
     function stageBody(slideRow, index, navHtml) {
       return '<div class="reels-stage reels-stage-anim"><div>' + shot(slideRow, index) + '</div><div><p class="reels-kicker">' + esc(slideRow.group) + '</p><h3 class="text-2xl font-bold text-slate-900 mt-1">' + esc(slideRow.title) + '</h3><p class="text-base text-slate-700 mt-3 leading-relaxed">' + esc(slideRow.story) + "</p>" + navHtml + "</div></div>";
     }
-    function quietCard(slideRow, index, meta) {
-      return '<article class="reels-quiet">' + shot(slideRow, index) + '<p class="text-base font-semibold text-slate-500 mt-3">' + esc(meta) + '</p><h3 class="text-2xl font-bold text-slate-900 mt-1">' + esc(slideRow.title) + '</h3><p class="text-base text-slate-700 mt-3 leading-relaxed">' + esc(slideRow.story) + "</p></article>";
-    }
     function storyNav() {
       var html = '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="story-prev"' + (state.storyIndex === 0 ? " disabled" : "") + ">Previous slide</button>";
-      html += '<button type="button" class="reels-navbtn" id="story-next"' + (state.storyIndex === 9 ? " disabled" : "") + ">Next slide</button>";
-      if (state.storyIndex === 9) {
-        html += '<button type="button" class="reels-navbtn reels-navbtn-primary" data-scroll="how-it-works">Continue to How a reel is made →</button>';
-        html += '<button type="button" class="reels-navbtn" data-scroll="prices">Build your plan in 3 steps →</button>';
-      }
-      return html + "</div>";
+      html += '<button type="button" class="reels-navbtn" id="story-next"' + (state.storyIndex === 9 ? " disabled" : "") + ">Next slide</button></div>";
+      if (state.storyIndex === 9) html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-door="craft">Next: How a reel is made</button></p>';
+      return html;
     }
     function craftNav() {
       return '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="craft-prev"' + (state.craftIndex === 0 ? " disabled" : "") + '>Previous</button><button type="button" class="reels-navbtn" id="craft-next"' + (state.craftIndex === 3 ? " disabled" : "") + ">Next</button></div>";
@@ -403,15 +400,6 @@
         html += '<button type="button" id="' + idPrefix + items[i].attr + '" class="' + buttonClass(on) + '" ' + attr + '="' + items[i].attr + '" aria-pressed="' + on + '">' + labelFor(items[i]) + "</button>";
       }
       return html;
-    }
-    function renderHero() {
-      var tier = tierById("reel_cover_caption");
-      var year = quoteTier(tier, 1, 12).perReelInr;
-      byId("hero-rate-line").textContent = money(year, true) + " a reel on the 12-month complete plan (half the " + money(tier.basePerReelInr, true) + " monthly price).";
-    }
-    function renderSticky() {
-      var q = quoteTier(tierById(state.tierId), state.reels, state.months);
-      byId("sticky-plan-pill").textContent = state.reels + " " + plural(state.reels, "reel", "reels") + "/mo · " + state.months + "m · " + money(q.perReelInr, true) + "/reel · Review plan →";
     }
     function renderControls() {
       var currencies = [{ attr: "inr" }, { attr: "usd" }];
@@ -426,18 +414,8 @@
       byId("pace-line").textContent = paceSentence();
     }
     function renderModes() {
-      var labels = ["Step 1 · Monthly pace", "Step 2 · Weekly workflow", "Step 3 · Term & confirm"];
-      var subs = [state.reels + " " + plural(state.reels, "reel", "reels") + " / month", tierById(state.tierId).name, termSub()];
-      var html = "";
       var i;
-      byId("story-mode-toggle").textContent = state.storyMode === "single" ? "Show all 10 at once" : "Step through one at a time";
-      byId("craft-mode-toggle").textContent = state.craftMode === "single" ? "Show all 4 diagrams" : "Step through one by one";
-      byId("wizard-mode-toggle").textContent = state.wizardMode === "stepped" ? "Show all 3 steps at once" : "One step at a time";
-      for (i = 0; i < 3; i++) {
-        html += '<button type="button" id="wiz-tab-' + (i + 1) + '" class="reels-stepbtn' + (state.wizardStep === i + 1 ? " is-on" : "") + '" data-wizard-step="' + (i + 1) + '" aria-pressed="' + (state.wizardStep === i + 1) + '"><span class="reels-step-label">' + labels[i] + '</span><span class="reels-step-sub">' + esc(subs[i]) + "</span></button>";
-      }
-      byId("wizard-steps-bar").innerHTML = html;
-      for (i = 1; i <= 3; i++) byId("wizard-panel-" + i).hidden = state.wizardMode === "stepped" && state.wizardStep !== i;
+      for (i = 1; i <= 3; i++) byId("wizard-panel-" + i).hidden = state.wizardStep !== i;
       if (state.wizardStep !== lastWizard) {
         lastWizard = state.wizardStep;
         animate(byId("wizard-panel-" + state.wizardStep));
@@ -470,59 +448,26 @@
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
         html += '</ul><p class="mt-4 text-base text-slate-700"><span class="font-semibold text-slate-900">Not included.</span> ' + esc(tier.notIncluded) + "</p>";
         html += '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + selected + '">' + (selected ? "Chosen" : "Choose this") + "</button>";
-        html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-fold="' + esc(tier.fold) + '">See craft details</button></p></div></article>';
+        html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-door="craft">See how a reel is made</button></p></div></article>';
       }
       byId("plan-grid").innerHTML = html;
     }
     function renderStory() {
-      var single = state.storyMode === "single";
-      var html = "";
-      var i, row;
+      var row;
       if (state.storyIndex < 0 || state.storyIndex > 9) state.storyIndex = 0;
-      if (state.storyMode + ":" + state.storyIndex === storySig) return;
-      storySig = state.storyMode + ":" + state.storyIndex;
-      byId("story-stage").hidden = !single;
-      byId("story-grid").hidden = single;
-      if (!single) {
-        byId("story-card-host").innerHTML = "";
-        for (i = 0; i < cfg.storySlides.length; i++) {
-          row = cfg.storySlides[i];
-          html += quietCard(row, i, row.num + " / 10 · " + row.group);
-        }
-        byId("story-grid").innerHTML = html;
-        return;
-      }
-      byId("story-grid").innerHTML = "";
+      if (String(state.storyIndex) === storySig) return;
+      storySig = String(state.storyIndex);
       row = cfg.storySlides[state.storyIndex];
-      byId("story-step-meta").textContent = "Slide " + row.num + " of 10 · " + row.group;
-      for (i = 0; i < cfg.storySlides.length; i++) html += '<button type="button" class="reels-dot" data-story-index="' + i + '" aria-pressed="' + (i === state.storyIndex) + '">' + cfg.storySlides[i].num + "</button>";
-      byId("story-dots").innerHTML = html;
+      byId("story-step-meta").textContent = "Slide " + (state.storyIndex + 1) + " of 10";
       byId("story-card-host").innerHTML = stageBody(row, state.storyIndex, storyNav());
     }
     function renderCraft() {
-      var labels = ["11. Five craft jobs", "12. 300 checks beneath", "13. 9 gates & 7 axes", "14. 9 layers of consistency"];
-      var single = state.craftMode === "single";
-      var html = "";
-      var i, row;
+      var row;
       if (state.craftIndex < 0 || state.craftIndex > 3) state.craftIndex = 0;
-      if (state.craftMode + ":" + state.craftIndex === craftSig) return;
-      craftSig = state.craftMode + ":" + state.craftIndex;
-      byId("craft-tabs").hidden = !single;
-      byId("craft-stage").hidden = !single;
-      byId("craft-grid").hidden = single;
-      if (!single) {
-        byId("craft-stage").innerHTML = "";
-        for (i = 0; i < cfg.craftSlides.length; i++) {
-          row = cfg.craftSlides[i];
-          html += quietCard(row, cfg.storySlides.length + i, row.num + " / 18 · " + row.group);
-        }
-        byId("craft-grid").innerHTML = html;
-        return;
-      }
-      byId("craft-grid").innerHTML = "";
-      for (i = 0; i < labels.length; i++) html += '<button type="button" class="reels-craft-tab" data-craft-index="' + i + '" aria-pressed="' + (i === state.craftIndex) + '">' + esc(labels[i]) + "</button>";
-      byId("craft-tabs").innerHTML = html;
+      if (String(state.craftIndex) === craftSig) return;
+      craftSig = String(state.craftIndex);
       row = cfg.craftSlides[state.craftIndex];
+      byId("craft-step-meta").textContent = "Diagram " + (state.craftIndex + 1) + " of 4";
       byId("craft-stage").innerHTML = stageBody(row, cfg.storySlides.length + state.craftIndex, craftNav());
     }
     function renderFaq() {
@@ -540,8 +485,8 @@
       for (i = 0; i < cfg.faqSlides.length; i++) {
         row = cfg.faqSlides[i];
         index = base + i;
-        html += '<details id="faq-visual-' + i + '" class="reels-fold"><summary><span class="reels-q">' + esc(row.title) + '</span><span class="reels-take">' + esc(takes[i]) + "</span></summary>";
-        html += '<div class="reels-faq-body">' + shot(row, index) + '<p class="text-base text-slate-700 leading-relaxed">' + esc(row.story) + "</p></div></details>";
+        html += '<details id="faq-visual-' + i + '" class="reels-fold"><summary><span class="reels-q">' + esc(row.title) + "</span></summary>";
+        html += '<div class="reels-faq-body"><div><p class="text-base text-slate-700 mb-4">' + esc(takes[i]) + "</p>" + shot(row, index) + "</div></div></details>";
       }
       byId("faq-grid").innerHTML = html;
     }
@@ -606,10 +551,20 @@
       setText("credits-hours", line);
       setText("credits-extra", extra);
     }
-    function renderRoadmap() {
+    function renderFounding() {
       var tier = tierById("reel_cover_caption");
       var year = quoteTier(tier, 1, 12).perReelInr;
-      byId("roadmap-rate").textContent = "A 12-month commitment combines the 33.3% annual discount with the 25% Founding Partner discount. Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year, true) + " per reel for the entire year, with early access to each new format as it ships.";
+      byId("founding-rate").textContent = "A 12-month commitment combines the 33.3% annual discount with the 25% Founding Partner discount. Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year, true) + " per reel for the entire year, with early access to each new format as it ships.";
+    }
+    function renderDoors() {
+      var ids = ["story", "craft", "plan", "faq", "founding"];
+      var panels = { story: "story", craft: "how-it-works", plan: "prices", faq: "faq", founding: "founding" };
+      var i, btn;
+      for (i = 0; i < ids.length; i++) {
+        btn = byId("door-" + ids[i]);
+        if (btn) btn.setAttribute("aria-pressed", state.door === ids[i] ? "true" : "false");
+        byId(panels[ids[i]]).hidden = state.door !== ids[i];
+      }
     }
     function currentUrl() {
       var href = window.location.href;
@@ -664,8 +619,7 @@
     }
     function render() {
       syncHash();
-      renderHero();
-      renderSticky();
+      renderDoors();
       renderControls();
       renderModes();
       renderPlans();
@@ -674,7 +628,7 @@
       renderFaq();
       renderPillars();
       renderHours();
-      renderRoadmap();
+      renderFounding();
       renderCheckout();
       if (!byId("story-lightbox").hidden) paintLightbox();
     }
@@ -748,9 +702,9 @@
       function add(node) { if (node) nodes.push(node); }
       flashToken += 1;
       token = flashToken;
-      if (patch.months) { add(byId("months-opt-" + patch.months)); add(byId("wiz-tab-3")); }
-      if (patch.reels) { add(byId("reels-opt-" + patch.reels)); add(byId("wiz-tab-1")); }
-      if (patch.tierId) { add(byId("tier-" + patch.tierId)); add(byId("wiz-tab-2")); }
+      if (patch.months) add(byId("months-opt-" + patch.months));
+      if (patch.reels) add(byId("reels-opt-" + patch.reels));
+      if (patch.tierId) add(byId("tier-" + patch.tierId));
       add(byId("choice"));
       for (i = 0; i < nodes.length; i++) nodes[i].classList.add("reels-flash");
       window.setTimeout(function () {
@@ -818,26 +772,23 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { show(true); }, function () { show(fallback()); });
       else show(fallback());
     }
-    function setActiveTab(href) {
-      var pairs = [["nav-tab-story", "#story"], ["nav-tab-craft", "#how-it-works"], ["nav-tab-prices", "#prices"]];
-      var i, tab;
-      for (i = 0; i < pairs.length; i++) {
-        tab = byId(pairs[i][0]);
-        if (!tab) continue;
-        if (pairs[i][1] === href) tab.setAttribute("aria-current", "true");
-        else tab.removeAttribute("aria-current");
-      }
+    function panelFor(door) {
+      if (door === "craft") return "how-it-works";
+      if (door === "plan") return "prices";
+      return door;
     }
-    function bindSpy() {
-      var ids = ["story", "how-it-works", "faq", "roadmap", "prices"];
-      var map = { story: "#story", "how-it-works": "#how-it-works", faq: "#how-it-works", roadmap: "#how-it-works", prices: "#prices" };
-      var i;
-      if (!("IntersectionObserver" in window)) return;
-      var obs = new IntersectionObserver(function (entries) {
-        var j;
-        for (j = 0; j < entries.length; j++) if (entries[j].isIntersecting) setActiveTab(map[entries[j].target.id]);
-      }, { rootMargin: "-25% 0px -55% 0px", threshold: 0.01 });
-      for (i = 0; i < ids.length; i++) obs.observe(byId(ids[i]));
+    function bindFaqAccordion() {
+      var rootNode = byId("faq");
+      if (!rootNode) return;
+      rootNode.addEventListener("click", function (e) {
+        var summary = e.target.closest && e.target.closest("summary");
+        var details, nodes, i;
+        if (!summary || !rootNode.contains(summary)) return;
+        details = summary.parentElement;
+        if (!details || details.tagName !== "DETAILS" || details.open) return;
+        nodes = rootNode.getElementsByTagName("details");
+        for (i = 0; i < nodes.length; i++) if (nodes[i] !== details) nodes[i].open = false;
+      });
     }
     applyHash();
     byId("reels-custom").addEventListener("input", function (e) {
@@ -857,18 +808,30 @@
       if (origin.closest("#lightbox-next")) { stepLightbox(1); return; }
       if (origin.closest("#copy-choice")) { copyText(state.summaryText || "", byId("copy-choice"), "Copied plan summary"); return; }
       if (origin.closest("#copy-link-choice")) { syncHash(); copyText(window.location.href, byId("copy-link-choice"), "Copied link"); return; }
-      if (origin.closest("#story-mode-toggle")) { state.storyMode = state.storyMode === "single" ? "grid" : "single"; render(); return; }
-      if (origin.closest("#craft-mode-toggle")) { state.craftMode = state.craftMode === "single" ? "grid" : "single"; render(); return; }
-      if (origin.closest("#wizard-mode-toggle")) { state.wizardMode = state.wizardMode === "stepped" ? "all" : "stepped"; render(); return; }
-      if (origin.closest("#sticky-plan-pill")) { scrollToId("prices"); return; }
-      btn = origin.closest("[data-door]");
-      if (btn) {
-        doorId = { story: "story", craft: "how-it-works", wizard: "prices" };
-        scrollToId(doorId[btn.getAttribute("data-door")] || "story");
+      if (origin.closest("#founding-build")) {
+        state.months = 12;
+        state.tierId = "reel_cover_caption";
+        state.wizardStep = 3;
+        state.door = "plan";
+        render();
+        scrollToId("prices");
         return;
       }
-      btn = origin.closest("a.reels-tab");
-      if (btn) { e.preventDefault(); scrollToId(btn.getAttribute("href").replace("#", "")); return; }
+      btn = origin.closest("[data-open-door]");
+      if (btn) {
+        state.door = btn.getAttribute("data-open-door");
+        render();
+        scrollToId(panelFor(state.door));
+        return;
+      }
+      btn = origin.closest("#entry-doors [data-door]");
+      if (btn) {
+        doorId = btn.getAttribute("data-door");
+        state.door = state.door === doorId ? "" : doorId;
+        render();
+        if (state.door) scrollToId(panelFor(state.door));
+        return;
+      }
       btn = origin.closest("[data-scroll]");
       if (btn) { scrollToId(btn.getAttribute("data-scroll")); return; }
       btn = origin.closest("[data-goto-step], [data-wizard-step]");
@@ -903,7 +866,7 @@
       else if (e.key === "ArrowRight") { stepLightbox(1); e.preventDefault(); }
       else if (e.key === "ArrowLeft") { stepLightbox(-1); e.preventDefault(); }
     });
-    bindSpy();
+    bindFaqAccordion();
     render();
   }
   root.SparkReelsPage = { mount: mount };
