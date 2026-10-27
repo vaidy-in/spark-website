@@ -1,13 +1,12 @@
 /*
-  Spark Reels public pricing, the 10-slide story, and diagrams 11 to 18.
-
+  Spark Reels pricing, the 10-slide story, and the plan wizard.
   Edit a number here, save, and reload marketing/spark-reels.html.
   Founding partner pricing applies to 3, 6, and 12 month terms.
-  It does not apply to the 1-month price.
   Term and founding discounts stack by multiplication, not by adding percents.
   Included lecture hours = max(6, reels per month x videoHoursPerReelRatio).
   The page opens in rupees, on 20 reels and 12 months, on the full column.
-  Currency choice stays in memory for this page view. No browser storage.
+  Page state lives in the URL hash. No browser storage.
+  INR shows rupees only. USD shows dollars only, at fxRateInrPerUsd.
   Keep the rupee rates in step with docs/Vaidy/spark-reels-pricing-config.js.
 */
 (function (root) {
@@ -213,9 +212,9 @@
   }
 
   function pillFor(level) {
-    if (level === "included") return "Included in your choice";
-    if (level === "partial") return "Partially unlocked";
-    return "Missed on current choice";
+    if (level === "included") return "Included";
+    if (level === "partial") return "Optional upgrade";
+    return "Not in current choice";
   }
 
   function tone(level) {
@@ -228,47 +227,6 @@
     return n < 10 ? "0" + n : String(n);
   }
 
-  function numsAtLevel(tierId, reels, months, level) {
-    var nums = [];
-    var i;
-    var st;
-    for (i = 0; i < cfg.storySlides.length; i++) {
-      st = statusFor(cfg.storySlides[i], { tierId: tierId, reels: reels, months: months });
-      if (st.level === level) nums.push(parseInt(cfg.storySlides[i].num, 10));
-    }
-    return nums;
-  }
-
-  function groupRanges(nums) {
-    var parts = [];
-    var start = nums[0];
-    var prev = nums[0];
-    var i;
-    for (i = 1; i <= nums.length; i++) {
-      if (i < nums.length && nums[i] === prev + 1) {
-        prev = nums[i];
-        continue;
-      }
-      parts.push(start === prev ? pad(start) : pad(start) + " - " + pad(prev));
-      if (i < nums.length) {
-        start = nums[i];
-        prev = nums[i];
-      }
-    }
-    return parts.join(", ");
-  }
-
-  function planSlideBadge(tierId, reels, months) {
-    var unlocked = numsAtLevel(tierId, reels, months, "included");
-    var missed = numsAtLevel(tierId, reels, months, "missed");
-    var partial = numsAtLevel(tierId, reels, months, "partial");
-    var text;
-    if (unlocked.length === 10) return "Unlocks all 10 of 10 slides (01 - 10)";
-    text = "Unlocks " + unlocked.length + " of 10 slides (" + groupRanges(unlocked) + ")";
-    if (missed.length) text += " - misses " + groupRanges(missed);
-    if (partial.length) text += " - partial " + groupRanges(partial);
-    return text;
-  }
 
   cfg.quoteTier = quoteTier;
   cfg.quotePerReelInr = function (tierId, months) {
@@ -281,60 +239,98 @@
     var missing = document.getElementById("pricing-missing");
     var state;
     var flashToken = 0;
-    var copyToken = 0;
+    var lastWizard = 0;
+    var storySig = "";
+    var craftSig = "";
+    var faqDone = false;
     if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.allSlides.length !== 18) {
       if (missing) missing.classList.remove("hidden");
       return;
     }
-
     state = {
       reels: cfg.defaultReelsPerMonth,
       months: cfg.defaultDurationMonths,
       currency: cfg.defaultCurrency === "usd" ? "usd" : "inr",
       tierId: cfg.defaultTierId,
-      filter: "all",
+      storyIndex: 0,
+      craftIndex: 0,
+      wizardStep: 1,
+      storyMode: "single",
+      craftMode: "single",
+      wizardMode: "stepped",
       lightbox: 0,
       summaryText: ""
     };
-
+    function byId(id) { return document.getElementById(id); }
+    function dbg(step, detail) {
+      if (typeof console !== "undefined" && console.debug) console.debug("[SparkReels]", step, detail || "");
+    }
     function esc(value) {
       return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
-
-    function formatInr(inr) {
-      return "₹" + Math.round(inr).toLocaleString("en-IN");
+    function readHash() {
+      var raw = String(window.location.hash || "").replace(/^#/, "");
+      var bits, i, pair, out;
+      if (raw.indexOf("=") === -1) return null;
+      bits = raw.split("&");
+      out = {};
+      for (i = 0; i < bits.length; i++) {
+        pair = bits[i].split("=");
+        out[decodeURIComponent(pair[0] || "")] = decodeURIComponent(pair.slice(1).join("="));
+      }
+      return out;
     }
-
+    function applyHash() {
+      var data = readHash();
+      var tiers = { reel_only: 1, reel_cover: 1, reel_cover_caption: 1 };
+      var monthOk = { 1: 1, 3: 1, 6: 1, 12: 1 };
+      var reels, months, story, step;
+      if (!data) return;
+      if (data.c === "inr" || data.c === "usd") state.currency = data.c;
+      reels = parseInt(data.r, 10);
+      if (String(reels) === data.r && reels >= 1 && reels <= 90) {
+        state.reels = reels;
+        if (reels !== 12 && reels !== 20 && reels !== 28 && reels !== 30 && byId("reels-custom")) {
+          byId("reels-custom").value = String(reels);
+        }
+      }
+      months = parseInt(data.m, 10);
+      if (String(months) === data.m && monthOk[months]) state.months = months;
+      if (tiers[data.t]) state.tierId = data.t;
+      story = parseInt(data.s, 10);
+      if (String(story) === data.s && story >= 1 && story <= 10) state.storyIndex = story - 1;
+      step = parseInt(data.w, 10);
+      if (String(step) === data.w && step >= 1 && step <= 3) state.wizardStep = step;
+      dbg("applyHash:done", state);
+    }
+    function stateHash() {
+      return "#c=" + state.currency + "&r=" + state.reels + "&m=" + state.months + "&t=" + state.tierId + "&s=" + (state.storyIndex + 1) + "&w=" + state.wizardStep;
+    }
+    function syncHash() {
+      var next = stateHash();
+      if (window.location.hash !== next) window.history.replaceState(null, "", next);
+    }
+    function formatInr(inr) { return "₹" + Math.round(inr).toLocaleString("en-IN"); }
     function formatUsd(inr, reel) {
       var usd = Math.round(inr) / cfg.fxRateInrPerUsd;
       if (reel || usd < 100) return "$" + usd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       return "$" + Math.round(usd).toLocaleString("en-US");
     }
-
     function money(inr, reel) {
       if (state.currency === "usd") return formatUsd(inr, reel);
       return formatInr(inr);
     }
-
-    function plural(n, one, many) {
-      return n === 1 ? one : many;
-    }
-
-    function includedHours(reels) {
-      return Math.max(cfg.minLectureHours, reels * cfg.videoHoursPerReelRatio);
-    }
-
+    function plural(n, one, many) { return n === 1 ? one : many; }
+    function includedHours(reels) { return Math.max(cfg.minLectureHours, reels * cfg.videoHoursPerReelRatio); }
     function hoursText(hours) {
       var rounded = Math.round(hours * 10) / 10;
       if (Math.abs(rounded - Math.round(rounded)) < 0.001) return String(Math.round(rounded));
       return rounded.toFixed(1);
     }
-
     function hourPhrase(hours) {
       var label = hoursText(hours);
       return label + " " + plural(Number(label) === 1 ? 1 : 2, "hour", "hours");
     }
-
     function ratePhrase(tier, months) {
       var perReel = quoteTier(tier, 1, months).perReelInr;
       var pct;
@@ -343,238 +339,265 @@
       pct = Math.round((1 - perReel / tier.basePerReelInr) * 100);
       return pct + "% under the monthly price";
     }
-
-    function durationHint(opt) {
-      var factor;
-      if (opt.months === 1) return "Full monthly price";
-      if (opt.bestValue) return "Best value - 50% off";
-      factor = (1 - opt.termDiscountPct / 100) * (1 - cfg.foundingDiscountPct / 100);
-      return Math.round((1 - factor) * 100) + "% off";
-    }
-
-    function discountLabel(months) {
+    function offPct(months) {
       var opt = durationByMonths(months);
-      var factor;
-      var pct;
-      if (months < 3) return "None (1-month trial)";
-      factor = (1 - opt.termDiscountPct / 100) * (1 - cfg.foundingDiscountPct / 100);
-      pct = Math.round((1 - factor) * 100);
-      if (months === 12) return pct + "% off (33.3% annual + 25% Founding Partner)";
-      return pct + "% off";
+      var factor = (1 - opt.termDiscountPct / 100) * (1 - cfg.foundingDiscountPct / 100);
+      return Math.round((1 - factor) * 100);
     }
-
+    function discountLabel(months) {
+      if (months < 3) return "None (1-month trial)";
+      if (months === 12) return "50% off (33.3% annual + 25% Founding Partner)";
+      return offPct(months) + "% off";
+    }
+    function durationButtonLabel(opt) {
+      if (opt.months === 12) return "12 months - Best value 50% off";
+      return opt.label;
+    }
+    function termSub() {
+      if (state.months === 12) return "12 months · 50% off";
+      if (state.months === 1) return "1 month · full price";
+      return state.months + " months · " + offPct(state.months) + "% off";
+    }
     function buttonClass(on) {
       return on
         ? "px-4 py-2 rounded-full bg-brand-600 text-white text-base font-semibold cursor-pointer"
         : "px-4 py-2 rounded-full bg-white text-slate-800 text-base font-semibold border border-slate-300 hover:bg-slate-50 cursor-pointer";
     }
-
-    function ctxNow() {
-      return { tierId: state.tierId, reels: state.reels, months: state.months };
-    }
-
+    function ctxNow() { return { tierId: state.tierId, reels: state.reels, months: state.months }; }
     function setText(id, text) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = text;
+      var node = byId(id);
+      if (node) node.textContent = text;
     }
-
-    function actionsHtml(actions, fromId) {
-      var html = "";
-      var i;
-      var action;
-      if (!actions || !actions.length) return "";
-      html += '<div class="reels-fixrow">';
-      for (i = 0; i < actions.length; i++) {
-        action = actions[i];
-        html += '<button type="button" class="reels-fix" data-fix="1" data-from="' + esc(fromId) + '"';
-        if (action.months) html += ' data-months="' + action.months + '"';
-        if (action.reels) html += ' data-reels="' + action.reels + '"';
-        if (action.tierId) html += ' data-tier="' + esc(action.tierId) + '"';
-        html += ">" + esc(action.label) + "</button>";
-      }
-      return html + "</div>";
-    }
-
     function paceSentence() {
       var total = state.reels * state.months;
       var minutes = Math.round(total * 2 * 1.5);
-      var watch;
-      if (minutes < 60) watch = "about " + minutes + " " + plural(minutes, "minute", "minutes");
-      else watch = "about " + hourPhrase(minutes / 60);
+      var watch = minutes < 60 ? "about " + minutes + " " + plural(minutes, "minute", "minutes") : "about " + hourPhrase(minutes / 60);
       return total + " " + plural(total, "reel", "reels") + " over " + state.months + " " + plural(state.months, "month", "months") + " - " + watch + " of classroom teaching on your page. Each reel is about 2 minutes, and serious students often watch about 1.5 times.";
     }
-
-    function slideCard(slideRow, index, withTie) {
-      var st = withTie ? statusFor(slideRow, ctxNow()) : null;
-      var html = '<article class="reels-slide" id="slide-' + slideRow.num + '" data-index="' + index + '">';
-      html += '<div class="reels-slide-top"><span class="reels-step">' + slideRow.num + " / " + pad(cfg.allSlides.length) + "</span>";
-      html += '<span class="reels-grouptag">' + esc(slideRow.group) + "</span>";
-      if (st) html += '<span class="reels-status reels-status-' + tone(st.level) + '">' + esc(st.pill) + "</span>";
-      html += "</div>";
-      html += '<button type="button" class="reels-shot" data-open-slide="' + index + '" aria-label="Open diagram ' + slideRow.num + ", " + esc(slideRow.title) + '">';
-      html += '<img src="' + esc(slideRow.image) + '" width="1280" height="720" alt="' + esc(slideRow.alt) + '" loading="lazy"></button>';
-      html += '<h3 class="text-2xl font-bold text-slate-900 mt-4">' + esc(slideRow.title) + "</h3>";
-      html += '<p class="mt-3 text-base text-slate-700">' + esc(slideRow.story) + "</p>";
-      if (st) {
-        html += '<div class="reels-tie"><div class="reels-tie-box"><p class="text-base text-slate-800">' + esc(st.reason) + "</p>";
-        html += actionsHtml(st.actions, "slide-" + slideRow.num) + "</div></div>";
-      }
-      return html + "</article>";
+    function shot(slideRow, index) {
+      return '<button type="button" class="reels-shot" data-open-slide="' + index + '" aria-label="Open diagram ' + slideRow.num + ", " + esc(slideRow.title) + '"><img src="' + esc(slideRow.image) + '" width="1280" height="720" alt="' + esc(slideRow.alt) + '" loading="lazy"></button>';
     }
-
-    function renderButtons(items, attr, pressed, labelFor) {
+    function stageBody(slideRow, index, navHtml) {
+      return '<div class="reels-stage reels-stage-anim"><div>' + shot(slideRow, index) + '</div><div><p class="reels-kicker">' + esc(slideRow.group) + '</p><h3 class="text-2xl font-bold text-slate-900 mt-1">' + esc(slideRow.title) + '</h3><p class="text-base text-slate-700 mt-3 leading-relaxed">' + esc(slideRow.story) + "</p>" + navHtml + "</div></div>";
+    }
+    function quietCard(slideRow, index, meta) {
+      return '<article class="reels-quiet">' + shot(slideRow, index) + '<p class="text-base font-semibold text-slate-500 mt-3">' + esc(meta) + '</p><h3 class="text-2xl font-bold text-slate-900 mt-1">' + esc(slideRow.title) + '</h3><p class="text-base text-slate-700 mt-3 leading-relaxed">' + esc(slideRow.story) + "</p></article>";
+    }
+    function storyNav() {
+      var html = '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="story-prev"' + (state.storyIndex === 0 ? " disabled" : "") + ">Previous slide</button>";
+      html += '<button type="button" class="reels-navbtn" id="story-next"' + (state.storyIndex === 9 ? " disabled" : "") + ">Next slide</button>";
+      if (state.storyIndex === 9) {
+        html += '<button type="button" class="reels-navbtn reels-navbtn-primary" data-scroll="how-it-works">Continue to How a reel is made →</button>';
+        html += '<button type="button" class="reels-navbtn" data-scroll="prices">Build your plan in 3 steps →</button>';
+      }
+      return html + "</div>";
+    }
+    function craftNav() {
+      return '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="craft-prev"' + (state.craftIndex === 0 ? " disabled" : "") + '>Previous</button><button type="button" class="reels-navbtn" id="craft-next"' + (state.craftIndex === 3 ? " disabled" : "") + ">Next</button></div>";
+    }
+    function renderButtons(items, attr, idPrefix, pressed, labelFor) {
       var html = "";
-      var i;
-      var on;
+      var i, on;
       for (i = 0; i < items.length; i++) {
         on = pressed(items[i]);
-        html += '<button type="button" class="' + buttonClass(on) + '" ' + attr + '="' + items[i].attr + '" aria-pressed="' + on + '">' + labelFor(items[i]) + "</button>";
+        html += '<button type="button" id="' + idPrefix + items[i].attr + '" class="' + buttonClass(on) + '" ' + attr + '="' + items[i].attr + '" aria-pressed="' + on + '">' + labelFor(items[i]) + "</button>";
       }
       return html;
     }
-
+    function renderHero() {
+      var tier = tierById("reel_cover_caption");
+      var year = quoteTier(tier, 1, 12).perReelInr;
+      byId("hero-rate-line").textContent = money(year, true) + " a reel on the 12-month complete plan (half the " + money(tier.basePerReelInr, true) + " monthly price).";
+    }
+    function renderSticky() {
+      var q = quoteTier(tierById(state.tierId), state.reels, state.months);
+      byId("sticky-plan-pill").textContent = state.reels + " " + plural(state.reels, "reel", "reels") + "/mo · " + state.months + "m · " + money(q.perReelInr, true) + "/reel · Review plan →";
+    }
     function renderControls() {
-      var currencies = [{ attr: "inr", label: "INR" }, { attr: "usd", label: "USD" }];
+      var currencies = [{ attr: "inr" }, { attr: "usd" }];
       var reels = [];
       var durations = [];
       var i;
-      for (i = 0; i < cfg.reelsPerMonthOptions.length; i++) {
-        reels.push({ attr: cfg.reelsPerMonthOptions[i].reels, opt: cfg.reelsPerMonthOptions[i] });
-      }
-      for (i = 0; i < cfg.durationMonthsOptions.length; i++) {
-        durations.push({ attr: cfg.durationMonthsOptions[i].months, opt: cfg.durationMonthsOptions[i] });
-      }
-      document.getElementById("currency-switch").innerHTML = renderButtons(currencies, "data-currency", function (item) { return state.currency === item.attr; }, function (item) { return item.label; });
-      document.getElementById("reels-controls").innerHTML = renderButtons(reels, "data-reels", function (item) { return state.reels === item.opt.reels; }, function (item) { return esc(item.opt.label) + ' <span class="reels-hint">(' + esc(item.opt.hint) + ")</span>"; });
-      document.getElementById("duration-controls").innerHTML = renderButtons(durations, "data-months", function (item) { return state.months === item.opt.months; }, function (item) { return esc(item.opt.label) + ' <span class="reels-hint">(' + esc(durationHint(item.opt)) + ")</span>"; });
-      document.getElementById("pace-line").textContent = paceSentence();
+      for (i = 0; i < cfg.reelsPerMonthOptions.length; i++) reels.push({ attr: cfg.reelsPerMonthOptions[i].reels, opt: cfg.reelsPerMonthOptions[i] });
+      for (i = 0; i < cfg.durationMonthsOptions.length; i++) durations.push({ attr: cfg.durationMonthsOptions[i].months, opt: cfg.durationMonthsOptions[i] });
+      byId("currency-switch").innerHTML = renderButtons(currencies, "data-currency", "currency-", function (item) { return state.currency === item.attr; }, function (item) { return item.attr === "usd" ? "USD" : "INR"; });
+      byId("reels-controls").innerHTML = renderButtons(reels, "data-reels", "reels-opt-", function (item) { return state.reels === item.opt.reels; }, function (item) { return esc(item.opt.label) + ' <span class="reels-hint">(' + esc(item.opt.hint) + ")</span>"; });
+      byId("duration-controls").innerHTML = renderButtons(durations, "data-months", "months-opt-", function (item) { return state.months === item.opt.months; }, function (item) { return esc(durationButtonLabel(item.opt)); });
+      byId("pace-line").textContent = paceSentence();
     }
-
-    function renderPlans() {
+    function renderModes() {
+      var labels = ["Step 1 · Monthly pace", "Step 2 · Weekly workflow", "Step 3 · Term & confirm"];
+      var subs = [state.reels + " " + plural(state.reels, "reel", "reels") + " / month", tierById(state.tierId).name, termSub()];
       var html = "";
       var i;
-      var j;
-      var tier;
-      var q;
-      var selected;
-      var rate;
+      byId("story-mode-toggle").textContent = state.storyMode === "single" ? "Show all 10 at once" : "Step through one at a time";
+      byId("craft-mode-toggle").textContent = state.craftMode === "single" ? "Show all 4 diagrams" : "Step through one by one";
+      byId("wizard-mode-toggle").textContent = state.wizardMode === "stepped" ? "Show all 3 steps at once" : "One step at a time";
+      for (i = 0; i < 3; i++) {
+        html += '<button type="button" id="wiz-tab-' + (i + 1) + '" class="reels-stepbtn' + (state.wizardStep === i + 1 ? " is-on" : "") + '" data-wizard-step="' + (i + 1) + '" aria-pressed="' + (state.wizardStep === i + 1) + '"><span class="reels-step-label">' + labels[i] + '</span><span class="reels-step-sub">' + esc(subs[i]) + "</span></button>";
+      }
+      byId("wizard-steps-bar").innerHTML = html;
+      for (i = 1; i <= 3; i++) byId("wizard-panel-" + i).hidden = state.wizardMode === "stepped" && state.wizardStep !== i;
+      if (state.wizardStep !== lastWizard) {
+        lastWizard = state.wizardStep;
+        animate(byId("wizard-panel-" + state.wizardStep));
+      }
+    }
+    function animate(node) {
+      if (!node) return;
+      node.classList.remove("reels-stage-anim");
+      void node.offsetWidth;
+      node.classList.add("reels-stage-anim");
+    }
+    function renderPlans() {
+      var html = "";
+      var i, j, tier, q, selected, rate;
       for (i = 0; i < cfg.tiers.length; i++) {
         tier = cfg.tiers[i];
         q = quoteTier(tier, state.reels, state.months);
         selected = tier.id === state.tierId;
         rate = ratePhrase(tier, state.months);
-        html += '<article data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '" class="rounded-2xl border p-6 flex flex-col ' + (selected ? "border-brand-600 reels-start reels-chosen" : "border-slate-200") + '">';
-        html += '<p class="reels-eyebrow text-base font-semibold text-brand-700 mb-2">' + (tier.recommended ? "Start here - Complete system" : "") + "</p>";
+        html += '<article id="tier-' + esc(tier.id) + '" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '" class="rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
+        html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Start here - Complete system" : "") + "</p>";
         html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>";
-        html += '<p class="mt-4 text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + "</p>";
-        html += '<p class="text-base text-slate-600">a reel</p>';
+        html += '<p class="mt-4 text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + '</p><p class="text-base text-slate-600">a reel</p>';
         if (q.perReelInr < tier.basePerReelInr) html += '<p class="mt-2 text-base reels-was">' + esc(money(tier.basePerReelInr, true)) + " on a monthly plan</p>";
         html += '<p class="mt-4 text-base font-semibold text-brand-700">' + esc(rate.charAt(0).toUpperCase() + rate.slice(1)) + "</p>";
         html += '<p class="mt-3 text-base text-slate-900 font-semibold">' + esc(money(q.monthlyInr, false)) + " a month</p>";
         html += '<p class="mt-1 text-base text-slate-900 font-semibold">' + esc(money(q.upfrontInr, false)) + " upfront</p>";
         html += '<p class="text-base text-slate-600">for ' + state.reels + " " + plural(state.reels, "reel", "reels") + " × " + state.months + " " + plural(state.months, "month", "months") + "</p>";
-        html += '<p class="mt-3 text-base font-semibold text-slate-900">' + esc(planSlideBadge(tier.id, state.reels, state.months)) + "</p>";
         html += '<p class="mt-4 text-base font-semibold text-slate-900">What you get</p><ul class="reels-benefits mt-2 space-y-2 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
         html += '</ul><p class="mt-4 text-base text-slate-700"><span class="font-semibold text-slate-900">Not included.</span> ' + esc(tier.notIncluded) + "</p>";
-        html += '<div class="reels-card-foot"><p><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + selected + '">';
-        html += (selected ? "Chosen" : "Choose this") + "</button></p>";
-        html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-fold="' + esc(tier.fold) + '">See details below</button></p></div></article>';
+        html += '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + selected + '">' + (selected ? "Chosen" : "Choose this") + "</button>";
+        html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-fold="' + esc(tier.fold) + '">See craft details</button></p></div></article>';
       }
-      document.getElementById("plan-grid").innerHTML = html;
+      byId("plan-grid").innerHTML = html;
     }
-
-    function renderStoryBar() {
-      var termLabel = { 1: "1m", 3: "3m", 6: "6m", 12: "12m · 50% off" };
-      var tiers = [];
-      var terms = [];
-      var paces = [];
-      var i;
-      var tier;
-      var q;
-      var unlocked;
-      for (i = 0; i < cfg.tiers.length; i++) tiers.push({ attr: cfg.tiers[i].id, name: cfg.tiers[i].name });
-      for (i = 0; i < cfg.durationMonthsOptions.length; i++) terms.push({ attr: String(cfg.durationMonthsOptions[i].months), months: cfg.durationMonthsOptions[i].months });
-      for (i = 0; i < cfg.reelsPerMonthOptions.length; i++) paces.push({ attr: String(cfg.reelsPerMonthOptions[i].reels), reels: cfg.reelsPerMonthOptions[i].reels });
-      document.getElementById("story-tier").innerHTML = renderButtons(tiers, "data-story-tier", function (item) { return state.tierId === item.attr; }, function (item) { return esc(item.name); });
-      document.getElementById("story-term").innerHTML = renderButtons(terms, "data-story-months", function (item) { return state.months === item.months; }, function (item) { return termLabel[item.months]; });
-      document.getElementById("story-pace").innerHTML = renderButtons(paces, "data-story-reels", function (item) { return state.reels === item.reels; }, function (item) { return String(item.reels); });
-      tier = tierById(state.tierId);
-      q = quoteTier(tier, state.reels, state.months);
-      unlocked = numsAtLevel(state.tierId, state.reels, state.months, "included").length;
-      document.getElementById("story-plan-summary").textContent = tier.name + " · " + state.reels + " " + plural(state.reels, "reel", "reels") + "/mo · " + state.months + " " + plural(state.months, "month", "months") + ": " + money(q.perReelInr, true) + "/reel (" + money(q.monthlyInr, false) + "/mo) · " + unlocked + " of 10 slides unlocked";
-    }
-
     function renderStory() {
+      var single = state.storyMode === "single";
       var html = "";
-      var filters;
-      var i;
-      var slideRow;
-      var st;
-      var missedCount = 0;
-      var tier;
-      var show;
-      for (i = 0; i < cfg.storySlides.length; i++) {
-        if (statusFor(cfg.storySlides[i], ctxNow()).level === "missed") missedCount += 1;
-      }
-      if (state.filter === "missed" && missedCount === 0) {
-        tier = tierById(state.tierId);
-        html = '<div class="reels-tie-box"><p class="text-base text-slate-800">All 10 slides are unlocked in your current choice (' + esc(tier.name) + ", " + state.reels + " " + plural(state.reels, "reel", "reels") + "/month, " + state.months + " " + plural(state.months, "month", "months") + ').</p><p class="mt-3"><button type="button" class="reels-fix" data-show-all="1">Show all 10 slides</button></p></div>';
-      }
-      for (i = 0; i < cfg.storySlides.length && html.indexOf("data-show-all") === -1; i++) {
-        slideRow = cfg.storySlides[i];
-        st = statusFor(slideRow, ctxNow());
-        if (state.filter === "missed") show = st.level === "missed";
-        else if (state.filter === "all") show = true;
-        else show = slideRow.filter === state.filter;
-        if (show) html += slideCard(slideRow, i, true);
-      }
-      document.getElementById("story-grid").innerHTML = html;
-      filters = document.querySelectorAll("#story-filters [data-filter]");
-      for (i = 0; i < filters.length; i++) {
-        filters[i].setAttribute("aria-pressed", filters[i].getAttribute("data-filter") === state.filter ? "true" : "false");
-        if (filters[i].getAttribute("data-filter") === "missed") filters[i].textContent = "Missed on current choice (" + missedCount + ")";
-      }
-    }
-
-    function renderBand(id, slides, offset, withTie) {
-      var html = "";
-      var i;
-      for (i = 0; i < slides.length; i++) html += slideCard(slides[i], offset + i, withTie);
-      document.getElementById(id).innerHTML = html;
-    }
-
-    function renderChoice() {
-      var tier = tierById(state.tierId);
-      var q = quoteTier(tier, state.reels, state.months);
-      var total = state.reels * state.months;
-      var got = "";
-      var missed = "";
-      var missCount = 0;
-      var chips = "";
-      var i;
-      var slideRow;
-      var st;
-      for (i = 0; i < cfg.storySlides.length; i++) {
-        slideRow = cfg.storySlides[i];
-        st = statusFor(slideRow, ctxNow());
-        if (st.level === "included") got += '<li class="reels-gap"><span class="font-semibold">' + slideRow.num + ".</span> " + esc(st.reason) + "</li>";
-        else {
-          missCount += 1;
-          missed += '<li class="reels-gap"><span class="font-semibold">' + slideRow.num + ".</span> " + esc(st.reason) + actionsHtml(st.actions, "choice") + "</li>";
+      var i, row;
+      if (state.storyIndex < 0 || state.storyIndex > 9) state.storyIndex = 0;
+      if (state.storyMode + ":" + state.storyIndex === storySig) return;
+      storySig = state.storyMode + ":" + state.storyIndex;
+      byId("story-stage").hidden = !single;
+      byId("story-grid").hidden = single;
+      if (!single) {
+        byId("story-card-host").innerHTML = "";
+        for (i = 0; i < cfg.storySlides.length; i++) {
+          row = cfg.storySlides[i];
+          html += quietCard(row, i, row.num + " / 10 · " + row.group);
         }
-        chips += '<button type="button" class="reels-chip reels-chip-' + tone(st.level) + '" data-jump-slide="' + slideRow.num + '" aria-label="Go to slide ' + slideRow.num + '">' + slideRow.num + "</button>";
+        byId("story-grid").innerHTML = html;
+        return;
       }
-      document.getElementById("choice-kicker").textContent = tier.name + " · " + state.reels + " " + plural(state.reels, "reel", "reels") + "/month · " + state.months + " " + plural(state.months, "month", "months") + " upfront";
-      document.getElementById("choice-price").textContent = money(q.perReelInr, true) + " a reel. " + money(q.monthlyInr, false) + " a month. " + money(q.upfrontInr, false) + " upfront for " + total + " " + plural(total, "reel", "reels") + ".";
-      document.getElementById("choice-hours").textContent = hourPhrase(includedHours(state.reels)) + " of lecture included each month. Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
-      document.getElementById("coverage-bar").innerHTML = chips;
-      document.getElementById("choice-got").innerHTML = got;
-      document.getElementById("choice-miss").innerHTML = missCount === 0
-        ? "<p>Nothing left out. You have the full classroom-to-trust system, half the monthly price locked for a year, and early access as new formats ship.</p>"
-        : '<ul class="reels-miss">' + missed + "</ul>";
+      byId("story-grid").innerHTML = "";
+      row = cfg.storySlides[state.storyIndex];
+      byId("story-step-meta").textContent = "Slide " + row.num + " of 10 · " + row.group;
+      for (i = 0; i < cfg.storySlides.length; i++) html += '<button type="button" class="reels-dot" data-story-index="' + i + '" aria-pressed="' + (i === state.storyIndex) + '">' + cfg.storySlides[i].num + "</button>";
+      byId("story-dots").innerHTML = html;
+      byId("story-card-host").innerHTML = stageBody(row, state.storyIndex, storyNav());
     }
-
+    function renderCraft() {
+      var labels = ["11. Five craft jobs", "12. 300 checks beneath", "13. 9 gates & 7 axes", "14. 9 layers of consistency"];
+      var single = state.craftMode === "single";
+      var html = "";
+      var i, row;
+      if (state.craftIndex < 0 || state.craftIndex > 3) state.craftIndex = 0;
+      if (state.craftMode + ":" + state.craftIndex === craftSig) return;
+      craftSig = state.craftMode + ":" + state.craftIndex;
+      byId("craft-tabs").hidden = !single;
+      byId("craft-stage").hidden = !single;
+      byId("craft-grid").hidden = single;
+      if (!single) {
+        byId("craft-stage").innerHTML = "";
+        for (i = 0; i < cfg.craftSlides.length; i++) {
+          row = cfg.craftSlides[i];
+          html += quietCard(row, cfg.storySlides.length + i, row.num + " / 18 · " + row.group);
+        }
+        byId("craft-grid").innerHTML = html;
+        return;
+      }
+      byId("craft-grid").innerHTML = "";
+      for (i = 0; i < labels.length; i++) html += '<button type="button" class="reels-craft-tab" data-craft-index="' + i + '" aria-pressed="' + (i === state.craftIndex) + '">' + esc(labels[i]) + "</button>";
+      byId("craft-tabs").innerHTML = html;
+      row = cfg.craftSlides[state.craftIndex];
+      byId("craft-stage").innerHTML = stageBody(row, cfg.storySlides.length + state.craftIndex, craftNav());
+    }
+    function renderFaq() {
+      if (faqDone) return;
+      faqDone = true;
+      var takes = [
+        "Spark finishes the post from classes you already taught, instead of leaving the weekly edit on you or an agency.",
+        "Repeat watches, Saves, Shares, and non-follower reach matter more than likes, and serious enquiries show up after the library has hours of teaching.",
+        "You approve every watermarked draft: a thumbs-up spends one credit, and a pass retires the clip for free.",
+        "Fill the page to 60 to 90 classroom reels before you spend on ads, so each click lands on hours of teaching."
+      ];
+      var html = "";
+      var i, row, index;
+      var base = cfg.storySlides.length + cfg.craftSlides.length;
+      for (i = 0; i < cfg.faqSlides.length; i++) {
+        row = cfg.faqSlides[i];
+        index = base + i;
+        html += '<details id="faq-visual-' + i + '" class="reels-fold"><summary><span class="reels-q">' + esc(row.title) + '</span><span class="reels-take">' + esc(takes[i]) + "</span></summary>";
+        html += '<div class="reels-faq-body">' + shot(row, index) + '<p class="text-base text-slate-700 leading-relaxed">' + esc(row.story) + "</p></div></details>";
+      }
+      byId("faq-grid").innerHTML = html;
+    }
+    function pillarStates() {
+      var cover = hasCover(state.tierId);
+      var caption = state.tierId === "reel_cover_caption";
+      var habit = "missed";
+      var rate = "missed";
+      if (state.reels >= 20 && state.months >= 6) habit = "included";
+      else if (state.reels >= 20 && state.months >= 3) habit = "partial";
+      if (state.months === 12) rate = "included";
+      else if (state.months === 3 || state.months === 6) rate = "partial";
+      return [
+        { name: "Weekly habit & 7-hour student trust library", level: habit, fix: habit === "included" ? null : { label: "Set 20 reels/mo & 6 months", reels: 20, months: 6 } },
+        { name: "3-second scannable profile grid", level: cover ? "included" : "missed", fix: cover ? null : { label: "Select Reel + cover", tierId: "reel_cover" } },
+        { name: "Non-follower search reach + Carousels & Stories", level: caption ? "included" : "missed", fix: caption ? null : { label: "Select Reel + cover + caption", tierId: "reel_cover_caption" } },
+        { name: "Founding Partner + Annual 50% rate lock", level: rate, fix: rate === "included" ? null : { label: "Switch to 12 months", months: 12 } },
+        { name: "Early access to Quizzes, YouTube Chapters, Multi-Platform & Email Nurture", level: state.months === 12 && caption ? "included" : "missed", fix: state.months === 12 && caption ? null : { label: "Select 12 months on Reel + cover + caption", months: 12, tierId: "reel_cover_caption" } }
+      ];
+    }
+    function badgeLabel(level) {
+      if (level === "included") return "Included";
+      if (level === "partial") return "Optional upgrade";
+      return "Not in current choice";
+    }
+    function renderPillars() {
+      var rows = pillarStates();
+      var html = "";
+      var includedCount = 0;
+      var i, row, fix;
+      for (i = 0; i < rows.length; i++) if (rows[i].level === "included") includedCount += 1;
+      byId("choice-kicker").textContent = includedCount === 5
+        ? "All 5 core pillars are included in your current setup."
+        : includedCount + " of 5 core pillars included - use any button on the right to add what is missing.";
+      for (i = 0; i < rows.length; i++) {
+        row = rows[i];
+        html += '<div class="reels-pillar"><p class="text-base text-slate-900">' + esc(row.name) + '</p><span class="' + (row.level === "included" ? "reels-badge reels-badge-in" : "reels-badge reels-badge-gap") + '">' + badgeLabel(row.level) + "</span>";
+        fix = row.fix;
+        if (fix) {
+          html += '<button type="button" class="reels-fix" data-fix="1" data-from="pillars"';
+          if (fix.months) html += ' data-months="' + fix.months + '"';
+          if (fix.reels) html += ' data-reels="' + fix.reels + '"';
+          if (fix.tierId) html += ' data-tier="' + esc(fix.tierId) + '"';
+          html += ">" + esc(fix.label) + "</button>";
+        }
+        html += "</div>";
+      }
+      byId("pillars-list").innerHTML = html;
+    }
+    function pillarsLine() {
+      var rows = pillarStates();
+      var n = 0;
+      var i;
+      for (i = 0; i < rows.length; i++) if (rows[i].level === "included") n += 1;
+      return n + " of 5 core pillars included";
+    }
     function renderHours() {
       var line = "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
       var extra = "Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
@@ -583,22 +606,16 @@
       setText("credits-hours", line);
       setText("credits-extra", extra);
     }
-
     function renderRoadmap() {
       var tier = tierById("reel_cover_caption");
       var year = quoteTier(tier, 1, 12).perReelInr;
-      document.getElementById("roadmap-rate").textContent = "A 12-month commitment combines the 33.3% annual discount with the 25% Founding Partner discount. Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year, true) + " per reel for the entire year, with early access to each new format as it ships.";
+      byId("roadmap-rate").textContent = "A 12-month commitment combines the 33.3% annual discount with the 25% Founding Partner discount. Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year, true) + " per reel for the entire year, with early access to each new format as it ships.";
     }
-
-    function pillarsLine() {
-      var n = numsAtLevel(state.tierId, state.reels, state.months, "included").length;
-      var text = n + " of 10 story slides unlocked";
-      if (state.months === 12 && state.tierId === "reel_cover_caption") {
-        text += " + early access to Quizzes, YouTube chapters, multi-platform, and email nurture";
-      }
-      return text;
+    function currentUrl() {
+      var href = window.location.href;
+      var cut = href.indexOf("#");
+      return (cut === -1 ? href : href.slice(0, cut)) + stateHash();
     }
-
     function summaryRows() {
       var tier = tierById(state.tierId);
       var q = quoteTier(tier, state.reels, state.months);
@@ -616,90 +633,97 @@
         ["Value pillars unlocked", pillarsLine()]
       ];
     }
-
     function renderNudge() {
-      var box = document.getElementById("checkout-nudge");
-      var nowRate;
-      var nextRate;
-      var save;
-      var msg;
-      if (!box) return;
-      if (state.tierId === "reel_cover_caption" && state.months === 12) {
-        box.innerHTML = "";
-        return;
-      }
+      var box = byId("checkout-nudge");
+      var nowRate, nextRate, save, msg;
+      if (state.tierId === "reel_cover_caption" && state.months === 12) { box.innerHTML = ""; return; }
       nowRate = quoteTier(tierById(state.tierId), 1, state.months).perReelInr;
       nextRate = quoteTier(tierById("reel_cover_caption"), 1, 12).perReelInr;
       save = nowRate - nextRate;
-      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / reel, which is " + money(save, true) + " less per reel, and it unlocks all 10 story slides plus early access.";
-      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / reel. It unlocks all 10 story slides plus early access to Quizzes, YouTube chapters, multi-platform, and email nurture.";
+      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / reel, which is " + money(save, true) + " less per reel, and it covers all 5 pillars.";
+      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / reel, and it covers all 5 pillars, including early access.";
       box.innerHTML = '<p class="text-base text-slate-800 mb-3">' + esc(msg) + '</p><p><button type="button" class="reels-fix" data-fix="1" data-from="checkout" data-months="12" data-tier="reel_cover_caption">Switch to 12 months, Reel + cover + caption</button></p>';
     }
-
     function renderCheckout() {
       var rows = summaryRows();
       var html = "";
       var lines = [];
-      var i;
-      var text;
-      var subject;
+      var i, text, subject;
       for (i = 0; i < rows.length; i++) {
         html += '<div class="reels-kv"><p class="font-semibold text-slate-900">' + esc(rows[i][0]) + "</p><p>" + esc(rows[i][1]) + "</p></div>";
         lines.push(rows[i][0] + ": " + rows[i][1]);
       }
+      lines.push("Setup link: " + currentUrl());
       text = lines.join("\n");
       state.summaryText = text;
       subject = "Spark Reels plan: " + tierById(state.tierId).name + ", " + state.reels + " " + plural(state.reels, "reel", "reels") + ", " + state.months + " " + plural(state.months, "month", "months");
-      document.getElementById("checkout-summary").innerHTML = html;
-      document.getElementById("whatsapp-choice").href = "https://wa.me/" + cfg.whatsappPhone + "?text=" + encodeURIComponent(text);
-      document.getElementById("email-choice").href = "mailto:support@sparktutor.ai?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text);
+      byId("checkout-summary").innerHTML = html;
+      byId("whatsapp-choice").href = "https://wa.me/" + cfg.whatsappPhone + "?text=" + encodeURIComponent(text);
+      byId("email-choice").href = "mailto:support@sparktutor.ai?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text);
       renderNudge();
     }
-
     function render() {
+      syncHash();
+      renderHero();
+      renderSticky();
       renderControls();
-      renderStoryBar();
+      renderModes();
       renderPlans();
       renderStory();
-      renderBand("how-grid", cfg.craftSlides, cfg.storySlides.length, true);
-      renderBand("faq-grid", cfg.faqSlides, cfg.storySlides.length + cfg.craftSlides.length, false);
-      renderChoice();
+      renderCraft();
+      renderFaq();
+      renderPillars();
       renderHours();
       renderRoadmap();
       renderCheckout();
-      if (!document.getElementById("story-lightbox").hidden) paintLightbox();
+      if (!byId("story-lightbox").hidden) paintLightbox();
     }
-
     function setReels(n, fromCustom) {
-      var error = document.getElementById("reels-error");
+      var error = byId("reels-error");
       if (!isFinite(n) || Math.floor(n) !== n || n < 1 || n > 90) {
         error.textContent = "Use a whole number from 1 to 90.";
         return;
       }
       error.textContent = "";
       state.reels = n;
-      if (!fromCustom) document.getElementById("reels-custom").value = "";
+      if (!fromCustom) byId("reels-custom").value = "";
       render();
     }
-
     function openFold(id) {
-      var el = document.getElementById(id);
-      if (!el || el.tagName !== "DETAILS") return;
-      el.open = true;
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      var node = byId(id);
+      if (!node || node.tagName !== "DETAILS") return;
+      node.open = true;
+      node.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-
-    function jumpToSlide(num) {
-      var el;
-      state.filter = "all";
+    function scrollToId(id) {
+      var node = byId(id);
+      if (node) node.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    function gotoStep(n) {
+      if (n < 1 || n > 3) return;
+      dbg("gotoStep:before", { from: state.wizardStep, to: n });
+      state.wizardStep = n;
       render();
-      el = document.getElementById("slide-" + num);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      dbg("gotoStep:after", { step: state.wizardStep });
+      scrollToId("wizard-panel-" + n);
     }
-
+    function moveStory(delta) {
+      var next = state.storyIndex + delta;
+      if (next < 0 || next > 9) return;
+      dbg("moveStory", { from: state.storyIndex, to: next });
+      state.storyIndex = next;
+      render();
+    }
+    function moveCraft(delta) {
+      var next = state.craftIndex + delta;
+      if (next < 0 || next > 3) return;
+      dbg("moveCraft", { from: state.craftIndex, to: next });
+      state.craftIndex = next;
+      render();
+    }
     function applyFix(btn) {
       var patch = {};
-      var fromId = btn.getAttribute("data-from") || "";
+      dbg("applyFix:before", state);
       if (btn.hasAttribute("data-months")) {
         patch.months = parseInt(btn.getAttribute("data-months"), 10);
         state.months = patch.months;
@@ -707,97 +731,78 @@
       if (btn.hasAttribute("data-reels")) {
         patch.reels = parseInt(btn.getAttribute("data-reels"), 10);
         state.reels = patch.reels;
-        document.getElementById("reels-custom").value = "";
-        document.getElementById("reels-error").textContent = "";
+        byId("reels-custom").value = "";
+        byId("reels-error").textContent = "";
       }
       if (btn.hasAttribute("data-tier")) {
         patch.tierId = btn.getAttribute("data-tier");
         state.tierId = patch.tierId;
       }
       render();
-      flash(patch, fromId);
+      dbg("applyFix:after", patch);
+      flash(patch);
     }
-
-    function flash(patch, fromId) {
+    function flash(patch) {
       var nodes = [];
-      var token;
-      var card;
-      var button;
-      var i;
+      var token, i;
+      function add(node) { if (node) nodes.push(node); }
       flashToken += 1;
       token = flashToken;
-      if (fromId.indexOf("slide-") === 0) {
-        card = document.getElementById(fromId);
-        if (card) nodes.push(card);
-      }
-      if (patch.months) {
-        button = document.querySelector('#duration-controls [data-months="' + patch.months + '"]');
-        if (button) nodes.push(button);
-      }
-      if (patch.reels) {
-        button = document.querySelector('#reels-controls [data-reels="' + patch.reels + '"]');
-        if (button) nodes.push(button);
-      }
-      if (patch.tierId) {
-        card = document.querySelector('#plan-grid article[data-tier="' + patch.tierId + '"]');
-        if (card) nodes.push(card);
-      }
+      if (patch.months) { add(byId("months-opt-" + patch.months)); add(byId("wiz-tab-3")); }
+      if (patch.reels) { add(byId("reels-opt-" + patch.reels)); add(byId("wiz-tab-1")); }
+      if (patch.tierId) { add(byId("tier-" + patch.tierId)); add(byId("wiz-tab-2")); }
+      add(byId("choice"));
       for (i = 0; i < nodes.length; i++) nodes[i].classList.add("reels-flash");
-      if ((fromId === "choice" || fromId === "checkout") && nodes.length) nodes[0].scrollIntoView({ behavior: "smooth", block: "center" });
       window.setTimeout(function () {
         var j;
         if (token !== flashToken) return;
         for (j = 0; j < nodes.length; j++) nodes[j].classList.remove("reels-flash");
       }, 1800);
     }
-
     function paintLightbox() {
       var slideRow = cfg.allSlides[state.lightbox];
       var st = statusFor(slideRow, ctxNow());
-      var img = document.getElementById("lightbox-img");
-      var status = document.getElementById("lightbox-status");
+      var img = byId("lightbox-img");
+      var status = byId("lightbox-status");
       img.src = slideRow.image;
       img.alt = slideRow.alt;
-      document.getElementById("lightbox-step").textContent = slideRow.num + " / " + pad(cfg.allSlides.length) + " · " + slideRow.group;
+      byId("lightbox-step").textContent = slideRow.num + " / " + pad(cfg.allSlides.length) + " · " + slideRow.group;
       status.hidden = !st.pill;
-      status.textContent = st.pill;
+      status.textContent = st.pill || "";
       status.className = "reels-status reels-status-" + tone(st.level);
-      document.getElementById("lightbox-title").textContent = slideRow.title;
-      document.getElementById("lightbox-story").textContent = slideRow.story;
-      document.getElementById("lightbox-reason").textContent = st.reason || "";
+      byId("lightbox-title").textContent = slideRow.title;
+      byId("lightbox-story").textContent = slideRow.story;
+      byId("lightbox-reason").textContent = st.reason || "";
     }
-
     function openLightbox(index) {
-      var dlg = document.getElementById("story-lightbox");
+      var dlg = byId("story-lightbox");
       if (!cfg.allSlides[index]) return;
       state.lightbox = index;
       paintLightbox();
       dlg.hidden = false;
       dlg.setAttribute("aria-hidden", "false");
-      document.getElementById("lightbox-close").focus();
+      byId("lightbox-close").focus();
     }
-
     function closeLightbox() {
-      var dlg = document.getElementById("story-lightbox");
+      var dlg = byId("story-lightbox");
       dlg.hidden = true;
       dlg.setAttribute("aria-hidden", "true");
     }
-
     function stepLightbox(delta) {
       var n = cfg.allSlides.length;
       state.lightbox = (state.lightbox + delta + n) % n;
       paintLightbox();
     }
-
-    function copySummary() {
-      var text = state.summaryText || "";
-      var btn = document.getElementById("copy-choice");
-      var token;
+    function copyText(text, button, done) {
+      var idle = button.getAttribute("data-idle") || button.textContent;
+      var token = String(Date.now()) + Math.random();
+      button.setAttribute("data-idle", idle);
+      button.setAttribute("data-copy-token", token);
       function show(ok) {
-        btn.textContent = ok ? "Copied plan summary" : "Select the summary and copy it";
+        button.textContent = ok ? done : "Select the text and copy it";
         window.setTimeout(function () {
-          if (token !== copyToken) return;
-          btn.textContent = "Copy plan summary";
+          if (button.getAttribute("data-copy-token") !== token) return;
+          button.textContent = idle;
         }, 2000);
       }
       function fallback() {
@@ -810,72 +815,96 @@
         document.body.removeChild(area);
         return ok;
       }
-      copyToken += 1;
-      token = copyToken;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function () { show(true); }, function () { show(fallback()); });
-      } else show(fallback());
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { show(true); }, function () { show(fallback()); });
+      else show(fallback());
     }
-
-    document.getElementById("reels-custom").addEventListener("input", function (e) {
+    function setActiveTab(href) {
+      var pairs = [["nav-tab-story", "#story"], ["nav-tab-craft", "#how-it-works"], ["nav-tab-prices", "#prices"]];
+      var i, tab;
+      for (i = 0; i < pairs.length; i++) {
+        tab = byId(pairs[i][0]);
+        if (!tab) continue;
+        if (pairs[i][1] === href) tab.setAttribute("aria-current", "true");
+        else tab.removeAttribute("aria-current");
+      }
+    }
+    function bindSpy() {
+      var ids = ["story", "how-it-works", "faq", "roadmap", "prices"];
+      var map = { story: "#story", "how-it-works": "#how-it-works", faq: "#how-it-works", roadmap: "#how-it-works", prices: "#prices" };
+      var i;
+      if (!("IntersectionObserver" in window)) return;
+      var obs = new IntersectionObserver(function (entries) {
+        var j;
+        for (j = 0; j < entries.length; j++) if (entries[j].isIntersecting) setActiveTab(map[entries[j].target.id]);
+      }, { rootMargin: "-25% 0px -55% 0px", threshold: 0.01 });
+      for (i = 0; i < ids.length; i++) obs.observe(byId(ids[i]));
+    }
+    applyHash();
+    byId("reels-custom").addEventListener("input", function (e) {
       var raw = e.target.value;
-      if (raw === "") {
-        document.getElementById("reels-error").textContent = "";
-        return;
-      }
-      if (!/^\d+$/.test(raw)) {
-        document.getElementById("reels-error").textContent = "Use a whole number from 1 to 90.";
-        return;
-      }
+      if (raw === "") { byId("reels-error").textContent = ""; return; }
+      if (!/^\d+$/.test(raw)) { byId("reels-error").textContent = "Use a whole number from 1 to 90."; return; }
       setReels(parseInt(raw, 10), true);
     });
-
     document.addEventListener("click", function (e) {
-      var btn;
-      if (e.target.id === "story-lightbox") { closeLightbox(); return; }
-      if (e.target.closest("#lightbox-close")) { closeLightbox(); return; }
-      if (e.target.closest("#lightbox-prev")) { stepLightbox(-1); return; }
-      if (e.target.closest("#lightbox-next")) { stepLightbox(1); return; }
-      if (e.target.closest("#copy-choice")) { copySummary(); return; }
-      if (e.target.closest("[data-show-all]")) { state.filter = "all"; render(); return; }
-      btn = e.target.closest("[data-fix]");
+      var origin = e.target;
+      var btn, doorId;
+      if (origin && origin.nodeType !== 1) origin = origin.parentElement;
+      if (!origin || !origin.closest) return;
+      if (origin.id === "story-lightbox") { closeLightbox(); return; }
+      if (origin.closest("#lightbox-close")) { closeLightbox(); return; }
+      if (origin.closest("#lightbox-prev")) { stepLightbox(-1); return; }
+      if (origin.closest("#lightbox-next")) { stepLightbox(1); return; }
+      if (origin.closest("#copy-choice")) { copyText(state.summaryText || "", byId("copy-choice"), "Copied plan summary"); return; }
+      if (origin.closest("#copy-link-choice")) { syncHash(); copyText(window.location.href, byId("copy-link-choice"), "Copied link"); return; }
+      if (origin.closest("#story-mode-toggle")) { state.storyMode = state.storyMode === "single" ? "grid" : "single"; render(); return; }
+      if (origin.closest("#craft-mode-toggle")) { state.craftMode = state.craftMode === "single" ? "grid" : "single"; render(); return; }
+      if (origin.closest("#wizard-mode-toggle")) { state.wizardMode = state.wizardMode === "stepped" ? "all" : "stepped"; render(); return; }
+      if (origin.closest("#sticky-plan-pill")) { scrollToId("prices"); return; }
+      btn = origin.closest("[data-door]");
+      if (btn) {
+        doorId = { story: "story", craft: "how-it-works", wizard: "prices" };
+        scrollToId(doorId[btn.getAttribute("data-door")] || "story");
+        return;
+      }
+      btn = origin.closest("a.reels-tab");
+      if (btn) { e.preventDefault(); scrollToId(btn.getAttribute("href").replace("#", "")); return; }
+      btn = origin.closest("[data-scroll]");
+      if (btn) { scrollToId(btn.getAttribute("data-scroll")); return; }
+      btn = origin.closest("[data-goto-step], [data-wizard-step]");
+      if (btn) { gotoStep(parseInt(btn.getAttribute("data-goto-step") || btn.getAttribute("data-wizard-step"), 10)); return; }
+      btn = origin.closest("[data-story-index]");
+      if (btn) { state.storyIndex = parseInt(btn.getAttribute("data-story-index"), 10); render(); return; }
+      btn = origin.closest("[data-craft-index]");
+      if (btn) { state.craftIndex = parseInt(btn.getAttribute("data-craft-index"), 10); render(); return; }
+      if (origin.closest("#story-prev")) { moveStory(-1); return; }
+      if (origin.closest("#story-next")) { moveStory(1); return; }
+      if (origin.closest("#craft-prev")) { moveCraft(-1); return; }
+      if (origin.closest("#craft-next")) { moveCraft(1); return; }
+      btn = origin.closest("[data-fix]");
       if (btn) { applyFix(btn); return; }
-      btn = e.target.closest("[data-jump-slide]");
-      if (btn) { jumpToSlide(btn.getAttribute("data-jump-slide")); return; }
-      btn = e.target.closest("[data-open-slide]");
+      btn = origin.closest("[data-open-slide]");
       if (btn) { openLightbox(parseInt(btn.getAttribute("data-open-slide"), 10)); return; }
-      btn = e.target.closest("button[data-choose]");
-      if (btn) { state.tierId = btn.getAttribute("data-tier"); render(); flash({ tierId: state.tierId }, ""); return; }
-      btn = e.target.closest("[data-open-fold]");
+      btn = origin.closest("button[data-choose]");
+      if (btn) { state.tierId = btn.getAttribute("data-tier"); render(); return; }
+      btn = origin.closest("[data-open-fold]");
       if (btn) { openFold(btn.getAttribute("data-open-fold")); return; }
-      btn = e.target.closest("[data-filter]");
-      if (btn) { state.filter = btn.getAttribute("data-filter"); render(); return; }
-      btn = e.target.closest("button[data-currency]");
+      btn = origin.closest("button[data-currency]");
       if (btn) { state.currency = btn.getAttribute("data-currency") === "usd" ? "usd" : "inr"; render(); return; }
-      btn = e.target.closest("button[data-story-tier]");
-      if (btn) { state.tierId = btn.getAttribute("data-story-tier"); render(); return; }
-      btn = e.target.closest("button[data-story-months]");
-      if (btn) { state.months = parseInt(btn.getAttribute("data-story-months"), 10); render(); return; }
-      btn = e.target.closest("button[data-story-reels]");
-      if (btn) { setReels(parseInt(btn.getAttribute("data-story-reels"), 10), false); return; }
-      btn = e.target.closest("#reels-controls button[data-reels]");
+      btn = origin.closest("#reels-controls button[data-reels]");
       if (btn) { setReels(parseInt(btn.getAttribute("data-reels"), 10), false); return; }
-      btn = e.target.closest("#duration-controls button[data-months]");
+      btn = origin.closest("#duration-controls button[data-months]");
       if (btn) { state.months = parseInt(btn.getAttribute("data-months"), 10); render(); return; }
-      btn = e.target.closest("#story-grid .reels-slide, #how-grid .reels-slide, #faq-grid .reels-slide");
-      if (btn && !e.target.closest("button, a")) openLightbox(parseInt(btn.getAttribute("data-index"), 10));
     });
-
     document.addEventListener("keydown", function (e) {
-      var dlg = document.getElementById("story-lightbox");
-      if (dlg.hidden) return;
+      var dlg = byId("story-lightbox");
+      if (!dlg || dlg.hidden) return;
       if (e.key === "Escape") { closeLightbox(); e.preventDefault(); }
       else if (e.key === "ArrowRight") { stepLightbox(1); e.preventDefault(); }
       else if (e.key === "ArrowLeft") { stepLightbox(-1); e.preventDefault(); }
     });
-
+    bindSpy();
     render();
   }
-
   root.SparkReelsPage = { mount: mount };
 })(typeof window !== "undefined" ? window : globalThis);
