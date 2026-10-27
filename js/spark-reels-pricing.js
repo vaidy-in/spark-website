@@ -81,13 +81,16 @@
       slide("11", "how", "Above the waterline", "Five craft jobs in one reel.", "reel-above-waterline.jpg", "A vertical classroom reel surrounded by 5 numbered callouts: 1. Pre-roll hook, 2. Pause-protected clip, 3. 3-second grid cover, 4. Studio end card, 5. Teacher-voice SEO caption.", "A single post is five separate jobs: a Coming Up pre-roll hook where your face is clear, a teaching clip with real pauses kept in, a 3-second grid cover with a short scannable title, a clean studio end card, and a study-note SEO caption in your voice. Miss one and the post sits in drafts.", ""),
       slide("12", "how", "Beneath the waterline", "Beneath the waterline: 300 checks replace a 5-person team.", "reel-under-waterline.jpg", "An iceberg pipeline from Teach once through Transcribe & clean, Chapter boundaries, Course map & notes, Pause judge, and Portrait frame & cover to Ready on WhatsApp.", "You teach once and upload the recording. Beneath the surface, Spark runs the work usually split across a transcriptionist, subject-matter assistant, instructional designer, video editor, and copywriter: time-coded transcription with Sanskrit and anatomy intact, maker-checker chapter boundaries that never cut mid-thought, a structured course map, an acoustic and LLM pause judge that protects pranayama holds and demonstrations while cutting dead air, and portrait face reframing with blur-focus depth.", ""),
       slide("13", "how", "One-shot quality", "How a reel earns Recommended vs Okay.", "reel-grading-rubric.jpg", "Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired.", "Why 9 out of 10 reels work on the first shot: every candidate chapter must first pass 9 hard gates (at most 150 seconds after dead air, dead air at most 30%, traffic/background noise below 4/5, room echo contrast at least 19 dB, real teaching rather than class logistics or homework, stands alone for a stranger, one finishable idea, right audience, and delivery floor). Passing clips are then scored 0 to 100 across 7 weighted teaching axes (Interest match 3x, One claim 3x, Delivery 3x, Mastery signal 2x, Complete arc 2x, Said not performed 2x, Cold standalone 1x) plus a peer respect test, slide-opening check, and other-speaker check.", ""),
-      slide("14", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", "")
+      slide("14", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", ""),
+      slide("15", "how", "The cover", "How the cover and 3-second grid work.", "grid.jpg", "3 seconds. A nine-frame grid. One person leaves. Another stays and touches the grid.", "Reel + cover adds the grid cover. Reel alone does not include a cover or a caption. Titles stay short enough to scan in the grid. Templates and colour palettes rotate so the page stays consistent week to week. Blur-focus depth keeps the subject clear and the background quiet.", ""),
+      slide("16", "how", "The caption", "How the caption, Carousels, and Stories work.", "intent.jpg", "A path through a field toward one person. The line reads: who it is for, what it is for, and the promise.", "Only Reel + cover + caption includes the caption, Carousels, and Stories. The reel and the cover do not. The notes stay in the teacher's voice, Sanskrit and anatomical terms stay as taught, and the caption is written for people who care about the subject and do not follow you yet. Carousels and Stories are cut from the same lecture, for learners who read and swipe.", ""),
+      slide("17", "how", "Credits", "Credits, watermark, and lecture hours.", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "A thumbs-up spends a credit and removes the watermark. A rejected clip is retired and cannot be downloaded clean. The whole term is paid upfront.", "")
     ],
     faqSlides: [
-      slide("15", "faq", "FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
-      slide("16", "faq", "FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
-      slide("17", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
-      slide("18", "faq", "FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
+      slide("18", "faq", "FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
+      slide("19", "faq", "FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
+      slide("20", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
+      slide("21", "faq", "FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
     ]
   };
 
@@ -244,7 +247,7 @@
     var storySig = "";
     var craftSig = "";
     var faqDone = false;
-    if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.allSlides.length !== 18) {
+    if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.craftSlides.length !== 7 || cfg.allSlides.length !== 21) {
       if (missing) missing.classList.remove("hidden");
       return;
     }
@@ -389,8 +392,9 @@
       if (state.storyIndex === 9) html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-door="craft">Next: How a reel is made</button></p>';
       return html;
     }
+    function craftLast() { return cfg.craftSlides.length - 1; }
     function craftNav() {
-      return '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="craft-prev"' + (state.craftIndex === 0 ? " disabled" : "") + '>Previous</button><button type="button" class="reels-navbtn" id="craft-next"' + (state.craftIndex === 3 ? " disabled" : "") + ">Next</button></div>";
+      return '<div class="reels-navrow"><button type="button" class="reels-navbtn" id="craft-prev"' + (state.craftIndex === 0 ? " disabled" : "") + '>Previous</button><button type="button" class="reels-navbtn" id="craft-next"' + (state.craftIndex === craftLast() ? " disabled" : "") + ">Next</button></div>";
     }
     function renderButtons(items, attr, idPrefix, pressed, labelFor) {
       var html = "";
@@ -462,13 +466,16 @@
       byId("story-card-host").innerHTML = stageBody(row, state.storyIndex, storyNav());
     }
     function renderCraft() {
-      var row;
-      if (state.craftIndex < 0 || state.craftIndex > 3) state.craftIndex = 0;
-      if (String(state.craftIndex) === craftSig) return;
-      craftSig = String(state.craftIndex);
+      var row, shown, sig;
+      if (state.craftIndex < 0 || state.craftIndex > craftLast()) state.craftIndex = 0;
+      sig = state.craftIndex + "|" + state.reels + "|" + state.currency;
+      if (sig === craftSig) return;
+      craftSig = sig;
       row = cfg.craftSlides[state.craftIndex];
-      byId("craft-step-meta").textContent = "Diagram " + (state.craftIndex + 1) + " of 4";
-      byId("craft-stage").innerHTML = stageBody(row, cfg.storySlides.length + state.craftIndex, craftNav());
+      shown = { num: row.num, group: row.group, title: row.title, image: row.image, alt: row.alt, story: row.story };
+      if (row.num === "17") shown.story = hoursSentences() + " " + row.story;
+      byId("craft-step-meta").textContent = "Diagram " + (state.craftIndex + 1) + " of " + cfg.craftSlides.length;
+      byId("craft-stage").innerHTML = stageBody(shown, cfg.storySlides.length + state.craftIndex, craftNav());
     }
     function renderFaq() {
       if (faqDone) return;
@@ -543,13 +550,15 @@
       for (i = 0; i < rows.length; i++) if (rows[i].level === "included") n += 1;
       return n + " of 5 core pillars included";
     }
+    function hoursSentences() {
+      var line = "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
+      return line + " Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
+    }
     function renderHours() {
       var line = "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
       var extra = "Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
       setText("included-hours", line);
       setText("extra-hour", extra);
-      setText("credits-hours", line);
-      setText("credits-extra", extra);
     }
     function renderFounding() {
       var tier = tierById("reel_cover_caption");
@@ -670,7 +679,7 @@
     }
     function moveCraft(delta) {
       var next = state.craftIndex + delta;
-      if (next < 0 || next > 3) return;
+      if (next < 0 || next > craftLast()) return;
       dbg("moveCraft", { from: state.craftIndex, to: next });
       state.craftIndex = next;
       render();
