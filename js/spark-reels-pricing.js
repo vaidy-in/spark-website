@@ -47,21 +47,21 @@
     tiers: [
       {
         id: "reel_only", name: "Reel", fold: "reel", basePerReelInr: 1000, recommended: false,
-        fits: "You want the class posted for you, and you will handle how the page looks.",
-        craftSlideNums: ["13", "14", "15", "20"], craftHeading: "How the reel is built (tap to inspect)",
-        benefits: ["Cut from classes you already taught", "One complete story arc in every reel", "Arrives on WhatsApp, ready to approve"]
+        fits: "Edited classroom reels, ready to post.",
+        craftSlideNums: ["13", "14", "15", "20"], craftHeading: "How the reel is built",
+        benefits: ["Cut from your class recordings", "3-second pre-roll & complete story arc", "Sent on WhatsApp for 1-tap approval"]
       },
       {
         id: "reel_cover", name: "Reel + cover", fold: "cover", basePerReelInr: 1250, recommended: false,
-        fits: "The grid has to read as a menu of lessons in the first few seconds.",
-        craftSlideNums: ["12", "18"], craftHeading: "How the cover is built (plus all Reel slides)",
-        benefits: ["Everything in Reel, plus:", "Custom cover fitted to 1:1 and 9:16 grids", "Short scannable titles and rotating studio palette"]
+        fits: "Profile grid with custom covers.",
+        craftSlideNums: ["12", "18"], craftHeading: "How the cover is built",
+        benefits: ["Everything in Reel, plus:", "Custom cover for 1:1 & 9:16 grids", "Scannable titles & studio color palette"]
       },
       {
         id: "reel_cover_caption", name: "Reel + cover + caption", fold: "caption", basePerReelInr: 1500, recommended: true,
-        fits: "The page has to reach people who do not follow you yet, in your voice.",
-        craftSlideNums: ["16", "11", "21"], craftHeading: "How caption & reach work (plus Reel & Cover slides)",
-        benefits: ["Everything in Reel + cover, plus:", "Teacher-voice SEO caption and researched tags", "Carousels and Stories from the same class"]
+        fits: "Full non-follower reach in your voice.",
+        craftSlideNums: ["16", "11", "21"], craftHeading: "How caption & reach work",
+        benefits: ["Everything in Reel + cover, plus:", "Teacher-voice SEO caption & search tags", "Carousels & Stories from the same class"]
       }
     ],
     storySlides: [
@@ -123,7 +123,9 @@
     var factor = cfg.discountCombineMode === "additive" ? (1 - (termPct + foundingPct) / 100) : (1 - termPct / 100) * (1 - foundingPct / 100);
     var totalOffPct = Math.round((1 - factor) * 100);
     var perReelInr = Math.round(tier.basePerReelInr * factor);
-    return { perReelInr: perReelInr, monthlyInr: perReelInr * reels, upfrontInr: perReelInr * reels * months, termPct: termPct, foundingPct: foundingPct, totalOffPct: totalOffPct };
+    var baseMonthlyInr = tier.basePerReelInr * reels;
+    var monthlyInr = Math.round(baseMonthlyInr * factor);
+    return { perReelInr: perReelInr, baseMonthlyInr: baseMonthlyInr, monthlyInr: monthlyInr, baseUpfrontInr: baseMonthlyInr * months, upfrontInr: monthlyInr * months, termPct: termPct, foundingPct: foundingPct, totalOffPct: totalOffPct };
   }
   function includedHours(reels) {
     var minHrs = reels ? Math.round(reels / cfg.reelsPerLectureHourMin) : 0;
@@ -366,7 +368,12 @@
       if (opt.bestValue) return opt.months + " " + plural(opt.months, "month", "months") + " · Best value " + off;
       return opt.label + " · " + off;
     }
-    function discountBadgeText(q) { return q.totalOffPct + "% off (" + q.termPct + "% plan + " + q.foundingPct + "% one-time founding)"; }
+    function durationDiscountNote(months) {
+      var q = quoteTier(cfg.tiers[0], 1, months);
+      var founding = q.foundingPct + "% founding customer discount*";
+      if (!q.termPct) return founding;
+      return q.termPct + "% term discount + " + founding;
+    }
     function buttonClass(on) {
       return on
         ? "px-4 py-2 rounded-full bg-brand-600 text-white text-base font-semibold cursor-pointer"
@@ -543,7 +550,8 @@
       return -1;
     }
     function slideBtn(s, idx) {
-      return '<button type="button" class="reels-card-slide" data-open-slide="' + idx + '" aria-label="Open diagram ' + s.num + ", " + esc(s.title) + '"><img src="' + esc(s.image) + '" width="320" height="180" alt="' + esc(s.alt) + '" loading="lazy"><span class="reels-card-slide-meta">Slide ' + s.num + " · " + esc(s.title) + "</span></button>";
+      var shortTitle = ({ "11": "All 4 discovery surfaces", "12": "1:1 & 9:16 cover design", "13": "3-second pre-roll", "14": "Feed-safe reel & captions", "15": "Studio end card", "16": "SEO caption & tags", "18": "Cover & frame checks", "20": "9-gate quality rubric", "21": "9 layers of consistency" })[s.num] || s.title;
+      return '<button type="button" class="reels-card-slide" data-open-slide="' + idx + '" aria-label="Open diagram ' + s.num + ", " + esc(s.title) + '"><img src="' + esc(s.image) + '" width="320" height="180" alt="' + esc(s.alt) + '" loading="lazy"><span class="reels-card-slide-meta">Slide ' + s.num + " · " + esc(shortTitle) + "</span></button>";
     }
     function fixButtons(actions) {
       var html = "", i, a;
@@ -554,7 +562,7 @@
       return html;
     }
     function craftBlock(tier) {
-      var nums = tier.craftSlideNums || [], html = '<div class="reels-card-slides mt-4 pt-4 border-t border-slate-200"><p class="text-base font-semibold text-slate-900 mb-2">' + esc(tier.craftHeading || "") + "</p>", i, s, idx;
+      var nums = tier.craftSlideNums || [], html = '<div class="reels-card-slides mt-4"><p class="text-base font-semibold text-slate-900 mb-2">' + esc(tier.craftHeading || "") + "</p>", i, s, idx;
       for (i = 0; i < nums.length; i++) { idx = slideIndexByNum(nums[i]); s = cfg.allSlides[idx]; if (idx >= 0 && s) html += slideBtn(s, idx); }
       return html + "</div>";
     }
@@ -576,32 +584,35 @@
       dbg("renderPlanValue", { tier: state.tierId, months: state.months, reels: state.reels, lost: lostCount });
       box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">What this plan + term gives you (and what you leave on the table)</h3><div class="reels-value-cols mt-4"><section><h4 class="reels-value-h is-got">What you get (✓)</h4><ul class="reels-value-list">' + got + '</ul></section><section><h4 class="reels-value-h is-lost">What you lose (✗)</h4>' + (lostCount ? '<ul class="reels-value-list">' + lost + "</ul>" : '<p class="reels-value-clear">✓ Nothing left on the table - all 10 story advantages and the full ' + offPct(12) + '% 12-month rate lock are included.</p>') + "</section></div>";
     }
+    function placeDurationNote() {
+      var controls = byId("duration-controls"), box = byId("duration-discount"), btn = controls && controls.querySelector('button[aria-pressed="true"]'), c, b, n;
+      if (!controls || !box || !btn || !box.offsetWidth) return;
+      box.style.left = "0px"; c = controls.getBoundingClientRect(); b = btn.getBoundingClientRect(); n = box.getBoundingClientRect();
+      box.style.left = Math.max(16 - c.left, Math.min(innerWidth - 16 - c.left - n.width, b.left + b.width / 2 - c.left - n.width / 2)) + "px";
+    }
     function renderOfferCopy() {
-      var box = byId("discount-explainer"), g = byId("plan-guarantee"), parts = [], i;
-      if (g) g.textContent = cfg.guaranteeCopy;
-      if (!box) return;
-      for (i = 0; i < cfg.durationMonthsOptions.length; i++) parts.push(cfg.durationMonthsOptions[i].termDiscountPct + "% on " + cfg.durationMonthsOptions[i].label);
-      box.innerHTML = '<p class="text-base font-semibold text-slate-900">Two discounts stack on your first plan (paid upfront):</p><p class="text-base text-slate-800 mt-2"><span class="font-semibold">1. Standard plan discount:</span> ' + esc(parts.join(" · ")) + '.</p><p class="text-base text-slate-800 mt-2"><span class="font-semibold">2. Founding Partner discount (' + cfg.foundingDiscountPct + "% off - " + (cfg.foundingOneTime ? "one time only" : "included") + "):</span> " + (cfg.foundingOneTime ? "Applies across all terms on your first commitment only, and will not apply again on renewal." : "Applies across all terms on this plan.") + " Choosing 12 months locks the full " + offPct(12) + "% combined discount for the entire year.</p>";
+      setText("plan-guarantee", cfg.guaranteeCopy); setText("duration-discount-note", durationDiscountNote(state.months)); placeDurationNote();
     }
     function renderPlans() {
       var html = "";
-      var i, j, tier, q, selected, price;
+      var i, j, tier, q, selected, monthlyLine, upfrontLine;
       for (i = 0; i < cfg.tiers.length; i++) {
         tier = cfg.tiers[i];
         q = quoteTier(tier, state.reels, state.months);
         selected = state.planChosen && tier.id === state.tierId;
-        price = '<p class="mt-4"><span class="text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + '</span> <span class="text-base text-slate-600">/ post</span>';
-        if (q.perReelInr < tier.basePerReelInr) price += ' <span class="text-base reels-was">' + esc(money(tier.basePerReelInr, true)) + "</span>";
-        price += "</p>";
+        monthlyLine = '<p class="mt-4"><span class="text-4xl font-extrabold text-slate-900">' + esc(money(q.monthlyInr, false)) + '</span> <span class="text-base text-slate-600">/ month</span>';
+        if (q.monthlyInr < q.baseMonthlyInr) monthlyLine += ' <span class="text-base reels-was">' + esc(money(q.baseMonthlyInr, false)) + "</span>";
+        monthlyLine += "</p>";
+        upfrontLine = '<p class="mt-1 text-base font-semibold text-slate-900">' + esc(planPriceLine(q));
+        if (q.upfrontInr < q.baseUpfrontInr) upfrontLine += ' <span class="font-normal reels-was">' + esc(money(q.baseUpfrontInr, false)) + "</span>";
+        upfrontLine += ' · <span class="text-brand-700">' + q.totalOffPct + "% off</span></p>";
         html += '<article id="tier-' + esc(tier.id) + '" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '" class="rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
         html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Recommended" : "") + "</p>";
         html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>";
-        html += '<p class="mt-2 text-base text-slate-600">' + esc(tier.fits) + "</p>";
-        html += price;
-        html += '<p class="mt-2 text-base font-semibold text-slate-900">' + esc(planPriceLine(q)) + "</p>";
-        html += '<p class="mt-1 text-base text-brand-700 font-semibold">' + esc(discountBadgeText(q)) + "</p>";
-        html += '<p class="mt-1 text-base text-slate-600">Includes up to ' + esc(hourPhrase(includedHours(state.reels))) + " of lecture video a month.</p>";
-        html += '<ul class="reels-benefits mt-4 space-y-2 text-base text-slate-700">';
+        html += '<p class="mt-1 text-base text-slate-600">' + esc(tier.fits) + "</p>";
+        html += monthlyLine + upfrontLine;
+        html += '<p class="mt-2 text-base font-semibold text-slate-800">' + state.reels + " " + plural(state.reels, "post", "posts") + " / month · Up to " + esc(hourPhrase(includedHours(state.reels))) + " lecture video</p>";
+        html += '<ul class="reels-benefits mt-3 space-y-1.5 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
         html += "</ul>" + craftBlock(tier) + '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + (selected ? "true" : "false") + '">' + (selected ? "Selected" : "Choose this plan") + "</button></div></article>";
       }
@@ -664,8 +675,9 @@
     }
     function renderFounding() {
       var tier = tierById("reel_cover_caption");
-      var year = quoteTier(tier, 1, 12);
-      byId("founding-rate").textContent = "A 12-month commitment combines the " + year.termPct + "% annual discount with the " + year.foundingPct + "% one-time Founding Partner discount (" + year.totalOffPct + "% off for the full year). Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year.perReelInr, true) + " per reel. A shorter term spends the one-time " + cfg.foundingDiscountPct + "%, and renewals revert to the standard term rate.";
+      var reels = state.reels || 20;
+      var year = quoteTier(tier, reels, 12);
+      setText("founding-rate", "Two discounts stack on your first upfront plan: up to " + year.termPct + "% plan discount + " + year.foundingPct + "% one-time Founding Partner discount (" + year.totalOffPct + "% off on 12 months - " + money(year.monthlyInr, false) + " / month instead of " + money(year.baseMonthlyInr, false) + " for " + reels + " " + plural(reels, "post", "posts") + " a month).");
     }
     function renderDoors() {
       var tab = state.door === "craft" ? "craft" : (state.door === "plan" || state.door === "faq" || state.door === "founding") ? "plan" : "story";
@@ -673,7 +685,7 @@
       byId("story").hidden = tab !== "story";
       byId("how-it-works").hidden = tab !== "craft";
       byId("prices").hidden = tab !== "plan";
-      byId("faq").hidden = byId("founding").hidden = tab !== "plan" || !step2Shown;
+      byId("faq").hidden = tab !== "plan" || !step2Shown;
     }
     function currentUrl() {
       var href = window.location.href;
@@ -682,13 +694,13 @@
     }
     function renderNudge() {
       var box = byId("checkout-nudge");
-      var nowRate, nextRate, save, msg;
+      var nowMonthly, nextMonthly, save, msg;
       if (!state.planChosen || (state.tierId === "reel_cover_caption" && state.months === 12)) { box.innerHTML = ""; return; }
-      nowRate = quoteTier(tierById(state.tierId), 1, state.months).perReelInr;
-      nextRate = quoteTier(tierById("reel_cover_caption"), 1, 12).perReelInr;
-      save = nowRate - nextRate;
-      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, which is " + money(save, true) + " less per post.";
-      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, with early access as new formats ship.";
+      nowMonthly = quoteTier(tierById(state.tierId), state.reels, state.months).monthlyInr;
+      nextMonthly = quoteTier(tierById("reel_cover_caption"), state.reels, 12).monthlyInr;
+      save = nowMonthly - nextMonthly;
+      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextMonthly, false) + " / month (" + money(save, false) + " less per month).";
+      else msg = "12 months on Reel + cover + caption is " + money(nextMonthly, false) + " / month, locking 45% off for the full year with early access as new formats ship.";
       box.innerHTML = '<p class="text-base text-slate-800 mt-3 mb-3">' + esc(msg) + '</p><p><button type="button" class="reels-fix" data-fix="1" data-from="checkout" data-months="12" data-tier="reel_cover_caption">Switch to 12 months, Reel + cover + caption</button></p>';
     }
     function renderCheckout() {
@@ -698,8 +710,8 @@
       var week = weekFromReels(state.reels);
       var line1, line2, line3, text, subject;
       if (box) box.hidden = !state.planChosen;
-      line1 = tier.name + " · " + week + " " + plural(week, "post", "posts") + " a week · " + state.months + " " + plural(state.months, "month", "months") + " - " + money(q.perReelInr, true) + " / post (" + money(q.upfrontInr, false) + " upfront)";
-      line2 = "Includes up to " + hourPhrase(includedHours(state.reels)) + " of lecture video / month (min " + monthlyLectureLabel(minLectureHoursRounded(week)) + " needed + " + cfg.lectureLimitBufferPct + "% buffer; extra video " + money(cfg.extraVideoHourInr, true) + " / hour) · " + listRateNote(state.months) + ".";
+      line1 = tier.name + " · " + week + " " + plural(week, "post", "posts") + " a week (" + state.reels + " / month) · " + state.months + " " + plural(state.months, "month", "months") + " - " + money(q.monthlyInr, false) + " / month (" + money(q.upfrontInr, false) + " upfront, was " + money(q.baseUpfrontInr, false) + ")";
+      line2 = "Includes up to " + hourPhrase(includedHours(state.reels)) + " of lecture video / month (extra video " + money(cfg.extraVideoHourInr, true) + " / hour) · " + listRateNote(state.months) + ".";
       line3 = cfg.guaranteeCopy;
       text = line1 + "\n" + line2 + "\n" + line3 + "\nSetup link: " + currentUrl();
       state.summaryText = text;
@@ -978,9 +990,10 @@
       else if (e.key === "ArrowRight") { stepLightbox(1); e.preventDefault(); }
       else if (e.key === "ArrowLeft") { stepLightbox(-1); e.preventDefault(); }
     });
+    window.addEventListener("resize", placeDurationNote);
     step2Shown = weekFromReels(state.reels) > 0 && state.wizardStep === 2;
     render();
-    if ((state.door === "faq" || state.door === "founding") && step2Shown) scrollToId(state.door);
+    if ((state.door === "faq" || state.door === "founding") && step2Shown) scrollToId("faq");
   }
   root.SparkReelsPage = { mount: mount };
 })(typeof window !== "undefined" ? window : globalThis);

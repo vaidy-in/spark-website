@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="js/layout.js"></script>
     <script src="js/components/accordion.js" defer></script>
-    <script src="js/spark-reels-pricing.js?v=20261028u"></script>
+    <script src="js/spark-reels-pricing.js?v=20261028ad"></script>
     <style>
         [hidden] { display: none !important; }
         .reels-tab, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-cta, .reels-cite, .reels-source-name, .reels-book, .reels-tick, .reels-range, .reels-card-slide, .reels-value-shot { cursor: pointer; font-family: inherit; }
@@ -28,6 +28,8 @@
         .reels-kicker { color: #4f46e5; font-weight: 600; font-size: 1rem; margin: 0; }
         .reels-eyebrow { min-height: 1.5rem; }
         .reels-anchor, .reels-step-panel, #pace-bridge, #plan-value { scroll-margin-top: 6rem; }
+        .reels-duration-note { position: relative; width: max-content; max-width: 100%; margin-top: 0.45rem; margin-bottom: 2.75rem; text-align: left; }
+        .reels-duration-foot { position: absolute; left: 0; top: calc(100% + 0.25rem); margin: 0; white-space: nowrap; }
         .reels-stage { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: start; }
         .reels-split, .reels-grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
         .reels-shot { display: block; width: 100%; padding: 0; border: 0; background: none; border-radius: 12px; text-align: left; }
@@ -211,7 +213,7 @@
         <div id="entry-doors" class="reels-tabs" role="tablist" aria-label="Page sections">
             <button type="button" id="tab-story" class="reels-tab" role="tab" data-door="story" aria-selected="true" aria-controls="story">Build Your Brand</button>
             <button type="button" id="tab-craft" class="reels-tab" role="tab" data-door="craft" aria-selected="false" aria-controls="how-it-works">Under the Hood</button>
-            <button type="button" id="tab-plan" class="reels-tab" role="tab" data-door="plan" aria-selected="false" aria-controls="prices faq founding">Pricing</button>
+            <button type="button" id="tab-plan" class="reels-tab" role="tab" data-door="plan" aria-selected="false" aria-controls="prices faq">Pricing</button>
         </div>
 
         <section id="story" class="reels-anchor mt-8" hidden>
@@ -298,14 +300,17 @@
             <div id="wizard-panel-2" class="reels-step-panel" hidden>
                 <div class="reels-excerpt mt-3"><p><mark id="pace-bridge" class="reels-mark"></mark></p></div>
                 <h3 class="text-2xl font-bold text-slate-900 mt-4">Choose a plan</h3>
-                <div id="discount-explainer" class="reels-discount-box mt-2 mb-4 max-w-3xl"></div>
-                <p id="plan-guarantee" class="reels-guarantee mt-3 mb-4 max-w-3xl"></p>
-                <div id="duration-controls" class="flex flex-wrap gap-2" role="group" aria-label="Months paid upfront"></div>
-                <div class="flex flex-wrap items-center gap-3 mt-6">
+                <div class="flex flex-wrap items-center gap-3 mt-4">
                     <p id="currency-label" class="text-base font-semibold text-slate-900">Prices in</p>
                     <div id="currency-switch" class="flex flex-wrap gap-2" role="group" aria-labelledby="currency-label"></div>
                 </div>
+                <div id="duration-controls" class="flex flex-wrap gap-2 mt-4" role="group" aria-label="Months paid upfront"></div>
+                <div id="duration-discount" class="reels-duration-note">
+                    <p id="duration-discount-note" class="text-base text-slate-600"></p>
+                    <p class="reels-duration-foot text-base text-slate-600">* The founding customer discount is a <strong>one-time offer</strong> for the <strong>first 5 customers</strong>.</p>
+                </div>
                 <div id="plan-grid" class="mt-4"></div>
+                <p id="plan-guarantee" class="reels-guarantee mt-5 max-w-3xl"></p>
                 <div id="plan-value" class="mt-8" hidden aria-live="polite"></div>
                 <div id="checkout" class="mt-8" hidden aria-live="polite">
                     <div class="reels-checkout-card">
@@ -370,26 +375,21 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="founding" class="reels-anchor mt-8" hidden>
-            <div data-accordion id="reels-founding-accordion" class="space-y-2">
                 <div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
                     <button type="button" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl min-h-[3rem] sm:min-h-0">
-                        <span class="text-base font-semibold text-slate-900">Founding Partner rate</span>
+                        <span class="text-base font-semibold text-slate-900">How do the plan and Founding Partner discounts work?</span>
                         <span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span>
                     </button>
                     <div data-accordion-content class="hidden">
                         <div class="px-5 pb-5 max-w-3xl space-y-3">
                             <p id="founding-rate" class="text-base text-slate-900 font-semibold"></p>
-                            <p class="text-base text-slate-600">You pay the term upfront. The 25% Founding Partner discount is one time only, and it applies on every term of your first plan. A 12-month term stacks the 20% annual plan discount with that 25%, which is 45% off for the full year, and includes early access as each new format launches. Using the one-time 25% on a shorter term means renewals revert to the standard term rate.</p>
+                            <ul class="space-y-2 text-base text-slate-600 list-disc pl-5">
+                                <li><strong>Standard plan discount:</strong> 0% on 1 month · 5% on 3 months · 10% on 6 months · 20% on 12 months (paid upfront).</li>
+                                <li><strong>Founding Partner discount (25% off - one time only):</strong> Applies on your first plan across any term. Choosing 12 months locks 45% off for the full year and includes early access as new formats launch; shorter terms revert to the standard rate on renewal.</li>
+                            </ul>
                             <button type="button" class="reels-shot" data-open-slide="9" aria-label="Open diagram 10, Why the 25% Founding Partner price exists.">
                                 <img src="images/spark-reels/founding-window.jpg" width="1280" height="720" alt="Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as new formats ship." loading="lazy">
                             </button>
-                            <div class="reels-navrow">
-                                <button type="button" id="founding-build" class="reels-navbtn reels-navbtn-primary">Build this plan</button>
-                            </div>
                         </div>
                     </div>
                 </div>
