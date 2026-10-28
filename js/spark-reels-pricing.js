@@ -274,7 +274,7 @@
       craftIndex: 0,
       wizardStep: 1,
       planChosen: false,
-      door: "",
+      door: "story",
       lightbox: 0,
       summaryText: ""
     };
@@ -308,7 +308,7 @@
       var monthOk = {};
       var doors = { story: 1, craft: 1, plan: 1, faq: 1, founding: 1 };
       var reels, months, story, step, mi;
-      if (!data) return;
+      if (!data) { state.door = "story"; return; }
       for (mi = 0; mi < cfg.durationMonthsOptions.length; mi++) monthOk[cfg.durationMonthsOptions[mi].months] = 1;
       if (data.c === "inr" || data.c === "usd") state.currency = data.c;
       reels = parseInt(data.r, 10);
@@ -323,8 +323,7 @@
         state.wizardStep = step > 2 ? 2 : step;
         if (state.wizardStep === 2) state.planChosen = true;
       }
-      state.door = doors[data.d] ? data.d : "";
-      dbg("applyHash:done", state);
+      state.door = doors[data.d] ? data.d : "story";
     }
     function stateHash() {
       var hash = "#c=" + state.currency + "&r=" + state.reels + "&m=" + state.months + "&t=" + state.tierId + "&s=" + (state.storyIndex + 1) + "&w=" + state.wizardStep;
@@ -629,6 +628,9 @@
       byId("craft-step-meta").textContent = "Diagram " + (state.craftIndex + 1) + " of " + cfg.craftSlides.length;
       byId("craft-stage").innerHTML = stageBody(shown, cfg.storySlides.length + state.craftIndex, craftNav(), "craft-more");
     }
+    function accItem(title, body) {
+      return '<div data-accordion-item class="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors"><button type="button" data-accordion-toggle aria-expanded="false" class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded-xl min-h-[3rem] sm:min-h-0"><span class="text-base font-semibold text-slate-900">' + title + '</span><span class="material-symbols-rounded text-slate-400 flex-shrink-0" data-accordion-chevron>expand_more</span></button><div data-accordion-content class="hidden"><div class="px-5 pb-5">' + body + "</div></div></div>";
+    }
     function renderFaq() {
       if (faqDone) return;
       faqDone = true;
@@ -644,8 +646,7 @@
       for (i = 0; i < cfg.faqSlides.length; i++) {
         row = cfg.faqSlides[i];
         index = base + i;
-        html += '<details id="faq-visual-' + i + '" class="reels-fold"><summary><span class="reels-q">' + esc(row.title) + "</span></summary>";
-        html += '<div class="reels-faq-body"><div><p class="text-base text-slate-700 mb-4">' + esc(takes[i]) + "</p>" + shot(row, index) + "</div></div></details>";
+        html += accItem(esc(row.title), '<p class="text-base text-slate-600 mb-4">' + esc(takes[i]) + "</p>" + shot(row, index));
       }
       byId("faq-grid").innerHTML = html;
     }
@@ -667,14 +668,12 @@
       byId("founding-rate").textContent = "A 12-month commitment combines the " + year.termPct + "% annual discount with the " + year.foundingPct + "% one-time Founding Partner discount (" + year.totalOffPct + "% off for the full year). Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year.perReelInr, true) + " per reel. A shorter term spends the one-time " + cfg.foundingDiscountPct + "%, and renewals revert to the standard term rate.";
     }
     function renderDoors() {
-      var ids = ["story", "craft", "plan", "faq", "founding"];
-      var panels = { story: "story", craft: "how-it-works", plan: "prices", faq: "faq", founding: "founding" };
-      var i, btn;
-      for (i = 0; i < ids.length; i++) {
-        btn = byId("door-" + ids[i]);
-        if (btn) btn.setAttribute("aria-pressed", state.door === ids[i] ? "true" : "false");
-        byId(panels[ids[i]]).hidden = state.door !== ids[i];
-      }
+      var tab = state.door === "craft" ? "craft" : (state.door === "plan" || state.door === "faq" || state.door === "founding") ? "plan" : "story";
+      ["story", "craft", "plan"].forEach(function (name) { var btn = byId("tab-" + name); if (btn) btn.setAttribute("aria-selected", tab === name ? "true" : "false"); });
+      byId("story").hidden = tab !== "story";
+      byId("how-it-works").hidden = tab !== "craft";
+      byId("prices").hidden = tab !== "plan";
+      byId("faq").hidden = byId("founding").hidden = tab !== "plan" || !step2Shown;
     }
     function currentUrl() {
       var href = window.location.href;
@@ -869,19 +868,6 @@
       if (door === "plan") return "prices";
       return door;
     }
-    function bindFaqAccordion() {
-      var rootNode = byId("faq");
-      if (!rootNode) return;
-      rootNode.addEventListener("click", function (e) {
-        var summary = e.target.closest && e.target.closest("summary");
-        var details, nodes, i;
-        if (!summary || !rootNode.contains(summary)) return;
-        details = summary.parentElement;
-        if (!details || details.tagName !== "DETAILS" || details.open) return;
-        nodes = rootNode.getElementsByTagName("details");
-        for (i = 0; i < nodes.length; i++) if (nodes[i] !== details) nodes[i].open = false;
-      });
-    }
     applyHash();
     byId("posts-range").addEventListener("input", function (e) {
       setReels(parseInt(e.target.value, 10) * 4);
@@ -925,9 +911,9 @@
       btn = origin.closest("#entry-doors [data-door]");
       if (btn) {
         doorId = btn.getAttribute("data-door");
-        state.door = state.door === doorId ? "" : doorId;
+        if (state.door === doorId) return;
+        state.door = doorId;
         render();
-        if (state.door) scrollToId(panelFor(state.door));
         return;
       }
       btn = origin.closest("[data-scroll]");
@@ -992,9 +978,9 @@
       else if (e.key === "ArrowRight") { stepLightbox(1); e.preventDefault(); }
       else if (e.key === "ArrowLeft") { stepLightbox(-1); e.preventDefault(); }
     });
-    bindFaqAccordion();
     step2Shown = weekFromReels(state.reels) > 0 && state.wizardStep === 2;
     render();
+    if ((state.door === "faq" || state.door === "founding") && step2Shown) scrollToId(state.door);
   }
   root.SparkReelsPage = { mount: mount };
 })(typeof window !== "undefined" ? window : globalThis);
