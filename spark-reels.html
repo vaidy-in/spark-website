@@ -4,25 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Spark Reels</title>
-    <meta name="description" content="Classroom reels, posted for you, every week. Walk the 10-slide story, see how a reel is made, and build a founding plan. A year is half the monthly price.">
+    <title>Spark Branding</title>
+    <meta name="description" content="Classroom reels, posted for you, every week. Walk the 10-slide story, see how a reel is made, and build a founding plan. 12 months locks 45% off.">
     <link rel="stylesheet" href="css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="js/layout.js"></script>
-    <script src="js/spark-reels-pricing.js?v=20261027x"></script>
+    <script src="js/spark-reels-pricing.js?v=20261028b"></script>
     <style>
         [hidden] { display: none !important; }
         .reels-choices { margin-top: 1.5rem; }
-        .reels-door, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-fold summary, .reels-cta, .reels-cite, .reels-tick, .reels-range { cursor: pointer; font-family: inherit; }
+        .reels-door, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-fold summary, .reels-cta, .reels-cite, .reels-tick, .reels-range, .reels-card-slide, .reels-value-shot { cursor: pointer; font-family: inherit; }
         .reels-navbtn, .reels-fix { border-radius: 999px; border: 1px solid #cbd5e1; background: #fff; color: #1e293b; font-weight: 700; font-size: 1rem; padding: 0.45rem 0.9rem; text-decoration: none; }
         .reels-navbtn:disabled { opacity: 0.4; cursor: default; }
         .reels-navbtn-primary, .reels-cta-primary { background: #4f46e5; color: #fff; border-color: #4f46e5; }
         .reels-navbtn-primary:hover, .reels-cta-primary:hover { background: #4338ca; }
+        .reels-navbtn-invert { background: #fff; color: #4f46e5; border-color: #4f46e5; }
+        .reels-navbtn-invert:hover { background: #4f46e5; color: #fff; }
         .reels-door { display: block; width: 100%; text-align: left; background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.1rem 1.15rem; color: inherit; }
         .reels-door:hover, .reels-door[aria-pressed="true"] { border-color: #4f46e5; background: #eef2ff; }
         .reels-kicker { color: #4f46e5; font-weight: 600; font-size: 1rem; margin: 0; }
         .reels-eyebrow { min-height: 1.5rem; }
-        .reels-anchor, .reels-fold, .reels-step-panel { scroll-margin-top: 6rem; }
+        .reels-anchor, .reels-fold, .reels-step-panel, #pace-bridge, #plan-value { scroll-margin-top: 6rem; }
         .reels-stage { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: start; }
         .reels-faq-body, .reels-split, .reels-grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
         .reels-faq-body { align-items: start; padding-bottom: 1.5rem; }
@@ -47,6 +49,8 @@
         .reels-step-panel { margin-top: 1.25rem; }
         .reels-dots, .reels-navrow, .reels-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .reels-navrow { margin-top: 1.25rem; }
+        #show-step-2-row { flex-direction: column; align-items: flex-start; }
+        #show-step-2-row .reels-warning { margin: 0.25rem 0 0; }
         .reels-stage .reels-navrow { justify-content: center; }
         .reels-preview { margin-top: 0.75rem; font-size: 1rem; line-height: 1.625; color: #334155; }
         .reels-preview p { margin: 0; }
@@ -82,12 +86,40 @@
         #plan-grid article[data-recommended="true"] { order: -1; }
         @keyframes reelsFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .reels-stage-anim { animation: reelsFadeIn 200ms cubic-bezier(0.22, 1, 0.36, 1); }
-        .reels-door:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-fold summary:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible, .reels-cite:focus-visible, .reels-tick:focus-visible, .reels-range:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+        .reels-door:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-fold summary:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible, .reels-cite:focus-visible, .reels-tick:focus-visible, .reels-range:focus-visible, .reels-card-slide:focus-visible, .reels-value-shot:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+        .reels-discount-box, .reels-guarantee { border-radius: 12px; padding: 0.9rem 1rem; font-size: 1rem; line-height: 1.5; }
+        .reels-discount-box { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e293b; }
+        .reels-discount-box:empty, .reels-guarantee:empty { display: none; }
+        .reels-guarantee { display: flex; gap: 0.55rem; align-items: flex-start; background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; }
+        .reels-guarantee::before { content: "✓"; font-weight: 800; }
+        .reels-card-slides { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+        .reels-card-slides > p { grid-column: 1 / -1; margin: 0; }
+        .reels-card-slide { display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem; width: 100%; padding: 0.35rem; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; text-align: left; font-size: 1rem; }
+        .reels-card-slide:hover { border-color: #4f46e5; }
+        .reels-card-slide img { width: 100%; height: auto; display: block; border-radius: 8px; }
+        .reels-card-slide-meta { display: block; color: #334155; font-size: 1rem; line-height: 1.35; }
+        .reels-value-cols { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+        .reels-value-h { margin: 0; font-size: 1.25rem; line-height: 1.4; font-weight: 700; }
+        .reels-value-h.is-got { color: #047857; }
+        .reels-value-h.is-lost { color: #b91c1c; }
+        .reels-value-list { list-style: none; padding: 0; margin: 0.75rem 0 0; display: grid; gap: 0.85rem; }
+        .reels-value-item { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 0.75rem; align-items: start; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.75rem; }
+        .reels-value-shot { display: block; width: 11rem; padding: 0; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; overflow: hidden; }
+        .reels-value-shot:hover { border-color: #4f46e5; }
+        .reels-value-shot img { width: 100%; height: auto; display: block; }
+        .reels-value-title { display: inline; margin: 0; }
+        .reels-value-copy > p + p { margin: 0.35rem 0 0; }
+        .reels-value-mark { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; font-weight: 800; font-size: 1rem; margin: 0 0.45rem 0 0; vertical-align: -0.35rem; }
+        .reels-value-mark.is-got { background: #ecfdf5; color: #047857; }
+        .reels-value-mark.is-lost { background: #fef2f2; color: #b91c1c; }
+        .reels-value-clear { margin: 0.75rem 0 0; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 12px; padding: 0.9rem 1rem; font-size: 1rem; font-weight: 600; }
+        .reels-value-item .reels-fix { margin: 0.55rem 0.4rem 0 0; }
         .reels-step-why { margin-top: 0.85rem; }
         .reels-excerpt { margin: 0; max-width: 40rem; }
         .reels-excerpt p { margin: 0; font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #0f172a; }
         .reels-excerpt p + p { margin-top: 0.75rem; }
         .reels-mark { background: linear-gradient(#fde68a, #fde68a) left 88% / 100% 0.45em no-repeat; font-weight: 700; color: #0f172a; padding: 0.05em 0.25em; border-radius: 0.2rem; }
+        #pace-bridge { box-decoration-break: clone; -webkit-box-decoration-break: clone; }
         .reels-cite { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.55rem; color: #4338ca; font-size: 1rem; font-weight: 500; text-decoration: underline; text-underline-offset: 0.18rem; }
         .reels-step-choice { margin-top: 1.25rem; margin-left: 0.25rem; padding: 0.15rem 0 0 1rem; border-left: 3px solid #c7d2fe; }
         .reels-step-choice .reels-prompt { margin-top: 0; }
@@ -114,6 +146,8 @@
         .reels-signal[data-band="yellow"]::before { background: #f59e0b; }
         .reels-signal[data-band="red"] { color: #991b1b; }
         .reels-signal[data-band="red"]::before { background: #dc2626; }
+        .reels-warning { display: flex; align-items: flex-start; gap: 0.55rem; margin: 0.75rem 0 0; color: #92400e; font-size: 1.125rem; line-height: 1.4; font-weight: 700; }
+        .reels-warning-icon { width: 1.35rem; height: 1.35rem; flex: none; margin-top: 0.12rem; }
         .reels-g { width: 1.05rem; height: 1.05rem; flex: none; }
         .reels-prompt { display: block; margin: 1.5rem 0 0; font-size: 1.125rem; line-height: 1.4; font-weight: 600; color: #0f172a; cursor: pointer; }
         .reels-slider { margin-top: 0.85rem; }
@@ -136,12 +170,16 @@
         .reels-tick[data-week="6"] { left: 85.714%; }
         .reels-tick[data-week="7"] { left: 100%; }
         .reels-linkrow { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.75rem; }
+        #checkout .reels-actions { flex-direction: row; }
+        #checkout .reels-cta { width: auto; flex: 1 1 12rem; }
+        @media (max-width: 639px) { .reels-value-item { grid-template-columns: 1fr; } }
         @media (min-width: 768px) { .reels-steps { grid-template-columns: 1fr 1fr 1fr; } }
         @media (min-width: 1024px) {
             .reels-stage, .reels-faq-body { grid-template-columns: 7fr 5fr; }
             .reels-split, .reels-grid-2 { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
             #plan-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
             #plan-grid article[data-recommended="true"] { order: 0; }
+            .reels-value-cols { grid-template-columns: 1fr 1fr; }
         }
         @media (prefers-reduced-motion: reduce) { .reels-stage-anim { animation: none; } }
     </style>
@@ -150,7 +188,7 @@
 <main class="pt-8 pb-24">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <header class="text-center mb-2">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-3">Spark Reels</h1>
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-3">Spark Branding</h1>
             <p class="text-xl text-slate-600">Classroom reels, posted for you, every week.</p>
             <p class="text-base text-slate-700 max-w-3xl mx-auto mt-4">A category of one: built from classes you already taught, for serious students who need hours of your teaching before they join.</p>
             <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -172,7 +210,7 @@
             <button type="button" id="door-plan" class="reels-door" data-door="plan" aria-pressed="false">
                 <p class="reels-kicker">One step at a time</p>
                 <p class="text-xl font-bold text-slate-900 mt-1">3. Build your studio's plan</p>
-                <p class="text-base text-slate-600 mt-2">Choose monthly pace, weekly workflow, and term.</p>
+                <p class="text-base text-slate-600 mt-2">Choose weekly pace, plan, and term.</p>
             </button>
             <button type="button" id="door-faq" class="reels-door" data-door="faq" aria-pressed="false">
                 <p class="reels-kicker">Questions</p>
@@ -182,7 +220,7 @@
             <button type="button" id="door-founding" class="reels-door" data-door="founding" aria-pressed="false">
                 <p class="reels-kicker">The live rate</p>
                 <p class="text-xl font-bold text-slate-900 mt-1">5. Founding Partner rate</p>
-                <p class="text-base text-slate-600 mt-2">12 months on the complete plan is half the monthly price.</p>
+                <p class="text-base text-slate-600 mt-2">12 months locks 45% off for the year (20% annual + 25% one-time founding).</p>
             </button>
         </div>
 
@@ -233,7 +271,7 @@
         <section id="founding" class="reels-anchor mt-8" hidden>
             <h2 class="text-3xl font-bold text-slate-900">Founding Partner rate</h2>
             <p id="founding-rate" class="text-base text-slate-900 font-semibold mt-3 max-w-3xl"></p>
-            <p class="text-base text-slate-700 mt-3 max-w-3xl">You pay the term upfront so the library can compound over 3 to 12 months. The 25% Founding Partner discount is on 3, 6, and 12 month terms today, while those new formats are still in build. As they ship, the founding discount steps down for newer cohorts. A 12-month term stacks the annual discount with the founding discount, which is half the monthly price for the full year, and includes early access as each new format launches.</p>
+            <p class="text-base text-slate-700 mt-3 max-w-3xl">You pay the term upfront. The 25% Founding Partner discount is one time only, and it applies on every term of your first plan. A 12-month term stacks the 20% annual plan discount with that 25%, which is 45% off for the full year, and includes early access as each new format launches. Using the one-time 25% on a shorter term means renewals revert to the standard term rate.</p>
             <div class="mt-6 max-w-3xl">
                 <button type="button" class="reels-shot" data-open-slide="9" aria-label="Open diagram 10, Why the 25% Founding Partner price exists.">
                     <img src="images/spark-reels/founding-window.jpg" width="1280" height="720" alt="Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as new formats ship." loading="lazy">
@@ -248,7 +286,6 @@
             <h2 class="text-3xl font-bold text-slate-900">Build your studio's plan</h2>
 
             <div id="wizard-panel-1" class="reels-step-panel">
-                <p class="reels-kicker">1 of 3</p>
                 <div class="reels-step-why">
                     <div class="reels-excerpt">
                         <p>Google's Zero Moment of Truth study: buyers consult 10.4 sources and <mark class="reels-mark">spend hours researching before they decide</mark>.</p>
@@ -280,62 +317,48 @@
                             <button type="button" class="reels-tick" data-week="7">7</button>
                         </div>
                     </div>
-                    <div class="reels-step-result">
+                    <div id="pace-result" class="reels-step-result" hidden>
                         <div id="pace-months" class="reels-months" hidden aria-hidden="true"></div>
                         <p id="pace-signal" class="reels-signal" hidden></p>
                         <p class="reels-step-note">A reel is about 2 minutes. A carousel is about twice that. The calendars count the months to 7 hours of that teaching.</p>
                     </div>
                 </div>
-                <div class="reels-navrow">
-                    <button type="button" id="pace-next" class="reels-navbtn reels-navbtn-primary" data-goto-step="2" disabled>Next</button>
-                </div>
+            </div>
+
+            <div id="show-step-2-row" class="reels-navrow" hidden>
+                <button type="button" id="show-step-2" class="reels-navbtn reels-navbtn-invert">Confirm</button>
+                <p id="pace-lecture" class="reels-warning" hidden>
+                    <svg class="reels-warning-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M12 3.2 1.8 21h20.4L12 3.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                        <path d="M12 9.2v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                        <circle cx="12" cy="17.6" r="1" fill="currentColor"></circle>
+                    </svg>
+                    <span id="pace-lecture-text"></span>
+                </p>
             </div>
 
             <div id="wizard-panel-2" class="reels-step-panel" hidden>
-                <p class="reels-kicker">2 of 3</p>
-                <h3 class="text-2xl font-bold text-slate-900">What Spark handles</h3>
-                <p class="text-base text-slate-600 mt-1 mb-4 max-w-3xl">Every column starts from classes you already taught and arrives on WhatsApp ready to approve.</p>
-                <div id="plan-grid"></div>
-                <div class="reels-navrow">
-                    <button type="button" class="reels-navbtn" data-goto-step="1">Back</button>
-                    <button type="button" class="reels-navbtn reels-navbtn-primary" data-goto-step="3">Next</button>
-                </div>
-            </div>
-
-            <div id="wizard-panel-3" class="reels-step-panel" hidden>
-                <p class="reels-kicker">3 of 3</p>
-                <h3 class="text-2xl font-bold text-slate-900">Term</h3>
-                <p class="text-base text-slate-600 mt-1 mb-4 max-w-3xl">You pay the term upfront. A 12-month term stacks the 33.3% annual discount with the 25% Founding Partner discount - half the monthly price for the full year.</p>
+                <div class="reels-excerpt mt-3"><p><mark id="pace-bridge" class="reels-mark"></mark></p></div>
+                <h3 class="text-2xl font-bold text-slate-900 mt-4">Choose a plan</h3>
+                <div id="discount-explainer" class="reels-discount-box mt-2 mb-4 max-w-3xl"></div>
+                <p id="plan-guarantee" class="reels-guarantee mt-3 mb-4 max-w-3xl"></p>
                 <div id="duration-controls" class="flex flex-wrap gap-2" role="group" aria-label="Months paid upfront"></div>
-
-                <div id="choice" class="mt-8" aria-live="polite">
-                    <h3 class="text-2xl font-bold text-slate-900">How your setup covers the 5 core pillars</h3>
-                    <p id="choice-kicker" class="mt-1 text-base text-slate-600"></p>
-                    <div id="pillars-list" class="mt-3"></div>
-                </div>
-
-                <div id="checkout" class="mt-8" aria-live="polite">
-                    <div class="reels-split">
-                        <div class="reels-checkout-card">
-                            <h3 class="text-2xl font-bold text-slate-900 mb-2">Your plan</h3>
-                            <div id="checkout-summary" class="text-base text-slate-800"></div>
+                <div id="plan-grid" class="mt-6"></div>
+                <div id="plan-value" class="mt-8" hidden aria-live="polite"></div>
+                <div id="checkout" class="mt-8" hidden aria-live="polite">
+                    <div class="reels-checkout-card">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">Confirm this plan</h3>
+                        <div id="checkout-summary" class="text-base text-slate-800"></div>
+                        <div id="checkout-nudge"></div>
+                        <div class="reels-actions">
+                            <a id="whatsapp-choice" class="reels-cta reels-cta-primary" target="_blank" rel="noopener" href="https://wa.me/917899156587">Confirm on WhatsApp</a>
+                            <a id="email-choice" class="reels-cta reels-cta-secondary" href="mailto:support@sparktutor.ai?subject=Spark%20Reels%20plan">Confirm by Email</a>
                         </div>
-                        <div class="reels-checkout-card">
-                            <h3 class="text-2xl font-bold text-slate-900 mb-2">Confirm this choice</h3>
-                            <div id="checkout-nudge"></div>
-                            <div class="reels-actions">
-                                <a id="whatsapp-choice" class="reels-cta reels-cta-primary" target="_blank" rel="noopener" href="https://wa.me/917899156587">Confirm on WhatsApp</a>
-                                <a id="email-choice" class="reels-cta reels-cta-secondary" href="mailto:support@sparktutor.ai?subject=Spark%20Reels%20plan">Confirm by Email</a>
-                            </div>
-                            <div class="reels-linkrow">
-                                <button type="button" id="copy-choice" class="reels-textlink">Copy plan summary</button>
-                                <button type="button" id="copy-link-choice" class="reels-textlink">Copy link to this setup</button>
-                            </div>
+                        <div class="reels-linkrow">
+                            <button type="button" id="copy-choice" class="reels-textlink">Copy plan summary</button>
+                            <button type="button" id="copy-link-choice" class="reels-textlink">Copy link to this setup</button>
                         </div>
                     </div>
-                </div>
-                <div class="reels-navrow">
-                    <button type="button" class="reels-navbtn" data-goto-step="2">Back</button>
                 </div>
             </div>
         </section>

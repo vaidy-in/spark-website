@@ -1,14 +1,8 @@
 /*
-  Spark Reels pricing, the 10-slide story, and the plan wizard.
-  Edit a number here, save, and reload marketing/spark-reels.html.
-  Founding partner pricing applies to 3, 6, and 12 month terms.
-  Term and founding discounts stack by multiplication, not by adding percents.
-  Included lecture hours = max(6, reels per month x videoHoursPerReelRatio).
-  The page opens in rupees, with no posts chosen yet, on 12 months, on the full column.
-  Page state lives in the URL hash. No browser storage.
-  d= is the open section: story, craft, plan, faq, or founding. No d means the first screen.
-  INR shows rupees only. USD shows dollars only, at fxRateInrPerUsd.
-  Keep the rupee rates in step with docs/Vaidy/spark-reels-pricing-config.js.
+  Spark Reels pricing and plan wizard. Edit cfg, save, and reload marketing/spark-reels.html.
+  Founding 25% is one time and applies on every term. Discounts follow cfg.discountCombineMode.
+  Page state lives in the URL hash (no browser storage). INR or USD at fxRateInrPerUsd.
+  d= opens story, craft, plan, faq, or founding. No d means the first screen.
 */
 (function (root) {
   function slide(num, filter, group, title, image, alt, story, on, off, partial, extra) {
@@ -34,35 +28,40 @@
     defaultDurationMonths: 12,
     defaultTierId: "reel_cover_caption",
     foundingDiscountPct: 25,
-    applyFoundingToMonthly: false,
-    videoHoursPerReelRatio: 0.5,
+    foundingOneTime: true,
+    applyFoundingToMonthly: true,
+    discountCombineMode: "additive",
+    reelsPerLectureHourMin: 3,
+    lectureLimitBufferPct: 30,
     minLectureHours: 6,
     extraVideoHourInr: 500,
+    guaranteeCopy: "Pro-rated money-back guarantee: if you are unhappy at any point, you get a pro-rated refund for the remainder of your term.",
+    valueComparisonSlideNums: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
     whatsappPhone: "917899156587",
     durationMonthsOptions: [
       { months: 1, label: "1 month", termDiscountPct: 0, bestValue: false },
-      { months: 3, label: "3 months", termDiscountPct: 15, bestValue: false },
-      { months: 6, label: "6 months", termDiscountPct: 20, bestValue: false },
-      { months: 12, label: "12 months", termDiscountPct: 33.3333, bestValue: true }
+      { months: 3, label: "3 months", termDiscountPct: 5, bestValue: false },
+      { months: 6, label: "6 months", termDiscountPct: 10, bestValue: false },
+      { months: 12, label: "12 months", termDiscountPct: 20, bestValue: true }
     ],
     tiers: [
       {
         id: "reel_only", name: "Reel", fold: "reel", basePerReelInr: 1000, recommended: false,
         fits: "You want the class posted for you, and you will handle how the page looks.",
-        notIncluded: "A cover, a caption, carousels, and Stories.",
-        benefits: ["A real class, not a performance", "One complete story in every reel", "Arrives on WhatsApp, ready to schedule"]
+        craftSlideNums: ["13", "14", "15", "20"], craftHeading: "How the reel is built (tap to inspect)",
+        benefits: ["Cut from classes you already taught", "One complete story arc in every reel", "Arrives on WhatsApp, ready to approve"]
       },
       {
         id: "reel_cover", name: "Reel + cover", fold: "cover", basePerReelInr: 1250, recommended: false,
         fits: "The grid has to read as a menu of lessons in the first few seconds.",
-        notIncluded: "A caption, carousels, and Stories.",
-        benefits: ["The grid reads as a menu of lessons", "Short titles someone can scan", "The same look, week to week"]
+        craftSlideNums: ["12", "18"], craftHeading: "How the cover is built (plus all Reel slides)",
+        benefits: ["Everything in Reel, plus:", "Custom cover fitted to 1:1 and 9:16 grids", "Short scannable titles and rotating studio palette"]
       },
       {
         id: "reel_cover_caption", name: "Reel + cover + caption", fold: "caption", basePerReelInr: 1500, recommended: true,
         fits: "The page has to reach people who do not follow you yet, in your voice.",
-        notIncluded: "Quizzes, YouTube chapters, multi-platform publishing, and student email nurture are still being built. A 12-month term includes early access as they launch. Shorter terms do not.",
-        benefits: ["Found by people who do not follow you yet", "The words stay in your voice", "Carousels and Stories from the same class"]
+        craftSlideNums: ["16", "11", "21"], craftHeading: "How caption & reach work (plus Reel & Cover slides)",
+        benefits: ["Everything in Reel + cover, plus:", "Teacher-voice SEO caption and researched tags", "Carousels and Stories from the same class"]
       }
     ],
     storySlides: [
@@ -75,7 +74,7 @@
       slide("07", "cover", "The caption & reach", "Interest media reaches non-followers.", "interest.jpg", "Social media reaches people who already follow you. Interest media reaches people who care, even if they do not follow you yet.", "Followers already know you. Long-form SEO captions written in your lineage-accurate voice carry the lesson to people who care about the subject but do not follow you yet.", "Included: Teacher-voice SEO captions built for non-follower discovery and repeat reading.", "Left out without Caption: You get the video, but miss search discovery from non-followers and study-note captions in your voice."),
       slide("08", "cover", "The caption & reach", "Do it with intent: Carousels and Stories.", "intent.jpg", "A path through a field toward one person. The line reads: who it is for, what it is for, and the promise.", "Every piece states who it is for, what it teaches, and the promise. In the full column, the same class also gives you Carousels and Stories for learners who read and swipe.", "Included: Carousels and Stories cut from the same class, aligned to serious students.", "Left out without Caption: Carousels and Stories are only included in Reel + cover + caption."),
       slide("09", "roadmap", "Roadmap & founding window", "One class. More formats next.", "upcoming-formats.jpg", "One open book fans out to Quizzes, YouTube, multi-platform, and email nurture. Built from the same recording. Early access on 12 months.", "Because Spark maps your actual course rather than slicing a flat transcript, the same recording will soon power Interactive Quizzes, YouTube Chapters and Shorts, Multi-Platform Publishing, and Student Email Nurture.", "Included on 12 months: Early access to Quizzes, YouTube chapters, multi-platform publishing, and email nurture as they launch.", "12-month full-plan advantage missed: Early access to Quizzes, YouTube chapters, multi-platform publishing, and email nurture is included when you lock the full Reel + cover + caption plan for 12 months."),
-      slide("10", "roadmap", "Roadmap & founding window", "Why the 25% Founding Partner price exists.", "founding-window.jpg", "Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as Quizzes and YouTube ship.", "The 25% Founding Partner discount is offered today because those upcoming formats are still being built. As each capability ships and the product matures, the founding discount steps down for newer cohorts. Paying for 12 months upfront stacks the 33.3% annual discount with the 25% founding discount, locking half the monthly price for a full year.", "Locked at best rate: 33.3% annual + 25% founding = 50% off the monthly price for all 12 months.", "Left out on 1 month: The 25% Founding Partner discount does not apply to a 1-month trial.", "Founding 25% applied for this term, but your rate renews after {months} months as the discount steps down.")
+      slide("10", "roadmap", "Roadmap & founding window", "Why the 25% Founding Partner price exists.", "founding-window.jpg", "Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as Quizzes and YouTube ship.", "The 25% Founding Partner discount is one time only, on your first plan, for any term. Paying for 12 months upfront stacks the 20% annual plan discount with that 25%, locking 45% off for the full year. Using the one-time 25% on a shorter term means renewals revert to the standard term rate.", "Locked for the year: 20% annual plan discount + 25% one-time Founding Partner discount = 45% off for all 12 months.", "One-time 25% Founding Partner discount on a shorter term means renewals revert to the standard term rate. 12 months locks 45% off for the full year.")
     ],
     craftSlides: [
       slide("11", "how", "Overview: Why manual fails", "Five craft jobs in every single reel - and all four discovery surfaces.", "reel-above-waterline.jpg", "A vertical classroom reel surrounded by 5 numbered callouts: 1. Pre-roll hook, 2. Pause-protected clip, 3. 3-second grid cover, 4. Studio end card, 5. Teacher-voice SEO caption.", "Doing this once is a project; doing it 5 to 7 times a week without dropping quality is why manual reel production breaks down. Every single post is five separate specialist jobs built around one goal: non-follower discovery without compromising your teaching.", "", "", "", { items: ["Four discovery surfaces in every post: (1) the cover image on the grid, (2) the 3-second pre-roll and teaching reel, (3) the on-screen title and synced captions inside the reel, and (4) the Instagram study-note caption and search tags.", "Every single reel goes through all five craft jobs and ~300 quality checks with zero compromise in quality."], roles: "Subject-matter expert, copywriter, video editor, visual designer, and SEO researcher", discovery: "Every surface - cover, reel, in-reel text, and caption - is engineered so serious students who do not follow you yet can discover and trust your teaching." }),
@@ -118,15 +117,20 @@
   }
 
   function quoteTier(tier, reels, months) {
-    var termPct = durationByMonths(months).termDiscountPct;
-    var foundingPct = 0;
-    var factor;
-    var perReelInr;
-    if (cfg.applyFoundingToMonthly || months >= 3) foundingPct = cfg.foundingDiscountPct;
-    factor = (1 - termPct / 100) * (1 - foundingPct / 100);
-    perReelInr = Math.round(tier.basePerReelInr * factor);
-    return { perReelInr: perReelInr, monthlyInr: perReelInr * reels, upfrontInr: perReelInr * reels * months };
+    var opt = durationByMonths(months);
+    var termPct = opt ? opt.termDiscountPct : 0;
+    var foundingPct = (cfg.applyFoundingToMonthly || months >= 3) ? cfg.foundingDiscountPct : 0;
+    var factor = cfg.discountCombineMode === "additive" ? (1 - (termPct + foundingPct) / 100) : (1 - termPct / 100) * (1 - foundingPct / 100);
+    var totalOffPct = Math.round((1 - factor) * 100);
+    var perReelInr = Math.round(tier.basePerReelInr * factor);
+    return { perReelInr: perReelInr, monthlyInr: perReelInr * reels, upfrontInr: perReelInr * reels * months, termPct: termPct, foundingPct: foundingPct, totalOffPct: totalOffPct };
   }
+  function includedHours(reels) {
+    var minHrs = reels ? Math.round(reels / cfg.reelsPerLectureHourMin) : 0;
+    return reels ? Math.max(minHrs + 1, Math.round(minHrs * (1 + cfg.lectureLimitBufferPct / 100))) : cfg.minLectureHours;
+  }
+  function minimumLectureHours(week) { return (week * 4) / cfg.reelsPerLectureHourMin; }
+  function minLectureHoursRounded(week) { return Math.round(minimumLectureHours(week)); }
 
   function hasCover(tierId) {
     return tierId === "reel_cover" || tierId === "reel_cover_caption";
@@ -217,14 +221,10 @@
       if (months === 12) {
         level = "included";
         reason = slideRow.on;
-      } else if (months >= 3) {
-        level = "partial";
-        reason = slideRow.partial.replace("{months}", String(months));
-        actions.push({ label: "Switch to 12 months", months: 12 });
       } else {
         level = "missed";
-        reason = slideRow.off;
-        actions.push({ label: "Switch to 12 months", months: 12 });
+        reason = "One-time " + cfg.foundingDiscountPct + "% Founding Partner discount is spent on a " + months + "-month term (renewals revert to standard rate; 12 months locks " + quoteTier(cfg.tiers[0], 1, 12).totalOffPct + "% off for the full year).";
+        actions = [{ label: "Switch to 12 months", months: 12 }];
       }
     }
     return { level: level, reason: reason, actions: actions, pill: pillFor(level) };
@@ -246,11 +246,10 @@
     return n < 10 ? "0" + n : String(n);
   }
 
-
   cfg.quoteTier = quoteTier;
-  cfg.quotePerReelInr = function (tierId, months) {
-    return quoteTier(tierById(tierId), 1, months).perReelInr;
-  };
+  cfg.includedHours = includedHours;
+  cfg.minimumLectureHours = minimumLectureHours;
+  cfg.quotePerReelInr = function (tierId, months) { return quoteTier(tierById(tierId), 1, months).perReelInr; };
   cfg.statusFor = statusFor;
   root.SPARK_REELS_PRICING = cfg;
 
@@ -258,7 +257,7 @@
     var missing = document.getElementById("pricing-missing");
     var state;
     var flashToken = 0;
-    var lastWizard = 0;
+    var step2Shown = false;
     var storySig = "";
     var craftSig = "";
     var faqDone = false;
@@ -274,6 +273,7 @@
       storyIndex: 0,
       craftIndex: 0,
       wizardStep: 1,
+      planChosen: false,
       door: "",
       lightbox: 0,
       summaryText: ""
@@ -305,10 +305,11 @@
     function applyHash() {
       var data = readHash();
       var tiers = { reel_only: 1, reel_cover: 1, reel_cover_caption: 1 };
-      var monthOk = { 1: 1, 3: 1, 6: 1, 12: 1 };
+      var monthOk = {};
       var doors = { story: 1, craft: 1, plan: 1, faq: 1, founding: 1 };
-      var reels, months, story, step;
+      var reels, months, story, step, mi;
       if (!data) return;
+      for (mi = 0; mi < cfg.durationMonthsOptions.length; mi++) monthOk[cfg.durationMonthsOptions[mi].months] = 1;
       if (data.c === "inr" || data.c === "usd") state.currency = data.c;
       reels = parseInt(data.r, 10);
       if (String(reels) === data.r && reels >= 0 && reels <= 90) state.reels = reels === 0 ? 0 : snapWeekReels(reels);
@@ -318,7 +319,10 @@
       story = parseInt(data.s, 10);
       if (String(story) === data.s && story >= 1 && story <= 10) state.storyIndex = story - 1;
       step = parseInt(data.w, 10);
-      if (String(step) === data.w && step >= 1 && step <= 3) state.wizardStep = step;
+      if (String(step) === data.w && step >= 1 && step <= 3) {
+        state.wizardStep = step > 2 ? 2 : step;
+        if (state.wizardStep === 2) state.planChosen = true;
+      }
       state.door = doors[data.d] ? data.d : "";
       dbg("applyHash:done", state);
     }
@@ -342,7 +346,7 @@
       return formatInr(inr);
     }
     function plural(n, one, many) { return n === 1 ? one : many; }
-    function includedHours(reels) { return Math.max(cfg.minLectureHours, reels * cfg.videoHoursPerReelRatio); }
+    function monthlyLectureLabel(hours) { return hourPhrase(Math.round(hours)); }
     function hoursText(hours) {
       var rounded = Math.round(hours * 10) / 10;
       if (Math.abs(rounded - Math.round(rounded)) < 0.001) return String(Math.round(rounded));
@@ -352,28 +356,18 @@
       var label = hoursText(hours);
       return label + " " + plural(Number(label) === 1 ? 1 : 2, "hour", "hours");
     }
-    function ratePhrase(tier, months) {
-      var perReel = quoteTier(tier, 1, months).perReelInr;
-      var pct;
-      if (perReel === tier.basePerReelInr) return "the full monthly price";
-      if (perReel * 2 === tier.basePerReelInr) return "half the monthly price";
-      pct = Math.round((1 - perReel / tier.basePerReelInr) * 100);
-      return pct + "% under the monthly price";
-    }
-    function offPct(months) {
-      var opt = durationByMonths(months);
-      var factor = (1 - opt.termDiscountPct / 100) * (1 - cfg.foundingDiscountPct / 100);
-      return Math.round((1 - factor) * 100);
-    }
-    function discountLabel(months) {
-      if (months < 3) return "None (1-month trial)";
-      if (months === 12) return "50% off (33.3% annual + 25% Founding Partner)";
-      return offPct(months) + "% off";
+    function offPct(months) { return quoteTier(cfg.tiers[0], 1, months).totalOffPct; }
+    function listRateNote(months) {
+      var q = quoteTier(cfg.tiers[0], 1, months);
+      if (q.termPct > 0) return q.totalOffPct + "% off list rate (" + q.termPct + "% term + " + q.foundingPct + "% one-time founding)";
+      return q.totalOffPct + "% off list rate (one-time founding discount)";
     }
     function durationButtonLabel(opt) {
-      if (opt.months === 12) return "12 months - Best value 50% off";
-      return opt.label;
+      var off = offPct(opt.months) + "% off";
+      if (opt.bestValue) return opt.months + " " + plural(opt.months, "month", "months") + " · Best value " + off;
+      return opt.label + " · " + off;
     }
+    function discountBadgeText(q) { return q.totalOffPct + "% off (" + q.termPct + "% plan + " + q.foundingPct + "% one-time founding)"; }
     function buttonClass(on) {
       return on
         ? "px-4 py-2 rounded-full bg-brand-600 text-white text-base font-semibold cursor-pointer"
@@ -394,20 +388,23 @@
       var week = weekFromReels(reels), months, band, lead;
       if (!week) return { week: 0, months: 0, band: "", text: "" };
       months = Math.max(1, Math.round((7 * 60) / (week * 3.25) * 12 / 52));
-      band = week >= 7 ? "green" : week >= 4 ? "yellow" : "red";
+      band = week >= 5 ? "green" : week >= 3 ? "yellow" : "red";
       lead = band === "green" ? "Recommended. " : band === "yellow" ? "Slower. " : "A long wait. ";
       return { week: week, months: months, band: band, text: "About " + months + " " + plural(months, "month", "months") + " to 7 hours.", signal: lead + "About " + months + " " + plural(months, "month", "months") + " to 7 hours." };
     }
     function paintPace() {
       var pace = sevenHourPace(state.reels);
+      var result = byId("pace-result");
       var range = byId("posts-range");
       var monthsBox = byId("pace-months");
       var signal = byId("pace-signal");
-      var next = byId("pace-next");
+      var lecture = byId("pace-lecture");
+      var lectureText = byId("pace-lecture-text");
       var ticks = document.querySelectorAll(".reels-tick");
       var pct = (pace.week / cfg.postsPerWeekMax) * 100;
       var phrase = pace.week ? pace.week + " " + plural(pace.week, "post", "posts") + " a week" : "Choose posts a week";
       var i, d, html, cells, offset;
+      if (result) result.hidden = !pace.week;
       if (monthsBox) {
         html = "";
         monthsBox.hidden = !pace.week;
@@ -424,7 +421,8 @@
         if (pace.week) signal.setAttribute("data-band", pace.band);
         signal.textContent = pace.signal || "";
       }
-      if (next) next.disabled = !pace.week;
+      if (lecture) lecture.hidden = !pace.week;
+      if (lectureText) lectureText.textContent = pace.week ? "This would require a minimum of " + monthlyLectureLabel(minLectureHoursRounded(pace.week)) + " of lecture video per month (plan includes up to " + hourPhrase(includedHours(state.reels)) + " / month)." : "";
       if (range) {
         range.value = String(pace.week);
         range.style.setProperty("--fill", pct + "%");
@@ -447,7 +445,7 @@
         "07": "The caption reaches people who do not follow you yet.",
         "08": "The same class also becomes Carousels and Stories.",
         "09": "The same recording will power more formats as they ship.",
-        "10": "Twelve months locks half the monthly price for the year.",
+        "10": "Twelve months locks " + offPct(12) + "% off for the full year (" + durationByMonths(12).termDiscountPct + "% annual + " + cfg.foundingDiscountPct + "% one-time founding). A shorter term spends the one-time " + cfg.foundingDiscountPct + "%, and renewals revert to the standard term rate.",
         "11": "Five specialist jobs, on every reel, or the post stays in drafts.",
         "12": "The cover is written from the whole class, not from the clip.",
         "13": "People decide to stay or leave in the first second.",
@@ -517,13 +515,22 @@
       byId("duration-controls").innerHTML = renderButtons(durations, "data-months", "months-opt-", function (item) { return state.months === item.opt.months; }, function (item) { return esc(durationButtonLabel(item.opt)); });
       paintPace();
     }
+    function paceBridgeLine(week) {
+      return "For " + week + " " + plural(week, "post", "posts") + " a week, that is " + state.reels + " " + plural(state.reels, "post", "posts") + " a month.";
+    }
     function renderModes() {
-      var i;
-      for (i = 1; i <= 3; i++) byId("wizard-panel-" + i).hidden = state.wizardStep !== i;
-      if (state.wizardStep !== lastWizard) {
-        lastWizard = state.wizardStep;
-        animate(byId("wizard-panel-" + state.wizardStep));
-      }
+      var panel1 = byId("wizard-panel-1");
+      var panel2 = byId("wizard-panel-2");
+      var bridge = byId("pace-bridge");
+      var showRow = byId("show-step-2-row");
+      var showBtn = byId("show-step-2");
+      var week = weekFromReels(state.reels);
+      var open = step2Shown && week > 0;
+      if (panel1) panel1.hidden = false;
+      if (panel2) panel2.hidden = !open;
+      if (showBtn && week > 0) showBtn.textContent = "Confirm " + week + " " + plural(week, "post", "posts") + " a week";
+      if (showRow) showRow.hidden = !(week > 0 && !open);
+      if (bridge) bridge.textContent = week ? paceBridgeLine(week) : "";
     }
     function animate(node) {
       if (!node) return;
@@ -531,29 +538,73 @@
       void node.offsetWidth;
       node.classList.add("reels-stage-anim");
     }
+    function planPriceLine(q) { return money(q.upfrontInr, false) + " upfront for " + state.months + " " + plural(state.months, "month", "months"); }
+    function slideIndexByNum(num) {
+      for (var i = 0; i < cfg.allSlides.length; i++) if (cfg.allSlides[i].num === String(num)) return i;
+      return -1;
+    }
+    function slideBtn(s, idx) {
+      return '<button type="button" class="reels-card-slide" data-open-slide="' + idx + '" aria-label="Open diagram ' + s.num + ", " + esc(s.title) + '"><img src="' + esc(s.image) + '" width="320" height="180" alt="' + esc(s.alt) + '" loading="lazy"><span class="reels-card-slide-meta">Slide ' + s.num + " · " + esc(s.title) + "</span></button>";
+    }
+    function fixButtons(actions) {
+      var html = "", i, a;
+      for (i = 0; i < (actions || []).length; i++) {
+        a = actions[i];
+        html += '<button type="button" class="reels-fix" data-fix="1"' + (a.months ? ' data-months="' + a.months + '"' : "") + (a.reels ? ' data-reels="' + a.reels + '"' : "") + (a.tierId ? ' data-tier="' + esc(a.tierId) + '"' : "") + ">" + esc(a.label) + "</button> ";
+      }
+      return html;
+    }
+    function craftBlock(tier) {
+      var nums = tier.craftSlideNums || [], html = '<div class="reels-card-slides mt-4 pt-4 border-t border-slate-200"><p class="text-base font-semibold text-slate-900 mb-2">' + esc(tier.craftHeading || "") + "</p>", i, s, idx;
+      for (i = 0; i < nums.length; i++) { idx = slideIndexByNum(nums[i]); s = cfg.allSlides[idx]; if (idx >= 0 && s) html += slideBtn(s, idx); }
+      return html + "</div>";
+    }
+    function renderPlanValue() {
+      var box = byId("plan-value"), nums, i, idx, row, st, got = "", lost = "", lostCount = 0, item, mark;
+      if (!box) return;
+      box.hidden = !state.planChosen;
+      if (!state.planChosen) return;
+      nums = cfg.valueComparisonSlideNums || [];
+      for (i = 0; i < nums.length; i++) {
+        idx = slideIndexByNum(nums[i]);
+        row = idx < 0 ? null : cfg.allSlides[idx];
+        if (!row) continue;
+        st = statusFor(row, ctxNow());
+        mark = st.level === "included";
+        item = '<li class="reels-value-item"><button type="button" class="reels-value-shot" data-open-slide="' + idx + '" aria-label="Open diagram ' + row.num + ", " + esc(row.title) + '"><img src="' + esc(row.image) + '" width="176" height="99" alt="' + esc(row.alt) + '" loading="lazy"></button><div class="reels-value-copy"><span class="reels-value-mark ' + (mark ? "is-got" : "is-lost") + '">' + (mark ? "✓" : "✗") + '</span><p class="reels-value-title text-base font-semibold text-slate-900">Slide ' + row.num + " · " + esc(row.title) + '</p><p class="text-base text-slate-700">' + esc(st.reason || "") + "</p>" + (mark ? "" : fixButtons(st.actions)) + "</div></li>";
+        if (mark) got += item; else { lost += item; lostCount += 1; }
+      }
+      dbg("renderPlanValue", { tier: state.tierId, months: state.months, reels: state.reels, lost: lostCount });
+      box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">What this plan + term gives you (and what you leave on the table)</h3><div class="reels-value-cols mt-4"><section><h4 class="reels-value-h is-got">What you get (✓)</h4><ul class="reels-value-list">' + got + '</ul></section><section><h4 class="reels-value-h is-lost">What you lose (✗)</h4>' + (lostCount ? '<ul class="reels-value-list">' + lost + "</ul>" : '<p class="reels-value-clear">✓ Nothing left on the table - all 10 story advantages and the full ' + offPct(12) + '% 12-month rate lock are included.</p>') + "</section></div>";
+    }
+    function renderOfferCopy() {
+      var box = byId("discount-explainer"), g = byId("plan-guarantee"), parts = [], i;
+      if (g) g.textContent = cfg.guaranteeCopy;
+      if (!box) return;
+      for (i = 0; i < cfg.durationMonthsOptions.length; i++) parts.push(cfg.durationMonthsOptions[i].termDiscountPct + "% on " + cfg.durationMonthsOptions[i].label);
+      box.innerHTML = '<p class="text-base font-semibold text-slate-900">Two discounts stack on your first plan (paid upfront):</p><p class="text-base text-slate-800 mt-2"><span class="font-semibold">1. Standard plan discount:</span> ' + esc(parts.join(" · ")) + '.</p><p class="text-base text-slate-800 mt-2"><span class="font-semibold">2. Founding Partner discount (' + cfg.foundingDiscountPct + "% off - " + (cfg.foundingOneTime ? "one time only" : "included") + "):</span> " + (cfg.foundingOneTime ? "Applies across all terms on your first commitment only, and will not apply again on renewal." : "Applies across all terms on this plan.") + " Choosing 12 months locks the full " + offPct(12) + "% combined discount for the entire year.</p>";
+    }
     function renderPlans() {
       var html = "";
-      var i, j, tier, q, selected, rate, week;
-      week = weekFromReels(state.reels);
+      var i, j, tier, q, selected, price;
       for (i = 0; i < cfg.tiers.length; i++) {
         tier = cfg.tiers[i];
         q = quoteTier(tier, state.reels, state.months);
-        selected = tier.id === state.tierId;
-        rate = ratePhrase(tier, state.months);
+        selected = state.planChosen && tier.id === state.tierId;
+        price = '<p class="mt-4"><span class="text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + '</span> <span class="text-base text-slate-600">/ post</span>';
+        if (q.perReelInr < tier.basePerReelInr) price += ' <span class="text-base reels-was">' + esc(money(tier.basePerReelInr, true)) + "</span>";
+        price += "</p>";
         html += '<article id="tier-' + esc(tier.id) + '" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '" class="rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
-        html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Start here - Complete system" : "") + "</p>";
+        html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Recommended" : "") + "</p>";
         html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>";
-        html += '<p class="mt-4 text-4xl font-extrabold text-slate-900">' + esc(money(q.perReelInr, true)) + '</p><p class="text-base text-slate-600">a post</p>';
-        if (q.perReelInr < tier.basePerReelInr) html += '<p class="mt-2 text-base reels-was">' + esc(money(tier.basePerReelInr, true)) + " on a monthly plan</p>";
-        html += '<p class="mt-4 text-base font-semibold text-brand-700">' + esc(rate.charAt(0).toUpperCase() + rate.slice(1)) + "</p>";
-        html += '<p class="mt-3 text-base text-slate-900 font-semibold">' + esc(money(q.monthlyInr, false)) + " a month</p>";
-        html += '<p class="mt-1 text-base text-slate-900 font-semibold">' + esc(money(q.upfrontInr, false)) + " upfront</p>";
-        html += '<p class="text-base text-slate-600">for ' + week + " " + plural(week, "post", "posts") + " a week, " + state.months + " " + plural(state.months, "month", "months") + "</p>";
-        html += '<p class="mt-4 text-base font-semibold text-slate-900">What you get</p><ul class="reels-benefits mt-2 space-y-2 text-base text-slate-700">';
+        html += '<p class="mt-2 text-base text-slate-600">' + esc(tier.fits) + "</p>";
+        html += price;
+        html += '<p class="mt-2 text-base font-semibold text-slate-900">' + esc(planPriceLine(q)) + "</p>";
+        html += '<p class="mt-1 text-base text-brand-700 font-semibold">' + esc(discountBadgeText(q)) + "</p>";
+        html += '<p class="mt-1 text-base text-slate-600">Includes up to ' + esc(hourPhrase(includedHours(state.reels))) + " of lecture video / month (min " + esc(monthlyLectureLabel(minLectureHoursRounded(weekFromReels(state.reels)))) + " needed)</p>";
+        html += '<ul class="reels-benefits mt-4 space-y-2 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
-        html += '</ul><p class="mt-4 text-base text-slate-700"><span class="font-semibold text-slate-900">Not included.</span> ' + esc(tier.notIncluded) + "</p>";
-        html += '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + selected + '">' + (selected ? "Chosen" : "Choose this") + "</button>";
-        html += '<p class="mt-4"><button type="button" class="reels-textlink" data-open-door="craft">See how a reel is made</button></p></div></article>';
+        html += "</ul>" + craftBlock(tier) + '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + (selected ? "true" : "false") + '">' + (selected ? "Selected" : "Choose this plan") + "</button></div></article>";
       }
       byId("plan-grid").innerHTML = html;
     }
@@ -598,62 +649,10 @@
       }
       byId("faq-grid").innerHTML = html;
     }
-    function pillarStates() {
-      var cover = hasCover(state.tierId);
-      var caption = state.tierId === "reel_cover_caption";
-      var habit = "missed";
-      var rate = "missed";
-      if (state.reels >= 20 && state.months >= 6) habit = "included";
-      else if (state.reels >= 20 && state.months >= 3) habit = "partial";
-      if (state.months === 12) rate = "included";
-      else if (state.months === 3 || state.months === 6) rate = "partial";
-      return [
-        { name: "Weekly habit & 7-hour student trust library", level: habit, fix: habit === "included" ? null : { label: "Set 20 reels/mo & 6 months", reels: 20, months: 6 } },
-        { name: "3-second scannable profile grid", level: cover ? "included" : "missed", fix: cover ? null : { label: "Select Reel + cover", tierId: "reel_cover" } },
-        { name: "Non-follower search reach + Carousels & Stories", level: caption ? "included" : "missed", fix: caption ? null : { label: "Select Reel + cover + caption", tierId: "reel_cover_caption" } },
-        { name: "Founding Partner + Annual 50% rate lock", level: rate, fix: rate === "included" ? null : { label: "Switch to 12 months", months: 12 } },
-        { name: "Early access to Quizzes, YouTube Chapters, Multi-Platform & Email Nurture", level: state.months === 12 && caption ? "included" : "missed", fix: state.months === 12 && caption ? null : { label: "Select 12 months on Reel + cover + caption", months: 12, tierId: "reel_cover_caption" } }
-      ];
-    }
-    function badgeLabel(level) {
-      if (level === "included") return "Included";
-      if (level === "partial") return "Optional upgrade";
-      return "Not in current choice";
-    }
-    function renderPillars() {
-      var rows = pillarStates();
-      var html = "";
-      var includedCount = 0;
-      var i, row, fix;
-      for (i = 0; i < rows.length; i++) if (rows[i].level === "included") includedCount += 1;
-      byId("choice-kicker").textContent = includedCount === 5
-        ? "All 5 core pillars are included in your current setup."
-        : includedCount + " of 5 core pillars included - use any button on the right to add what is missing.";
-      for (i = 0; i < rows.length; i++) {
-        row = rows[i];
-        html += '<div class="reels-pillar"><p class="text-base text-slate-900">' + esc(row.name) + '</p><span class="' + (row.level === "included" ? "reels-badge reels-badge-in" : "reels-badge reels-badge-gap") + '">' + badgeLabel(row.level) + "</span>";
-        fix = row.fix;
-        if (fix) {
-          html += '<button type="button" class="reels-fix" data-fix="1" data-from="pillars"';
-          if (fix.months) html += ' data-months="' + fix.months + '"';
-          if (fix.reels) html += ' data-reels="' + fix.reels + '"';
-          if (fix.tierId) html += ' data-tier="' + esc(fix.tierId) + '"';
-          html += ">" + esc(fix.label) + "</button>";
-        }
-        html += "</div>";
-      }
-      byId("pillars-list").innerHTML = html;
-    }
-    function pillarsLine() {
-      var rows = pillarStates();
-      var n = 0;
-      var i;
-      for (i = 0; i < rows.length; i++) if (rows[i].level === "included") n += 1;
-      return n + " of 5 core pillars included";
-    }
     function hoursLine() {
-      if (!state.reels) return "Included lecture time starts at 6 hours a month and rises with the number of posts.";
-      return "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, " + hourPhrase(includedHours(state.reels)) + " of your lecture are included each month.";
+      var week = weekFromReels(state.reels);
+      if (!state.reels) return "Included lecture time starts at " + hourPhrase(cfg.minLectureHours) + " a month and rises with the number of posts.";
+      return "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, you need a minimum of " + monthlyLectureLabel(minLectureHoursRounded(week)) + " of lecture video per month, and your plan includes a limit of up to " + hourPhrase(includedHours(state.reels)) + " per month (+" + cfg.lectureLimitBufferPct + "% buffer).";
     }
     function hoursSentences() {
       return hoursLine() + " Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
@@ -664,8 +663,8 @@
     }
     function renderFounding() {
       var tier = tierById("reel_cover_caption");
-      var year = quoteTier(tier, 1, 12).perReelInr;
-      byId("founding-rate").textContent = "A 12-month commitment combines the 33.3% annual discount with the 25% Founding Partner discount. Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year, true) + " per reel for the entire year, with early access to each new format as it ships.";
+      var year = quoteTier(tier, 1, 12);
+      byId("founding-rate").textContent = "A 12-month commitment combines the " + year.termPct + "% annual discount with the " + year.foundingPct + "% one-time Founding Partner discount (" + year.totalOffPct + "% off for the full year). Reel + cover + caption moves from " + money(tier.basePerReelInr, true) + " to " + money(year.perReelInr, true) + " per reel. A shorter term spends the one-time " + cfg.foundingDiscountPct + "%, and renewals revert to the standard term rate.";
     }
     function renderDoors() {
       var ids = ["story", "craft", "plan", "faq", "founding"];
@@ -682,63 +681,52 @@
       var cut = href.indexOf("#");
       return (cut === -1 ? href : href.slice(0, cut)) + stateHash();
     }
-    function summaryRows() {
-      var tier = tierById(state.tierId);
-      var q = quoteTier(tier, state.reels, state.months);
-      var week = weekFromReels(state.reels);
-      var pace = sevenHourPace(state.reels);
-      return [
-        ["Selected plan", tier.name],
-        ["Posts a week", week ? week + " " + plural(week, "post", "posts") + " a week (" + pace.text.replace(/\.$/, "") + ")" : "Not chosen"],
-        ["Commitment term", state.months + " " + plural(state.months, "month", "months") + " paid upfront"],
-        ["1-month list rate", money(tier.basePerReelInr, true) + " / post"],
-        ["Discount applied", discountLabel(state.months)],
-        ["Your rate", money(q.perReelInr, true) + " / post · " + money(q.monthlyInr, false) + " / month"],
-        ["Total due upfront", money(q.upfrontInr, false)],
-        ["Included lecture processing", hourPhrase(includedHours(state.reels)) + " / month (extra video " + money(cfg.extraVideoHourInr, true) + " / hour)"],
-        ["Value pillars unlocked", pillarsLine()]
-      ];
-    }
     function renderNudge() {
       var box = byId("checkout-nudge");
       var nowRate, nextRate, save, msg;
-      if (state.tierId === "reel_cover_caption" && state.months === 12) { box.innerHTML = ""; return; }
+      if (!state.planChosen || (state.tierId === "reel_cover_caption" && state.months === 12)) { box.innerHTML = ""; return; }
       nowRate = quoteTier(tierById(state.tierId), 1, state.months).perReelInr;
       nextRate = quoteTier(tierById("reel_cover_caption"), 1, 12).perReelInr;
       save = nowRate - nextRate;
-      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, which is " + money(save, true) + " less per post, and it covers all 5 pillars.";
-      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, and it covers all 5 pillars, including early access.";
-      box.innerHTML = '<p class="text-base text-slate-800 mb-3">' + esc(msg) + '</p><p><button type="button" class="reels-fix" data-fix="1" data-from="checkout" data-months="12" data-tier="reel_cover_caption">Switch to 12 months, Reel + cover + caption</button></p>';
+      if (save > 0) msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, which is " + money(save, true) + " less per post.";
+      else msg = "12 months on Reel + cover + caption is " + money(nextRate, true) + " / post, with early access as new formats ship.";
+      box.innerHTML = '<p class="text-base text-slate-800 mt-3 mb-3">' + esc(msg) + '</p><p><button type="button" class="reels-fix" data-fix="1" data-from="checkout" data-months="12" data-tier="reel_cover_caption">Switch to 12 months, Reel + cover + caption</button></p>';
     }
     function renderCheckout() {
-      var rows = summaryRows();
-      var html = "";
-      var lines = [];
-      var i, text, subject;
-      for (i = 0; i < rows.length; i++) {
-        html += '<div class="reels-kv"><p class="font-semibold text-slate-900">' + esc(rows[i][0]) + "</p><p>" + esc(rows[i][1]) + "</p></div>";
-        lines.push(rows[i][0] + ": " + rows[i][1]);
-      }
-      lines.push("Setup link: " + currentUrl());
-      text = lines.join("\n");
+      var box = byId("checkout");
+      var tier = tierById(state.tierId);
+      var q = quoteTier(tier, state.reels, state.months);
+      var week = weekFromReels(state.reels);
+      var line1, line2, line3, text, subject;
+      if (box) box.hidden = !state.planChosen;
+      line1 = tier.name + " · " + week + " " + plural(week, "post", "posts") + " a week · " + state.months + " " + plural(state.months, "month", "months") + " - " + money(q.perReelInr, true) + " / post (" + money(q.upfrontInr, false) + " upfront)";
+      line2 = "Includes up to " + hourPhrase(includedHours(state.reels)) + " of lecture video / month (min " + monthlyLectureLabel(minLectureHoursRounded(week)) + " needed + " + cfg.lectureLimitBufferPct + "% buffer; extra video " + money(cfg.extraVideoHourInr, true) + " / hour) · " + listRateNote(state.months) + ".";
+      line3 = cfg.guaranteeCopy;
+      text = line1 + "\n" + line2 + "\n" + line3 + "\nSetup link: " + currentUrl();
       state.summaryText = text;
-      subject = "Spark Reels plan: " + tierById(state.tierId).name + ", " + weekFromReels(state.reels) + " posts a week, " + state.months + " " + plural(state.months, "month", "months");
-      byId("checkout-summary").innerHTML = html;
+      subject = "Spark Reels plan: " + tier.name + ", " + week + " posts a week, " + state.months + " " + plural(state.months, "month", "months");
+      byId("checkout-summary").innerHTML = '<p class="text-base font-semibold text-slate-900">' + esc(line1) + '</p><p class="mt-1 text-base text-slate-600">' + esc(line2) + '</p><p class="reels-guarantee mt-3">' + esc(line3) + "</p>";
       byId("whatsapp-choice").href = "https://wa.me/" + cfg.whatsappPhone + "?text=" + encodeURIComponent(text);
       byId("email-choice").href = "mailto:support@sparktutor.ai?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text);
       renderNudge();
     }
+    function closeStep2() {
+      step2Shown = false;
+      state.wizardStep = 1;
+      state.planChosen = false;
+    }
     function render() {
-      if (!weekFromReels(state.reels) && state.wizardStep > 1) state.wizardStep = 1;
+      if (!weekFromReels(state.reels)) closeStep2();
       syncHash();
       renderDoors();
       renderControls();
       renderModes();
+      renderOfferCopy();
       renderPlans();
+      renderPlanValue();
       renderStory();
       renderCraft();
       renderFaq();
-      renderPillars();
       renderHours();
       renderFounding();
       renderCheckout();
@@ -747,8 +735,11 @@
       if (!byId("story-lightbox").hidden) paintLightbox();
     }
     function setReels(n) {
+      var prevWeek;
       if (!isFinite(n) || Math.floor(n) !== n || n < 0 || n > 90) return;
+      prevWeek = weekFromReels(state.reels);
       state.reels = n === 0 ? 0 : snapWeekReels(n);
+      if (weekFromReels(state.reels) !== prevWeek) closeStep2();
       render();
     }
     function openFold(id) {
@@ -760,14 +751,6 @@
     function scrollToId(id) {
       var node = byId(id);
       if (node) node.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    function gotoStep(n) {
-      if (n < 1 || n > 3 || (n > 1 && !weekFromReels(state.reels))) return;
-      dbg("gotoStep:before", { from: state.wizardStep, to: n });
-      state.wizardStep = n;
-      render();
-      dbg("gotoStep:after", { step: state.wizardStep });
-      scrollToId("wizard-panel-" + n);
     }
     function moveStory(delta) {
       var next = state.storyIndex + delta;
@@ -786,6 +769,9 @@
     function applyFix(btn) {
       var patch = {};
       dbg("applyFix:before", state);
+      step2Shown = true;
+      state.planChosen = true;
+      state.wizardStep = 2;
       if (btn.hasAttribute("data-months")) {
         patch.months = parseInt(btn.getAttribute("data-months"), 10);
         state.months = patch.months;
@@ -809,9 +795,9 @@
       flashToken += 1;
       token = flashToken;
       if (patch.months) add(byId("months-opt-" + patch.months));
-      if (patch.reels) add(byId("reels-opt-" + patch.reels));
+      if (patch.reels) add(byId("pace-bridge"));
       if (patch.tierId) add(byId("tier-" + patch.tierId));
-      add(byId("choice"));
+      add(byId("plan-value"));
       for (i = 0; i < nodes.length; i++) nodes[i].classList.add("reels-flash");
       window.setTimeout(function () {
         var j;
@@ -911,10 +897,19 @@
       if (origin.closest("#lightbox-next")) { stepLightbox(1); return; }
       if (origin.closest("#copy-choice")) { copyText(state.summaryText || "", byId("copy-choice"), "Copied plan summary"); return; }
       if (origin.closest("#copy-link-choice")) { syncHash(); copyText(window.location.href, byId("copy-link-choice"), "Copied link"); return; }
+      if (origin.closest("#show-step-2")) {
+        if (!weekFromReels(state.reels)) return;
+        step2Shown = true;
+        render();
+        scrollToId("wizard-panel-2");
+        return;
+      }
       if (origin.closest("#founding-build")) {
         state.months = 12;
         state.tierId = "reel_cover_caption";
-        state.wizardStep = 3;
+        state.wizardStep = 2;
+        state.planChosen = true;
+        step2Shown = true;
         state.door = "plan";
         render();
         scrollToId("prices");
@@ -937,8 +932,6 @@
       }
       btn = origin.closest("[data-scroll]");
       if (btn) { scrollToId(btn.getAttribute("data-scroll")); return; }
-      btn = origin.closest("[data-goto-step], [data-wizard-step]");
-      if (btn) { gotoStep(parseInt(btn.getAttribute("data-goto-step") || btn.getAttribute("data-wizard-step"), 10)); return; }
       btn = origin.closest("[data-story-index]");
       if (btn) { state.storyIndex = parseInt(btn.getAttribute("data-story-index"), 10); render(); return; }
       btn = origin.closest("[data-craft-index]");
@@ -963,7 +956,14 @@
       btn = origin.closest("[data-open-slide]");
       if (btn) { openLightbox(parseInt(btn.getAttribute("data-open-slide"), 10)); return; }
       btn = origin.closest("button[data-choose]");
-      if (btn) { state.tierId = btn.getAttribute("data-tier"); render(); return; }
+      if (btn) {
+        state.tierId = btn.getAttribute("data-tier");
+        state.planChosen = true;
+        state.wizardStep = 2;
+        render();
+        scrollToId("plan-value");
+        return;
+      }
       btn = origin.closest("[data-open-fold]");
       if (btn) { openFold(btn.getAttribute("data-open-fold")); return; }
       btn = origin.closest("button[data-currency]");
@@ -993,6 +993,7 @@
       else if (e.key === "ArrowLeft") { stepLightbox(-1); e.preventDefault(); }
     });
     bindFaqAccordion();
+    step2Shown = weekFromReels(state.reels) > 0 && state.wizardStep === 2;
     render();
   }
   root.SparkReelsPage = { mount: mount };
