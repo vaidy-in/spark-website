@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0" rel="stylesheet">
     <script src="js/layout.js"></script>
     <script src="js/components/accordion.js" defer></script>
-    <script src="js/spark-reels-pricing.js?v=20261028ax"></script>
+    <script src="js/spark-reels-pricing.js?v=20261028bh"></script>
     <style>
         [hidden] { display: none !important; }
         .reels-tab, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-cta, .reels-cite, .reels-source-name, .reels-book, .reels-tick, .reels-range, .reels-card-slide, .reels-value-shot { cursor: pointer; font-family: inherit; }
@@ -87,8 +87,12 @@
         .reels-cta-tertiary { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; }
         .reels-lightbox[hidden] { display: none !important; }
         .reels-lightbox { position: fixed; inset: 0; z-index: 80; background: rgba(15, 23, 42, 0.72); display: flex; align-items: center; justify-content: center; padding: 1rem; }
-        .reels-lightbox-panel { width: min(1080px, 96vw); max-height: 92vh; overflow: auto; background: #fff; border-radius: 16px; padding: 1rem; }
+        .reels-lightbox-panel { width: min(1440px, 96vw); max-height: 94vh; overflow: auto; background: #fff; border-radius: 16px; padding: 1rem; }
+        .reels-lightbox[data-zoom="1"] .reels-lightbox-panel { width: 98vw; max-height: 96vh; }
+        .reels-lightbox-bar { position: sticky; top: -1rem; z-index: 2; background: #fff; padding: 0.5rem 0; margin-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; }
         .reels-lightbox-bar, .reels-lightbox-nav { display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; justify-content: space-between; }
+        #lightbox-img { cursor: zoom-in; }
+        .reels-lightbox[data-zoom="1"] #lightbox-img { width: auto; max-width: none; cursor: zoom-out; }
         .reels-flash { outline: 3px solid #4f46e5; outline-offset: 3px; }
         #plan-grid { display: flex; flex-direction: column; gap: 1.5rem; }
         #plan-grid .reels-plan-col[data-recommended="true"] { order: -1; }
@@ -417,8 +421,11 @@
     <div class="reels-lightbox-panel">
         <div class="reels-lightbox-bar">
             <p id="lightbox-step" class="text-base font-semibold text-slate-900"></p>
-            <span id="lightbox-status" class="reels-status"></span>
-            <button type="button" class="reels-navbtn" id="lightbox-close">Close</button>
+            <div class="flex flex-wrap items-center gap-2">
+                <span id="lightbox-status" class="reels-status"></span>
+                <button type="button" class="reels-navbtn" id="lightbox-zoom" aria-pressed="false">Full size</button>
+                <button type="button" class="reels-navbtn" id="lightbox-close">Close</button>
+            </div>
         </div>
         <img id="lightbox-img" alt="" width="1280" height="720">
         <p id="lightbox-title" class="text-xl font-bold text-slate-900 mt-4"></p>

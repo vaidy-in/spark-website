@@ -48,13 +48,13 @@
       {
         id: "reel_only", name: "Reel", fold: "reel", basePerReelInr: 1000, recommended: false,
         fits: "Edited classroom reels, ready to post.",
-        craftSlideNums: ["13", "14", "15", "20"], craftHeading: "How the reel is built",
+        craftSlideNums: ["13", "14", "15", "17"], craftHeading: "How the reel is built",
         benefits: ["Cut from your class recordings", "3-second pre-roll & complete story arc", "Sent on WhatsApp for 1-tap approval"]
       },
       {
         id: "reel_cover", name: "Reel + cover", fold: "cover", basePerReelInr: 1250, recommended: false,
         fits: "Profile grid with custom covers.",
-        craftSlideNums: ["12", "18"], craftHeading: "How the cover is built",
+        craftSlideNums: ["12"], craftHeading: "How the cover is built",
         benefits: ["Everything in Reel, plus:", "Custom cover for 1:1 & 9:16 grids", "Scannable titles & studio color palette"]
       },
       {
@@ -83,10 +83,7 @@
       slide("14", "how", "Part 3 of 5: The Teaching Reel & In-Reel Text", "Feed-scroll safe framing, protected teaching pauses, and searchable in-reel text.", "craft-reel-framing.jpg", "Smartphone showing top and bottom feed safe zones so nothing is cut off while scrolling, with 4 callouts: 1. On-screen lesson title, 2. Speaker framed in safe zone, 3. Teaching pauses kept in, 4. Synced Sanskrit and anatomy captions.", "As people scroll through the Instagram feed, top and bottom UI overlays cut off ordinary videos. Every Spark reel is constructed inside a strict feed-safe viewport so the whole lesson is always visible while scrolling.", "", "", "", { items: ["Never cut off at the top or bottom: the on-screen title, speaker framing, and burned-in captions stay inside the feed-scroll safe zone.", "In-reel text built for discovery: the persistent lesson title and synced captions keep exact Sanskrit and anatomical terms readable on mute and indexable by Instagram search.", "Teaching-aware cut: keeps pranayama holds, chanting, and demonstrations intact while cutting dead air, false starts, and class logistics."], roles: "Senior video editor, visual layout specialist, audio engineer, and domain proofreader", discovery: "On-screen titles and captions drive silent-scroll retention and platform topic indexing, earning 1.5x repeat watches." }),
       slide("15", "how", "Part 4 of 5: The Studio End Card", "A 'Check the caption' CTA and teacher attribution tailored to every faculty member.", "craft-end-card.jpg", "Studio end card diagram with Check the caption CTA button and 3 callouts: 1. Studio brand mark, 2. Check the caption CTA (drives to study notes), 3. Matched to the session's teacher (multi-faculty).", "When the teaching thought lands, the reel closes with a clean studio end card that points viewers straight to the written study note below.", "", "", "", { items: ["Explicit 'Check the caption' CTA: turns a passive viewer into a reader who spends another minute with your study notes.", "Multi-faculty aware: each video in a studio can feature a different teacher. The end card and framing adapt to the specific teacher on screen while holding one studio brand."], roles: "Brand designer and video editor", discovery: "Drives caption dwell time, Saves, and Shares - the strongest signals for non-follower reach." }),
       slide("16", "how", "Part 5 of 5: The Instagram Caption", "Teacher-voice study notes and researched tags that power interest-media search.", "craft-caption-discovery.jpg", "Caption and search discovery diagram showing 1. Teacher-voice study note, 2. Researched search tags and hashtags, 3. Carousels and Stories from same class, pointing to 50%+ non-follower discovery.", "In interest-based media, the caption is not an afterthought - it is how strangers who care about your subject find you through search and topic graphs, even when they do not follow you yet.", "", "", "", { items: ["Concise domain copywriting: short, to the point, and written in the teacher's own voice with Sanskrit and anatomical accuracy intact.", "Researched tags and hashtags: every post includes researched domain keywords and hashtags that would take a human writer dedicated research time on every reel.", "Carousels and Stories (in Reel + cover + caption): cut from the same lecture for learners who prefer to read and swipe."], roles: "Domain subject-matter writer, senior copywriter, and SEO / tag researcher", discovery: "Makes every lesson searchable across Instagram interest media, driving over 50% of views from non-followers." }),
-      slide("17", "how", "Beneath the Waterline: Steps 1 to 4 of 11 (~110 of ~300 Checks)", "How a 90-minute class is understood before a single frame is cut.", "pipeline-steps-1-to-4.jpg", "2x2 grid of pipeline steps 1 to 4 (~110 checks): 1. Audio and speaker check (~15 checks, Audio ops), 2. Domain transcription (~35 checks, Transcriptionist), 3. Full-lecture course map (~35 checks, Instructional designer), 4. Standalone lesson pick (~25 checks, Domain expert).", "On the Spark homepage, turning a raw recording into a course takes 10+ specialist steps and 25 to 30 hours of human work per hour of video. For Spark Reels, Steps 1 to 4 run ~110 checks on the full lecture first:", "", "", "", { items: ["Step 1 - Audio & speaker diagnostics (~15 checks): verifies speaker-view framing, room echo contrast (19 dB+ floor), and background noise gates. Usually done by: Audio ops.", "Step 2 - Domain transcription & cleanup (~35 checks): word-level time-coded transcript preserving Sanskrit, pranayama counts, and anatomy. Usually done by: Transcriptionist & Content assistant.", "Step 3 - Full-lecture course map & chapters (~35 checks): maps modules and maker-checker chapter boundaries across the whole 60 to 90 minute class. Usually done by: Instructional designer & Subject-matter assistant.", "Step 4 - Standalone lesson selection (~25 checks): filters out class logistics, homework, and student-specific cues so each candidate stands alone for a stranger. Usually done by: Domain expert."], roles: "Audio ops, transcriptionist, instructional designer, and domain expert", discovery: "Ensures every clip carries a complete, accurate teaching arc grounded in the full lecture." }),
-      slide("18", "how", "Beneath the Waterline: Steps 5 to 8 of 11 (~105 of ~300 Checks)", "Teaching-aware editing, pre-roll extraction, feed-safe framing, and dual-grid covers.", "pipeline-steps-5-to-8.jpg", "2x2 grid of pipeline steps 5 to 8 (~105 checks): 5. Teaching pause judge (~30 checks, Senior editor), 6. 3-second pre-roll cut (~25 checks, Creative director), 7. Feed-safe reframe and captions (~30 checks, Visual specialist), 8. Dual-grid cover design (~20 checks, Copywriter and designer).", "Once a candidate lesson is chosen, Steps 5 to 8 run another ~105 checks to craft the video, the 3-second hook, the feed-safe layout, and the cover:", "", "", "", { items: ["Step 5 - Teaching pause judge (~30 checks): acoustic + LLM judge protects pranayama holds and demonstrations while removing dead air and false starts. Usually done by: Senior video editor & Domain teacher.", "Step 6 - 3-second pre-roll cut (~25 checks): scans the finished lesson for the peak 3-second insight with a clear speaker face and cuts the transition. Usually done by: Creative director & Video editor.", "Step 7 - Feed-safe reframe & in-reel captions (~30 checks): portrait speaker tracking, blur-focus depth, on-screen title, and synced captions locked inside top and bottom feed safe zones. Usually done by: Video editor & Visual specialist.", "Step 8 - Dual-grid cover design (~20 checks): writes series name, capped title, and hook from the full lecture and fits both the 1:1 Home grid and 9:16 Reels grid. Usually done by: Copywriter & Graphic designer."], roles: "Senior video editor, creative director, visual specialist, copywriter, and graphic designer", discovery: "Protects 1-second scroll stop, full feed visibility, and 3-second profile grid scanning on every post." }),
-      slide("19", "how", "Beneath the Waterline: Steps 9 to 11 of 11 (~85 Checks -> ~300 Total)", "Multi-faculty end card, SEO caption research, and the 300-check quality gate.", "pipeline-steps-9-to-11.jpg", "Pipeline steps 9 to 11 (~85 checks completing ~300 checks total): 9. Faculty end card and audio master (~20 checks, Brand designer), 10. Voice caption, tags and Carousels (~35 checks, Domain writer and SEO), 11. 9-gate rubric and WhatsApp (~30 checks, Quality evaluator), plus badge: ~300 checks = 25-30 hrs of specialist work replaced.", "Steps 9 to 11 complete the ~300 checks (110 + 105 + 85 = 300 checks), replacing ~25 to 30 hours of specialist work per lecture with a 3-minute approval on your phone:", "", "", "", { items: ["Step 9 - Multi-faculty end card & audio master (~20 checks): matches the teacher on screen, adds the 'Check the caption' CTA card, and levels studio/Zoom audio. Usually done by: Brand designer & Audio engineer.", "Step 10 - Teacher-voice caption, tags & Carousels (~35 checks): writes the concise study note, researches interest-media search tags and hashtags, and generates Carousels and Stories. Usually done by: Domain copywriter & SEO researcher.", "Step 11 - 9-gate rubric audit & WhatsApp delivery (~30 checks): grades every piece across 9 hard gates and 7 teaching axes so 9 of 10 arrive ready to post. Usually done by: Quality evaluator & Social media manager."], roles: "Brand designer, audio engineer, domain copywriter, SEO researcher, and quality evaluator", discovery: "Delivers all four discovery surfaces (cover, reel, in-reel text, and caption) on every single reel without compromise." }),
-      slide("20", "how", "One-shot quality", "How a reel earns Recommended vs Okay.", "reel-grading-rubric.jpg", "Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired.", "Why 9 out of 10 reels work on the first shot: every candidate chapter must first pass 9 hard gates (at most 150 seconds after dead air, dead air at most 30%, traffic/background noise below 4/5, room echo contrast at least 19 dB, real teaching rather than class logistics or homework, stands alone for a stranger, one finishable idea, right audience, and delivery floor). Passing clips are then scored 0 to 100 across 7 weighted teaching axes (Interest match 3x, One claim 3x, Delivery 3x, Mastery signal 2x, Complete arc 2x, Said not performed 2x, Cold standalone 1x) plus a peer respect test, slide-opening check, and other-speaker check.", ""),
+      slide("17", "how", "Beneath the Waterline: 18 Steps & ~300 Checks", "Deceptively simple on the surface: 18 steps, 10+ AI specialist roles, and ~300 checks underneath.", "reel-under-waterline.jpg?v=20261028bg", "Vertical cross-section of the Spark Reels iceberg: above the waterline you teach once and approve on WhatsApp in under 3 minutes; beneath the waterline, 6 depth strata run 18 pipeline steps and ~300 automated checks across 10+ AI specialist roles, built over 5+ years to replace 25 to 30 hours of manual work per 1-hour lecture.", "Like Google Search's single box, what feels like a 3-minute tap on your phone hides 5+ years of pipeline engineering (~3 to 4 engineering days per check) and replaces 25 to 30 hours of specialist work per 1-hour lecture across 6 depth strata and 18 pipeline steps:", "", "", "", { items: ["Stratum I - Signal & acoustic diagnostics (Steps 1 to 2, ~25 checks): speaker-view stability audit and 19 dB+ room echo and noise-floor gates. AI Roles: Video Ops Technician & Audio Diagnostics Engineer.", "Stratum II - Domain transcription & lexicon lock (Steps 3 to 4, ~45 checks): millisecond word timestamps and Sanskrit, pranayama, and clinical anatomy protection. AI Roles: Transcriptionist & Subject-Matter Proofreader.", "Stratum III - Full-lecture architecture & lesson selection (Steps 5 to 8, ~70 checks): full 90-minute syllabus map, maker-checker chapter boundaries that never cut mid-thought, cold-stranger logistics filter, and complete story arc selection. AI Roles: Instructional Designer, Curriculum Editor, Domain Expert & Acquisitions Editor.", "Stratum IV - Teaching-aware video & audio craft (Steps 9 to 11, ~65 checks): acoustic + LLM teaching pause judge (protects pranayama holds and silent demos while cutting dead air), peak 3-second pre-roll hook cut for the 1-second scroll test, and studio/Zoom audio mastering. AI Roles: Senior Video Editor, Domain Teacher, Creative Director & Audio Mastering Engineer.", "Stratum V - All 4 discovery surfaces (Steps 12 to 16, ~65 checks): 9:16 feed-safe portrait reframe, persistent lesson banner and synced captions, dual-grid 3-second cover (1:1 Home + 9:16 Reels), multi-faculty studio end card, and teacher-voice study note with researched SEO tags and Carousels. AI Roles: Visual Layout Specialist, Motion Typesetter, Brand Designer, Copywriter, Art Director, Domain Writer & SEO Researcher.", "Stratum VI - 9-gate quality rubric & WhatsApp release (Steps 17 to 18, ~30 checks -> ~300 total): every candidate must pass 9 hard gates and is scored 0 to 100 across 7 weighted teaching axes - sorting into Recommended (70+, sent first), Okay (50 to 69, backup library), or Retired (<50, filtered out) so 9 out of 10 reels arrive ready for 1-tap WhatsApp approval."], roles: "Video ops technician, audio diagnostics engineer, transcriptionist, subject-matter proofreader, instructional designer, curriculum editor, domain expert, senior video editor, creative director, audio mastering engineer, visual layout specialist, motion typesetter, brand designer, copywriter, SEO researcher, and quality evaluator", discovery: "Orchestrates all 18 steps and ~300 checks beneath the waterline so posting takes under 3 minutes on your phone with 9 of 10 reels ready on the first shot." }),
       slide("21", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", ""),
       slide("22", "how", "Credits", "Credits, watermark, and lecture hours.", "faq-accuracy-buffer.jpg", "You approve every clip. Extra lecture hours cover passes. A thumbs-up spends one credit and removes the watermark. A pass is free.", "Your plan includes 30% extra lecture-video hours, about 1 extra candidate for every 4 to 5 posts, so you can pass on a clip and still reach up to your monthly post count. You only spend a credit when you approve a clip, and the watermark comes off. A passed clip is retired at zero credit cost. If the recordings yield fewer clips, or you pass on most drafts, output stays within the included lecture-video hours. Extra video is ₹500 an hour ($5.35 USD). If you are unhappy, the pro-rated money-back guarantee refunds the remainder of the term.", "")
     ],
@@ -164,8 +161,7 @@
       if (caption) return pack("included", "Included in your choice: Teacher-voice study note, researched tags, and Carousels and Stories.");
       return pack("missed", "Left out without Caption: Select Reel + cover + caption to include the SEO caption, tags, Carousels, and Stories.", full);
     }
-    if (slideRow.num === "17" || slideRow.num === "18" || slideRow.num === "19") return pack("included", "Included in every plan: Built over 5 years (~250 to 300 automated checks, with 3 to 4 days of engineering invested per check) so posting takes under 3 minutes on your phone.");
-    if (slideRow.num === "20") return pack("included", "Included in every plan: Clips scoring 70+ land in Recommended (sent first). Clips scoring 50 to 69 land in Okay (your backup library). Anything under 50 or failing a gate is retired before you ever see it.");
+    if (slideRow.num === "17") return pack("included", "Included in every plan: Built over 5+ years (18 pipeline steps and ~300 automated checks across 10+ AI specialist roles, with 3 to 4 engineering days per check) - replacing 25 to 30 hours of specialist work per lecture and sorting clips through 9 hard gates and 7 teaching axes into Recommended (70+), Okay (50 to 69), or Retired (<50) so 9 of 10 arrive ready on WhatsApp.");
     if (slideRow.num !== "21") return { level: "included", reason: "", actions: [], pill: "" };
     if (caption && pace) return pack("included", "Included in your choice: All 9 layers of consistency hold across your page.");
     if (!cover) gaps.push("Layer 3 requires Cover");
@@ -186,7 +182,7 @@
     var level = "included";
     var reason = slideRow.on;
     var actions = [];
-    if (n >= 22) return { level: "included", reason: "", actions: [], pill: "" };
+    if (slideRow.filter === "faq" || slideRow.num === "22") return { level: "included", reason: "", actions: [], pill: "" };
     if (n >= 11) return tieCraft(slideRow, ctx);
     if (slideRow.num === "02" && !(reels >= 20 && months >= 3)) {
       level = "missed";
@@ -254,7 +250,7 @@
     var storySig = "";
     var craftSig = "";
     var faqDone = false;
-    if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.craftSlides.length !== 12 || cfg.allSlides.length !== 26) {
+    if (!cfg.tiers || cfg.storySlides.length !== 10 || cfg.craftSlides.length !== 9 || cfg.allSlides.length !== 23) {
       if (missing) missing.classList.remove("hidden");
       return;
     }
@@ -394,7 +390,7 @@
       months = Math.max(1, Math.round((7 * 60) / (week * 3.25) * 12 / 52));
       band = week >= 5 ? "green" : week >= 3 ? "yellow" : "red";
       lead = band === "green" ? "Recommended. " : band === "yellow" ? "Slower. " : "A long wait. ";
-      return { week: week, months: months, band: band, text: "About " + months + " " + plural(months, "month", "months") + " to 7 hours.", signal: lead + "About " + months + " " + plural(months, "month", "months") + " to 7 hours." };
+      return { week: week, months: months, band: band, text: "About " + months + " " + plural(months, "month", "months") + " to post 7 hours of content.", signal: lead + "About " + months + " " + plural(months, "month", "months") + " to post 7 hours of content." };
     }
     function paintPace() {
       var pace = sevenHourPace(state.reels);
@@ -456,10 +452,7 @@
         "14": "The lesson stays fully visible while someone scrolls the feed.",
         "15": "The end card sends them to the caption.",
         "16": "The caption is how strangers find the lesson.",
-        "17": "The full class is understood before a frame is cut.",
-        "18": "Then the cut, the hook, the frame, and the cover.",
-        "19": "About 300 checks replace a day of specialist work.",
-        "20": "Nine gates, then a score, before a reel is Recommended.",
+        "17": "Deceptively simple on the surface - 18 steps and ~300 checks across 10+ AI specialist roles underneath.",
         "21": "A full week only holds if all nine layers stay."
       };
       return leads[num] || "";
@@ -563,11 +556,11 @@
     function renderPlanValue() {
       var box = byId("plan-value"), head = "", rows = "", nums, i, t, idx, row, st, on, tier, pick;
       if (!box) return;
-      box.hidden = !state.planChosen;
-      if (!state.planChosen) return;
+      box.hidden = !step2Shown;
+      if (!step2Shown) return;
       for (t = 0; t < cfg.tiers.length; t++) {
         tier = cfg.tiers[t];
-        pick = tier.id === state.tierId ? ' class="is-picked"' : "";
+        pick = state.planChosen && tier.id === state.tierId ? ' class="is-picked"' : "";
         head += '<th scope="col"' + pick + ">" + esc(tier.name) + "</th>";
       }
       nums = cfg.valueComparisonSlideNums || [];
@@ -580,19 +573,19 @@
           tier = cfg.tiers[t];
           st = statusFor(row, { tierId: tier.id, reels: 20, months: 12 }); // plan only; pace and term stay on the price controls
           on = st.level === "included";
-          pick = tier.id === state.tierId ? ' class="is-picked"' : "";
+          pick = state.planChosen && tier.id === state.tierId ? ' class="is-picked"' : "";
           rows += "<td" + pick + ">" + (st.rank ? sproutCell(st.rank, tier.name) : '<span class="reels-value-mark ' + (on ? "is-got" : "is-lost") + '" role="img" aria-label="' + (on ? "Included" : "Not included") + " on " + esc(tier.name) + '">' + (on ? "✓" : "✗") + "</span>") + "</td>";
         }
         rows += "</tr>";
       }
-      box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">What each plan includes</h3><div class="reels-value-scroll mt-4"><table class="reels-value-table"><thead><tr><th scope="col"><span class="reels-sr">Diagram</span></th><th scope="col">What it is</th>' + head + "</tr></thead><tbody>" + rows + "</tbody></table></div>";
+      box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">Choose your plan wisely</h3><div class="reels-value-scroll mt-4"><table class="reels-value-table"><thead><tr><th scope="col"><span class="reels-sr">Diagram</span></th><th scope="col">What it is</th>' + head + "</tr></thead><tbody>" + rows + "</tbody></table></div>";
     }
     function renderPlans() {
       var html = "";
-      var i, j, tier, q, selected, monthlyLine, upfrontLine;
+      var i, j, tier, q, save, selected, monthlyLine, upfrontLine;
       for (i = 0; i < cfg.tiers.length; i++) {
         tier = cfg.tiers[i];
-        q = quoteTier(tier, state.reels, state.months);
+        q = quoteTier(tier, state.reels, state.months), save = quoteTier(tier, state.reels, 1).monthlyInr * state.months - q.upfrontInr;
         selected = state.planChosen && tier.id === state.tierId;
         monthlyLine = '<p class="mt-4"><span class="text-4xl font-extrabold text-slate-900">' + esc(money(q.monthlyInr, false)) + '</span> <span class="text-base text-slate-600">/ month</span>';
         if (q.monthlyInr < q.baseMonthlyInr) monthlyLine += ' <span class="text-base reels-was">' + esc(money(q.baseMonthlyInr, false)) + "</span>";
@@ -603,6 +596,7 @@
         html += '<div class="reels-plan-col" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '">';
         html += '<article id="tier-' + esc(tier.id) + '" class="reels-plan-card rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
         html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Recommended" : "") + "</p>";
+        if (save > 0) html += '<p class="text-base font-semibold text-brand-700 mb-1">Save ' + esc(money(save, false)) + " over " + state.months + " " + plural(state.months, "month", "months") + "</p>";
         html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>" + (tier.upcoming ? '<p class="mt-1 text-base text-slate-600">' + esc(tier.upcoming) + ' <span class="reels-upcoming-pill">Upcoming</span></p>' : "");
         html += '<p class="mt-1 text-base text-slate-600">' + esc(tier.fits) + "</p>";
         html += monthlyLine + upfrontLine;
@@ -830,10 +824,16 @@
       byId("lightbox-story").textContent = (slideRow.num === "22" ? hoursSentences() + " " : "") + slideRow.story + (slideRow.roles ? " Specialists required every time: " + slideRow.roles + "." : "") + (slideRow.discovery ? " Discovery impact: " + slideRow.discovery : "");
       byId("lightbox-reason").textContent = st.reason || "";
     }
+    function setZoom(on) {
+      var dlg = byId("story-lightbox"), z = byId("lightbox-zoom");
+      if (dlg) on ? dlg.setAttribute("data-zoom", "1") : dlg.removeAttribute("data-zoom");
+      if (z) { z.setAttribute("aria-pressed", on ? "true" : "false"); z.textContent = on ? "Fit to screen" : "Full size"; }
+    }
     function openLightbox(index) {
       var dlg = byId("story-lightbox");
       if (!cfg.allSlides[index]) return;
       state.lightbox = index;
+      setZoom(false);
       paintLightbox();
       dlg.hidden = false;
       dlg.setAttribute("aria-hidden", "false");
@@ -841,13 +841,12 @@
     }
     function closeLightbox() {
       var dlg = byId("story-lightbox");
-      dlg.hidden = true;
-      dlg.setAttribute("aria-hidden", "true");
+      setZoom(false); dlg.hidden = true; dlg.setAttribute("aria-hidden", "true");
     }
     function stepLightbox(delta) {
       var n = cfg.allSlides.length;
       state.lightbox = (state.lightbox + delta + n) % n;
-      paintLightbox();
+      setZoom(false); paintLightbox();
     }
     function copyText(text, button, done) {
       var idle = button.getAttribute("data-idle") || button.textContent;
@@ -890,6 +889,7 @@
       if (!origin || !origin.closest) return;
       if (origin.id === "story-lightbox") { closeLightbox(); return; }
       if (origin.closest("#lightbox-close")) { closeLightbox(); return; }
+      if (origin.closest("#lightbox-zoom") || origin.id === "lightbox-img") { setZoom(byId("story-lightbox").getAttribute("data-zoom") !== "1"); return; }
       if (origin.closest("#lightbox-prev")) { stepLightbox(-1); return; }
       if (origin.closest("#lightbox-next")) { stepLightbox(1); return; }
       if (origin.closest("#copy-choice")) { copyText(state.summaryText || "", byId("copy-choice"), "Copied plan summary"); return; }
