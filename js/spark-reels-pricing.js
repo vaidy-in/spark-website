@@ -1,5 +1,5 @@
 /*
-  Spark Reels pricing and plan wizard. Edit cfg, save, and reload marketing/spark-reels.html.
+  Spark Reels pricing and plan wizard. Edit cfg, save, and reload marketing/spark-branding.html.
   Founding 25% is one time and applies on every term. Discounts follow cfg.discountCombineMode.
   Page state lives in the URL hash (no browser storage). INR or USD at fxRateInrPerUsd.
   d= opens story, craft, plan, faq, or founding. No d means the first screen.
