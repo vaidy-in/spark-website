@@ -403,15 +403,23 @@
       var ticks = document.querySelectorAll(".reels-tick");
       var pct = (pace.week / cfg.postsPerWeekMax) * 100;
       var phrase = pace.week ? pace.week + " " + plural(pace.week, "post", "posts") + " a week" : "Choose posts a week";
-      var i, d, html, cells, offset;
+      var i, d, html, cells, offset, inMonth, postCol, order, k;
       if (result) result.hidden = !pace.week;
       if (monthsBox) {
         html = "";
         monthsBox.hidden = !pace.week;
+        order = [0, 2, 4, 6, 1, 3, 5];
+        postCol = {};
+        for (k = 0; k < pace.week && k < order.length; k++) postCol[order[k]] = 1;
         for (i = 1; i <= pace.months; i++) {
           offset = i % 7;
           cells = "";
-          for (d = 0; d < 35; d++) cells += "<i" + (d < offset || d >= offset + 28 ? ' class="is-off"' : "") + "></i>";
+          for (d = 0; d < 35; d++) {
+            inMonth = d >= offset && d < offset + 28;
+            if (!inMonth) cells += '<i class="is-off"></i>';
+            else if (postCol[d % 7]) cells += '<i class="is-post"></i>';
+            else cells += "<i></i>";
+          }
           html += '<span class="reels-month"><span class="reels-month-top"><span class="reels-month-ring"></span><span class="reels-month-n">' + i + '</span><span class="reels-month-ring"></span></span><span class="reels-month-grid">' + cells + "</span></span>";
         }
         if (pace.week) { monthsBox.innerHTML = html; monthsBox.setAttribute("data-size", pace.months > 8 ? "sm" : "lg"); }
