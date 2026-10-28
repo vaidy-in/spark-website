@@ -58,7 +58,7 @@
         benefits: ["Everything in Reel, plus:", "Custom cover for 1:1 & 9:16 grids", "Scannable titles & studio color palette"]
       },
       {
-        id: "reel_cover_caption", name: "Reel + cover + caption", fold: "caption", basePerReelInr: 1500, recommended: true,
+        id: "reel_cover_caption", name: "Reel + cover + caption", fold: "caption", basePerReelInr: 1500, recommended: true, upcoming: "Carousels & Stories",
         fits: "Full non-follower reach in your voice.",
         craftSlideNums: ["16", "11", "21"], craftHeading: "How caption & reach work",
         benefits: ["Everything in Reel + cover, plus:", "Teacher-voice SEO caption & search tags", "Carousels & Stories from the same class"]
@@ -99,6 +99,7 @@
   };
 
   cfg.allSlides = cfg.storySlides.concat(cfg.craftSlides, cfg.faqSlides);
+  var guaranteeSealMarkup = '<span class="reels-guarantee-mark" aria-hidden="true"><svg class="reels-trust-badge" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="reelsSealGold" x1="0.2" y1="0" x2="0.85" y2="1"><stop offset="0%" stop-color="#fffbeb"/><stop offset="38%" stop-color="#fde047"/><stop offset="72%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs><path fill="url(#reelsSealGold)" stroke="#92400e" stroke-width="1.75" d="M48 2l12.2 24.7 27.3 4-19.8 19.3 4.7 27.2L48 66.5 23.6 77.7l4.7-27.2L8.5 31.4l27.3-4L48 2z"/></svg></span>';
 
   function durationByMonths(months) {
     var i;
@@ -363,16 +364,23 @@
       if (q.termPct > 0) return q.totalOffPct + "% off list rate (" + q.termPct + "% term + " + q.foundingPct + "% one-time founding)";
       return q.totalOffPct + "% off list rate (one-time founding discount)";
     }
-    function durationButtonLabel(opt) {
-      var off = offPct(opt.months) + "% off";
-      if (opt.bestValue) return opt.months + " " + plural(opt.months, "month", "months") + " · Best value " + off;
+    function durationTermHeadline(months, boxTitle) {
+      var opt = durationByMonths(months), off = offPct(months) + "% off", sep;
+      if (!opt) return "";
+      if (opt.bestValue) {
+        sep = boxTitle ? " · Best value · " : " · Best value ";
+        return opt.months + " " + plural(opt.months, "month", "months") + sep + off;
+      }
       return opt.label + " · " + off;
     }
-    function durationDiscountNote(months) {
-      var q = quoteTier(cfg.tiers[0], 1, months);
-      var founding = q.foundingPct + "% founding customer discount*";
-      if (!q.termPct) return founding;
-      return q.termPct + "% term discount + " + founding;
+    function durationButtonLabel(opt) { return durationTermHeadline(opt.months, false); }
+    function renderDurationDiscount() {
+      var box = byId("duration-discount"), opt, q, html;
+      if (!box || !(opt = durationByMonths(state.months))) { if (box) box.innerHTML = ""; return; }
+      q = quoteTier(cfg.tiers[0], 1, state.months);
+      html = '<p class="reels-duration-lead text-base font-semibold text-slate-900">' + esc(durationTermHeadline(state.months, true)) + '</p><ul class="reels-duration-break text-base text-slate-600 mt-2">';
+      if (q.termPct) html += "<li>" + q.termPct + "% term discount</li>";
+      box.innerHTML = html + "<li>" + q.foundingPct + "% founding customer discount*</li></ul><p class=\"reels-duration-foot text-base text-slate-600\">* The founding customer discount is a <strong>one-time offer</strong> for the <strong>first 5 customers</strong>.</p><div class=\"reels-guarantee-badge\" role=\"note\">" + guaranteeSealMarkup + "<p class=\"reels-guarantee-text\">" + esc(cfg.guaranteeCopy) + "</p></div>";
     }
     function buttonClass(on) {
       return on
@@ -550,8 +558,7 @@
       return -1;
     }
     function slideBtn(s, idx) {
-      var shortTitle = ({ "11": "All 4 discovery surfaces", "12": "1:1 & 9:16 cover design", "13": "3-second pre-roll", "14": "Feed-safe reel & captions", "15": "Studio end card", "16": "SEO caption & tags", "18": "Cover & frame checks", "20": "9-gate quality rubric", "21": "9 layers of consistency" })[s.num] || s.title;
-      return '<button type="button" class="reels-card-slide" data-open-slide="' + idx + '" aria-label="Open diagram ' + s.num + ", " + esc(s.title) + '"><img src="' + esc(s.image) + '" width="320" height="180" alt="' + esc(s.alt) + '" loading="lazy"><span class="reels-card-slide-meta">Slide ' + s.num + " · " + esc(shortTitle) + "</span></button>";
+      return '<button type="button" class="reels-card-slide" data-open-slide="' + idx + '" aria-label="Open diagram ' + s.num + ", " + esc(s.title) + '"><img src="' + esc(s.image) + '" width="320" height="180" alt="' + esc(s.alt) + '" loading="lazy"></button>';
     }
     function fixButtons(actions) {
       var html = "", i, a;
@@ -584,15 +591,6 @@
       dbg("renderPlanValue", { tier: state.tierId, months: state.months, reels: state.reels, lost: lostCount });
       box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">What this plan + term gives you (and what you leave on the table)</h3><div class="reels-value-cols mt-4"><section><h4 class="reels-value-h is-got">What you get (✓)</h4><ul class="reels-value-list">' + got + '</ul></section><section><h4 class="reels-value-h is-lost">What you lose (✗)</h4>' + (lostCount ? '<ul class="reels-value-list">' + lost + "</ul>" : '<p class="reels-value-clear">✓ Nothing left on the table - all 10 story advantages and the full ' + offPct(12) + '% 12-month rate lock are included.</p>') + "</section></div>";
     }
-    function placeDurationNote() {
-      var controls = byId("duration-controls"), box = byId("duration-discount"), btn = controls && controls.querySelector('button[aria-pressed="true"]'), c, b, n;
-      if (!controls || !box || !btn || !box.offsetWidth) return;
-      box.style.left = "0px"; c = controls.getBoundingClientRect(); b = btn.getBoundingClientRect(); n = box.getBoundingClientRect();
-      box.style.left = Math.max(16 - c.left, Math.min(innerWidth - 16 - c.left - n.width, b.left + b.width / 2 - c.left - n.width / 2)) + "px";
-    }
-    function renderOfferCopy() {
-      setText("plan-guarantee", cfg.guaranteeCopy); setText("duration-discount-note", durationDiscountNote(state.months)); placeDurationNote();
-    }
     function renderPlans() {
       var html = "";
       var i, j, tier, q, selected, monthlyLine, upfrontLine;
@@ -606,15 +604,17 @@
         upfrontLine = '<p class="mt-1 text-base font-semibold text-slate-900">' + esc(planPriceLine(q));
         if (q.upfrontInr < q.baseUpfrontInr) upfrontLine += ' <span class="font-normal reels-was">' + esc(money(q.baseUpfrontInr, false)) + "</span>";
         upfrontLine += ' · <span class="text-brand-700">' + q.totalOffPct + "% off</span></p>";
-        html += '<article id="tier-' + esc(tier.id) + '" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '" class="rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
+        html += '<div class="reels-plan-col" data-tier="' + esc(tier.id) + '" data-recommended="' + (tier.recommended ? "true" : "false") + '">';
+        html += '<article id="tier-' + esc(tier.id) + '" class="reels-plan-card rounded-2xl border p-6 flex flex-col ' + (selected ? "reels-chosen" : "border-slate-200") + '">';
         html += '<p class="reels-kicker reels-eyebrow mb-2">' + (tier.recommended ? "Recommended" : "") + "</p>";
-        html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>";
+        html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>" + (tier.upcoming ? '<p class="mt-1 text-base text-slate-600">' + esc(tier.upcoming) + ' <span class="reels-upcoming-pill">Upcoming</span></p>' : "");
         html += '<p class="mt-1 text-base text-slate-600">' + esc(tier.fits) + "</p>";
         html += monthlyLine + upfrontLine;
         html += '<p class="mt-2 text-base font-semibold text-slate-800">' + state.reels + " " + plural(state.reels, "post", "posts") + " / month · Up to " + esc(hourPhrase(includedHours(state.reels))) + " lecture video</p>";
         html += '<ul class="reels-benefits mt-3 space-y-1.5 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
-        html += "</ul>" + craftBlock(tier) + '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + (selected ? "true" : "false") + '">' + (selected ? "Selected" : "Choose this plan") + "</button></div></article>";
+        html += "</ul>" + craftBlock(tier) + "</article>";
+        html += '<div class="reels-plan-choose"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + (selected ? "true" : "false") + '">' + (selected ? "Selected" : "Choose this plan") + "</button></div></div>";
       }
       byId("plan-grid").innerHTML = html;
     }
@@ -732,7 +732,7 @@
       renderDoors();
       renderControls();
       renderModes();
-      renderOfferCopy();
+      renderDurationDiscount();
       renderPlans();
       renderPlanValue();
       renderStory();
@@ -955,11 +955,12 @@
       if (btn) { openLightbox(parseInt(btn.getAttribute("data-open-slide"), 10)); return; }
       btn = origin.closest("button[data-choose]");
       if (btn) {
+        var scrollY = window.scrollY;
         state.tierId = btn.getAttribute("data-tier");
         state.planChosen = true;
         state.wizardStep = 2;
         render();
-        scrollToId("plan-value");
+        window.scrollTo(0, scrollY);
         return;
       }
       btn = origin.closest("[data-open-fold]");
@@ -990,7 +991,6 @@
       else if (e.key === "ArrowRight") { stepLightbox(1); e.preventDefault(); }
       else if (e.key === "ArrowLeft") { stepLightbox(-1); e.preventDefault(); }
     });
-    window.addEventListener("resize", placeDurationNote);
     step2Shown = weekFromReels(state.reels) > 0 && state.wizardStep === 2;
     render();
     if ((state.door === "faq" || state.door === "founding") && step2Shown) scrollToId("faq");

@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="js/layout.js"></script>
     <script src="js/components/accordion.js" defer></script>
-    <script src="js/spark-reels-pricing.js?v=20261028ad"></script>
+    <script src="js/spark-reels-pricing.js?v=20261028an"></script>
     <style>
         [hidden] { display: none !important; }
         .reels-tab, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-cta, .reels-cite, .reels-source-name, .reels-book, .reels-tick, .reels-range, .reels-card-slide, .reels-value-shot { cursor: pointer; font-family: inherit; }
@@ -28,8 +28,15 @@
         .reels-kicker { color: #4f46e5; font-weight: 600; font-size: 1rem; margin: 0; }
         .reels-eyebrow { min-height: 1.5rem; }
         .reels-anchor, .reels-step-panel, #pace-bridge, #plan-value { scroll-margin-top: 6rem; }
-        .reels-duration-note { position: relative; width: max-content; max-width: 100%; margin-top: 0.45rem; margin-bottom: 2.75rem; text-align: left; }
-        .reels-duration-foot { position: absolute; left: 0; top: calc(100% + 0.25rem); margin: 0; white-space: nowrap; }
+        .reels-duration-note { margin-top: 0.75rem; margin-bottom: 1.25rem; max-width: 42rem; padding: 0.9rem 1rem; background: #eef2ff; border-radius: 12px; text-align: left; }
+        .reels-duration-note .reels-duration-lead { margin: 0; }
+        .reels-duration-break { list-style: none; margin: 0.35rem 0 0; padding: 0 0 0 1rem; }
+        .reels-duration-break li + li { margin-top: 0.2rem; }
+        .reels-duration-foot { margin: 0.5rem 0 0; }
+        .reels-duration-note .reels-guarantee-badge { margin: 0.75rem 0 0; max-width: none; display: flex; gap: 0.9rem; align-items: center; padding: 0.35rem 0 0; border-radius: 0; background: transparent; border: none; color: #78350f; font-size: 1rem; line-height: 1.5; }
+        .reels-guarantee-mark { flex-shrink: 0; display: block; line-height: 0; }
+        .reels-trust-badge { width: 4.25rem; height: auto; display: block; filter: drop-shadow(0 2px 5px rgba(120, 53, 15, 0.28)); }
+        .reels-guarantee-text { flex: 1; min-width: 0; margin: 0; }
         .reels-stage { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: start; }
         .reels-split, .reels-grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
         .reels-shot { display: block; width: 100%; padding: 0; border: 0; background: none; border-radius: 12px; text-align: left; }
@@ -81,7 +88,11 @@
         .reels-lightbox-bar, .reels-lightbox-nav { display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; justify-content: space-between; }
         .reels-flash { outline: 3px solid #4f46e5; outline-offset: 3px; }
         #plan-grid { display: flex; flex-direction: column; gap: 1.5rem; }
-        #plan-grid article[data-recommended="true"] { order: -1; }
+        #plan-grid .reels-plan-col[data-recommended="true"] { order: -1; }
+        .reels-plan-col { display: flex; flex-direction: column; min-height: 0; }
+        .reels-plan-card { flex: 1 1 auto; }
+        .reels-plan-choose { flex: none; margin-top: 1rem; }
+        .reels-upcoming-pill { display: inline-block; padding: 0 0.6rem; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: 1rem; font-weight: 600; line-height: 1.5rem; white-space: nowrap; }
         @keyframes reelsFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .reels-stage-anim { animation: reelsFadeIn 200ms cubic-bezier(0.22, 1, 0.36, 1); }
         .reels-tab:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible, .reels-cite:focus-visible, .reels-source-name:focus-visible, .reels-book:focus-visible, .reels-tick:focus-visible, .reels-range:focus-visible, .reels-card-slide:focus-visible, .reels-value-shot:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
@@ -90,12 +101,11 @@
         .reels-discount-box:empty, .reels-guarantee:empty { display: none; }
         .reels-guarantee { display: flex; gap: 0.55rem; align-items: flex-start; background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; }
         .reels-guarantee::before { content: "✓"; font-weight: 800; }
-        .reels-card-slides { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
-        .reels-card-slides > p { grid-column: 1 / -1; margin: 0; }
-        .reels-card-slide { display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem; width: 100%; padding: 0.35rem; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; text-align: left; font-size: 1rem; }
+        .reels-card-slides { display: grid; grid-template-columns: 1fr; gap: 0.65rem; }
+        .reels-card-slides > p { margin: 0; }
+        .reels-card-slide { display: block; width: 100%; padding: 0.35rem; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; text-align: left; }
         .reels-card-slide:hover { border-color: #4f46e5; }
         .reels-card-slide img { width: 100%; height: auto; display: block; border-radius: 8px; }
-        .reels-card-slide-meta { display: block; color: #334155; font-size: 1rem; line-height: 1.35; }
         .reels-value-cols { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
         .reels-value-h { margin: 0; font-size: 1.25rem; line-height: 1.4; font-weight: 700; }
         .reels-value-h.is-got { color: #047857; }
@@ -195,8 +205,8 @@
         @media (min-width: 1024px) {
             .reels-stage { grid-template-columns: 7fr 5fr; }
             .reels-split, .reels-grid-2 { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-            #plan-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
-            #plan-grid article[data-recommended="true"] { order: 0; }
+            #plan-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: stretch; }
+            #plan-grid .reels-plan-col[data-recommended="true"] { order: 0; }
             .reels-value-cols { grid-template-columns: 1fr 1fr; }
         }
         @media (prefers-reduced-motion: reduce) { .reels-stage-anim { animation: none; } }
@@ -305,12 +315,8 @@
                     <div id="currency-switch" class="flex flex-wrap gap-2" role="group" aria-labelledby="currency-label"></div>
                 </div>
                 <div id="duration-controls" class="flex flex-wrap gap-2 mt-4" role="group" aria-label="Months paid upfront"></div>
-                <div id="duration-discount" class="reels-duration-note">
-                    <p id="duration-discount-note" class="text-base text-slate-600"></p>
-                    <p class="reels-duration-foot text-base text-slate-600">* The founding customer discount is a <strong>one-time offer</strong> for the <strong>first 5 customers</strong>.</p>
-                </div>
+                <div id="duration-discount" class="reels-duration-note" aria-live="polite"></div>
                 <div id="plan-grid" class="mt-4"></div>
-                <p id="plan-guarantee" class="reels-guarantee mt-5 max-w-3xl"></p>
                 <div id="plan-value" class="mt-8" hidden aria-live="polite"></div>
                 <div id="checkout" class="mt-8" hidden aria-live="polite">
                     <div class="reels-checkout-card">
