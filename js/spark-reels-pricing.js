@@ -36,7 +36,7 @@
     minLectureHours: 6,
     extraVideoHourInr: 500,
     guaranteeCopy: "Pro-rated money-back guarantee: if you are unhappy at any point, you get a pro-rated refund for the remainder of your term.",
-    valueComparisonSlideNums: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
+    valueComparisonSlideNums: ["02", "03", "04", "10", "01", "06", "07", "08", "05", "09"],
     whatsappPhone: "917899156587",
     durationMonthsOptions: [
       { months: 1, label: "1 month", termDiscountPct: 0, bestValue: false },
@@ -65,15 +65,15 @@
       }
     ],
     storySlides: [
-      slide("01", "long", "The long game", "Attention or nurture.", "attention.jpg", "A megaphone scatters a cloud labeled Attention. An arrow points to a seedling watered by drops, labeled Nurture.", "A loud hook fades in a day. Real teaching from your actual classroom waters trust every week without turning you into a performer.", "Included: Your reels are cut from real classes with live students, not scripted solo takes."),
+      slide("01", "long", "The long game", "Nurturing relationships, not capturing attention.", "attention.jpg", "A megaphone scatters a cloud labeled Attention. An arrow points to a seedling watered by drops, labeled Nurture.", "A loud hook fades in a day. Real teaching from your actual classroom waters trust every week without turning you into a performer.", "Included: Your reels are cut from real classes with live students, not scripted solo takes - and adding covers and study-note captions deepens how each lesson nurtures your audience."),
       slide("02", "long", "The long game", "Depth + consistency = trust.", "consistency.jpg", "An iceberg labeled Depth, plus a checked calendar labeled Consistency, equals a seedling labeled Trust.", "Posting 5 to 7 times a week usually burns a teacher out or thins the teaching. Because reels come from classes you already taught and arrive on WhatsApp ready to schedule, the calendar holds through festivals, batches, and travel.", "Included: Your pace keeps the weekly calendar full without a second filming job.", "At a lighter pace or a 1-month trial, the weekly habit is too brief or too sparse to compound."),
       slide("03", "long", "The long game", "About 7 hours before a serious yes.", "hours.jpg", "About 7 hours. Two reels a week takes 1 to 2 years to reach 90 reels. Seven a week reaches about 5 hours in 3 months and about 10 hours in 6 months.", "Google's research shows a high-trust buyer spends about 7 hours with your teaching before committing. Twice a week takes 1 to 2 years. At 5 to 7 reels a week, a prospective student can sit with 5 to 10 hours of your teaching in 3 to 6 months. A 12-month plan sustains that library across every intake.", "Included: Your term builds the multi-hour library a serious student needs.", "Shortfall: Fewer than 6 months or under 20 reels a month does not build enough hours on the page for a cold prospect to reach 7 hours."),
       slide("04", "long", "The long game", "Guide them before the first call.", "journey.jpg", "A guide points a traveler up free steps toward an open gate labeled Your program.", "Think of enrollment as a 1,000-step walk. Your page gives the first 200 steps generously for free so that when someone finally messages you, they already trust how you teach.", "Included: Enough runway for strangers to walk the first free steps on your page.", "Left out on 1 month: A single month puts out too few steps to guide a stranger before your next batch."),
       slide("05", "cover", "The cover & brand", "Three seconds on the grid.", "grid.jpg", "3 seconds. A nine-frame grid. One person leaves. Another stays and touches the grid.", "When someone taps your profile, they decide in about 3 seconds whether to leave or stay. Custom covers with short scannable titles turn nine frames into a menu of lessons.", "Included: Custom covers and short titles make your profile grid read as a menu of lessons.", "Left out on Reel only: Raw video frames look repetitive on the grid, so profile visitors cannot scan topics in 3 seconds."),
-      slide("06", "cover", "The cover & brand", "A brand is trust, built on purpose.", "brand.jpg", "A brick wall with a path rising through it. A brand is trust. Built on purpose. Not by accident.", "Rotating colour palettes, subject framing, and multi-faculty variety make your studio look deliberate week after week, brick by brick.", "Included: Multi-month visual and curriculum coherence across your grid.", "Left out: Requires the Cover tier (Reel + cover or full tier) over at least 6 months so the visual system compounds."),
-      slide("07", "cover", "The caption & reach", "Interest media reaches non-followers.", "interest.jpg", "Social media reaches people who already follow you. Interest media reaches people who care, even if they do not follow you yet.", "Followers already know you. Long-form SEO captions written in your lineage-accurate voice carry the lesson to people who care about the subject but do not follow you yet.", "Included: Teacher-voice SEO captions built for non-follower discovery and repeat reading.", "Left out without Caption: You get the video, but miss search discovery from non-followers and study-note captions in your voice."),
-      slide("08", "cover", "The caption & reach", "Do it with intent: Carousels and Stories.", "intent.jpg", "A path through a field toward one person. The line reads: who it is for, what it is for, and the promise.", "Every piece states who it is for, what it teaches, and the promise. In the full column, the same class also gives you Carousels and Stories for learners who read and swipe.", "Included: Carousels and Stories cut from the same class, aligned to serious students.", "Left out without Caption: Carousels and Stories are only included in Reel + cover + caption."),
-      slide("09", "roadmap", "Roadmap & founding window", "One class. More formats next.", "upcoming-formats.jpg", "One open book fans out to Quizzes, YouTube, multi-platform, and email nurture. Built from the same recording. Early access on 12 months.", "Because Spark maps your actual course rather than slicing a flat transcript, the same recording will soon power Interactive Quizzes, YouTube Chapters and Shorts, Multi-Platform Publishing, and Student Email Nurture.", "Included on 12 months: Early access to Quizzes, YouTube chapters, multi-platform publishing, and email nurture as they launch.", "12-month full-plan advantage missed: Early access to Quizzes, YouTube chapters, multi-platform publishing, and email nurture is included when you lock the full Reel + cover + caption plan for 12 months."),
+      slide("06", "cover", "The cover & brand", "A brand is trust, built on purpose.", "brand.jpg", "A brick wall with a path rising through it. A brand is trust. Built on purpose. Not by accident.", "Rotating colour palettes, subject framing, and multi-faculty variety make your studio look deliberate week after week, brick by brick.", "Included: Every classroom reel builds trust; adding custom grid covers and teacher-voice captions compounds your studio brand week after week."),
+      slide("07", "cover", "The caption & reach", "Interest media reaches non-followers.", "interest.jpg", "Social media reaches people who already follow you. Interest media reaches people who care, even if they do not follow you yet.", "Followers already know you. Classroom reels with in-reel text reach non-followers on the feed, custom covers convert profile visits, and long-form SEO captions in your voice carry the lesson through search.", "Included: Reels reach non-followers on their own, while custom covers and teacher-voice SEO captions compound discovery and search reach."),
+      slide("08", "cover", "The caption & reach", "Do it with intent.", "intent.jpg", "A path through a field toward one person. The line reads: who it is for, what it is for, and the promise.", "Every piece is aimed at the exact student you want to teach - stating who it is for, what it teaches, and the promise across the reel, the cover hook, and the study-note caption.", "Included: Every post is aimed at your target student - from the 3-second pre-roll in Reel, to the target-viewer hook on the Cover, to the full study-note Caption."),
+      slide("09", "roadmap", "Roadmap & founding window", "One class. More formats next.", "upcoming-formats.jpg", "One open book fans out to Quizzes, YouTube, multi-platform, and email nurture. Built from the same recording. Early access on 12 months.", "Because Spark maps your actual course rather than slicing a flat transcript, the same recording also powers upcoming Carousels and Stories, plus Interactive Quizzes, YouTube Chapters and Shorts, Multi-Platform Publishing, and Student Email Nurture.", "Included: Upcoming Carousels and Stories from the same class, plus early access to Quizzes, YouTube chapters, multi-platform publishing, and email nurture as they launch.", "Left out without Caption: Carousels, Stories, and upcoming multi-format outputs are included in Reel + cover + caption."),
       slide("10", "roadmap", "Roadmap & founding window", "Why the 25% Founding Partner price exists.", "founding-window.jpg", "Stairs rise from a locked 12-month rate and today's 25% Founding Partner discount toward full price as Quizzes and YouTube ship.", "The 25% Founding Partner discount is one time only, on your first plan, for any term. Paying for 12 months upfront stacks the 20% annual plan discount with that 25%, locking 45% off for the full year. Using the one-time 25% on a shorter term means renewals revert to the standard term rate.", "Locked for the year: 20% annual plan discount + 25% one-time Founding Partner discount = 45% off for all 12 months.", "One-time 25% Founding Partner discount on a shorter term means renewals revert to the standard term rate. 12 months locks 45% off for the full year.")
     ],
     craftSlides: [
@@ -88,18 +88,18 @@
       slide("19", "how", "Beneath the Waterline: Steps 9 to 11 of 11 (~85 Checks -> ~300 Total)", "Multi-faculty end card, SEO caption research, and the 300-check quality gate.", "pipeline-steps-9-to-11.jpg", "Pipeline steps 9 to 11 (~85 checks completing ~300 checks total): 9. Faculty end card and audio master (~20 checks, Brand designer), 10. Voice caption, tags and Carousels (~35 checks, Domain writer and SEO), 11. 9-gate rubric and WhatsApp (~30 checks, Quality evaluator), plus badge: ~300 checks = 25-30 hrs of specialist work replaced.", "Steps 9 to 11 complete the ~300 checks (110 + 105 + 85 = 300 checks), replacing ~25 to 30 hours of specialist work per lecture with a 3-minute approval on your phone:", "", "", "", { items: ["Step 9 - Multi-faculty end card & audio master (~20 checks): matches the teacher on screen, adds the 'Check the caption' CTA card, and levels studio/Zoom audio. Usually done by: Brand designer & Audio engineer.", "Step 10 - Teacher-voice caption, tags & Carousels (~35 checks): writes the concise study note, researches interest-media search tags and hashtags, and generates Carousels and Stories. Usually done by: Domain copywriter & SEO researcher.", "Step 11 - 9-gate rubric audit & WhatsApp delivery (~30 checks): grades every piece across 9 hard gates and 7 teaching axes so 9 of 10 arrive ready to post. Usually done by: Quality evaluator & Social media manager."], roles: "Brand designer, audio engineer, domain copywriter, SEO researcher, and quality evaluator", discovery: "Delivers all four discovery surfaces (cover, reel, in-reel text, and caption) on every single reel without compromise." }),
       slide("20", "how", "One-shot quality", "How a reel earns Recommended vs Okay.", "reel-grading-rubric.jpg", "Three-stage grading diagram: 9 Hard Gates filter out weak clips, 7 Teaching Axes score 0 to 100, sorting into Recommended (70+), Okay (50 to 69), or Retired.", "Why 9 out of 10 reels work on the first shot: every candidate chapter must first pass 9 hard gates (at most 150 seconds after dead air, dead air at most 30%, traffic/background noise below 4/5, room echo contrast at least 19 dB, real teaching rather than class logistics or homework, stands alone for a stranger, one finishable idea, right audience, and delivery floor). Passing clips are then scored 0 to 100 across 7 weighted teaching axes (Interest match 3x, One claim 3x, Delivery 3x, Mastery signal 2x, Complete arc 2x, Said not performed 2x, Cold standalone 1x) plus a peer respect test, slide-opening check, and other-speaker check.", ""),
       slide("21", "how", "Sustainable depth", "Nine layers of consistency held at once.", "consistency-nine-layers.jpg", "A 3x3 grid of 9 consistency layers (Weekly pace, Story arc, Grid cover, SEO caption, Live classroom, Full syllabus, Every teacher, Right student, Exact terms) feeding a Sustainable brand tree.", "Posting once a week is easy; posting 5 to 7 times a week usually forces a teacher to drop quality or burn out. Spark holds nine layers of consistency at the same time: (1) weekly frequency through festivals and travel, (2) complete story arcs, (3) 3-second grid cover variety, (4) interest-media SEO captions, (5) live classroom energy on home ground, (6) full syllabus breadth across modules, (7) every faculty member visible without solo camera acting, (8) 100% serious-student intent, and (9) exact Sanskrit and anatomical terminology.", ""),
-      slide("22", "how", "Credits", "Credits, watermark, and lecture hours.", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "A thumbs-up spends a credit and removes the watermark. A rejected clip is retired and cannot be downloaded clean. The whole term is paid upfront.", "")
+      slide("22", "how", "Credits", "Credits, watermark, and lecture hours.", "faq-accuracy-buffer.jpg", "You approve every clip. Extra lecture hours cover passes. A thumbs-up spends one credit and removes the watermark. A pass is free.", "Your plan includes 30% extra lecture-video hours, about 1 extra candidate for every 4 to 5 posts, so you can pass on a clip and still reach up to your monthly post count. You only spend a credit when you approve a clip, and the watermark comes off. A passed clip is retired at zero credit cost. If the recordings yield fewer clips, or you pass on most drafts, output stays within the included lecture-video hours. Extra video is ₹500 an hour ($5.35 USD). If you are unhappy, the pro-rated money-back guarantee refunds the remainder of the term.", "")
     ],
     faqSlides: [
       slide("23", "faq", "FAQ", "Why not use a clipping app or a social media agency? (Done-For-You vs Done-With-You)", "faq-dfy-vs-dwy.jpg", "Done for you, from class you already taught. Clipping apps leave 70% of the work. Agencies wait on you to film. Spark is ready on WhatsApp, from daily practice, 130+ teachers, and a 5-year pipeline.", "AI clipping apps slice flat podcast transcripts: on a class they cut mid-thought, chop teaching pauses, and leave 70% of the work to you or your team (scrubbing 90-minute recordings, picking clips, making covers, writing captions) - so busy teachers quit in week 2. Agencies and editors are Done-With-You disguised as Done-For-You: they still wait on you to script and film solo camera videos every week, and general editors miss Sanskrit and anatomical nuances. Spark is built at the intersection of three circles - daily personal practice, 9 years alongside 130+ teachers, and 5 years of pipeline engineering - turning classes you already taught into finished posts on WhatsApp. For a family member or coordinator on your team, a 15-hour weekly editing burden becomes a 2-minute phone post.", ""),
       slide("24", "faq", "FAQ", "Which Instagram numbers actually matter, and when do enquiries convert?", "faq-quality-per-eyeball.jpg", "Quality per eyeball, two horizons. The metrics that matter are a 1.5x repeat watch, Saves, Shares, and over 50% non-followers. Months 1 to 3: warm enquiries convert. Months 3 to 6+: strangers trust and join.", "Instagram puts Views and Likes at the top to sell ads, while a generic viral reel can bring millions of views and zero serious students. For a high-trust course, look at Quality per Eyeball in Instagram Insights: a 1.5x repeat watch ratio (views vs viewers), Saves, Shares, and over 50% non-follower reach. At 20 to 30 reels a month, expect two distinct horizons: in Months 1 to 3 (about 90 reels / 5 hours of attention), warm referrals and enquiries who check your profile before your next batch see a deep library and stop hesitating. In Months 3 to 6+ (180+ reels / 10 hours of attention), complete strangers who discover one reel can binge hours of your teaching and apply.", ""),
-      slide("25", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip, with a 20% pass buffer. A watermarked draft goes to the teacher. Approve 9 of 10: watermark off, one credit used. Pass 1 in 5: retired free, zero credits used.", "In a real class, you might cue a modification for one wobbly student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is ever published without your approval. Drafts arrive on WhatsApp with a preview watermark (and can be routed directly to the faculty member who taught that session). At least 9 out of 10 clips meet the bar. When you give a thumbs-up, 1 credit is used and the watermark comes off. If you pass on a clip (up to our 20% replacement buffer - 1 in 5), that file is permanently retired at zero credit cost and the next Recommended clip moves up.", ""),
+      slide("25", "faq", "FAQ", "What if a clip has a student-specific modification or a verbal slip? How do credits work?", "faq-accuracy-buffer.jpg", "You approve every clip. Extra lecture hours cover passes. A thumbs-up spends one credit and removes the watermark. A pass is free.", "In a real class, you might cue a modification for one student that looks wrong out of context, or a teacher may have a 3-second verbal slip. Nothing is published without your approval. Drafts arrive on WhatsApp with a preview watermark, and can go to the faculty member who taught that session. Your plan includes 30% extra lecture-video hours, about 1 extra candidate for every 4 to 5 posts, so you can pass on that clip and still reach up to your monthly post count. You only spend a credit when you approve a clip, and the watermark comes off. A passed clip is retired at zero credit cost. If the recordings yield fewer clips, or you pass on most drafts, output stays within the included lecture-video hours. Extra video is ₹500 an hour ($5.35 USD). If you are unhappy, the pro-rated money-back guarantee refunds the remainder of the term.", ""),
       slide("26", "faq", "FAQ", "Should we run paid Meta ads or boost our reels right away?", "faq-paid-ads-library.jpg", "Fill the library before you boost. Paid ads on 6 reels leak out. At 60 to 90+ reels, every click lands on hours of teaching.", "Running paid ads when your page only has 6 reels (15 minutes of teaching) pours paid clicks into a leaky bucket: people tap your profile, see a thin grid, and leave. Once your page has 60 to 90+ classroom reels (3 to 5+ hours of teaching across your syllabus), every rupee of ad spend or boosting lands on a bingeable library that can actually earn a high-ticket enrolment.", "")
     ]
   };
 
   cfg.allSlides = cfg.storySlides.concat(cfg.craftSlides, cfg.faqSlides);
-  var guaranteeSealMarkup = '<span class="reels-guarantee-mark" aria-hidden="true"><svg class="reels-trust-badge" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="reelsSealGold" x1="0.2" y1="0" x2="0.85" y2="1"><stop offset="0%" stop-color="#fffbeb"/><stop offset="38%" stop-color="#fde047"/><stop offset="72%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs><path fill="url(#reelsSealGold)" stroke="#92400e" stroke-width="1.75" d="M48 2l12.2 24.7 27.3 4-19.8 19.3 4.7 27.2L48 66.5 23.6 77.7l4.7-27.2L8.5 31.4l27.3-4L48 2z"/></svg></span>';
+  var guaranteeSealMarkup = '<span class="reels-guarantee-mark" aria-hidden="true"><span class="material-symbols-rounded reels-trust-badge">verified</span></span>';
 
   function durationByMonths(months) {
     var i;
@@ -206,20 +206,10 @@
       level = "missed";
       reason = slideRow.off;
       actions.push({ label: "Select Reel + cover", tierId: "reel_cover" });
-    } else if (slideRow.num === "06" && !(cover && months >= 6)) {
-      level = "missed";
-      reason = slideRow.off;
-      if (!cover) actions.push({ label: "Select Reel + cover", tierId: "reel_cover" });
-      if (months < 6) actions.push({ label: "Switch to 6 months", months: 6 });
-    } else if ((slideRow.num === "07" || slideRow.num === "08") && !caption) {
+    } else if (slideRow.num === "09" && !caption) {
       level = "missed";
       reason = slideRow.off;
       actions.push({ label: "Select Reel + cover + caption", tierId: "reel_cover_caption" });
-    } else if (slideRow.num === "09" && !(months === 12 && caption)) {
-      level = "missed";
-      reason = slideRow.off;
-      if (!caption) actions.push({ label: "Select Reel + cover + caption", tierId: "reel_cover_caption" });
-      if (months !== 12) actions.push({ label: "Switch to 12 months", months: 12 });
     } else if (slideRow.num === "10") {
       if (months === 12) {
         level = "included";
@@ -230,7 +220,7 @@
         actions = [{ label: "Switch to 12 months", months: 12 }];
       }
     }
-    return { level: level, reason: reason, actions: actions, pill: pillFor(level) };
+    return { level: level, rank: ({ "01": 1, "06": 1, "07": 1, "08": 1 }[slideRow.num] ? (caption ? 3 : cover ? 2 : 1) : 0), reason: reason, actions: actions, pill: pillFor(level) };
   }
 
   function pillFor(level) {
@@ -380,7 +370,7 @@
       q = quoteTier(cfg.tiers[0], 1, state.months);
       html = '<p class="reels-duration-lead text-base font-semibold text-slate-900">' + esc(durationTermHeadline(state.months, true)) + '</p><ul class="reels-duration-break text-base text-slate-600 mt-2">';
       if (q.termPct) html += "<li>" + q.termPct + "% term discount</li>";
-      box.innerHTML = html + "<li>" + q.foundingPct + "% founding customer discount*</li></ul><p class=\"reels-duration-foot text-base text-slate-600\">* The founding customer discount is a <strong>one-time offer</strong> for the <strong>first 5 customers</strong>.</p><div class=\"reels-guarantee-badge\" role=\"note\">" + guaranteeSealMarkup + "<p class=\"reels-guarantee-text\">" + esc(cfg.guaranteeCopy) + "</p></div>";
+      box.innerHTML = html + "<li>" + q.foundingPct + "% founding customer discount*</li></ul><p class=\"reels-duration-foot text-base text-slate-600\">* The founding customer discount is a <strong>one-time offer</strong> for the <strong>first 5 customers</strong>.</p>" + (state.currency === "inr" ? '<div class="reels-saving-note" role="note">' + byId("founding-gst").innerHTML + "</div>" : "") + "<div class=\"reels-guarantee-badge\" role=\"note\">" + guaranteeSealMarkup + "<p class=\"reels-guarantee-text\">" + esc(cfg.guaranteeCopy) + "</p></div>";
     }
     function buttonClass(on) {
       return on
@@ -457,7 +447,7 @@
         "05": "A profile visit is decided in about 3 seconds.",
         "06": "The grid has to look deliberate, week after week.",
         "07": "The caption reaches people who do not follow you yet.",
-        "08": "The same class also becomes Carousels and Stories.",
+        "08": "Every piece states who it is for, what it teaches, and the promise.",
         "09": "The same recording will power more formats as they ship.",
         "10": "Twelve months locks " + offPct(12) + "% off for the full year (" + durationByMonths(12).termDiscountPct + "% annual + " + cfg.foundingDiscountPct + "% one-time founding). A shorter term spends the one-time " + cfg.foundingDiscountPct + "%, and renewals revert to the standard term rate.",
         "11": "Five specialist jobs, on every reel, or the post stays in drafts.",
@@ -560,36 +550,42 @@
     function slideBtn(s, idx) {
       return '<button type="button" class="reels-card-slide" data-open-slide="' + idx + '" aria-label="Open diagram ' + s.num + ", " + esc(s.title) + '"><img src="' + esc(s.image) + '" width="320" height="180" alt="' + esc(s.alt) + '" loading="lazy"></button>';
     }
-    function fixButtons(actions) {
-      var html = "", i, a;
-      for (i = 0; i < (actions || []).length; i++) {
-        a = actions[i];
-        html += '<button type="button" class="reels-fix" data-fix="1"' + (a.months ? ' data-months="' + a.months + '"' : "") + (a.reels ? ' data-reels="' + a.reels + '"' : "") + (a.tierId ? ' data-tier="' + esc(a.tierId) + '"' : "") + ">" + esc(a.label) + "</button> ";
-      }
-      return html;
-    }
     function craftBlock(tier) {
       var nums = tier.craftSlideNums || [], html = '<div class="reels-card-slides mt-4"><p class="text-base font-semibold text-slate-900 mb-2">' + esc(tier.craftHeading || "") + "</p>", i, s, idx;
       for (i = 0; i < nums.length; i++) { idx = slideIndexByNum(nums[i]); s = cfg.allSlides[idx]; if (idx >= 0 && s) html += slideBtn(s, idx); }
       return html + "</div>";
     }
+    function sproutCell(rank, name) {
+      var s = "", k;
+      for (k = 1; k <= 3; k++) s += '<svg class="reels-sprout ' + (k <= rank ? "is-on" : "is-off") + '" viewBox="0 0 24 24" aria-hidden="true"><path class="reels-sprout-leaf" d="M12 13C12 8.5 8 5.5 3.5 6C3.5 10.5 7.5 13 12 13ZM12 10.5C12 6 16 3 20.5 3.5C20.5 8 16.5 10.5 12 10.5Z"/><path class="reels-sprout-stem" d="M12 9.5V20M8.5 20H15.5"/></svg>';
+      return '<span class="reels-value-sprouts" role="img" aria-label="Level ' + rank + " of 3 on " + esc(name) + '">' + s + "</span>";
+    }
     function renderPlanValue() {
-      var box = byId("plan-value"), nums, i, idx, row, st, got = "", lost = "", lostCount = 0, item, mark;
+      var box = byId("plan-value"), head = "", rows = "", nums, i, t, idx, row, st, on, tier, pick;
       if (!box) return;
       box.hidden = !state.planChosen;
       if (!state.planChosen) return;
+      for (t = 0; t < cfg.tiers.length; t++) {
+        tier = cfg.tiers[t];
+        pick = tier.id === state.tierId ? ' class="is-picked"' : "";
+        head += '<th scope="col"' + pick + ">" + esc(tier.name) + "</th>";
+      }
       nums = cfg.valueComparisonSlideNums || [];
       for (i = 0; i < nums.length; i++) {
         idx = slideIndexByNum(nums[i]);
         row = idx < 0 ? null : cfg.allSlides[idx];
         if (!row) continue;
-        st = statusFor(row, ctxNow());
-        mark = st.level === "included";
-        item = '<li class="reels-value-item"><button type="button" class="reels-value-shot" data-open-slide="' + idx + '" aria-label="Open diagram ' + row.num + ", " + esc(row.title) + '"><img src="' + esc(row.image) + '" width="176" height="99" alt="' + esc(row.alt) + '" loading="lazy"></button><div class="reels-value-copy"><span class="reels-value-mark ' + (mark ? "is-got" : "is-lost") + '">' + (mark ? "✓" : "✗") + '</span><p class="reels-value-title text-base font-semibold text-slate-900">Slide ' + row.num + " · " + esc(row.title) + '</p><p class="text-base text-slate-700">' + esc(st.reason || "") + "</p>" + (mark ? "" : fixButtons(st.actions)) + "</div></li>";
-        if (mark) got += item; else { lost += item; lostCount += 1; }
+        rows += '<tr><td><button type="button" class="reels-value-shot" data-open-slide="' + idx + '" aria-label="Open diagram ' + row.num + ", " + esc(row.title) + '"><img src="' + esc(row.image) + '" width="176" height="99" alt="' + esc(row.alt) + '" loading="lazy"></button></td><th scope="row">' + esc(row.title) + "</th>";
+        for (t = 0; t < cfg.tiers.length; t++) {
+          tier = cfg.tiers[t];
+          st = statusFor(row, { tierId: tier.id, reels: 20, months: 12 }); // plan only; pace and term stay on the price controls
+          on = st.level === "included";
+          pick = tier.id === state.tierId ? ' class="is-picked"' : "";
+          rows += "<td" + pick + ">" + (st.rank ? sproutCell(st.rank, tier.name) : '<span class="reels-value-mark ' + (on ? "is-got" : "is-lost") + '" role="img" aria-label="' + (on ? "Included" : "Not included") + " on " + esc(tier.name) + '">' + (on ? "✓" : "✗") + "</span>") + "</td>";
+        }
+        rows += "</tr>";
       }
-      dbg("renderPlanValue", { tier: state.tierId, months: state.months, reels: state.reels, lost: lostCount });
-      box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">What this plan + term gives you (and what you leave on the table)</h3><div class="reels-value-cols mt-4"><section><h4 class="reels-value-h is-got">What you get (✓)</h4><ul class="reels-value-list">' + got + '</ul></section><section><h4 class="reels-value-h is-lost">What you lose (✗)</h4>' + (lostCount ? '<ul class="reels-value-list">' + lost + "</ul>" : '<p class="reels-value-clear">✓ Nothing left on the table - all 10 story advantages and the full ' + offPct(12) + '% 12-month rate lock are included.</p>') + "</section></div>";
+      box.innerHTML = '<h3 class="text-2xl font-bold text-slate-900">What each plan includes</h3><div class="reels-value-scroll mt-4"><table class="reels-value-table"><thead><tr><th scope="col"><span class="reels-sr">Diagram</span></th><th scope="col">What it is</th>' + head + "</tr></thead><tbody>" + rows + "</tbody></table></div>";
     }
     function renderPlans() {
       var html = "";
@@ -610,7 +606,7 @@
         html += '<h3 class="text-2xl font-bold text-slate-900">' + esc(tier.name) + "</h3>" + (tier.upcoming ? '<p class="mt-1 text-base text-slate-600">' + esc(tier.upcoming) + ' <span class="reels-upcoming-pill">Upcoming</span></p>' : "");
         html += '<p class="mt-1 text-base text-slate-600">' + esc(tier.fits) + "</p>";
         html += monthlyLine + upfrontLine;
-        html += '<p class="mt-2 text-base font-semibold text-slate-800">' + state.reels + " " + plural(state.reels, "post", "posts") + " / month · Up to " + esc(hourPhrase(includedHours(state.reels))) + " lecture video</p>";
+        html += '<p class="mt-2 text-base font-semibold text-slate-800">Up to ' + state.reels + " " + plural(state.reels, "post", "posts") + " / month · Up to " + esc(hourPhrase(includedHours(state.reels))) + " lecture video</p>";
         html += '<ul class="reels-benefits mt-3 space-y-1.5 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
         html += "</ul>" + craftBlock(tier) + "</article>";
@@ -648,7 +644,7 @@
       var takes = [
         "Spark finishes the post from classes you already taught, instead of leaving the weekly edit on you or an agency.",
         "Repeat watches, Saves, Shares, and non-follower reach matter more than likes, and serious enquiries show up after the library has hours of teaching.",
-        "You approve every watermarked draft: a thumbs-up spends one credit, and a pass retires the clip for free.",
+        "A thumbs-up spends one credit. A pass is free. The extra lecture hours are there so you can pass on drafts and still reach up to your monthly post count.",
         "Fill the page to 60 to 90 classroom reels before you spend on ads, so each click lands on hours of teaching."
       ];
       var html = "";
@@ -664,7 +660,7 @@
     function hoursLine() {
       var week = weekFromReels(state.reels);
       if (!state.reels) return "Included lecture time starts at " + hourPhrase(cfg.minLectureHours) + " a month and rises with the number of posts.";
-      return "At " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, you need a minimum of " + monthlyLectureLabel(minLectureHoursRounded(week)) + " of lecture video per month, and your plan includes a limit of up to " + hourPhrase(includedHours(state.reels)) + " per month (+" + cfg.lectureLimitBufferPct + "% buffer).";
+      return "For up to " + state.reels + " " + plural(state.reels, "reel", "reels") + " a month, you need at least " + monthlyLectureLabel(minLectureHoursRounded(week)) + " of lecture-rich video per month, and your plan includes up to " + hourPhrase(includedHours(state.reels)) + " per month (+" + cfg.lectureLimitBufferPct + "% extra video hours so you can pass on drafts and still reach your target).";
     }
     function hoursSentences() {
       return hoursLine() + " Extra video is " + money(cfg.extraVideoHourInr, true) + " an hour.";
@@ -677,7 +673,9 @@
       var tier = tierById("reel_cover_caption");
       var reels = state.reels || 20;
       var year = quoteTier(tier, reels, 12);
-      setText("founding-rate", "Two discounts stack on your first upfront plan: up to " + year.termPct + "% plan discount + " + year.foundingPct + "% one-time Founding Partner discount (" + year.totalOffPct + "% off on 12 months - " + money(year.monthlyInr, false) + " / month instead of " + money(year.baseMonthlyInr, false) + " for " + reels + " " + plural(reels, "post", "posts") + " a month).");
+      setText("founding-rate", "Two discounts stack on your first upfront plan: up to " + year.termPct + "% plan discount + " + year.foundingPct + "% one-time Founding Partner discount (" + year.totalOffPct + "% off on 12 months - " + money(year.monthlyInr, false) + " / month instead of " + money(year.baseMonthlyInr, false) + " for up to " + reels + " " + plural(reels, "post", "posts") + " a month).");
+      var gst = byId("founding-gst");
+      if (gst) gst.hidden = state.currency !== "inr";
     }
     function renderDoors() {
       var tab = state.door === "craft" ? "craft" : (state.door === "plan" || state.door === "faq" || state.door === "founding") ? "plan" : "story";
@@ -709,7 +707,8 @@
       var q = quoteTier(tier, state.reels, state.months);
       var week = weekFromReels(state.reels);
       var line1, line2, line3, text, subject;
-      if (box) box.hidden = !state.planChosen;
+      // Temporarily hidden — confirm/checkout UI will return later.
+      if (box) box.hidden = true;
       line1 = tier.name + " · " + week + " " + plural(week, "post", "posts") + " a week (" + state.reels + " / month) · " + state.months + " " + plural(state.months, "month", "months") + " - " + money(q.monthlyInr, false) + " / month (" + money(q.upfrontInr, false) + " upfront, was " + money(q.baseUpfrontInr, false) + ")";
       line2 = "Includes up to " + hourPhrase(includedHours(state.reels)) + " of lecture video / month (extra video " + money(cfg.extraVideoHourInr, true) + " / hour) · " + listRateNote(state.months) + ".";
       line3 = cfg.guaranteeCopy;
