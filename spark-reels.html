@@ -11,10 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="js/layout.js"></script>
     <script src="js/components/accordion.js" defer></script>
-    <script src="js/spark-reels-pricing.js?v=20261028f"></script>
+    <script src="js/spark-reels-pricing.js?v=20261028u"></script>
     <style>
         [hidden] { display: none !important; }
-        .reels-tab, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-cta, .reels-cite, .reels-tick, .reels-range, .reels-card-slide, .reels-value-shot { cursor: pointer; font-family: inherit; }
+        .reels-tab, .reels-shot, .reels-navbtn, .reels-fix, .reels-textlink, .reels-cta, .reels-cite, .reels-source-name, .reels-book, .reels-tick, .reels-range, .reels-card-slide, .reels-value-shot { cursor: pointer; font-family: inherit; }
         .reels-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem 1.5rem; margin-top: 1.75rem; border-bottom: 1px solid #e2e8f0; }
         .reels-tab { background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 0.75rem 0.2rem; color: #334155; font-weight: 700; font-size: 1.125rem; }
         .reels-tab:hover, .reels-tab[aria-selected="true"] { color: #312e81; }
@@ -82,7 +82,7 @@
         #plan-grid article[data-recommended="true"] { order: -1; }
         @keyframes reelsFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .reels-stage-anim { animation: reelsFadeIn 200ms cubic-bezier(0.22, 1, 0.36, 1); }
-        .reels-tab:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible, .reels-cite:focus-visible, .reels-tick:focus-visible, .reels-range:focus-visible, .reels-card-slide:focus-visible, .reels-value-shot:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+        .reels-tab:focus-visible, .reels-navbtn:focus-visible, .reels-cta:focus-visible, .reels-shot:focus-visible, .reels-fix:focus-visible, .reels-textlink:focus-visible, .reels-cite:focus-visible, .reels-source-name:focus-visible, .reels-book:focus-visible, .reels-tick:focus-visible, .reels-range:focus-visible, .reels-card-slide:focus-visible, .reels-value-shot:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
         .reels-discount-box, .reels-guarantee { border-radius: 12px; padding: 0.9rem 1rem; font-size: 1rem; line-height: 1.5; }
         .reels-discount-box { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e293b; }
         .reels-discount-box:empty, .reels-guarantee:empty { display: none; }
@@ -111,7 +111,7 @@
         .reels-value-clear { margin: 0.75rem 0 0; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 12px; padding: 0.9rem 1rem; font-size: 1rem; font-weight: 600; }
         .reels-value-item .reels-fix { margin: 0.55rem 0.4rem 0 0; }
         .reels-step-why { margin-top: 0.85rem; }
-        .reels-excerpt { margin: 0; max-width: 40rem; }
+        .reels-excerpt { margin: 0; max-width: 40rem; font-style: normal; }
         .reels-excerpt p { margin: 0; font-size: 1.25rem; line-height: 1.5; font-weight: 400; color: #0f172a; }
         .reels-excerpt p + p { margin-top: 0.75rem; }
         .reels-mark { background: linear-gradient(#fde68a, #fde68a) left 88% / 100% 0.45em no-repeat; font-weight: 700; color: #0f172a; padding: 0.05em 0.25em; border-radius: 0.2rem; }
@@ -145,6 +145,22 @@
         .reels-warning { display: flex; align-items: flex-start; gap: 0.55rem; margin: 0.75rem 0 0; color: #92400e; font-size: 1.125rem; line-height: 1.4; font-weight: 700; }
         .reels-warning-icon { width: 1.35rem; height: 1.35rem; flex: none; margin-top: 0.12rem; }
         .reels-g { width: 1.05rem; height: 1.05rem; flex: none; }
+        .reels-quote { position: relative; margin: 1.35rem 0 0; padding: 1.15rem 1.35rem 1.1rem 1.15rem; background: #f8fafc; border-radius: 16px; }
+        .reels-quote-mark { position: absolute; top: -0.62rem; left: 0.7rem; font-family: Georgia, "Iowan Old Style", Palatino, serif; font-size: 4.25rem; line-height: 0.75; font-weight: 700; color: #4f46e5; pointer-events: none; }
+        .reels-quote-text { margin: 0; max-width: none; }
+        .reels-quote-text p { margin: 0; padding-left: 2.35rem; font-size: 1.375rem; line-height: 1.45; font-weight: 500; font-style: italic; color: #0f172a; }
+        .reels-quote-by { display: flex; align-items: flex-start; gap: 0.7rem; margin: 0.85rem 0 0 2.35rem; }
+        .reels-quote-photo { width: 2.75rem; height: 2.75rem; margin-top: 0.1rem; border-radius: 999px; object-fit: cover; object-position: center 18%; flex: none; }
+        .reels-quote-person { min-width: 0; }
+        .reels-source-name { font-size: 1rem; font-weight: 700; color: #0f172a; text-decoration: none; }
+        .reels-source-name:hover { text-decoration: underline; }
+        .reels-book { display: block; margin-top: 0.1rem; color: #4338ca; font-size: 1rem; font-weight: 500; line-height: 1.4; text-decoration: underline; text-underline-offset: 0.15rem; }
+        .reels-book-gap { color: #94a3b8; text-decoration: none; }
+        .reels-inspired { display: flex; align-items: flex-start; gap: 0.7rem; margin: 0.85rem 0 0 2.35rem; color: #64748b; font-size: 1rem; line-height: 1.4; }
+        .reels-inspired .reels-g { width: 2.75rem; height: 2.75rem; margin-top: 0.1rem; }
+        .reels-inspired-copy { min-width: 0; }
+        .reels-inspired-links { display: block; margin-top: 0.1rem; }
+        .reels-inspired .reels-cite { display: inline; margin-top: 0; }
         .reels-prompt { display: block; margin: 1.5rem 0 0; font-size: 1.125rem; line-height: 1.4; font-weight: 600; color: #0f172a; cursor: pointer; }
         .reels-slider { margin-top: 0.85rem; }
         .reels-range { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 1.75rem; margin: 0; background: transparent; }
@@ -168,7 +184,11 @@
         .reels-linkrow { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.75rem; }
         #checkout .reels-actions { flex-direction: row; }
         #checkout .reels-cta { width: auto; flex: 1 1 12rem; }
-        @media (max-width: 639px) { .reels-value-item { grid-template-columns: 1fr; } }
+        @media (max-width: 639px) {
+            .reels-value-item { grid-template-columns: 1fr; }
+            .reels-quote-text p { padding-left: 1.85rem; }
+            .reels-quote-by, .reels-inspired { margin-left: 0; }
+        }
         @media (min-width: 768px) { .reels-steps { grid-template-columns: 1fr 1fr 1fr; } }
         @media (min-width: 1024px) {
             .reels-stage { grid-template-columns: 7fr 5fr; }
@@ -207,27 +227,37 @@
         </section>
 
         <section id="prices" class="reels-anchor mt-8" hidden>
-            <div class="flex flex-wrap items-center gap-3">
-                <p id="currency-label" class="text-base font-semibold text-slate-900">Prices in</p>
-                <div id="currency-switch" class="flex flex-wrap gap-2" role="group" aria-labelledby="currency-label"></div>
-            </div>
-            <h2 class="text-3xl font-bold text-slate-900 mt-6">Build your studio's plan</h2>
-
             <div id="wizard-panel-1" class="reels-step-panel">
                 <div class="reels-step-why">
-                    <div class="reels-excerpt">
-                        <p>Google's Zero Moment of Truth study: buyers consult 10.4 sources and <mark class="reels-mark">spend hours researching before they decide</mark>.</p>
-                        <p>The rule of thumb built on that research: <mark class="reels-mark">about 7 hours with your content</mark>, across roughly 11 touchpoints, before a buyer commits.</p>
-                    </div>
-                    <a id="zmot-link" class="reels-cite" href="https://www.thinkwithgoogle.com/_qs/documents/673/2011-winning-zmot-ebook_research-studies.pdf" target="_blank" rel="noopener noreferrer">
-                        <svg class="reels-g" viewBox="0 0 48 48" aria-hidden="true">
-                            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
-                            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
-                            <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
-                            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.3 4.2-4.1 5.6l6.2 5.2C39.2 37.1 44 31.6 44 24c0-1.3-.1-2.7-.4-3.5z"/>
-                        </svg>
-                        Winning the Zero Moment of Truth, Google / Shopper Sciences (2011)
-                    </a>
+                    <figure class="reels-quote">
+                        <span class="reels-quote-mark" aria-hidden="true">“</span>
+                        <blockquote class="reels-quote-text">
+                            <p>7-11-4 is the key formula to building meaningful connections. Imagine spending <mark class="reels-mark">7 hours</mark> together, engaging in <mark class="reels-mark">11</mark> interactions, and meeting in <mark class="reels-mark">4</mark> locations. A bond is inevitable.</p>
+                        </blockquote>
+                        <figcaption class="reels-quote-by">
+                            <img class="reels-quote-photo" src="images/spark-reels/daniel-priestley.jpg" width="800" height="896" alt="">
+                            <span class="reels-quote-person">
+                                <a class="reels-source-name" href="https://danielpriestley.com/" target="_blank" rel="noopener noreferrer">Daniel Priestley</a>
+                                <a class="reels-book" href="https://danielpriestley.com/books" target="_blank" rel="noopener noreferrer">Key Person of Influence, Oversubscribed, Entrepreneur Revolution, and 24 Assets</a>
+                            </span>
+                        </figcaption>
+                        <p class="reels-inspired">
+                            <svg class="reels-g" viewBox="0 0 48 48" aria-hidden="true">
+                                <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
+                                <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34.2 6.1 29.4 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
+                                <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8.1l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+                                <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.3 4.2-4.1 5.6l6.2 5.2C39.2 37.1 44 31.6 44 24c0-1.3-.1-2.7-.4-3.5z"/>
+                            </svg>
+                            <span class="reels-inspired-copy">
+                                <span>Inspired by Google.</span>
+                                <span class="reels-inspired-links">
+                                    <a class="reels-cite" href="https://www.gstatic.com/ads/research/en/2011_ZMOT_Macro_Study.pdf" target="_blank" rel="noopener noreferrer">Macro study</a>
+                                    <span class="reels-book-gap" aria-hidden="true"> · </span>
+                                    <a class="reels-cite" href="https://www.thinkwithgoogle.com/_qs/documents/673/2011-winning-zmot-ebook_research-studies.pdf" target="_blank" rel="noopener noreferrer">Winning the Zero Moment of Truth</a>
+                                </span>
+                            </span>
+                        </p>
+                    </figure>
                 </div>
                 <h3 class="text-2xl font-bold text-slate-900 mt-6">Posts a week</h3>
                 <div class="reels-step-choice">
@@ -271,7 +301,11 @@
                 <div id="discount-explainer" class="reels-discount-box mt-2 mb-4 max-w-3xl"></div>
                 <p id="plan-guarantee" class="reels-guarantee mt-3 mb-4 max-w-3xl"></p>
                 <div id="duration-controls" class="flex flex-wrap gap-2" role="group" aria-label="Months paid upfront"></div>
-                <div id="plan-grid" class="mt-6"></div>
+                <div class="flex flex-wrap items-center gap-3 mt-6">
+                    <p id="currency-label" class="text-base font-semibold text-slate-900">Prices in</p>
+                    <div id="currency-switch" class="flex flex-wrap gap-2" role="group" aria-labelledby="currency-label"></div>
+                </div>
+                <div id="plan-grid" class="mt-4"></div>
                 <div id="plan-value" class="mt-8" hidden aria-live="polite"></div>
                 <div id="checkout" class="mt-8" hidden aria-live="polite">
                     <div class="reels-checkout-card">

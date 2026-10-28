@@ -421,7 +421,7 @@
         signal.textContent = pace.signal || "";
       }
       if (lecture) lecture.hidden = !pace.week;
-      if (lectureText) lectureText.textContent = pace.week ? "This would require a minimum of " + monthlyLectureLabel(minLectureHoursRounded(pace.week)) + " of lecture video per month (plan includes up to " + hourPhrase(includedHours(state.reels)) + " / month)." : "";
+      if (lectureText) lectureText.textContent = pace.week ? "Required: " + monthlyLectureLabel(minLectureHoursRounded(pace.week)) + " of lecture video per month." : "";
       if (range) {
         range.value = String(pace.week);
         range.style.setProperty("--fill", pct + "%");
@@ -600,7 +600,7 @@
         html += price;
         html += '<p class="mt-2 text-base font-semibold text-slate-900">' + esc(planPriceLine(q)) + "</p>";
         html += '<p class="mt-1 text-base text-brand-700 font-semibold">' + esc(discountBadgeText(q)) + "</p>";
-        html += '<p class="mt-1 text-base text-slate-600">Includes up to ' + esc(hourPhrase(includedHours(state.reels))) + " of lecture video / month (min " + esc(monthlyLectureLabel(minLectureHoursRounded(weekFromReels(state.reels)))) + " needed)</p>";
+        html += '<p class="mt-1 text-base text-slate-600">Includes up to ' + esc(hourPhrase(includedHours(state.reels))) + " of lecture video a month.</p>";
         html += '<ul class="reels-benefits mt-4 space-y-2 text-base text-slate-700">';
         for (j = 0; j < tier.benefits.length; j++) html += "<li>" + esc(tier.benefits[j]) + "</li>";
         html += "</ul>" + craftBlock(tier) + '<div class="mt-5"><button type="button" class="' + buttonClass(selected) + '" data-choose="1" data-tier="' + esc(tier.id) + '" aria-pressed="' + (selected ? "true" : "false") + '">' + (selected ? "Selected" : "Choose this plan") + "</button></div></article>";
